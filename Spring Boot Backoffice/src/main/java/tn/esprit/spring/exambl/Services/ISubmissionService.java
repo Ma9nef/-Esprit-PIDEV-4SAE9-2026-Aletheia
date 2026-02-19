@@ -1,0 +1,16 @@
+package tn.esprit.spring.exambl.Services;
+
+import tn.esprit.spring.exambl.Entity.Submission;
+
+import java.util.List;
+
+public interface ISubmissionService {
+    Submission addSubmission(Submission submission);
+
+    List<Submission> getAllSubmissions();
+
+    Submission getSubmissionById(Long id);
+
+    Submission updateSubmission(Long id, Submission submission);
+    Submission submitAndGradeQuiz(Long userId, Long assessmentId, List<Long> selectedOptionIds);
+}
