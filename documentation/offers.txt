@@ -1,0 +1,41 @@
+1. Présentation du service
+
+Le microservice Offer est responsable de la gestion complète des offres promotionnelles, coupons et ventes flash pour la plateforme de formation en ligne. Il permet de créer, gérer et appliquer différentes stratégies de réduction sur les cours et certifications.
+
+Responsabilités principales :
+
+Gestion des offres promotionnelles (réductions globales)
+
+Gestion des codes promo individuels et partagés
+
+Gestion des ventes flash temporaires
+
+Calcul des prix après application des réductions
+
+Planification automatique des offres (activation/désactivation)
+
+3.1 Enums
+OfferType.java
+
+java
+package com.example.offer.model;
+
+public enum OfferType {
+    PERCENTAGE,        // Réduction en pourcentage (ex: -20%)
+    FIXED_AMOUNT,      // Réduction en montant fixe (ex: -10€)
+    BUY_ONE_GET_ONE,   // Achetez-en un, obtenez-en un gratuit
+    BUNDLE_DISCOUNT    // Réduction sur un pack de cours
+}
+OfferStatus.java
+
+java
+package com.example.offer.model;
+
+public enum OfferStatus {
+    ACTIVE,
+    INACTIVE,
+    EXPIRED,
+    SCHEDULED,    // Planifiée pour plus tard
+    PAUSED        // Suspendue temporairement
+}
+
