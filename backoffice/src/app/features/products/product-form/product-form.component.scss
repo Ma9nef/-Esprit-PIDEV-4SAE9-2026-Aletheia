@@ -1,0 +1,246 @@
+// ─── Product Dialog ───────────────────────────────────────────────────────────
+
+:deep(.product-dialog) {
+  .p-dialog-header {
+    padding: 1.25rem 1.5rem 1rem;
+    border-bottom: 1px solid var(--surface-border);
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .p-dialog-content {
+    padding: 0;
+    overflow-y: auto;
+    max-height: 75vh;
+  }
+
+  .p-dialog-footer {
+    padding: 0;
+    border-top: 1px solid var(--surface-border);
+  }
+}
+
+// ─── Form Layout ─────────────────────────────────────────────────────────────
+
+.product-form {
+  padding: 0;
+}
+
+.form-section {
+  padding: 1.25rem 1.5rem;
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-color-secondary);
+  margin: 0 0 1rem 0;
+}
+
+.section-desc {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+  margin: -0.5rem 0 1rem;
+}
+
+// ─── Fields ──────────────────────────────────────────────────────────────────
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.field-row {
+  display: flex;
+  gap: 1rem;
+
+  .field { margin-bottom: 0; }
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+  }
+}
+
+.field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+.required {
+  color: var(--red-500);
+  margin-left: 2px;
+}
+
+.field-error {
+  color: var(--red-500);
+  font-size: 0.78rem;
+}
+
+.field-hint {
+  color: var(--text-color-secondary);
+  font-size: 0.78rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+// ─── Available Toggle ─────────────────────────────────────────────────────────
+
+.available-field {
+  display: flex;
+  align-items: center;
+  flex-direction: row !important;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface-ground);
+  border-radius: 8px;
+  border: 1px solid var(--surface-border);
+}
+
+.available-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  cursor: pointer;
+
+  span:first-child {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-color);
+  }
+}
+
+.available-hint {
+  font-size: 0.78rem;
+  color: var(--text-color-secondary) !important;
+  font-weight: 400 !important;
+}
+
+// ─── Cover Upload ─────────────────────────────────────────────────────────────
+
+.cover-upload-area {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+
+  @media (max-width: 500px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.cover-preview {
+  width: 90px;
+  height: 120px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+  position: relative;
+  background: var(--surface-ground);
+  border: 1px dashed var(--surface-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+
+  &.has-image {
+    border-style: solid;
+    border-color: var(--primary-color);
+  }
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-color-secondary);
+    opacity: 0.5;
+
+    i { font-size: 1.5rem; }
+    span { font-size: 0.7rem; }
+  }
+}
+
+.cover-remove-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  transition: background 0.15s;
+
+  &:hover { background: var(--red-500); }
+}
+
+.cover-controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.cover-upload-btn {
+  width: 100% !important;
+}
+
+// ─── File Upload ──────────────────────────────────────────────────────────────
+
+.file-upload-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px dashed var(--surface-border);
+  border-radius: 8px;
+  background: var(--surface-ground);
+  margin-bottom: 1rem;
+}
+
+// ─── Shared Upload Styles ────────────────────────────────────────────────────
+
+.upload-hint {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+}
+
+.upload-progress {
+  height: 4px !important;
+  border-radius: 4px;
+}
+
+.divider-text {
+  font-size: 0.75rem;
+  color: var(--text-color-secondary);
+  padding: 0 0.5rem;
+}
+
+// ─── Dialog Footer ────────────────────────────────────────────────────────────
+
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+}
