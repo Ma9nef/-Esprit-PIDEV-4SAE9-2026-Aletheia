@@ -1,0 +1,17 @@
+nav.app-nav {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: #2d3748;
+}
+nav.app-nav a {
+  color: #e2e8f0;
+  text-decoration: none;
+}
+nav.app-nav a:hover,
+nav.app-nav a.active {
+  color: #fff;
+}
+main {
+  min-height: calc(100vh - 56px);
+}
