@@ -23,10 +23,50 @@ public class OfferController {
     private final OfferService offerService;
     private final CouponService couponService;
 
+    // Lister toutes les offres
+    @GetMapping
+    public ResponseEntity<List<OfferResponseDTO>> getAllOffers() {
+        List<Offer> offers = offerService.getAllOffers();
+        List<OfferResponseDTO> response = offers.stream()
+                .map(offerService::mapToResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+    // Récupérer une offre par ID
+    @GetMapping("/{offerId}")
+    public ResponseEntity<OfferResponseDTO> getOfferById(@PathVariable String offerId) {
+        Offer offer = offerService.getOfferById(offerId);
+        return ResponseEntity.ok(offerService.mapToResponseDTO(offer));
+    }
+
     // Créer une offre
     @PostMapping
     public ResponseEntity<OfferResponseDTO> createOffer(@Valid @RequestBody OfferRequestDTO requestDTO) {
         Offer offer = offerService.createOffer(requestDTO);
+        return ResponseEntity.ok(offerService.mapToResponseDTO(offer));
+    }
+
+    // Mettre à jour une offre
+    @PutMapping("/{offerId}")
+    public ResponseEntity<OfferResponseDTO> updateOffer(
+            @PathVariable String offerId,
+            @Valid @RequestBody OfferRequestDTO requestDTO) {
+        Offer offer = offerService.updateOffer(offerId, requestDTO);
+        return ResponseEntity.ok(offerService.mapToResponseDTO(offer));
+    }
+
+    // Supprimer une offre
+    @DeleteMapping("/{offerId}")
+    public ResponseEntity<Void> deleteOffer(@PathVariable String offerId) {
+        offerService.deleteOffer(offerId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Activer/Désactiver une offre
+    @PatchMapping("/{offerId}/toggle")
+    public ResponseEntity<OfferResponseDTO> toggleOfferStatus(@PathVariable String offerId) {
+        Offer offer = offerService.toggleOfferStatus(offerId);
         return ResponseEntity.ok(offerService.mapToResponseDTO(offer));
     }
 

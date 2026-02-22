@@ -30,10 +30,33 @@ public class CouponController {
         return ResponseEntity.ok(couponService.getAllCoupons());
     }
 
-    // Récupérer un coupon par code
-    @GetMapping("/{code}")
+    // Récupérer un coupon par ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Coupon> getCouponById(@PathVariable String id) {
+        Coupon coupon = couponService.getCouponById(id);
+        return ResponseEntity.ok(coupon);
+    }
+
+    // Récupérer un coupon par code (endpoint alternatif pour éviter conflit avec id)
+    @GetMapping("/by-code/{code}")
     public ResponseEntity<Coupon> getCouponByCode(@PathVariable String code) {
         Coupon coupon = couponService.getCouponByCode(code);
         return ResponseEntity.ok(coupon);
+    }
+
+    // Mettre à jour un coupon
+    @PutMapping("/{id}")
+    public ResponseEntity<Coupon> updateCoupon(
+            @PathVariable String id,
+            @Valid @RequestBody CouponRequestDTO requestDTO) {
+        Coupon coupon = couponService.updateCoupon(id, requestDTO);
+        return ResponseEntity.ok(coupon);
+    }
+
+    // Supprimer un coupon
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCoupon(@PathVariable String id) {
+        couponService.deleteCoupon(id);
+        return ResponseEntity.noContent().build();
     }
 }

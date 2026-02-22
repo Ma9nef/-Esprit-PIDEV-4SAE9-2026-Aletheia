@@ -69,10 +69,53 @@ public class CouponService {
         return couponRepository.findAll();
     }
 
-    // ✅ 3. Récupérer un coupon par son code (pour GET /api/coupons/{code})
+    // Récupérer un coupon par ID
+    public Coupon getCouponById(String id) {
+        return couponRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Coupon non trouvé avec l'ID: " + id));
+    }
+
+    // Récupérer un coupon par son code
     public Coupon getCouponByCode(String code) {
         return couponRepository.findByCode(code)
                 .orElseThrow(() -> new RuntimeException("Coupon non trouvé avec le code: " + code));
+    }
+
+    // Mettre à jour un coupon
+    public Coupon updateCoupon(String id, CouponRequestDTO requestDTO) {
+        Coupon coupon = getCouponById(id);
+        if (requestDTO.getCode() != null && !requestDTO.getCode().equals(coupon.getCode())) {
+            if (couponRepository.existsByCode(requestDTO.getCode())) {
+                throw new RuntimeException("Un coupon avec ce code existe déjà: " + requestDTO.getCode());
+            }
+            coupon.setCode(requestDTO.getCode());
+        }
+        if (requestDTO.getOfferId() != null) {
+            offerRepository.findById(requestDTO.getOfferId())
+                    .orElseThrow(() -> new RuntimeException("Offre non trouvée: " + requestDTO.getOfferId()));
+            coupon.setOfferId(requestDTO.getOfferId());
+        }
+        if (requestDTO.getDescription() != null) coupon.setDescription(requestDTO.getDescription());
+        if (requestDTO.getIsUnique() != null) coupon.setIsUnique(requestDTO.getIsUnique());
+        if (requestDTO.getAssignedUserId() != null) coupon.setAssignedUserId(requestDTO.getAssignedUserId());
+        if (requestDTO.getValidFrom() != null) coupon.setValidFrom(requestDTO.getValidFrom());
+        if (requestDTO.getValidUntil() != null) coupon.setValidUntil(requestDTO.getValidUntil());
+        if (requestDTO.getMaxUses() != null) {
+            coupon.setMaxUses(requestDTO.getMaxUses());
+            if (coupon.getIsUnique() == null || !coupon.getIsUnique()) {
+                int currentRemaining = coupon.getRemainingUses() != null ? coupon.getRemainingUses() : 0;
+                coupon.setRemainingUses(Math.min(currentRemaining, requestDTO.getMaxUses()));
+            }
+        }
+        return couponRepository.save(coupon);
+    }
+
+    // Supprimer un coupon
+    public void deleteCoupon(String id) {
+        if (!couponRepository.existsById(id)) {
+            throw new RuntimeException("Coupon non trouvé avec l'ID: " + id);
+        }
+        couponRepository.deleteById(id);
     }
 
     // ✅ 4. Appliquer un coupon et retourner AppliedOfferDTO

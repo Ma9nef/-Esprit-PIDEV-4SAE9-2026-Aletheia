@@ -65,7 +65,52 @@ public class OfferService {
 
         return dto;
     }
-    // ✅ NOUVELLE MÉTHODE: Récupérer les offres actives
+    // Récupérer toutes les offres
+    public List<Offer> getAllOffers() {
+        return offerRepository.findAll();
+    }
+
+    // Récupérer une offre par ID
+    public Offer getOfferById(String id) {
+        return offerRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Offre non trouvée avec l'ID: " + id));
+    }
+
+    // Mettre à jour une offre
+    public Offer updateOffer(String id, OfferRequestDTO requestDTO) {
+        Offer offer = getOfferById(id);
+        offer.setName(requestDTO.getName());
+        offer.setDescription(requestDTO.getDescription());
+        offer.setType(requestDTO.getType());
+        offer.setValue(requestDTO.getValue());
+        offer.setCourseIds(requestDTO.getCourseIds());
+        offer.setCategoryIds(requestDTO.getCategoryIds());
+        offer.setUserIds(requestDTO.getUserIds());
+        offer.setStartDate(requestDTO.getStartDate());
+        offer.setEndDate(requestDTO.getEndDate());
+        offer.setMaxUses(requestDTO.getMaxUses());
+        offer.setMaxUsesPerUser(requestDTO.getMaxUsesPerUser());
+        offer.setUpdatedAt(LocalDateTime.now());
+        return offerRepository.save(offer);
+    }
+
+    // Supprimer une offre
+    public void deleteOffer(String id) {
+        if (!offerRepository.existsById(id)) {
+            throw new RuntimeException("Offre non trouvée avec l'ID: " + id);
+        }
+        offerRepository.deleteById(id);
+    }
+
+    // Activer/Désactiver le statut d'une offre
+    public Offer toggleOfferStatus(String id) {
+        Offer offer = getOfferById(id);
+        offer.setStatus(offer.getStatus() == OfferStatus.ACTIVE ? OfferStatus.INACTIVE : OfferStatus.ACTIVE);
+        offer.setUpdatedAt(LocalDateTime.now());
+        return offerRepository.save(offer);
+    }
+
+    // Récupérer les offres actives
     public List<Offer> getActiveOffers() {
         return offerRepository.findByStatus(OfferStatus.ACTIVE);
     }
