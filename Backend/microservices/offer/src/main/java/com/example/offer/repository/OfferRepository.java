@@ -4,6 +4,7 @@ package com.example.offer.repository;
 import com.example.offer.model.Offer;
 import com.example.offer.model.OfferStatus;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface OfferRepository extends MongoRepository<Offer, String> {
     // Optionnel: autres méthodes utiles
     boolean existsByName(String name);
     Offer findByName(String name);
+    @Query(value = "{ 'type': ?0 }", count = true)
+    long countByType(String offerType);
 }
