@@ -1,0 +1,229 @@
+<!-- admin/analytics/analytics.component.html -->
+<div class="analytics-container">
+
+  <div class="analytics-header">
+    <h1>📊 Tableau de bord analytique</h1>
+    <button class="refresh-btn" (click)="loadDashboard()" [disabled]="loading">
+      @if (!loading) {
+        <span>⟳ Actualiser</span>
+      } @else {
+        <span>⟳ Rechargement...</span>
+      }
+    </button>
+  </div>
+
+  <!-- Message d'erreur -->
+  @if (error) {
+    <div class="error-message">
+      {{ error }}
+      <button (click)="loadDashboard()">Réessayer</button>
+    </div>
+  }
+
+  <!-- Loading - affiché pendant le chargement -->
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement des données analytiques...</p>
+    </div>
+  }
+
+  <!-- Message d'erreur -->
+  @if (error && !loading) {
+    <div class="error-message">
+      {{ error }}
+      <button (click)="loadDashboard()">Réessayer</button>
+    </div>
+  }
+
+  <!-- Dashboard Content - affiché dès que les données existent -->
+  @if (dashboardData && !loading) {
+    <div class="dashboard-content">
+
+      <!-- Indicateur de rechargement (optionnel) -->
+      @if (loading) {
+        <div class="reloading-indicator" style="text-align: center; padding: 10px; background: #e3f2fd; margin-bottom: 20px; border-radius: 8px;">
+          🔄 Mise à jour des données en cours...
+        </div>
+      }
+
+      <!-- Résumé -->
+      <div class="summary-cards">
+        <div class="summary-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <div class="card-icon">🏆</div>
+          <div class="card-content">
+            <div class="card-label">Meilleur type d'offre</div>
+            <div class="card-value">{{ dashboardData.executiveSummary?.meilleur_type_offre }}</div>
+          </div>
+        </div>
+
+        <div class="summary-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+          <div class="card-icon">📅</div>
+          <div class="card-content">
+            <div class="card-label">Meilleure période</div>
+            <div class="card-value">{{ dashboardData.executiveSummary?.meilleure_periode }}</div>
+          </div>
+        </div>
+
+        <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <div class="card-icon">👨‍🏫</div>
+          <div class="card-content">
+            <div class="card-label">Meilleur instructeur</div>
+            <div class="card-value">{{ dashboardData.executiveSummary?.meilleur_instructeur }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 1: Types d'offres -->
+      @if (dashboardData.conversionByType) {
+        <section class="analytics-section">
+          <div class="section-header">
+            <h2>🎯 {{ dashboardData.conversionByType.question }}</h2>
+            <span class="section-answer">👉 <strong>{{ dashboardData.conversionByType.answer }}</strong></span>
+          </div>
+
+          @if (dashboardData.conversionByType.details?.length > 0) {
+            <div class="type-cards">
+              @for (type of dashboardData.conversionByType.details; track type.offerType) {
+                <div class="type-card" [style.border-top]="'4px solid ' + getTypeColor(type.offerType)">
+                  <h3>{{ type.offerType }}</h3>
+                  <div class="type-stats">
+                    <div class="stat-item">
+                      <span class="stat-label">Conversions</span>
+                      <span class="stat-value">{{ formatNumber(type.totalConversions) }}</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Revenu</span>
+                      <span class="stat-value">{{ formatCurrency(type.totalRevenue) }}</span>
+                    </div>
+                    <div class="stat-item">
+                      <span class="stat-label">Taux conversion</span>
+                      <span class="stat-value">{{ type.conversionRate }}</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Question 2: Périodes -->
+      @if (dashboardData.bestPeriod) {
+        <section class="analytics-section">
+          <div class="section-header">
+            <h2>⏰ {{ dashboardData.bestPeriod.question }}</h2>
+            <span class="section-answer">👉 <strong>{{ dashboardData.bestPeriod.answer }}</strong></span>
+          </div>
+
+          @if (dashboardData.bestPeriod.details) {
+            <div class="period-stats">
+              <div class="period-card">
+                <div class="period-icon">📆</div>
+                <div class="period-details">
+                  <h4>Meilleur mois</h4>
+                  <div class="period-value">{{ dashboardData.bestPeriod.details.bestMonth }}</div>
+                  <div class="period-meta">
+                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestMonthSales) }} ventes</span>
+                    <span>{{ formatCurrency(dashboardData.bestPeriod.details.bestMonthRevenue) }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="period-card">
+                <div class="period-icon">📅</div>
+                <div class="period-details">
+                  <h4>Meilleur jour</h4>
+                  <div class="period-value">{{ dashboardData.bestPeriod.details.bestDayOfWeek }}</div>
+                  <div class="period-meta">
+                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestDaySales) }} ventes</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="period-card">
+                <div class="period-icon">⏱️</div>
+                <div class="period-details">
+                  <h4>Meilleure heure</h4>
+                  <div class="period-value">{{ dashboardData.bestPeriod.details.bestHour }}</div>
+                  <div class="period-meta">
+                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestHourSales) }} ventes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Tableau des mois -->
+          @if (dashboardData.bestPeriod.monthlyBreakdown?.length > 0) {
+            <div class="monthly-table">
+              <h3>Détail mensuel</h3>
+              <table>
+                <thead>
+                <tr>
+                  <th>Mois</th>
+                  <th>Ventes</th>
+                  <th>Revenu</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for (month of dashboardData.bestPeriod.monthlyBreakdown; track month._id.month) {
+                    <tr>
+                      <td>{{ getMonthName(month._id.month) }} {{ month._id.year }}</td>
+                      <td>{{ formatNumber(month.totalSales) }}</td>
+                      <td>{{ formatCurrency(month.revenue) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Question 3: Top Instructeurs -->
+      @if (dashboardData.topInstructors) {
+        <section class="analytics-section">
+          <div class="section-header">
+            <h2>👨‍🏫 {{ dashboardData.topInstructors.question }}</h2>
+            <span class="section-answer">👉 <strong>{{ dashboardData.topInstructors.answer }}</strong></span>
+          </div>
+
+          @if (dashboardData.topInstructors.allInstructors?.length > 0) {
+            <div class="instructors-table">
+              <table>
+                <thead>
+                <tr>
+                  <th>Rang</th>
+                  <th>Instructeur</th>
+                  <th>Ventes</th>
+                  <th>Revenu</th>
+                  <th>Étudiants</th>
+                </tr>
+                </thead>
+                <tbody>
+                  @for (inst of dashboardData.topInstructors.allInstructors; track inst.instructorId) {
+                    <tr [class.champion]="inst.rank === 1">
+                      <td>
+                        <span class="rank-badge"
+                              [class.gold]="inst.rank === 1"
+                              [class.silver]="inst.rank === 2"
+                              [class.bronze]="inst.rank === 3">
+                          {{ inst.rank }}
+                        </span>
+                      </td>
+                      <td>#{{ inst.instructorId }}</td>
+                      <td>{{ formatNumber(inst.totalSales) }}</td>
+                      <td>{{ formatCurrency(inst.revenue) }}</td>
+                      <td>{{ formatNumber(inst.uniqueStudents) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </section>
+      }
+    </div>
+  }
+</div>

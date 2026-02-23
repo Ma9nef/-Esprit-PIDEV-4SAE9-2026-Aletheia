@@ -8,6 +8,7 @@ import { AdminFlashSalesComponent } from './features/backoffice/pages/admin-flas
 import { OfferFormComponent } from './features/backoffice/pages/offer-form/offer-form.component';
 import { CouponFormComponent } from './features/backoffice/pages/coupon-form/coupon-form.component';
 import { FlashSaleFormComponent } from './features/backoffice/pages/flash-sale-form/flash-sale-form.component';
+import {AdminAnalyticsComponent} from './features/backoffice/pages/admin-analytics/admin-analytics.component';
 
 export const routes: Routes = [
   // Frontoffice
@@ -28,7 +29,8 @@ export const routes: Routes = [
       { path: 'coupons/:id', component: CouponFormComponent },
       { path: 'flash-sales', component: AdminFlashSalesComponent },
       { path: 'flash-sales/new', component: FlashSaleFormComponent },
-      { path: 'flash-sales/:id', component: FlashSaleFormComponent }
+      { path: 'flash-sales/:id', component: FlashSaleFormComponent },
+      {path: 'analytics', component: AdminAnalyticsComponent}
     ]
   },
   { path: '**', redirectTo: '/offers' }
