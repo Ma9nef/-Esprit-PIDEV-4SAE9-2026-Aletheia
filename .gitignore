@@ -1,0 +1,20 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Java / Maven / Gradle
+**/target/
+**/build/
+*.class
+*.log
+
+# Node / Angular
+**/node_modules/
+**/dist/
+.angular/
+npm-cache/
+
+# Env / secrets
+.env
+*.key
+*.pem

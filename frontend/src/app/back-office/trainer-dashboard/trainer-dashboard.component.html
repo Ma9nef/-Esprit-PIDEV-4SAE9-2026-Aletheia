@@ -1,0 +1,169 @@
+<div class="aletheia-dashboard aletheia-trainer">
+  <aside class="sidebar" aria-label="Trainer navigation">
+    <div class="sidebar-brand">
+      <span class="brand-text">ALETHEIA</span>
+      <span class="brand-role">Trainer</span>
+    </div>
+    <nav class="sidebar-nav" aria-label="Trainer menu">
+      <a href="#" class="nav-item nav-item--active" aria-current="page">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </span>
+        <span class="nav-label">Courses</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </span>
+        <span class="nav-label">Students</span>
+      </a>
+      <a href="#" class="nav-item">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </span>
+        <span class="nav-label">Revenue</span>
+      </a>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header">
+      <div class="header-left">
+        <h1 class="page-title">Trainer Dashboard</h1>
+      </div>
+      <div class="header-right">
+        <button type="button" class="icon-btn" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge-dot" aria-hidden="true">2</span>
+        </button>
+        <div class="avatar-wrap" aria-hidden="true">
+          <span class="avatar">TR</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="stats-row" aria-label="Overview statistics">
+      <div class="stat-card">
+        <div class="stat-icon stat-icon--blue" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">1,248</span>
+          <span class="stat-label">Total Students</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon--purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">12</span>
+          <span class="stat-label">Active Courses</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon stat-icon--green" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-value">$24,580</span>
+          <span class="stat-label">Revenue (30d)</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="two-col">
+      <section class="section section--wide" aria-labelledby="courses-table-heading">
+        <div class="section-header">
+          <h2 id="courses-table-heading" class="section-title">Course Management</h2>
+          <a href="#" class="link-more">Manage all</a>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" role="table">
+            <thead>
+              <tr>
+                <th scope="col">Course</th>
+                <th scope="col">Enrollments</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Advanced JavaScript & TypeScript</td>
+                <td>342</td>
+                <td><span class="status status--active">Active</span></td>
+              </tr>
+              <tr>
+                <td>React & Next.js Fundamentals</td>
+                <td>218</td>
+                <td><span class="status status--active">Active</span></td>
+              </tr>
+              <tr>
+                <td>Cloud Architecture (AWS)</td>
+                <td>156</td>
+                <td><span class="status status--draft">Draft</span></td>
+              </tr>
+              <tr>
+                <td>Node.js Backend Development</td>
+                <td>89</td>
+                <td><span class="status status--active">Active</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <aside class="section section--narrow" aria-labelledby="enrollments-heading">
+        <div class="section-header">
+          <h2 id="enrollments-heading" class="section-title">Recent Enrollments</h2>
+          <a href="#" class="link-more">View all</a>
+        </div>
+        <ul class="enrollment-list" role="list">
+          <li class="enrollment-item">
+            <span class="enrollment-avatar">MK</span>
+            <div class="enrollment-info">
+              <span class="enrollment-name">Maria Kim</span>
+              <span class="enrollment-course">Advanced JavaScript</span>
+            </div>
+            <time class="enrollment-time" datetime="2025-02-16T09:30">2h ago</time>
+          </li>
+          <li class="enrollment-item">
+            <span class="enrollment-avatar">JL</span>
+            <div class="enrollment-info">
+              <span class="enrollment-name">James Lee</span>
+              <span class="enrollment-course">React Fundamentals</span>
+            </div>
+            <time class="enrollment-time" datetime="2025-02-16T08:15">3h ago</time>
+          </li>
+          <li class="enrollment-item">
+            <span class="enrollment-avatar">AS</span>
+            <div class="enrollment-info">
+              <span class="enrollment-name">Anna Smith</span>
+              <span class="enrollment-course">Cloud Architecture</span>
+            </div>
+            <time class="enrollment-time" datetime="2025-02-15T16:00">Yesterday</time>
+          </li>
+        </ul>
+        <div class="notifications-panel" aria-labelledby="notifications-heading">
+          <h3 id="notifications-heading" class="panel-title">Notifications</h3>
+          <ul class="notif-list" role="list">
+            <li class="notif-item">
+              <span class="notif-dot" aria-hidden="true"></span>
+              <span class="notif-text">New review on "Advanced JavaScript"</span>
+            </li>
+            <li class="notif-item">
+              <span class="notif-dot" aria-hidden="true"></span>
+              <span class="notif-text">Workshop "API Design" scheduled for Feb 20</span>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
