@@ -1,0 +1,107 @@
+<div class="certificate-dashboard p-4 min-vh-100 bg-light">
+  <div class="container">
+    <!-- HEADER -->
+    <div class="row align-items-center mb-5">
+      <div class="col-md-8">
+        <h1 class="display-5 fw-bold text-dark mb-1">
+          <i class="bi bi-patch-check-fill text-primary me-2"></i>Manage Certificates
+        </h1>
+        <p class="text-muted fs-5">Issue, track, and verify student credentials.</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <button class="btn btn-primary shadow-sm rounded-pill px-4" (click)="openAddModal()">
+          <i class="bi bi-plus-lg me-1"></i> Add New Certificate
+        </button>
+      </div>
+    </div>
+
+    <!-- SEARCH & SIGNATURE PAD -->
+    <div class="row mb-4">
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+          <div class="card-body">
+            <label class="form-label fw-bold text-muted small uppercase">Recherche</label>
+            <div class="input-group border-0 bg-light rounded-3">
+              <span class="input-group-text bg-transparent border-0"><i class="bi bi-search"></i></span>
+              <input type="text" class="form-control border-0 bg-transparent shadow-none" 
+                     placeholder="Search by code..." [(ngModel)]="searchTerm">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- ZONE DE SIGNATURE -->
+      <div class="col-md-6">
+        <div class="card border-0 shadow-sm rounded-4">
+          <div class="card-body text-center">
+            <label class="form-label d-block fw-bold text-muted small text-start">Signature Officielle</label>
+            <div class="signature-container bg-white border rounded-3 mb-2" style="height: 120px;">
+              <canvas #sigCanvas width="450" height="120" style="touch-action: none; cursor: crosshair;"></canvas>
+            </div>
+            <button class="btn btn-link btn-sm text-danger text-decoration-none p-0" (click)="clearSignature()">
+              <i class="bi bi-eraser"></i> Effacer la signature
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th class="ps-4">Code</th>
+            <th>Issued Date</th>
+            <th>Enrollment</th>
+            <th class="text-end pe-4">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <tr *ngFor="let cert of filteredCertificates">
+            <td class="ps-4"><span class="code-badge bg-light p-2 rounded fw-bold">{{ cert.certificateCode }}</span></td>
+            <td><i class="bi bi-calendar-event me-2 text-primary"></i>{{ cert.issuedAt | date:'mediumDate' }}</td>
+            <td><span class="badge bg-light text-dark border">#{{ cert.enrollment?.id }}</span></td>
+            <td class="text-end pe-4">
+              <div class="btn-group gap-2">
+                <button class="btn btn-outline-success btn-sm rounded-pill px-3" (click)="downloadModern(cert)">
+                  <i class="bi bi-file-earmark-pdf"></i> PDF
+                </button>
+                <button class="btn btn-outline-dark btn-sm rounded-pill px-3" (click)="editCertificate(cert)">Update</button>
+                <button class="btn btn-danger btn-sm rounded-circle p-2" (click)="onDelete(cert.id!)">
+                  <i class="bi bi-trash3"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-dark text-white rounded-top-4">
+        <h5 class="modal-title">Edit Certificate Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" (click)="closeModal()"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label fw-bold">Certificate Code</label>
+          <input type="text" class="form-control" [(ngModel)]="selectedCertificate.certificateCode">
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold">Issued Date</label>
+          <input type="date" class="form-control" [ngModel]="selectedCertificate.issuedAt | date:'yyyy-MM-dd'" (ngModelChange)="selectedCertificate.issuedAt=$event">
+        </div>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light rounded-pill px-4" (click)="closeModal()">Cancel</button>
+        <button type="button" class="btn btn-primary rounded-pill px-4" (click)="saveChanges()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>

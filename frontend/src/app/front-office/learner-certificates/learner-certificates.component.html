@@ -1,0 +1,65 @@
+<div class="learner-container p-4 min-vh-100 bg-white">
+  <div class="container">
+    
+    <!-- HEADER -->
+    <div class="mb-5">
+      <h2 class="fw-bold text-dark">My Learning Achievements</h2>
+      <p class="text-muted">View, download, and share your verified professional credentials.</p>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div *ngIf="loading" class="text-center py-5">
+      <div class="spinner-border text-primary"></div>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="!loading && myCertificates.length === 0" class="text-center py-5 bg-light rounded-4">
+      <i class="bi bi-award text-muted display-1"></i>
+      <h4 class="mt-3">No certificates yet</h4>
+      <p class="text-muted">Complete your courses to earn your professional credentials.</p>
+    </div>
+
+    <!-- CERTIFICATES GRID -->
+    <div class="row g-4" *ngIf="!loading">
+      <div class="col-md-6 col-lg-4" *ngFor="let cert of myCertificates">
+        <div class="card h-100 border-0 shadow-sm hover-card">
+          
+          <!-- Badge Header -->
+          <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between">
+            <span class="badge rounded-pill bg-success-subtle text-success border border-success">
+              <i class="bi bi-shield-check me-1"></i> Verified
+            </span>
+            <small class="text-muted">{{ cert.issuedAt | date:'mediumDate' }}</small>
+          </div>
+
+          <!-- Body -->
+          <div class="card-body px-4">
+            <h5 class="card-title fw-bold mb-1">{{ cert.certificateCode }}</h5>
+            <p class="text-muted small mb-3">Professional Credential</p>
+            
+            <div class="d-flex align-items-center mb-4">
+              <div class="course-icon bg-primary-subtle text-primary rounded-circle me-3">
+                <i class="bi bi-journal-check"></i>
+              </div>
+              <div>
+                <small class="text-muted d-block">Enrollment Ref:</small>
+                <span class="fw-semibold">#{{ cert.enrollment?.id }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="card-footer bg-transparent border-0 pb-4 px-4 gap-2 d-grid">
+            <button class="btn btn-primary rounded-pill fw-bold" (click)="downloadCertificate(cert)">
+              <i class="bi bi-download me-2"></i>Download PDF
+            </button>
+            <a [routerLink]="['/verify', cert.certificateCode]" class="btn btn-outline-dark rounded-pill fw-bold">
+              <i class="bi bi-qr-code-scan me-2"></i>Public Link
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
