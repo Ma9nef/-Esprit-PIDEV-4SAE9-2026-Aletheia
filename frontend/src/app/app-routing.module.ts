@@ -16,6 +16,7 @@ import { AssessmentFormComponent } from './back-office/assessment-form/assessmen
 import { LearnerCertificatesComponent } from './front-office/learner-certificates/learner-certificates.component';
 import { VerifyCertificateComponent } from './front-office/verify-certificate/verify-certificate.component';
 import { ManageCertificatesComponent } from './back-office/manage-certificates/manage-certificates.component';
+import { LearnerAssessmentComponent } from './front-office/learner-assessment/learner-assessment.component';
 
 const routes: Routes = [
   {path:"",component:TemplateComponent},
@@ -33,7 +34,8 @@ const routes: Routes = [
     { path: 'add-assessment', component: AssessmentFormComponent }, 
      { path: 'manage-certificates', component: ManageCertificatesComponent },
   { path: 'edit-assessment/:id', component: AssessmentFormComponent  },
-  { path: 'my-certificates', component: LearnerCertificatesComponent },  
+  { path: 'my-certificates', component: LearnerCertificatesComponent }, 
+   { path: 'assessment', component: LearnerAssessmentComponent }, 
   {
     path: 'auth',
     loadChildren: () =>

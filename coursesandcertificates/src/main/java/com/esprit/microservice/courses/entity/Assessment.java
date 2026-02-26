@@ -24,7 +24,7 @@ public class Assessment {
     private LocalDateTime dueDate;
 
     @ManyToOne
-    @JsonIgnore // Keep this ignored so we don't load the whole course
+     // Keep this ignored so we don't load the whole course
     @JoinColumn(name = "course_id")
     private Course course;
 

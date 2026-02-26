@@ -1,63 +1,107 @@
-/* Custom Code Badge Style */
-.code-badge {
-    background: #f0f4f8;
-    color: #2c3e50;
-    font-family: 'Monaco', 'Consolas', monospace;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: 600;
-    border: 1px solid #d1d9e6;
+/* --- 1. THEME VARIABLES (Critical for the buttons to work) --- */
+.admin-container {
+  --table-header: #1e293b; /* Slate Dark */
+  --primary: #2563eb;
+  --bg-card: #ffffff;
+  transition: all 0.3s ease;
 }
 
-/* Table Enhancements */
+/* DARK MODE VARS */
+:host-context(body.dark-theme) .admin-container {
+  --table-header: #0f172a; /* Deeper Night */
+  --bg-card: #1e293b;
+}
+
+/* --- 2. TABLE STYLING (To match the premium buttons) --- */
+.table {
+  border-collapse: separate;
+  border-spacing: 0 8px; /* Creates spacing between rows */
+}
+
 .table thead th {
-    font-size: 0.85rem;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.table tbody tr {
-    transition: all 0.3s ease;
-}
-
-.table tbody tr:hover {
-    background-color: #f8fbff !important;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* Rounded Buttons */
-.btn-group .btn {
-    display: inline-flex;
-    align-items: center;
-}
-
-/* Container Background */
-.certificate-dashboard {
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-}
-
-.card.rounded-4 {
-    border-radius: 1.25rem !important;
-}
-.signature-container canvas {
-  width: 100%;
-  height: 100%;
-  background-color: #ffffff;
-}
-
-.code-badge {
-  font-family: 'Courier New', Courier, monospace;
+  background-color: var(--table-header) !important;
+  color: white !important;
+  border: none;
+  padding: 15px !important;
+  font-size: 0.8rem;
+  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-.card {
-  transition: transform 0.2s;
+.table tbody tr {
+  background-color: var(--bg-card) !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  transition: transform 0.2s ease;
 }
 
-.table thead th {
-  font-weight: 600;
+.table tbody tr:hover {
+  transform: scale(1.005);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* --- 3. ACTION BUTTONS (Corrected & Developed) --- */
+.text-end.pe-4 {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.btn-sm {
+  padding: 8px 16px !important;
+  border-radius: 12px !important; /* Squircle style */
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
   text-transform: uppercase;
-  font-size: 0.85rem;
   letter-spacing: 0.5px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  border: 1px solid transparent !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* PDF BUTTON */
+.btn-outline-success {
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #10b981 !important;
+  border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+.btn-outline-success:hover {
+  background: #10b981 !important;
+  color: white !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+}
+
+/* EDIT BUTTON */
+.btn-outline-dark {
+  background: var(--table-header) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn-outline-dark:hover {
+  background: #000000 !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* DELETE BUTTON */
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+.btn-danger:hover {
+  background: #ef4444 !important;
+  color: white !important;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
 }

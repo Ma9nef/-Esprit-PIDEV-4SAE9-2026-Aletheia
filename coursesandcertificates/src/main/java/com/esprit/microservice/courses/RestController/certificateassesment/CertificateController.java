@@ -24,7 +24,6 @@ public class CertificateController {
     CertificateRepository certificateRepository;
 
 
-
     @PostMapping("/generate/{enrollmentId}")
     public ResponseEntity<String> generateCertificate(@PathVariable Long enrollmentId) {
         Certificate cert = certificateService.generateCertificate(enrollmentId);

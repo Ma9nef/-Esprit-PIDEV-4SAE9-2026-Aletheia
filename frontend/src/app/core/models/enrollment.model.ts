@@ -7,5 +7,13 @@ export interface Enrollment {
     id: number;
     fullName: string;
     email?: string;
+    signature?: string;
+    nom?: string;
+    prenom?: string;
+  };
+  course?: {
+    id: number;
+    title: string;
+    description?: string;
   };
 }

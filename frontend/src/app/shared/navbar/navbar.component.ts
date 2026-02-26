@@ -38,7 +38,12 @@ export class NavbarComponent implements OnInit {
     }
   
     this.currentUser.email = u.email;
-    this.currentUser.name = u.email.split('@')[0];
+    // if the token contains first/last name use them, otherwise fall back to email prefix
+    if (u.prenom || u.nom) {
+      this.currentUser.name = `${u.prenom || ''} ${u.nom || ''}`.trim();
+    } else {
+      this.currentUser.name = u.email.split('@')[0];
+    }
   }
 
   menuItems = [
@@ -120,6 +125,11 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/front/my-courses']);
     this.isUserDropdownOpen = false;
   }
+  onMyCertificatesClick(): void {
+ 
+  this.router.navigate(['/my-certificates']); 
+  this.isUserDropdownOpen = false;
+}
 
   onLogout(): void {
     this.auth.logout();                  // remove token

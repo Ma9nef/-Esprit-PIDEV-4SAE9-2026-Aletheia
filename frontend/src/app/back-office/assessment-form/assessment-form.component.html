@@ -15,10 +15,27 @@
     <div class="card-body bg-white">
       <!-- MAIN ASSESSMENT FIELDS (Always Visible) -->
       <div class="row g-3 mb-4 p-3 bg-light border rounded">
-        <div class="col-md-4">
+        
+        <!-- 1. Title Input -->
+        <div class="col-md-3">
           <label class="small fw-bold">Title</label>
           <input type="text" class="form-control form-control-sm" [(ngModel)]="assessment.title">
         </div>
+
+   <!-- Update the OPTION line inside your select -->
+<div class="col-md-3">
+  <label class="small fw-bold">Course (Select by Description)</label>
+  <select class="form-select form-select-sm" [(ngModel)]="assessment.course_id" name="course_id">
+    <option [ngValue]="null">-- No Course Assigned --</option>
+    
+    <!-- USE [ngValue] HERE, NOT [value] -->
+    <option *ngFor="let c of courses" [ngValue]="c.id">
+      {{ c.title }} : {{ c.description | slice:0:40 }}...
+    </option>
+  </select>
+</div>
+
+        <!-- 3. Type -->
         <div class="col-md-2">
           <label class="small fw-bold">Type</label>
           <select class="form-select form-select-sm" [(ngModel)]="assessment.type">
@@ -26,11 +43,15 @@
             <option value="EXAM">EXAM</option>
           </select>
         </div>
+
+        <!-- 4. Score -->
         <div class="col-md-2">
           <label class="small fw-bold">Total Score</label>
           <input type="number" class="form-control form-control-sm" [(ngModel)]="assessment.totalScore">
         </div>
-        <div class="col-md-4">
+
+        <!-- 5. Due Date -->
+        <div class="col-md-2">
           <label class="small fw-bold">Due Date</label>
           <input type="datetime-local" class="form-control form-control-sm" [(ngModel)]="assessment.dueDate">
         </div>
