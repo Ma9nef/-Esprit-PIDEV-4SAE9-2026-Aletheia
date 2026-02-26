@@ -1,0 +1,91 @@
+/* --- THEME VARIABLES --- */
+.main-wrapper {
+  --bg-color: #f8f9fa;
+  --text-color: #1e293b;
+  --text-muted: #64748b;
+  --card-bg: #ffffff;
+  --accent-color: #3b82f6;
+  --banner-grad: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+}
+
+/* --- APPLY DARK THEME --- */
+:host-context(body.dark-theme) .main-wrapper {
+  --bg-color: #0f172a;
+  --text-color: #f8f9fa;
+  --text-muted: #94a3b8;
+  --card-bg: #1e293b;
+}
+
+.theme-bg { background-color: var(--bg-color); transition: 0.3s; }
+
+/* --- LAYOUT --- */
+.l-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hero-banner {
+  background: var(--banner-grad);
+  color: white;
+  padding: 60px 0;
+}
+
+.hero-title { font-size: 2.5rem; font-weight: 800; margin: 0; }
+.hero-subtitle { opacity: 0.85; font-size: 1.1rem; }
+
+/* --- GRID --- */
+.assessment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+  margin-top: 30px;
+}
+
+/* --- EXAM CARD --- */
+.exam-card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.exam-card:hover { transform: translateY(-5px); }
+
+.card-inner { padding: 25px; }
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.type-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-color);
+}
+
+.points-label { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+.exam-title { color: var(--text-color); font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+.exam-desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 25px; }
+
+/* --- BUTTON --- */
+.btn-start {
+  width: 100%;
+  padding: 12px;
+  border-radius: 50px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --- UTILS --- */
+.min-vh-100 { min-height: 100vh; }
+.shadow { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.py-5 { padding-top: 3rem; padding-bottom: 3rem; }

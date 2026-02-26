@@ -40,6 +40,12 @@ public class User {
     private String photoUrl;
     private String bio;
 
+    // ⬇️ ADD THIS HERE ⬇️
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String signature;
+    // ⬆️ ---------------- ⬆️
+
     private LocalDateTime lastLogin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

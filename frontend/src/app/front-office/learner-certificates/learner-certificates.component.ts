@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CertificateService } from '../../core/services/certificate.service';
-import { Certificate } from '../../core/models/certificate.model';
+import { AssessmentService } from '../../core/services/assessment.service';
+import { UserService } from '../../core/services/user.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import { jsPDF } from 'jspdf';
 import * as QRCode from 'qrcode';
 
@@ -10,57 +12,92 @@ import * as QRCode from 'qrcode';
   styleUrls: ['./learner-certificates.component.css']
 })
 export class LearnerCertificatesComponent implements OnInit {
-  myCertificates: Certificate[] = [];
+  myCertificates: any[] = [];
   loading: boolean = true;
+  currentUser: any = null;
+  adminSignature: string | null = null;
 
-  constructor(private certificateService: CertificateService) {}
+  constructor(
+    private certificateService: CertificateService,
+    private assessmentService: AssessmentService,
+    private userService: UserService,
+    private auth: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadMyCertificates();
+    this.currentUser = this.auth.getUserFromToken();
+    this.loadLearnerData();
   }
 
-  loadMyCertificates(): void {
-    // Assuming your backend has a way to filter by logged-in user
-    // If not, you can filter the getAll results by user ID locally
-    this.certificateService.getAllCertificates().subscribe({
-      next: (data: any) => {
-        // Example: Filter for student with ID 5 (Replace with real Auth logic)
-        const currentUserId = 5; 
-        this.myCertificates = data.filter((c: any) => c.enrollment?.user?.id === currentUserId);
-        this.loading = false;
-      },
-      error: () => this.loading = false
-    });
+  async loadLearnerData() {
+    try {
+      this.loading = true;
+      const loggedInId = Number(this.currentUser?.id || this.currentUser?.sub);
+
+      // 1. Load everything needed
+      const [allCerts, allUsers, allAssessments]: any = await Promise.all([
+        this.certificateService.getAllCertificates().toPromise(),
+        this.userService.getAllUsers().toPromise(),
+        this.assessmentService.getAllAssessments().toPromise()
+      ]);
+
+      // 2. Get Authority Signature (From Admin)
+      const users = allUsers.content || allUsers;
+      const admin = users.find((u: any) => u.role === 'ADMIN' || u.id === 1);
+      this.adminSignature = admin?.signature || null;
+
+      // 3. Filter Certificates for THIS student only
+      const certList = Array.isArray(allCerts) ? allCerts : [allCerts];
+      this.myCertificates = certList.filter(c => 
+        Number(c.userId) === loggedInId || 
+        Number(c.enrollment?.userId) === loggedInId ||
+        Number(c.enrollment?.user_id) === loggedInId
+      );
+
+      // 4. Attach Grades
+      this.myCertificates.forEach(cert => {
+        const related = allAssessments.filter((a: any) => a.course?.id === cert.enrollment?.course?.id);
+        cert.score = related.length 
+          ? Math.round(related.reduce((acc: number, curr: any) => acc + (curr.totalScore || 0), 0) / related.length) 
+          : 85; 
+      });
+
+      this.loading = false;
+    } catch (error) {
+      console.error("Error loading achievements:", error);
+      this.loading = false;
+    }
   }
 
-  async downloadCertificate(cert: Certificate) {
+  async downloadPDF(cert: any) {
     const doc = new jsPDF('l', 'mm', 'a4');
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
+    const w = doc.internal.pageSize.getWidth();
+    const h = doc.internal.pageSize.getHeight();
 
-    // Reusing your Modern PDF Logic
-    doc.setDrawColor(44, 62, 80); 
-    doc.setLineWidth(1);
-    doc.rect(10, 10, pageWidth - 20, pageHeight - 20);
+    // Design: Borders
+    doc.setDrawColor(30, 41, 59); doc.setLineWidth(5); doc.rect(5, 5, w - 10, h - 10);
+    doc.setDrawColor(202, 138, 4); doc.setLineWidth(1.5); doc.rect(12, 12, w - 24, h - 24);
 
-    doc.setFont('times', 'bold');
-    doc.setFontSize(40);
-    doc.text('CERTIFICATE OF ACHIEVEMENT', pageWidth / 2, 50, { align: 'center' });
+    // Text: Header
+    doc.setTextColor(30, 41, 59); doc.setFont('times', 'bold'); doc.setFontSize(35);
+    doc.text('CERTIFICATE OF ACHIEVEMENT', w / 2, 45, { align: 'center' });
 
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'normal');
-    doc.text('This credential is proudaly presented to', pageWidth / 2, 75, { align: 'center' });
+    // Text: Student Name
+    doc.setTextColor(180, 130, 30); doc.setFont('times', 'italic'); doc.setFontSize(45);
+    const name = `${this.currentUser?.prenom || 'Learner'} ${this.currentUser?.nom || ''}`;
+    doc.text(name, w / 2, 85, { align: 'center' });
 
-    doc.setFont('times', 'italic');
-    doc.setFontSize(35);
-    const name = cert.enrollment?.user?.fullName || 'Learner';
-    doc.text(name, pageWidth / 2, 100, { align: 'center' });
+    // Text: Course
+    doc.setTextColor(30, 41, 59); doc.setFont('helvetica', 'bold'); doc.setFontSize(22);
+    doc.text((cert.enrollment?.course?.title || 'Professional Course').toUpperCase(), w / 2, 120, { align: 'center' });
 
-    // Add QR Code for Verification
-    const verifyUrl = `http://localhost:4200/verify/${cert.certificateCode}`;
-    const qrDataUrl = await QRCode.toDataURL(verifyUrl);
-    doc.addImage(qrDataUrl, 'PNG', pageWidth - 50, pageHeight - 50, 35, 35);
+    // Signature & QR
+    if (this.adminSignature) doc.addImage(this.adminSignature, 'PNG', 40, 150, 50, 20);
+    doc.line(40, 172, 90, 172); doc.setFontSize(10); doc.text('Authorized Authority', 65, 178, { align: 'center' });
 
-    doc.save(`${name}_Certificate.pdf`);
+    const qr = await QRCode.toDataURL(`http://localhost:4200/verify/${cert.certificateCode}`);
+    doc.addImage(qr, 'PNG', w - 60, 145, 30, 30);
+
+    doc.save(`Certificate_${cert.certificateCode}.pdf`);
   }
 }

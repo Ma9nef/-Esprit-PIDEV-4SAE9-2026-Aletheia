@@ -6,5 +6,8 @@ export interface Assessment {
   type: string;
   totalScore: number;
   dueDate: string | Date;
-  questions?: Question[]; // Include questions here
+  questions?: Question[];
+     course?: { id: number; title?: string; description?: string };
+  courseId?: number;                       // Allows accessing data.courseId
+  course_id?: number;  // Include questions here
 }

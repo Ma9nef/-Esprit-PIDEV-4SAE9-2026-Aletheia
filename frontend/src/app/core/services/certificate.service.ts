@@ -17,7 +17,9 @@ export class CertificateService {
  getAllCertificates(): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/all`);
 }
-
+sendEmail(certId: number, email: string) {
+  return this.http.post(`${this.apiUrl}/${certId}/send-email?email=${email}`, {});
+}
   // Get by code
   
    updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {

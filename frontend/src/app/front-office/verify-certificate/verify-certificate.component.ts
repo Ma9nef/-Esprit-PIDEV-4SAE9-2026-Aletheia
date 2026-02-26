@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CertificateService } from '../../core/services/certificate.service';
-declare var bootstrap: any;
+import { Location } from '@angular/common'; // Import this correctly
+
 @Component({
   selector: 'app-verify-certificate',
   templateUrl: './verify-certificate.component.html',
@@ -11,19 +12,17 @@ export class VerifyCertificateComponent implements OnInit {
   certificate: any = null;
   loading = true;
   error = false;
-  
 
   constructor(
     private route: ActivatedRoute,
-    private certificateService: CertificateService
+    private certificateService: CertificateService,
+    private location: Location // Inject correctly
   ) { }
 
   ngOnInit(): void {
-    // 1. Get the code from the URL (e.g. CERT-34565992)
     const code = this.route.snapshot.paramMap.get('code');
     
     if (code) {
-      // 2. Call the service to verify with the backend
       this.certificateService.getCertificateByCode(code).subscribe({
         next: (data) => {
           this.certificate = data;
@@ -34,6 +33,14 @@ export class VerifyCertificateComponent implements OnInit {
           this.loading = false;
         }
       });
+    } else {
+      this.loading = false;
+      this.error = true;
     }
+  }
+
+  // Smart back button function
+  goBack(): void {
+    this.location.back();
   }
 }

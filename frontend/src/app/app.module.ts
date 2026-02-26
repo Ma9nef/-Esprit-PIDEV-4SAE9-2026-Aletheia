@@ -7,11 +7,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FrontOfficeModule } from './front-office/front-office.module';
 import { SharedModule } from './shared/shared.module';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule,  } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
 import { BackOfficeModule } from './back-office/back-office.module';
+import { JwtInterceptor } from './core/interceptors/auth.interceptor';
 
 
 
@@ -24,7 +25,7 @@ import { BackOfficeModule } from './back-office/back-office.module';
     BrowserModule,
     AppRoutingModule,
     FrontOfficeModule,
-    BackOfficeModule, 
+    
     SharedModule,
     FormsModule  ,
     CommonModule,
@@ -33,7 +34,7 @@ import { BackOfficeModule } from './back-office/back-office.module';
 
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

@@ -17,6 +17,7 @@ public class UserMapper {
                 .phone(user.getPhone())
                 .photoUrl(user.getPhotoUrl())
                 .bio(user.getBio())
+                        .signature(user.getSignature())
                 .build();
     }
 }

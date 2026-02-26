@@ -106,6 +106,16 @@
             <span>My Courses</span>
           </a>
           <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="onMyCertificatesClick()">
+  <!-- Certificate / Award Icon -->
+  <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 15L10 20L12 19L14 20L12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="12" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+    <path d="M9 8L11 10L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <span>My Certificates</span>
+</a>
+         <div class="dropdown-divider"></div>
           <a class="dropdown-item logout" (click)="onLogout()">
             <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

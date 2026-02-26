@@ -1,0 +1,40 @@
+<div class="main-wrapper min-vh-100 theme-bg">
+  
+  <!-- HERO BANNER -->
+  <header class="hero-banner shadow">
+    <div class="l-container">
+      <h1 class="hero-title">Certification Center</h1>
+      <p class="hero-subtitle">Validez vos compétences et obtenez vos certificats.</p>
+    </div>
+  </header>
+
+  <main class="l-container py-5">
+    <!-- VIEW LIST -->
+    <div *ngIf="currentView === 'list'" class="fade-in">
+      <h3 class="section-title">Examens disponibles</h3>
+
+      <!-- CUSTOM GRID (Replaces row/col) -->
+      <div class="assessment-grid">
+        
+        <article class="exam-card shadow-sm" *ngFor="let a of assessments">
+          <div class="card-inner">
+            <header class="card-meta">
+              <span class="type-badge" [attr.data-type]="a.type">
+                {{ a.type }}
+              </span>
+              <span class="points-label">{{ a.totalScore }} pts</span>
+            </header>
+
+            <h5 class="exam-title">{{ a.title }}</h5>
+            <p class="exam-desc">Cliquez sur commencer pour débuter l'examen.</p>
+            
+            <button class="btn-start" (click)="startAssessment(a)">
+              Commencer <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </main>
+</div>

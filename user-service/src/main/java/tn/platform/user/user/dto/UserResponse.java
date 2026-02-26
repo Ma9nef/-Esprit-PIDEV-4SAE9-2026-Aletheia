@@ -14,4 +14,5 @@ public class UserResponse {
     private String phone;
     private String photoUrl;
     private String bio;
+    private String signature;
 }

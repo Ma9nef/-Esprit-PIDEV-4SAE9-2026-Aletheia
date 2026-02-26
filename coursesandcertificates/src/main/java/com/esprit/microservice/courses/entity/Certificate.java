@@ -33,4 +33,5 @@ public class Certificate {
     @JoinColumn(name = "enrollment_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "certificate"})
     private Enrollment enrollment;
+
 }
