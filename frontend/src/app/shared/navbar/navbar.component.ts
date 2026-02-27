@@ -12,6 +12,18 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
+goToAssessments() {
+
+  const role = localStorage.getItem('role'); // or from your auth service
+
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-assessments']);
+  } 
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/assessment']);
+  }
+
+}
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
 

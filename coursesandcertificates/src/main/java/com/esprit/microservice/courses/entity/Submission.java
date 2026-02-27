@@ -26,6 +26,8 @@ public class Submission {
 
     private Double score;
     private String feedback;
+    @Column(name = "user_id", nullable = true)
+    private Long userId;
 
 
     @JsonIgnore
