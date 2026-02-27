@@ -1,6 +1,6 @@
 package com.esprit.microservice.courses.service.publicApi;
 
-import com.esprit.microservice.courses.entity.Enrollment;
+import com.esprit.microservice.courses.entity.progress.Enrollment;
 import com.esprit.microservice.courses.service.core.EnrollmentCoreService;
 import org.springframework.stereotype.Service;
 

@@ -2,7 +2,7 @@ package com.esprit.microservice.courses.service.mapper;
 
 import com.esprit.microservice.courses.dto.course.admin.CourseAdminDTO;
 import com.esprit.microservice.courses.dto.course.publicDto.CoursePublicDTO;
-import com.esprit.microservice.courses.entity.Course;
+import com.esprit.microservice.courses.entity.content.Course;
 import org.springframework.stereotype.Component;
 
 @Component

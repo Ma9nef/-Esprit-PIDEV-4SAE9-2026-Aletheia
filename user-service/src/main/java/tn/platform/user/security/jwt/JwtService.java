@@ -38,6 +38,7 @@ public class JwtService {
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole().name())
                 .claim("id", user.getId())
+                .claim("name", user.getNom() + " " + user.getPrenom()) // ✅ ADD THIS
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key)

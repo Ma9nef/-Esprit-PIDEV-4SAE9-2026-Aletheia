@@ -1,6 +1,7 @@
 package com.esprit.microservice.courses.RestController.lesson;
 
 import com.esprit.microservice.courses.dto.lesson.learning.LessonLearningDTO;
+import com.esprit.microservice.courses.security.JwtReader;
 import com.esprit.microservice.courses.service.publicApi.LearningLessonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,18 +13,20 @@ import java.util.List;
 public class LearningLessonController {
 
     private final LearningLessonService learningLessonService;
+    private final JwtReader jwtReader;
 
-    public LearningLessonController(LearningLessonService learningLessonService) {
+    public LearningLessonController(LearningLessonService learningLessonService, JwtReader jwtReader) {
         this.learningLessonService = learningLessonService;
+        this.jwtReader = jwtReader;
     }
 
     // List published lessons of a course (archived=false)
     @GetMapping("/by-course/{courseId}")
     public ResponseEntity<List<LessonLearningDTO>> listByCourse(
             @PathVariable Long courseId,
-            @RequestHeader(value = "X-USER-ID", required = false) String userIdHeader
+            @RequestHeader("Authorization") String authorization
     ) {
-        Long userId = parseUserIdOrDefault(userIdHeader);
+        Long userId = jwtReader.extractUserId(authorization);
         return ResponseEntity.ok(learningLessonService.listCourseLessons(courseId, userId));
     }
 
@@ -31,18 +34,12 @@ public class LearningLessonController {
     @GetMapping("/{lessonId}")
     public ResponseEntity<LessonLearningDTO> getLesson(
             @PathVariable Long lessonId,
-            @RequestHeader(value = "X-USER-ID", required = false) String userIdHeader
+            @RequestHeader("Authorization") String authorization
     ) {
-        Long userId = parseUserIdOrDefault(userIdHeader);
+        Long userId = jwtReader.extractUserId(authorization);
 
         return learningLessonService.getLesson(lessonId, userId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    private Long parseUserIdOrDefault(String header) {
-        if (header == null || header.isBlank()) return 1L; // dev default
-        try { return Long.parseLong(header.trim()); }
-        catch (NumberFormatException e) { return 1L; }
     }
 }

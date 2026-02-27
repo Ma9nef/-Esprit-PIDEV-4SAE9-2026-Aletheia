@@ -1,6 +1,6 @@
 package com.esprit.microservice.courses.repository;
 
-import com.esprit.microservice.courses.entity.Enrollment;
+import com.esprit.microservice.courses.entity.progress.Enrollment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

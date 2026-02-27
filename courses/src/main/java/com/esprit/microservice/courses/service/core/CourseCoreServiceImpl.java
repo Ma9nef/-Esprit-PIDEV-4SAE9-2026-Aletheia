@@ -1,6 +1,6 @@
 package com.esprit.microservice.courses.service.core;
 
-import com.esprit.microservice.courses.entity.Course;
+import com.esprit.microservice.courses.entity.content.Course;
 import com.esprit.microservice.courses.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 
@@ -41,5 +41,14 @@ public class CourseCoreServiceImpl implements CourseCoreService {
     @Override
     public Course save(Course course) {
         return courseRepo.save(course);
+    }
+    @Override
+    public List<Course> findByInstructorId(Long instructorId) {
+        return courseRepo.findByInstructorId(instructorId);
+    }
+
+    @Override
+    public Optional<Course> findByIdAndInstructorId(Long id, Long instructorId) {
+        return courseRepo.findByIdAndInstructorId(id, instructorId);
     }
 }

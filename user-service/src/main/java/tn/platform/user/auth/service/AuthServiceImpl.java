@@ -80,4 +80,33 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    @Override
+    public AuthResponse registerInstructor(CreateInstructorRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already used");
+        }
+
+        User user = new User();
+        user.setNom(request.getNom());
+        user.setPrenom(request.getPrenom());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        user.setRole(Role.INSTRUCTOR);
+        user.setEnabled(true);
+        user.setEmailVerified(true);
+
+        userRepository.save(user);
+
+        String token = jwtService.generateToken(user);
+
+        return new AuthResponse(
+                token,
+                user.getId(),
+                user.getEmail(),
+                user.getRole().name()
+        );
+    }
+
 }

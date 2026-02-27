@@ -2,7 +2,7 @@ package com.esprit.microservice.courses.service.instructor;
 
 import com.esprit.microservice.courses.dto.lesson.admin.LessonAdminDTO;
 import com.esprit.microservice.courses.dto.lesson.command.LessonUpsertDTO;
-import com.esprit.microservice.courses.entity.Lesson;
+import com.esprit.microservice.courses.entity.content.Lesson;
 import com.esprit.microservice.courses.service.core.LessonCoreService;
 import com.esprit.microservice.courses.service.mapper.LessonMapper;
 import org.springframework.stereotype.Service;

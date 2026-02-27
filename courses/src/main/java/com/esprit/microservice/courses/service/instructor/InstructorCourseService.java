@@ -8,10 +8,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface InstructorCourseService {
-    CourseAdminDTO create(CourseCreateDTO dto);
-    CourseAdminDTO update(Long id, CourseUpdateDTO dto);
+    CourseAdminDTO create(String bearer, CourseCreateDTO dto);
+    CourseAdminDTO update(String bearer, Long id, CourseUpdateDTO dto);
 
-    Optional<CourseAdminDTO> get(Long id);
-    List<CourseAdminDTO> list();
-
+    Optional<CourseAdminDTO> getMine(String bearer, Long id);
+    List<CourseAdminDTO> listMine(String bearer);
 }

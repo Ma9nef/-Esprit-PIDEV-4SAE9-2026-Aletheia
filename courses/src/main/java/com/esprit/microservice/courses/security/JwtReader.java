@@ -30,7 +30,27 @@ public class JwtReader {
                 .parseClaimsJws(token)
                 .getBody();
 
-        return claims.get("id", Long.class);
+        Object raw = claims.get("id");
+        System.out.println("JWT raw id = " + raw + " | type = " + (raw == null ? "null" : raw.getClass().getName()));
+
+        if (raw == null) raw = claims.get("userId");
+
+        if (raw instanceof Number n) {
+            Long v = n.longValue();
+            System.out.println("JWT extracted userId = " + v);
+            return v;
+        }
+        if (raw instanceof String s && s.matches("\\d+")) {
+            Long v = Long.parseLong(s);
+            System.out.println("JWT extracted userId = " + v);
+            return v;
+        }
+
+        String sub = claims.getSubject();
+        System.out.println("JWT subject = " + sub);
+        if (sub != null && sub.matches("\\d+")) return Long.parseLong(sub);
+
+        return null;
     }
     private static String sha256Hex(String s) {
         try {
@@ -42,5 +62,47 @@ public class JwtReader {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    public String extractName(String bearerOrToken) {
+        String token = bearerOrToken != null && bearerOrToken.startsWith("Bearer ")
+                ? bearerOrToken.substring(7)
+                : bearerOrToken;
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.get("name", String.class); // adapte le claim
+    }
+    public String extractRole(String bearerOrToken) {
+        String token = bearerOrToken != null && bearerOrToken.startsWith("Bearer ")
+                ? bearerOrToken.substring(7)
+                : bearerOrToken;
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        // ⚠️ Adapte le nom EXACT du claim :
+        // "role" ou "roles" ou "authorities"
+        return claims.get("role", String.class);
+    }
+    public void debugClaims(String bearerOrToken) {
+        String token = bearerOrToken != null && bearerOrToken.startsWith("Bearer ")
+                ? bearerOrToken.substring(7)
+                : bearerOrToken;
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        System.out.println("JWT CLAIMS = " + claims);
+        System.out.println("JWT SUBJECT = " + claims.getSubject());
     }
 }

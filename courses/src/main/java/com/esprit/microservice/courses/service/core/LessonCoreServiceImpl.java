@@ -1,7 +1,7 @@
 package com.esprit.microservice.courses.service.core;
 
-import com.esprit.microservice.courses.entity.Course;
-import com.esprit.microservice.courses.entity.Lesson;
+import com.esprit.microservice.courses.entity.content.Course;
+import com.esprit.microservice.courses.entity.content.Lesson;
 import com.esprit.microservice.courses.repository.CourseRepository;
 import com.esprit.microservice.courses.repository.LessonRepository;
 import org.springframework.stereotype.Service;
@@ -94,6 +94,11 @@ public class LessonCoreServiceImpl implements LessonCoreService {
             throw new IllegalArgumentException("Lesson not found: " + lessonId);
         }
         lessonRepository.deleteById(lessonId);
+    }
+
+    @Override
+    public long countByCourseId(Long courseId) {
+        return lessonRepository.countByCourseId(courseId);
     }
 
 

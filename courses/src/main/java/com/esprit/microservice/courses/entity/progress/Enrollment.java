@@ -1,5 +1,6 @@
-package com.esprit.microservice.courses.entity;
+package com.esprit.microservice.courses.entity.progress;
 
+import com.esprit.microservice.courses.entity.content.Course;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

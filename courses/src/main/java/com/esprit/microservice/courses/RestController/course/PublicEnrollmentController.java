@@ -1,7 +1,7 @@
 package com.esprit.microservice.courses.RestController.course;
 
 import com.esprit.microservice.courses.security.JwtReader;
-import com.esprit.microservice.courses.entity.Enrollment;
+import com.esprit.microservice.courses.entity.progress.Enrollment;
 import com.esprit.microservice.courses.service.publicApi.PublicEnrollmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

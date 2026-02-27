@@ -1,6 +1,6 @@
 package com.esprit.microservice.courses.service.core;
 
-import com.esprit.microservice.courses.entity.Lesson;
+import com.esprit.microservice.courses.entity.content.Lesson;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,4 +18,6 @@ public interface LessonCoreService {
     List<Lesson> findPublicByCourseId(Long courseId);
 
     void delete(Long lessonId);
+
+    long countByCourseId(Long courseId);
 }

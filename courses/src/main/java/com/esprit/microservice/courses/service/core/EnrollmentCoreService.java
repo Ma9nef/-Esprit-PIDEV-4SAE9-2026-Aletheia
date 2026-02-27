@@ -1,7 +1,7 @@
 package com.esprit.microservice.courses.service.core;
 
-import com.esprit.microservice.courses.entity.Course;
-import com.esprit.microservice.courses.entity.Enrollment;
+import com.esprit.microservice.courses.entity.content.Course;
+import com.esprit.microservice.courses.entity.progress.Enrollment;
 import com.esprit.microservice.courses.repository.CourseRepository;
 import com.esprit.microservice.courses.repository.EnrollmentRepository;
 import org.springframework.stereotype.Service;

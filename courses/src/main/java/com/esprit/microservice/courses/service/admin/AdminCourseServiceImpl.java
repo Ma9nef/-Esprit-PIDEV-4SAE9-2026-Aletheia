@@ -1,7 +1,7 @@
 package com.esprit.microservice.courses.service.admin;
 
 import com.esprit.microservice.courses.dto.course.admin.CourseAdminDTO;
-import com.esprit.microservice.courses.entity.Course;
+import com.esprit.microservice.courses.entity.content.Course;
 import com.esprit.microservice.courses.service.core.CourseCoreService;
 import com.esprit.microservice.courses.service.mapper.CourseMapper;
 import org.springframework.stereotype.Service;

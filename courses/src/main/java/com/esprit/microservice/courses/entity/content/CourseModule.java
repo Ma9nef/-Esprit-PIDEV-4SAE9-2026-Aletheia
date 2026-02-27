@@ -1,4 +1,4 @@
-package com.esprit.microservice.courses.entity;
+package com.esprit.microservice.courses.entity.content;
 import jakarta.persistence.*;
 
 @Entity

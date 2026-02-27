@@ -1,6 +1,6 @@
 package com.esprit.microservice.courses.service.core;
 
-import com.esprit.microservice.courses.entity.Course;
+import com.esprit.microservice.courses.entity.content.Course;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,5 +11,6 @@ public interface CourseCoreService {
     List<Course> findAll();
     List<Course> findPublicAll();                  // archived=false
     Course save(Course course);
-
+    List<Course> findByInstructorId(Long instructorId);
+    Optional<Course> findByIdAndInstructorId(Long id, Long instructorId);
 }

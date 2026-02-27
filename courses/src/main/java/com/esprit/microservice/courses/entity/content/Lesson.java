@@ -1,4 +1,4 @@
-package com.esprit.microservice.courses.entity;
+package com.esprit.microservice.courses.entity.content;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
