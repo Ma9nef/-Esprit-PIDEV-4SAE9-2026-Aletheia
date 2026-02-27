@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-// 1. Imports for Assessment
+import { forkJoin } from 'rxjs';
 import { AssessmentService } from '../../core/services/assessment.service';
 import { Assessment } from '../../core/models/assessment.model';
-
-// 2. Imports for Course
 import { CourseApiService, CoursePublicDTO } from '../../core/services/course-api.service';
 
 @Component({
@@ -14,9 +11,17 @@ import { CourseApiService, CoursePublicDTO } from '../../core/services/course-ap
   styleUrls: ['./manage-assessments.component.css']
 })
 export class ManageAssessmentsComponent implements OnInit {
+  // Initialisation à vide pour éviter les erreurs "undefined"
   assessments: Assessment[] = [];
   courses: CoursePublicDTO[] = [];
   searchTerm: string = '';
+  
+  sortKey: string = 'title';
+  sortOrder: 'asc' | 'desc' = 'asc';
+  selectedIds: Set<number> = new Set();
+  loading: boolean = false;
+  
+  stats = { total: 0, avgScore: 0, urgentCount: 0, quizCount: 0 };
 
   constructor(
     private assessmentService: AssessmentService,
@@ -24,153 +29,153 @@ export class ManageAssessmentsComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    this.loadCourses(); // Load courses first, then assessments
-  }
-
-  loadData() {
-    console.log('Loading assessments...');
-    this.assessmentService.getAllAssessments().subscribe({
-      next: (data) => {
-        this.assessments = data;
-        console.log('All assessments loaded:', this.assessments);
-        
-        if (this.assessments.length > 0) {
-          console.log('First assessment DETAILED structure:', JSON.stringify(this.assessments[0], null, 2));
-          
-          // Check each assessment for course data
-          this.assessments.forEach((assessment, index) => {
-            console.log(`Assessment ${index} (${assessment.title}):`, {
-              hasCourse: !!assessment.course,
-              hasCourseId: !!assessment.courseId,
-              hasCourse_id: !!assessment.course_id,
-              courseObject: assessment.course,
-              courseId: assessment.courseId,
-              course_id: assessment.course_id,
-              fullObject: assessment
-            });
-          });
-        } else {
-          console.log('No assessments loaded');
-        }
-      },
-      error: (err) => {
-        console.error('Error loading assessments', err);
-      }
-    });
-  }
-
-  loadCourses() {
-    console.log('Loading courses...');
-    this.courseApiService.getAllPublicCourses().subscribe({
-      next: (data) => {
-        this.courses = data;
-        console.log('Courses loaded:', this.courses);
-        
-        if (this.courses.length > 0) {
-          console.log('Available course IDs:', this.courses.map(c => c.id));
-        } else {
-          console.log('No courses loaded - this might be the issue!');
-        }
-        
-        this.loadData(); // Load assessments after courses are loaded
-      },
-      error: (err) => {
-        console.error('Error loading courses', err);
-        this.loadData(); // Still load assessments even if courses fail
-      }
-    });
-  }
-
-  // Helper function to extract course ID regardless of the structure
-  getCourseId(assessment: Assessment): number | null {
-    console.log('Getting course ID for assessment:', assessment.title, assessment);
-    
-    if (assessment.course?.id) {
-      console.log('Found course.id:', assessment.course.id);
-      return assessment.course.id;
-    } else if (assessment.courseId) {
-      console.log('Found courseId:', assessment.courseId);
-      return assessment.courseId;
-    } else if (assessment.course_id) {
-      console.log('Found course_id:', assessment.course_id);
-      return assessment.course_id;
-    }
-    
-    console.log('No course ID found for assessment:', assessment.title);
-    return null;
-  }
-
-  // Get course name for display
-  getCourseName(assessment: Assessment): string {
-    const courseId = this.getCourseId(assessment);
-    console.log(`Looking for course with ID ${courseId} in courses list:`, this.courses);
-    
-    if (!courseId) return 'Not Assigned';
-    
-    const course = this.courses.find(c => c.id === courseId);
-    console.log('Found course:', course);
-    
-    return course ? course.title : 'Unknown ID';
-  }
-
-  // Get course description for tooltip
-  getCourseDescription(assessment: Assessment): string {
-    const courseId = this.getCourseId(assessment);
-    if (!courseId) return '';
-    const course = this.courses.find(c => c.id === courseId);
-    return course ? course.description : '';
-  }
-
-  delete(id: number) {
-    if(confirm('Are you sure you want to delete this record?')) {
-      this.assessmentService.deleteAssessment(id).subscribe({
-        next: () => {
-          this.loadData();
-        },
-        error: (err) => {
-          console.error('Error deleting assessment', err);
+  // --- SELECTION HELPERS ---
+  toggleAll(event: Event) {
+    const checked = (event.target as HTMLInputElement).checked;
+    if (checked) {
+      // select every visible assessment
+      this.filteredAndSortedAssessments.forEach(a => {
+        if (a.id != null) {
+          this.selectedIds.add(a.id);
         }
       });
+    } else {
+      this.selectedIds.clear();
     }
   }
 
-  copy(assessment: Assessment) {
-    // Create a deep copy to avoid reference issues
-    const copyOfAssessment = JSON.parse(JSON.stringify(assessment));
-    delete copyOfAssessment.id; // Backend generates new ID
-    copyOfAssessment.title = copyOfAssessment.title + " (Copy)";
-    
-    // Preserve the course relationship
-    if (assessment.course?.id) {
-      copyOfAssessment.course = { id: assessment.course.id };
-      copyOfAssessment.courseId = assessment.course.id;
-      copyOfAssessment.course_id = assessment.course.id;
-    } else if (assessment.courseId) {
-      copyOfAssessment.course = { id: assessment.courseId };
-      copyOfAssessment.courseId = assessment.courseId;
-      copyOfAssessment.course_id = assessment.courseId;
-    } else if (assessment.course_id) {
-      copyOfAssessment.course = { id: assessment.course_id };
-      copyOfAssessment.courseId = assessment.course_id;
-      copyOfAssessment.course_id = assessment.course_id;
+  toggleSelect(id: number) {
+    if (this.selectedIds.has(id)) {
+      this.selectedIds.delete(id);
+    } else {
+      this.selectedIds.add(id);
     }
-    
-    this.assessmentService.createAssessment(copyOfAssessment).subscribe({
+  }
+
+  bulkDelete() {
+    if (this.selectedIds.size === 0) {
+      return;
+    }
+    if (!confirm(`Supprimer ${this.selectedIds.size} évaluation(s) ?`)) {
+      return;
+    }
+
+    this.loading = true;
+    const ids = Array.from(this.selectedIds);
+    const calls = ids.map(i => this.assessmentService.deleteAssessment(i));
+    forkJoin(calls).subscribe({
       next: () => {
+        this.selectedIds.clear();
         this.loadData();
       },
       error: (err) => {
-        console.error('Error copying assessment', err);
+        console.error('Bulk delete failed', err);
+        this.loading = false;
       }
     });
   }
 
-  edit(id: number) {
-    this.router.navigate(['/edit-assessment', id]);
+  ngOnInit(): void {
+    this.loadInitialData();
   }
 
-  navigateToAdd() {
-    this.router.navigate(['/add-assessment']);
+  loadInitialData() {
+    this.loading = true;
+    // 1. Charger les cours d'abord
+    this.courseApiService.getAllPublicCourses().subscribe({
+      next: (data) => {
+        this.courses = data || [];
+        this.loadData(); // Charger les évaluations après
+      },
+      error: (err) => {
+        console.error('Erreur API Courses:', err);
+        this.courses = [];
+        this.loadData();
+      }
+    });
   }
+
+  loadData() {
+    this.assessmentService.getAllAssessments().subscribe({
+      next: (data) => {
+        this.assessments = data || [];
+        this.calculateStats();
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Erreur API Assessments:', err);
+        this.assessments = [];
+        this.loading = false;
+      }
+    });
+  }
+
+  calculateStats() {
+    if (!this.assessments.length) return;
+    const now = new Date();
+    this.stats.total = this.assessments.length;
+    this.stats.quizCount = this.assessments.filter(a => a.type === 'QUIZ').length;
+    
+    const sum = this.assessments.reduce((acc, curr) => acc + (curr.totalScore || 0), 0);
+    this.stats.avgScore = sum / this.stats.total;
+
+    this.stats.urgentCount = this.assessments.filter(a => {
+      if (!a.dueDate) return false;
+      const diff = new Date(a.dueDate).getTime() - now.getTime();
+      return diff > 0 && diff < (48 * 60 * 60 * 1000);
+    }).length;
+  }
+
+  // --- LOGIQUE D'AFFICHAGE ---
+  get filteredAndSortedAssessments() {
+    let list = this.assessments.filter(a => 
+      a.title?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      a.type?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      this.getCourseName(a).toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+
+    return list.sort((a: any, b: any) => {
+      const valA = a[this.sortKey] || '';
+      const valB = b[this.sortKey] || '';
+      return (valA < valB ? -1 : 1) * (this.sortOrder === 'asc' ? 1 : -1);
+    });
+  }
+
+  getCourseName(a: Assessment): string {
+    const id = a.course?.id || a.courseId || a.course_id;
+    if (!id) return 'N/A';
+    const course = this.courses.find(c => c.id === id);
+    return course ? course.title : `ID: ${id}`;
+  }
+
+  getAssessmentStatus(date: any): { label: string, class: string } {
+    if (!date) return { label: 'Active', class: 'bg-success' };
+    const due = new Date(date);
+    const now = new Date();
+    if (due < now) return { label: 'Expired', class: 'bg-danger' };
+    return { label: 'Active', class: 'bg-success' };
+  }
+
+  // --- ACTIONS ---
+  setSort(key: string) {
+    this.sortOrder = (this.sortKey === key && this.sortOrder === 'asc') ? 'desc' : 'asc';
+    this.sortKey = key;
+  }
+
+  delete(id: number) {
+    if(confirm('Supprimer cette évaluation ?')) {
+      this.assessmentService.deleteAssessment(id).subscribe(() => this.loadData());
+    }
+  }
+
+  exportCSV() {
+    const headers = "Titre,Type,Points,Date\n";
+    const rows = this.assessments.map(a => `${a.title},${a.type},${a.totalScore},${a.dueDate}`).join("\n");
+    const blob = new Blob([headers + rows], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    window.open(url);
+  }
+
+  edit(id: number) { this.router.navigate(['/edit-assessment', id]); }
+  navigateToAdd() { this.router.navigate(['/add-assessment']); }
 }

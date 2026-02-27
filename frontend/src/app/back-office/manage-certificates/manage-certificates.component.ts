@@ -18,16 +18,15 @@ export class ManageCertificatesComponent implements OnInit, AfterViewInit {
 
   certificates: any[] = [];
   usersList: any[] = []; 
-  selectedUserId: number | null = null;
-  searchTerm: string = '';
   
+  // Selection & UI State
+  selectedUserId: number | null = null; // Admin selected for the signature
+  searchTerm: string = '';
+  stats: any[] = [];
+
+  // Form Models
   selectedCertificate: any = { enrollment: {} };
   newEnrollmentId: number | null = null;
-
-  selectedCertIds: Set<number> = new Set();
-  sortKey: string = 'issuedAt';
-  sortOrder: 'asc' | 'desc' = 'desc';
-  stats: any[] = [];
 
   constructor(private certificateService: CertificateService, private userService: UserService) {}
 
@@ -43,16 +42,12 @@ export class ManageCertificatesComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // --- 1. DATA LOADING ---
   loadUsers() {
     this.userService.getAllUsers().subscribe(data => {
       this.usersList = data.content || data;
       this.calculateStats();
     });
-  }
-
-  getUserName(userId: any): string {
-    const user = this.usersList.find(u => u.id === +userId);
-    return user ? `${user.prenom} ${user.nom}` : 'Unknown Student';
   }
 
   loadCertificates() {
@@ -62,61 +57,110 @@ export class ManageCertificatesComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // --- ADD FEATURE ---
-  openAddModal() {
-    this.newEnrollmentId = null;
-    const modalElem = document.getElementById('addModal');
-    if (modalElem) {
-      const modal = new bootstrap.Modal(modalElem);
-      modal.show();
-    }
+  getUserName(userId: any): string {
+    if (!userId) return 'Unassigned';
+    const user = this.usersList.find(u => u.id === +userId);
+    return user ? `${user.prenom} ${user.nom}` : 'Unknown Student';
   }
 
-  confirmAdd() {
-    if (!this.newEnrollmentId) return;
-    this.certificateService.addCertificate(this.newEnrollmentId).subscribe(() => {
-      alert("Certificate Generated!");
-      this.loadCertificates();
-      this.closeModal('addModal');
+  get learnersOnly() {
+    return this.usersList.filter(u => u.role === 'LEARNER' || u.roles?.some((r:any) => r.name === 'LEARNER'));
+  }
+
+  // --- 2. PDF GENERATION LOGIC ---
+  private async generateCertificateContent(cert: any): Promise<jsPDF> {
+    const doc = new jsPDF('l', 'mm', 'a4');
+    const w = doc.internal.pageSize.getWidth();
+    const h = doc.internal.pageSize.getHeight();
+
+    // Design: Frames
+    doc.setDrawColor(44, 62, 80); doc.setLineWidth(4); doc.rect(10, 10, w - 20, h - 20);
+    doc.setDrawColor(212, 175, 55); doc.setLineWidth(1); doc.rect(14, 14, w - 28, h - 28);
+    
+    // Header
+    doc.setTextColor(44, 62, 80); doc.setFontSize(30); 
+    doc.text('CERTIFICATE OF ACHIEVEMENT', w / 2, 45, { align: 'center' });
+
+    // DYNAMIC LEARNER NAME (The Fix)
+    const learnerId = cert.enrollment?.userId || cert.enrollment?.user_id;
+    const learnerName = this.getUserName(learnerId); 
+    doc.setFont('times', 'italic'); doc.setFontSize(45); doc.setTextColor(212, 175, 55);
+    doc.text(learnerName, w / 2, 92, { align: 'center' }); 
+
+    // Course Title
+    doc.setFont('times', 'bold'); doc.setFontSize(22); doc.setTextColor(44, 62, 80);
+    doc.text(cert.enrollment?.course?.title || 'Professional Certification', w / 2, 130, { align: 'center' });
+
+    // Admin Signature (The Admin selection)
+    let sig = this.signaturePad.isEmpty() ? null : this.signaturePad.toDataURL();
+    if (!sig) sig = this.usersList.find(u => u.id === this.selectedUserId)?.signature;
+    if (sig) doc.addImage(sig, 'PNG', 40, h - 55, 60, 25);
+    doc.line(40, h - 30, 100, h - 30); doc.setFontSize(10); doc.text('Authorized Signature', 70, h - 25, { align: 'center' });
+
+    // QR Code
+    const qr = await QRCode.toDataURL(`http://localhost:4200/verify/${cert.certificateCode}`);
+    doc.addImage(qr, 'PNG', w - 50, h - 50, 30, 30);
+
+    return doc;
+  }
+
+  async savePDFToDatabase(cert: any) {
+    const doc = await this.generateCertificateContent(cert);
+    const pdfBlob = doc.output('blob');
+    this.certificateService.uploadCertificatePdf(cert.id, pdfBlob).subscribe({
+      next: () => alert("Sync Successful! Certificate PDF saved in Database."),
+      error: (err) => alert("Database Sync Error: " + err.status)
     });
   }
 
-  // --- UPDATE FEATURE (FIXED ILLEGAL INVOCATION) ---
+  async downloadPDF(cert: any) {
+    const doc = await this.generateCertificateContent(cert);
+    doc.save(`Cert_${cert.certificateCode}.pdf`);
+  }
+
+  // --- 3. CRUD & ERROR HANDLING ---
+  confirmAdd() {
+    if (!this.newEnrollmentId) return;
+    this.certificateService.addCertificate(this.newEnrollmentId).subscribe({
+      next: () => {
+        alert("Certificate Generated!");
+        this.loadCertificates();
+        this.closeModal('addModal');
+        this.newEnrollmentId = null;
+      },
+      error: (err) => {
+        console.error("Backend 500 Error:", err);
+        alert("Server Error (500): Check if Enrollment ID exists or is already certified.");
+      }
+    });
+  }
+
+  // --- (Other CRUD methods like editCertificate, saveChanges, onDelete, etc.) ---
+  openAddModal() { new bootstrap.Modal(document.getElementById('addModal')).show(); }
+  
   editCertificate(cert: any) {
     this.selectedCertificate = JSON.parse(JSON.stringify(cert));
-    
-    // Ensure nested objects exist for student selection
-    if (!this.selectedCertificate.enrollment) {
-      this.selectedCertificate.enrollment = { userId: null };
-    } else {
-      // Map user_id to userId if necessary for consistency
-      this.selectedCertificate.enrollment.userId = cert.enrollment?.userId || cert.enrollment?.user_id;
-    }
-
-    const modalElem = document.getElementById('editModal');
-    if (modalElem) {
-      const modal = new bootstrap.Modal(modalElem);
-      modal.show();
-    } else {
-      console.error("Modal element 'editModal' not found in HTML.");
-    }
+    new bootstrap.Modal(document.getElementById('editModal')).show();
   }
 
   saveChanges() {
     this.certificateService.updateCertificate(this.selectedCertificate.id, this.selectedCertificate).subscribe(() => {
-      alert("Update Successful!");
       this.loadCertificates();
       this.closeModal('editModal');
     });
   }
 
+  onDelete(id: number) { 
+    if (confirm("Permanently delete this certificate?")) {
+      this.certificateService.deleteCertificate(id).subscribe(() => this.loadCertificates());
+    }
+  }
+
   closeModal(id: string) {
-    const modalElem = document.getElementById(id);
-    const modalInstance = bootstrap.Modal.getInstance(modalElem);
+    const modalInstance = bootstrap.Modal.getInstance(document.getElementById(id));
     if (modalInstance) modalInstance.hide();
   }
 
-  // --- SIGNATURE LOGIC ---
   onUserSelect() {
     this.signaturePad.clear();
     const user = this.usersList.find(u => u.id === this.selectedUserId);
@@ -126,77 +170,34 @@ export class ManageCertificatesComponent implements OnInit, AfterViewInit {
   saveSignature() {
     if (!this.selectedUserId) return;
     this.userService.saveSignature(this.selectedUserId, this.signaturePad.toDataURL()).subscribe(() => {
-      alert("Signature Saved!");
+      alert("Admin Signature Stored!");
       this.loadUsers(); 
     });
   }
 
   clearSignature() { this.signaturePad.clear(); }
 
-  onDelete(id: number) { 
-    if (confirm("Delete this certificate?")) {
-      this.certificateService.deleteCertificate(id).subscribe(() => this.loadCertificates());
-    }
-  }
-
-  // --- ADVANCED FEATURES ---
   calculateStats() {
-    const now = new Date();
-    const thisMonth = this.certificates.filter(c => new Date(c.issuedAt).getMonth() === now.getMonth());
     this.stats = [
-      { label: 'Total Certificates', value: this.certificates.length, icon: 'bi-patch-check', color: 'primary' },
-      { label: 'New This Month', value: thisMonth.length, icon: 'bi-calendar-check', color: 'success' },
-      { label: 'Authorities', value: this.usersList.length, icon: 'bi-person-badge', color: 'info' }
+      { label: 'Total Issued', value: this.certificates.length, icon: 'bi-patch-check', color: 'primary' },
+      { label: 'Learners', value: this.learnersOnly.length, icon: 'bi-people', color: 'success' },
+      { label: 'Admins', value: this.usersList.length - this.learnersOnly.length, icon: 'bi-shield-lock', color: 'info' }
     ];
   }
 
-  setSort(key: string) {
-    this.sortOrder = (this.sortKey === key && this.sortOrder === 'asc') ? 'desc' : 'asc';
-    this.sortKey = key;
-  }
-
-  toggleSelection(id: number) {
-    this.selectedCertIds.has(id) ? this.selectedCertIds.delete(id) : this.selectedCertIds.add(id);
-  }
-
-  toggleAll(event: any) {
-    if (event.target.checked) this.filteredCertificates.forEach(c => this.selectedCertIds.add(c.id));
-    else this.selectedCertIds.clear();
-  }
-
-  bulkDelete() {
-    if (confirm(`Delete ${this.selectedCertIds.size} certificates?`)) {
-      this.selectedCertIds.forEach(id => this.certificateService.deleteCertificate(id).subscribe());
-      this.certificates = this.certificates.filter(c => !this.selectedCertIds.has(c.id));
-      this.selectedCertIds.clear();
-      setTimeout(() => this.calculateStats(), 500);
-    }
-  }
-
-  exportToCSV() {
-    const headers = ["Code", "Student", "Date"];
-    const rows = this.filteredCertificates.map(c => [c.certificateCode, this.getUserName(c.enrollment?.userId || c.enrollment?.user_id), c.issuedAt]);
-    const csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
-    const link = document.createElement("a");
-    link.href = encodeURI(csvContent);
-    link.download = "certificates.csv";
-    link.click();
-  }
-
-  async downloadPDF(cert: any) {
-    const doc = new jsPDF('l', 'mm', 'a4');
-    doc.text('CERTIFICATE OF ACHIEVEMENT', 148, 45, { align: 'center' });
-    doc.save(`Cert_${cert.certificateCode}.pdf`);
-  }
-
   get filteredCertificates() {
-    let list = this.certificates.filter(c => 
+    return this.certificates.filter(c => 
       c.certificateCode?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
       this.getUserName(c.enrollment?.userId || c.enrollment?.user_id).toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-    return list.sort((a, b) => {
-      const valA = a[this.sortKey]; const valB = b[this.sortKey];
-      return this.sortOrder === 'asc' ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
-    });
+  }
+
+  exportToCSV() {
+    const headers = "Code,Learner,Date\n";
+    const content = this.filteredCertificates.map(c => `${c.certificateCode},${this.getUserName(c.enrollment?.userId)},${c.issuedAt}`).join("\n");
+    const link = document.createElement('a');
+    link.href = 'data:text/csv;charset=utf-8,' + encodeURI(headers + content);
+    link.download = 'certificates.csv';
+    link.click();
   }
 }

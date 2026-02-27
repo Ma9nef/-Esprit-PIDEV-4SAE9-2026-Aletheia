@@ -20,6 +20,12 @@ export class CertificateService {
 sendEmail(certId: number, email: string) {
   return this.http.post(`${this.apiUrl}/${certId}/send-email?email=${email}`, {});
 }
+// Add this to your CertificateService
+uploadCertificatePdf(id: number, file: Blob): Observable<any> {
+  const formData = new FormData();
+  formData.append('file', file, `certificate_${id}.pdf`);
+  return this.http.post(`${this.apiUrl}/${id}/upload-pdf`, formData);
+}
   // Get by code
   
    updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {
