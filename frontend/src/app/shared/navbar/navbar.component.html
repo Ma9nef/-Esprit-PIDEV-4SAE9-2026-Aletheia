@@ -1,0 +1,177 @@
+<header class="navbar" [class.dark-theme]="themeService.isDark$ | async">
+  <div class="nav-container">
+    
+    <!-- LEFT SECTION: Logo + Desktop Menu -->
+    <div class="nav-left">
+      <div class="logo" (click)="navigateTo('/home')">
+        <span class="logo-text" routerLink="/">ALETHEIA</span>
+        <span class="logo-accent"></span>
+      </div>
+
+      <nav class="desktop-menu">
+        <a 
+          *ngFor="let item of menuItems" 
+          class="menu-item"
+          [class.active]="currentRoute === item.route"
+          (click)="navigateTo(item.route)">
+          <span class="menu-icon">{{ item.icon }}</span>
+          <span class="menu-label">{{ item.label }}</span>
+        </a>
+      </nav>
+      
+
+
+
+
+
+    </div>
+
+    <!-- CENTER SECTION: Search Bar -->
+    <div class="nav-center">
+      <div class="search-container">
+        <form (ngSubmit)="onSearchSubmit()" class="search-form">
+          <input
+            #searchInput
+            type="text"
+            class="search-input"
+            [formControl]="searchControl"
+            placeholder="Search programming courses..."
+            aria-label="Search courses">
+          <button type="submit" class="search-button" aria-label="Search">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT SECTION: Theme Toggle + Auth Buttons / User Menu -->
+    <div class="nav-right">
+      <!-- Theme Toggle -->
+      <button 
+        class="theme-toggle"
+        (click)="toggleTheme()"
+        [attr.aria-label]="(themeService.isDark$ | async) ? 'Switch to light mode' : 'Switch to dark mode'"
+        [title]="(themeService.isDark$ | async) ? 'Light Mode' : 'Dark Mode'">
+        <svg *ngIf="!(themeService.isDark$ | async)" class="theme-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <svg *ngIf="themeService.isDark$ | async" class="theme-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Auth Buttons (when not logged in) -->
+      <div *ngIf="!isLoggedIn" class="auth-buttons">
+        <button class="btn-login" routerLink="/login">Login</button>
+        <button class="btn-register" routerLink="/register">Register</button>
+      </div>
+
+      <!-- User Menu (when logged in) -->
+      <div *ngIf="isLoggedIn" class="user-menu" #userDropdown>
+        <button 
+          class="user-avatar-btn"
+          (click)="toggleUserDropdown()"
+          [class.active]="isUserDropdownOpen"
+          aria-label="User menu">
+          <img [src]="currentUser.avatar" [alt]="currentUser.name" class="avatar-img">
+          <svg class="dropdown-arrow" [class.open]="isUserDropdownOpen" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        
+        <div class="user-dropdown" [class.open]="isUserDropdownOpen">
+          <div class="dropdown-header">
+            <img [src]="currentUser.avatar" [alt]="currentUser.name" class="dropdown-avatar">
+            <div class="dropdown-user-info">
+              <div class="dropdown-name">{{ currentUser.name }}</div>
+              <div class="dropdown-email">{{ currentUser.email }}</div>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" (click)="onProfileClick()">
+            <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Profile</span>
+          </a>
+          <a class="dropdown-item" (click)="onMyCoursesClick()">
+            <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>My Courses</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item logout" (click)="onLogout()">
+            <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Toggle -->
+      <button 
+        class="mobile-menu-toggle"
+        (click)="toggleMobileMenu()"
+        [class.active]="isMobileMenuOpen"
+        aria-label="Toggle menu">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
+  
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="isMobileMenuOpen">
+    <div class="mobile-menu-header">
+      <div class="mobile-logo">ALETHEIA</div>
+      <button class="mobile-close" (click)="toggleMobileMenu()" aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    
+ 
+    <nav class="mobile-nav">
+      <a 
+        *ngFor="let item of menuItems" 
+        class="mobile-menu-item"
+        [class.active]="currentRoute === item.route"
+        (click)="navigateTo(item.route)">
+        <span class="mobile-menu-icon">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+      </a>
+    </nav>
+
+    <div class="mobile-auth" *ngIf="!isLoggedIn">
+      <button class="mobile-btn-login" routerLink="/auth/login">Login</button>
+      <button class="mobile-btn-register" routerLink="/auth/register">Register</button>
+    </div>
+
+    <div class="mobile-user" *ngIf="isLoggedIn">
+      <div class="mobile-user-info">
+        <img [src]="currentUser.avatar" [alt]="currentUser.name" class="mobile-avatar">
+        <div>
+          <div class="mobile-user-name">{{ currentUser.name }}</div>
+          <div class="mobile-user-email">{{ currentUser.email }}</div>
+        </div>
+      </div>
+     
+      <a class="mobile-user-link" (click)="onMyCoursesClick()">My Courses</a>
+      <a class="mobile-user-link logout" (click)="onLogout()">Logout</a>
+    </div>
+  </div>
+</header>
