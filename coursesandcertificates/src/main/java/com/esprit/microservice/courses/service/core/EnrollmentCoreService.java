@@ -36,4 +36,8 @@ public class EnrollmentCoreService {
     public List<Enrollment> myEnrollments(Long userId) {
         return enrollmentRepository.findAllByUserId(userId);
     }
+
+    public List<Enrollment> findAll() {
+        return enrollmentRepository.findAll();
+    }
 }

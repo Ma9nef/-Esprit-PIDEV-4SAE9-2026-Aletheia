@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/course/public/enrollments")
 public class PublicEnrollmentController {
@@ -20,6 +20,10 @@ public class PublicEnrollmentController {
         this.jwtReader = jwtReader;
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<Enrollment>> getAllEnrollments() {
+        return ResponseEntity.ok(service.findAll());
+    }
     @PostMapping("/{courseId}")
     public ResponseEntity<Enrollment> enroll(@PathVariable Long courseId,
                                              @RequestHeader("Authorization") String authorization) {
