@@ -11,6 +11,8 @@ import { TrainerDashboardComponent } from './back-office/trainer-dashboard/train
 import { AdminDashboardComponent } from './back-office/admin-dashboard/admin-dashboard.component';
 import { CatalogComponent } from './front-office/catalog/catalog.component';
 import { CourseDetailsComponent } from './front-office/course-details/course-details.component';
+import { CourseLearningComponent } from './front-office/course-learning/course-learning.component';
+import { ManageCoursesComponent } from './back-office/manage-courses/manage-courses.component';
 
 const routes: Routes = [
   {path:"",component:TemplateComponent},
@@ -23,6 +25,10 @@ const routes: Routes = [
   {path: 'dashboardAdmin', component:AdminDashboardComponent },
   { path: 'front/courses', component: CatalogComponent },
   { path: 'front/course-details/:id', component: CourseDetailsComponent },
+  { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
+  {path: 'back-office/manage-courses',component: ManageCoursesComponent},
+  {path: 'back-office',loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)},
+
   {
     path: 'auth',
     loadChildren: () =>
