@@ -22,8 +22,9 @@ public class Enrollment {
     @JoinColumn(name="course_id", nullable=false)
     private Course course;
 
-    @Column(nullable=false)
-    private String status = "ENROLLED";
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EnrollmentStatus status;
 
     @Column(nullable=false)
     private LocalDateTime enrolledAt;
@@ -40,11 +41,43 @@ public class Enrollment {
         this.course = course;
     }
 
-    public Long getId() { return id; }
-    public Long getUserId() { return userId; }
-    public Course getCourse() { return course; }
-    public String getStatus() { return status; }
-    public LocalDateTime getEnrolledAt() { return enrolledAt; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setStatus(String status) { this.status = status; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public EnrollmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnrollmentStatus status) {
+        this.status = status;
+    }
+
+    public LocalDateTime getEnrolledAt() {
+        return enrolledAt;
+    }
+
+    public void setEnrolledAt(LocalDateTime enrolledAt) {
+        this.enrolledAt = enrolledAt;
+    }
 }

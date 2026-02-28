@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,27 +32,37 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        // Pas de token => on laisse passer (les routes publiques fonctionneront)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // Si déjà authentifié, on ne refait pas le travail
+        if (SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
             Long userId = jwtReader.extractUserId(authHeader);
-            String name = jwtReader.extractName(authHeader); // optionnel
-            String role = jwtReader.extractRole(authHeader); // "INSTRUCTOR" par ex.
+            String role = jwtReader.extractRole(authHeader); // ex: "INSTRUCTOR"
 
-            var authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+            if (userId == null || role == null || role.isBlank()) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
+            }
 
-            // principal: tu peux mettre userId, email, name... ici userId
+            String authority = role.startsWith("ROLE_") ? role : "ROLE_" + role;
+
+            var authorities = List.of(new SimpleGrantedAuthority(authority));
+
             var auth = new UsernamePasswordAuthenticationToken(userId, null, authorities);
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
-            // Token invalide => 401
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
