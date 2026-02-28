@@ -1,7 +1,7 @@
 <div class="admin-container p-4 bg-light min-vh-100">
   <div class="container animate-fade-in">
     
-    <!-- HEADER -->
+    <!-- 1. HEADER SECTION -->
     <div class="row mb-4 align-items-center">
       <div class="col-md-6">
         <h1 class="fw-bold main-title text-dark">Aletheia • Manage Certificates</h1>
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <!-- STATS -->
+    <!-- 2. STATS CARDS -->
     <div class="row g-3 mb-4">
       <div class="col-md-4" *ngFor="let stat of stats">
         <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
@@ -34,40 +34,46 @@
       </div>
     </div>
 
-    <!-- SIGNATURE PAD -->
+    <!-- 3. SEARCH & SIGNATURE PAD -->
     <div class="row g-4 mb-4">
+      <!-- Search -->
       <div class="col-md-5">
         <div class="card border-0 shadow-sm rounded-4 p-4 h-100 bg-white">
           <label class="small fw-bold text-muted text-uppercase mb-2">Search Records</label>
           <div class="input-group shadow-inner">
             <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search"></i></span>
-            <input type="text" class="form-control border-start-0" placeholder="Search learner..." [(ngModel)]="searchTerm">
+            <input type="text" class="form-control border-start-0" placeholder="Search code or student..." [(ngModel)]="searchTerm">
           </div>
         </div>
       </div>
       
+      <!-- Signature Authority -->
       <div class="col-md-7">
         <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-          <div class="d-flex justify-content-between mb-2">
+          <div class="d-flex justify-content-between mb-2 align-items-center">
             <label class="small fw-bold text-muted text-uppercase">Authority Signature Pad (Admin)</label>
-            <select class="form-select form-select-sm w-50" [(ngModel)]="selectedUserId" (change)="onUserSelect()">
+            <select class="form-select form-select-sm w-50 rounded-pill shadow-sm" [(ngModel)]="selectedUserId" (change)="onUserSelect()">
               <option [ngValue]="null">-- Select Admin Identity --</option>
               <option *ngFor="let u of usersList" [ngValue]="u.id">{{u.prenom}} {{u.nom}}</option>
             </select>
           </div>
-          <div class="canvas-wrapper border rounded-3 bg-white mb-2 shadow-inner">
+          <div class="canvas-wrapper border rounded-3 bg-white mb-2 shadow-inner position-relative">
             <canvas #sigCanvas width="500" height="120" style="width: 100%"></canvas>
           </div>
           <div class="d-flex justify-content-between">
-            <button class="btn btn-link text-danger p-0 text-decoration-none fw-bold" (click)="clearSignature()">Clear Canvas</button>
-            <button class="btn btn-success btn-sm rounded-pill px-4 shadow-sm" (click)="saveSignature()" [disabled]="!selectedUserId">Store Signature</button>
+            <button class="btn btn-link text-danger p-0 text-decoration-none fw-bold" (click)="clearSignature()">
+              <i class="bi bi-eraser me-1"></i>Clear Canvas
+            </button>
+            <button class="btn btn-success btn-sm rounded-pill px-4 shadow-sm" (click)="saveSignature()" [disabled]="!selectedUserId">
+              <i class="bi bi-save me-1"></i>Store Signature
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- DATA TABLE -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <!-- 4. DATA TABLE -->
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
       <table class="table table-hover mb-0 align-middle">
         <thead class="bg-dark text-white text-uppercase small">
           <tr>
@@ -81,7 +87,7 @@
           <tr *ngFor="let cert of filteredCertificates" class="border-bottom">
             <td class="ps-4 fw-bold text-primary font-monospace">{{ cert.certificateCode }}</td>
             <td>
-              <span class="badge bg-secondary-subtle text-dark border px-3 py-2 rounded-3">
+              <span class="badge bg-secondary-subtle text-dark border px-3 py-2 rounded-3 fw-normal">
                 {{ getUserName(cert.enrollment?.userId || cert.enrollment?.user_id) }}
               </span>
             </td>
@@ -90,10 +96,13 @@
               <div class="btn-group gap-1">
                 <button class="btn btn-primary btn-sm rounded-2" (click)="savePDFToDatabase(cert)" title="Sync PDF to DB"><i class="bi bi-cloud-arrow-up"></i></button>
                 <button class="btn btn-outline-success btn-sm rounded-2" (click)="downloadPDF(cert)" title="Download Local"><i class="bi bi-download"></i></button>
-                <button class="btn btn-outline-dark btn-sm rounded-2" (click)="editCertificate(cert)"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-danger btn-sm rounded-2" (click)="onDelete(cert.id)"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-outline-dark btn-sm rounded-2" (click)="editCertificate(cert)" title="Edit Metadata"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-danger btn-sm rounded-2" (click)="onDelete(cert.id)" title="Delete"><i class="bi bi-trash"></i></button>
               </div>
             </td>
+          </tr>
+          <tr *ngIf="filteredCertificates.length === 0">
+            <td colspan="4" class="text-center py-5 text-muted">No certificates found.</td>
           </tr>
         </tbody>
       </table>
@@ -101,53 +110,68 @@
   </div>
 </div>
 
-<!-- ADD MODAL -->
+<!-- 5. ADD MODAL (dropdown for enrollments) -->
 <div class="modal fade" id="addModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
       <div class="modal-header bg-primary text-white py-3">
-        <h5 class="modal-title fw-bold">New Certificate</h5>
+        <h5 class="modal-title fw-bold">Generate New Certificate</h5>
         <button type="button" class="btn-close btn-close-white" (click)="closeModal('addModal')"></button>
       </div>
       <div class="modal-body p-4">
-        <label class="form-label fw-bold small text-uppercase mb-1">Enrollment Reference ID</label>
-        <input type="number" class="form-control form-control-lg rounded-3" [(ngModel)]="newEnrollmentId" placeholder="e.g. 1005">
-        <p class="text-muted small mt-2">Enter a valid ID from the enrollment table to link a learner.</p>
+        <label class="form-label fw-bold small text-uppercase mb-1">Select Learner Enrollment</label>
+        <select class="form-select form-select-lg rounded-3 shadow-sm" [(ngModel)]="newEnrollmentId">
+          <option [ngValue]="null" disabled>-- Choose an enrollment --</option>
+          <option *ngFor="let enroll of enrollments" [value]="enroll.id">
+            ID: {{ enroll.id }} - {{ getUserName(enroll.userId || enroll.user_id) }} ({{ enroll.course?.title }})
+          </option>
+        </select>
+        <p class="text-muted small mt-2">
+          <i class="bi bi-info-circle me-1"></i> Only non-certified enrollments are listed.
+        </p>
       </div>
-      <div class="modal-footer border-0">
-        <button class="btn btn-primary w-100 rounded-pill py-2" (click)="confirmAdd()" [disabled]="!newEnrollmentId">Generate Record</button>
+      <div class="modal-footer border-0 p-4 pt-0">
+        <button class="btn btn-primary w-100 rounded-pill py-2 shadow" (click)="confirmAdd()" [disabled]="!newEnrollmentId">
+          <i class="bi bi-check-circle me-2"></i>Generate Record
+        </button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- EDIT MODAL -->
+<!-- 6. EDIT MODAL (dropdown for metadata) -->
 <div class="modal fade" id="editModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow rounded-4">
-      <div class="modal-header bg-dark text-white">
-        <h5 class="modal-title fw-bold">Update Metadata</h5>
+    <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+      <div class="modal-header bg-dark text-white py-3">
+        <h5 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2"></i>Update Metadata</h5>
         <button type="button" class="btn-close btn-close-white" (click)="closeModal('editModal')"></button>
       </div>
       <div class="modal-body p-4">
         <div class="mb-3">
-          <label class="form-label fw-bold small text-uppercase">Learner Assignment</label>
-          <select class="form-select rounded-3" [(ngModel)]="selectedCertificate.enrollment.userId">
-            <option *ngFor="let u of learnersOnly" [ngValue]="u.id">{{u.prenom}} {{u.nom}} (Learner)</option>
+          <label class="form-label fw-bold small text-uppercase text-muted">Reassign Learner</label>
+          <select class="form-select rounded-3 shadow-sm" [(ngModel)]="selectedCertificate.enrollment.userId">
+            <option *ngFor="let u of learnersOnly" [ngValue]="u.id">{{u.prenom}} {{u.nom}}</option>
           </select>
-          <div class="form-text text-primary">Dropdown limited to role: LEARNER.</div>
+          <div class="form-text text-primary small">Dropdown matches role: LEARNER.</div>
         </div>
+        
         <div class="mb-3">
-          <label class="form-label fw-bold small text-uppercase">Certificate Code</label>
-          <input type="text" class="form-control rounded-3" [(ngModel)]="selectedCertificate.certificateCode">
+          <label class="form-label fw-bold small text-uppercase text-muted">Certificate Reference Code</label>
+          <input type="text" class="form-control rounded-3 shadow-sm font-monospace" [(ngModel)]="selectedCertificate.certificateCode">
         </div>
+        
         <div class="mb-2">
-          <label class="form-label fw-bold small text-uppercase">Issue Date</label>
-          <input type="date" class="form-control rounded-3" [ngModel]="selectedCertificate.issuedAt | date:'yyyy-MM-dd'" (ngModelChange)="selectedCertificate.issuedAt=$event">
+          <label class="form-label fw-bold small text-uppercase text-muted">Modified Issue Date</label>
+          <input type="date" class="form-control rounded-3 shadow-sm" 
+                 [ngModel]="selectedCertificate.issuedAt | date:'yyyy-MM-dd'" 
+                 (ngModelChange)="selectedCertificate.issuedAt=$event">
         </div>
       </div>
-      <div class="modal-footer border-0">
-        <button class="btn btn-primary w-100 rounded-pill py-2" (click)="saveChanges()">Confirm Changes</button>
+      <div class="modal-footer border-0 p-4 pt-0">
+        <button class="btn btn-primary w-100 rounded-pill py-2 shadow" (click)="saveChanges()">
+          <i class="bi bi-save me-2"></i>Confirm and Save
+        </button>
       </div>
     </div>
   </div>
