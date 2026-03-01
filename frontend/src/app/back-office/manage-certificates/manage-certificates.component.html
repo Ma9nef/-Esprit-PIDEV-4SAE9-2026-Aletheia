@@ -110,7 +110,7 @@
   </div>
 </div>
 
-<!-- 5. ADD MODAL (dropdown for enrollments) -->
+<!-- 5. ADD MODAL (Step-by-step selection) -->
 <div class="modal fade" id="addModal" tabindex="-1">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow rounded-4 overflow-hidden">
@@ -119,15 +119,34 @@
         <button type="button" class="btn-close btn-close-white" (click)="closeModal('addModal')"></button>
       </div>
       <div class="modal-body p-4">
-        <label class="form-label fw-bold small text-uppercase mb-1">Select Learner Enrollment</label>
-        <select class="form-select form-select-lg rounded-3 shadow-sm" [(ngModel)]="newEnrollmentId">
-          <option [ngValue]="null" disabled>-- Choose an enrollment --</option>
-          <option *ngFor="let enroll of enrollments" [value]="enroll.id">
-            ID: {{ enroll.id }} - {{ getUserName(enroll.userId || enroll.user_id) }} ({{ enroll.course?.title }})
-          </option>
-        </select>
+        
+        <!-- Step 1: Select the Learner specifically -->
+        <div class="mb-4">
+          <label class="form-label fw-bold small text-uppercase mb-1">1. Choose Learner</label>
+          <select class="form-select form-select-lg rounded-3 shadow-sm" [(ngModel)]="selectedLearnerIdForAdd" (change)="newEnrollmentId = null">
+            <option [ngValue]="null" disabled>-- Select the student --</option>
+            <option *ngFor="let u of learnersOnly" [ngValue]="u.id">
+              {{ u.prenom }} {{ u.nom }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Step 2: Select the Course Enrollment for that student -->
+        <div class="mb-3 animate-fade-in" *ngIf="selectedLearnerIdForAdd">
+          <label class="form-label fw-bold small text-uppercase mb-1">2. Select Enrollment / Course</label>
+          <select class="form-select form-select-lg rounded-3 shadow-sm border-primary" [(ngModel)]="newEnrollmentId">
+            <option [ngValue]="null" disabled>-- Select course to certify --</option>
+            <option *ngFor="let enroll of enrollmentsForSelectedLearner" [value]="enroll.id">
+               {{ enroll.course?.title }} (Enrollment ID: {{ enroll.id }})
+            </option>
+          </select>
+          <div *ngIf="enrollmentsForSelectedLearner.length === 0" class="alert alert-warning mt-2 py-2 small">
+            This learner has no pending enrollments to certify.
+          </div>
+        </div>
+
         <p class="text-muted small mt-2">
-          <i class="bi bi-info-circle me-1"></i> Only non-certified enrollments are listed.
+          <i class="bi bi-info-circle me-1"></i> Certificates are linked strictly to the student's enrollment data.
         </p>
       </div>
       <div class="modal-footer border-0 p-4 pt-0">
@@ -150,10 +169,10 @@
       <div class="modal-body p-4">
         <div class="mb-3">
           <label class="form-label fw-bold small text-uppercase text-muted">Reassign Learner</label>
+          <!-- Using learnersOnly to prevent assigning back to Admin -->
           <select class="form-select rounded-3 shadow-sm" [(ngModel)]="selectedCertificate.enrollment.userId">
             <option *ngFor="let u of learnersOnly" [ngValue]="u.id">{{u.prenom}} {{u.nom}}</option>
           </select>
-          <div class="form-text text-primary small">Dropdown matches role: LEARNER.</div>
         </div>
         
         <div class="mb-3">

@@ -19,8 +19,13 @@ import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -61,37 +66,40 @@ public class CertificateServiceImpl implements ICertificateService {
 
         return jwtReader.extractUserId(authHeader);
     }
-
+    @Override
+    public Certificate getById(Long id) {
+        // This fetches the certificate by its primary key ID
+        return certificateRepository.findById(id).orElse(null);
+    }
     @Override
     public Certificate generateCertificate(Long enrollmentId) {
-        Long connectedUserId = getConnectedUserId();
+        // 1. Fetch the enrollment
+        Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new RuntimeException("❌ Erreur : L'inscription n°" + enrollmentId + " n'existe pas."));
 
-        Enrollment enrollment = enrollmentRepository.findById(enrollmentId).orElse(null);
-
-        // 1. Vérifie si le cours existe et est terminé
-        if (enrollment != null && "COMPLETED".equals(enrollment.getStatus())) {
-
-            // 2. Vérifie si l'utilisateur est le bon
-            if (enrollment.getUserId() == null || !enrollment.getUserId().equals(connectedUserId)) {
-                throw new RuntimeException("❌ Erreur : Ce cours n'est pas assigné à l'utilisateur " + connectedUserId);
-            }
-
-            // 3. Vérifie si le certificat existe déjà
-            Certificate existingCert = certificateRepository.findByEnrollmentId(enrollmentId);
-            if (existingCert != null) {
-                return existingCert;
-            }
-
-            // 4. Création
-            Certificate certificate = new Certificate();
-            certificate.setEnrollment(enrollment);
-            certificate.setIssuedAt(LocalDate.now());
-            certificate.setCertificateCode("CERT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase());
-
-            return certificateRepository.save(certificate);
+        // 2. Check if the status is COMPLETED
+        if (!"COMPLETED".equals(enrollment.getStatus())) {
+            throw new RuntimeException("❌ Erreur : L'inscription n°" + enrollmentId + " n'est pas encore terminée (Status: " + enrollment.getStatus() + ").");
         }
 
-        throw new RuntimeException("❌ Erreur : L'inscription n°" + enrollmentId + " n'existe pas ou le status n'est pas COMPLETED.");
+        // 3. Check if certificate already exists (Prevents duplicates)
+        Certificate existingCert = certificateRepository.findByEnrollmentId(enrollmentId);
+        if (existingCert != null) {
+            return existingCert;
+        }
+
+        // 4. Create and Save the Certificate
+        Certificate certificate = new Certificate();
+        certificate.setEnrollment(enrollment);
+        certificate.setIssuedAt(LocalDate.now());
+
+        // Generate a unique code
+        String uniqueCode = "CERT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+        certificate.setCertificateCode(uniqueCode);
+
+        System.out.println("✅ Succès : Certificat généré pour l'utilisateur ID: " + enrollment.getUserId());
+
+        return certificateRepository.save(certificate);
     }
 
     @Override
@@ -198,5 +206,30 @@ public class CertificateServiceImpl implements ICertificateService {
     public void deleteCertificate(Long id) {
         certificateRepository.deleteByIdCustom(id);
         certificateRepository.flush();
+    }
+
+    @Override
+    @Transactional
+    public void savePdfContent(Long id, byte[] content) {
+        Certificate cert = certificateRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
+
+        cert.setPdfContent(content);
+        certificateRepository.save(cert);
+    }
+
+    @PostMapping("/{id}/upload")
+    public ResponseEntity<String> uploadCertificatePdf(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+        try {
+            Certificate cert = certificateRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Certificate not found"));
+
+            cert.setPdfContent(file.getBytes()); // Convert file to byte array
+            certificateRepository.save(cert);
+
+            return ResponseEntity.ok("PDF stored successfully in database!");
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error reading PDF file");
+        }
     }
 }

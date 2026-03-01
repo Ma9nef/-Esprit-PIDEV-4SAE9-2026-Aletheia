@@ -13,7 +13,7 @@ public interface ICertificateService {
         List<Certificate> getAllCertificates();
         Certificate getByCode(String code);
 
-
+    Certificate getById(Long id);
     // --- ADVANCED MÉTIER 1: Modern PDF with QR-Code Verification ---
     // This provides "Trust" to the business by preventing forged certificates.
     void exportModernCertificate(Long certificateId, HttpServletResponse response) throws IOException;
@@ -23,4 +23,6 @@ public interface ICertificateService {
     Map<String, Object> getCertificationAnalytics();
 
     void deleteCertificate(Long id);
+
+    void savePdfContent(Long id, byte[] bytes);
 }
