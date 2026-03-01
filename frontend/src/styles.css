@@ -460,3 +460,17 @@ body:not(.dark-theme) .register-card-footer .footer-sep {
     border-radius: 14px;
     border: 1px solid rgba(99, 102, 241, 0.18);
   }
+  /* Course image inside cards */
+.courses-catalog .course-card__media{
+  width: 100%;
+  height: 190px;
+  background: #eef2f7;
+  overflow: hidden;
+}
+
+.courses-catalog .course-card__img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
