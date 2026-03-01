@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { CatalogComponent } from './catalog/catalog.component';
 import { CourseDetailsComponent } from './course-details/course-details.component';
-import { CourseLearningComponent } from './course-learning/course-learning.component'; // ✅ ADD
+import { CourseLearningComponent } from './course-learning/course-learning.component';
 import { ProfileComponent } from './profile/profile.component';
+import { LibraryComponent } from './library/library.component';
 
 import { SharedModule } from '../shared/shared.module';
 import { AboutComponent } from './template/about/about.component';
@@ -18,8 +19,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HomeComponent,
     CatalogComponent,
     CourseDetailsComponent,
-    CourseLearningComponent, // ✅ ADD
+    CourseLearningComponent,
     ProfileComponent,
+    LibraryComponent,
     AboutComponent,
     ServicesComponent,
     TemplateComponent,
@@ -33,8 +35,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     HomeComponent,
     CatalogComponent,
     CourseDetailsComponent,
-    CourseLearningComponent, // ✅ optional (export only if used outside)
+    CourseLearningComponent,
     ProfileComponent,
+    LibraryComponent,
     AboutComponent,
     ServicesComponent
   ]

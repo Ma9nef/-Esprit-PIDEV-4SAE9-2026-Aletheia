@@ -60,10 +60,12 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "aletheia-frontEnd:build:production"
+              "browserTarget": "aletheia-frontEnd:build:production",
+              "proxyConfig": "proxy.conf.json"
             },
             "development": {
-              "browserTarget": "aletheia-frontEnd:build:development"
+              "browserTarget": "aletheia-frontEnd:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

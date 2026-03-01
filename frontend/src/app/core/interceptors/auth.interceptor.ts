@@ -10,7 +10,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private allowedHosts = [
     'http://localhost:8080',
-    'http://localhost:8081'
+    'http://localhost:8081',
+    'http://localhost:8089' // API Gateway
   ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
