@@ -33,5 +33,7 @@ public class Certificate {
     @JoinColumn(name = "enrollment_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "certificate"})
     private Enrollment enrollment;
-
+    @Lob
+    @Column(columnDefinition = "LONGBLOB") // Use LONGBLOB for PDFs
+    private byte[] pdfContent;
 }

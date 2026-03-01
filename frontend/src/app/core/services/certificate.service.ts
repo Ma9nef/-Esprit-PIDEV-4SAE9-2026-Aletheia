@@ -21,10 +21,15 @@ sendEmail(certId: number, email: string) {
   return this.http.post(`${this.apiUrl}/${certId}/send-email?email=${email}`, {});
 }
 // Add this to your CertificateService
-uploadCertificatePdf(id: number, file: Blob): Observable<any> {
+// inside certificate.service.ts
+uploadCertificatePdf(id: number, blob: Blob): Observable<string> {
   const formData = new FormData();
-  formData.append('file', file, `certificate_${id}.pdf`);
-  return this.http.post(`${this.apiUrl}/${id}/upload-pdf`, formData);
+  // Ensure the key name "file" matches the @RequestParam("file") in Java
+  formData.append('file', blob, `certificate_${id}.pdf`);
+
+  return this.http.post(`http://localhost:8081/pidev/certificate/${id}/upload`, formData, {
+    responseType: 'text'  // <--- THIS IS THE KEY FIX
+  });
 }
   // Get by code
   
@@ -56,5 +61,12 @@ getCertificateByCode(code: string): Observable<Certificate> {
   // Matches @DeleteMapping("/pidev/certificate/{id}")
   return this.http.delete<void>(`${this.apiUrl}/${id}`);
 }
+// inside CertificateService
+downloadCertificateFile(id: number): Observable<Blob> {
+  return this.http.get(`http://localhost:8081/pidev/certificate/${id}/download`, {
+    responseType: 'blob' // This is the most important part
+  });
+}
+
 
 }
