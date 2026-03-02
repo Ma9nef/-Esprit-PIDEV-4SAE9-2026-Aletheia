@@ -42,4 +42,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     // ─── Exists check (useful for validation) ───────────────────────────────────
 
     boolean existsByTitleIgnoreCase(String title);
+
+    // ─── Low stock products ─────────────────────────────────────────────────────
+
+    @Query("SELECT p FROM Product p WHERE p.stockQuantity <= p.stockThreshold")
+    List<Product> findLowStockProducts();
 }

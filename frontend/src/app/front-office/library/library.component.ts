@@ -11,6 +11,9 @@ interface Product {
   fileUrl?: string;
   coverImageUrl?: string;
   available?: boolean;
+  stockQuantity?: number;
+  stockThreshold?: number;
+  lowStock?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -24,6 +27,8 @@ interface LibraryResource {
   downloadUrl?: string;
   imageUrl?: string;
   createdDate?: string;
+  stockQuantity?: number;
+  lowStock?: boolean;
 }
 
 @Component({
@@ -74,11 +79,13 @@ export class LibraryComponent implements OnInit {
             id: product.id,
             title: product.title,
             description: product.description || '',
-            category: product.type.toLowerCase(), // BOOK -> book, PDF -> pdf, etc.
+            category: product.type.toLowerCase(),
             resourceType: product.type.toLowerCase(),
             downloadUrl: product.fileUrl,
             imageUrl: product.coverImageUrl,
-            createdDate: product.createdAt || product.updatedAt
+            createdDate: product.createdAt || product.updatedAt,
+            stockQuantity: product.stockQuantity ?? 0,
+            lowStock: product.lowStock ?? false
           }));
           this.filterResources();
           this.loading = false;

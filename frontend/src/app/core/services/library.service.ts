@@ -12,8 +12,26 @@ export interface Product {
   fileUrl?: string;
   coverImageUrl?: string;
   available?: boolean;
+  stockQuantity?: number;
+  stockThreshold?: number;
+  lowStock?: boolean;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface StockMovement {
+  id: number;
+  productId: number;
+  productTitle: string;
+  movementType: 'IN' | 'OUT';
+  quantity: number;
+  reason: string;
+  timestamp: string;
+}
+
+export interface StockAdjustmentRequest {
+  quantity: number;
+  reason?: string;
 }
 
 @Injectable({
@@ -21,8 +39,6 @@ export interface Product {
 })
 export class LibraryService {
 
-  // Use relative path so Angular dev-server proxy (proxy.conf.json) forwards requests to the gateway
-  // during development. This ensures both front-office and back-office use the same routing.
   private baseUrl = '/api/products';
 
   constructor(private http: HttpClient) {}
@@ -41,5 +57,23 @@ export class LibraryService {
 
   delete(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
+  // ─── Stock Management ─────────────────────────────────────────────────────
+
+  getLowStockProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/low-stock`);
+  }
+
+  addStock(productId: number, request: StockAdjustmentRequest): Observable<Product> {
+    return this.http.post<Product>(`${this.baseUrl}/${productId}/stock/add`, request);
+  }
+
+  removeStock(productId: number, request: StockAdjustmentRequest): Observable<Product> {
+    return this.http.post<Product>(`${this.baseUrl}/${productId}/stock/remove`, request);
+  }
+
+  getStockMovements(productId: number): Observable<StockMovement[]> {
+    return this.http.get<StockMovement[]>(`${this.baseUrl}/${productId}/stock/movements`);
   }
 }

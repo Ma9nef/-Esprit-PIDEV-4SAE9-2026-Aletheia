@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LibraryService, Product } from 'src/app/core/services/library.service';
+import { LibraryService, Product, StockMovement } from 'src/app/core/services/library.service';
 
 interface LibraryResource {
   id?: number;
@@ -11,6 +11,9 @@ interface LibraryResource {
   downloadUrl?: string;
   imageUrl?: string;
   createdDate?: string;
+  stockQuantity?: number;
+  stockThreshold?: number;
+  lowStock?: boolean;
 }
 
 @Component({
@@ -56,6 +59,18 @@ export class ManageLibraryComponent implements OnInit {
     { id: 'exam', name: 'Exam' }
   ];
 
+  // Stock management
+  showStockModal = false;
+  stockResource: LibraryResource | null = null;
+  stockAction: 'add' | 'remove' = 'add';
+  stockQuantity = 1;
+  stockReason = '';
+  stockMovements: StockMovement[] = [];
+  showMovementsModal = false;
+  movementsResource: LibraryResource | null = null;
+  lowStockCount = 0;
+  showLowStockOnly = false;
+
   constructor(private libraryService: LibraryService, private fb: FormBuilder) {
     this.resourceForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(3)]],
@@ -63,7 +78,9 @@ export class ManageLibraryComponent implements OnInit {
       category: ['book', Validators.required],
       resourceType: ['book', Validators.required],
       downloadUrl: [''],
-      imageUrl: ['']
+      imageUrl: [''],
+      stockQuantity: [0, [Validators.min(0)]],
+      stockThreshold: [5, [Validators.min(0)]]
     });
   }
 
@@ -85,10 +102,14 @@ export class ManageLibraryComponent implements OnInit {
           resourceType: (product.type || 'BOOK').toLowerCase(),
           downloadUrl: product.fileUrl,
           imageUrl: product.coverImageUrl,
-          createdDate: product.createdAt || product.updatedAt
+          createdDate: product.createdAt || product.updatedAt,
+          stockQuantity: product.stockQuantity ?? 0,
+          stockThreshold: product.stockThreshold ?? 5,
+          lowStock: product.lowStock ?? false
         }));
 
-        console.log('Loaded resources:', this.resources); // debug
+        this.lowStockCount = this.resources.filter(r => r.lowStock).length;
+        console.log('Loaded resources:', this.resources);
         this.filterAndSort();
         this.loading = false;
       },
@@ -116,7 +137,9 @@ export class ManageLibraryComponent implements OnInit {
       const matchesType =
         this.selectedType === 'all' || r.resourceType === this.selectedType.toLowerCase();
 
-      return matchesSearch && matchesCategory && matchesType;
+      const matchesLowStock = !this.showLowStockOnly || r.lowStock;
+
+      return matchesSearch && matchesCategory && matchesType && matchesLowStock;
     });
 
     this.filteredResources.sort((a, b) => {
@@ -137,7 +160,7 @@ export class ManageLibraryComponent implements OnInit {
   openAddForm(): void {
     this.showForm = true;
     this.editingId = null;
-    this.resourceForm.reset({ category: 'book', resourceType: 'book' });
+    this.resourceForm.reset({ category: 'book', resourceType: 'book', stockQuantity: 0, stockThreshold: 5 });
   }
 
   openEditForm(resource: LibraryResource): void {
@@ -146,14 +169,16 @@ export class ManageLibraryComponent implements OnInit {
     this.resourceForm.patchValue({
       ...resource,
       category: resource.category.toLowerCase(),
-      resourceType: resource.resourceType.toLowerCase()
+      resourceType: resource.resourceType.toLowerCase(),
+      stockQuantity: resource.stockQuantity ?? 0,
+      stockThreshold: resource.stockThreshold ?? 5
     });
   }
 
   closeForm(): void {
     this.showForm = false;
     this.editingId = null;
-    this.resourceForm.reset({ category: 'book', resourceType: 'book' });
+    this.resourceForm.reset({ category: 'book', resourceType: 'book', stockQuantity: 0, stockThreshold: 5 });
   }
 
   saveResource(): void {
@@ -176,7 +201,9 @@ export class ManageLibraryComponent implements OnInit {
       fileUrl: resource.downloadUrl || undefined,
       coverImageUrl: resource.imageUrl || undefined,
       available: true,
-      price: 0
+      price: 0,
+      stockQuantity: this.resourceForm.get('stockQuantity')?.value ?? 0,
+      stockThreshold: this.resourceForm.get('stockThreshold')?.value ?? 5
     };
 
     this.libraryService.create(product).subscribe({
@@ -189,8 +216,12 @@ export class ManageLibraryComponent implements OnInit {
           resourceType: created.type.toLowerCase(),
           downloadUrl: created.fileUrl,
           imageUrl: created.coverImageUrl,
-          createdDate: created.createdAt
+          createdDate: created.createdAt,
+          stockQuantity: created.stockQuantity ?? 0,
+          stockThreshold: created.stockThreshold ?? 5,
+          lowStock: created.lowStock ?? false
         });
+        this.lowStockCount = this.resources.filter(r => r.lowStock).length;
         this.filterAndSort();
         this.closeForm();
       },
@@ -210,13 +241,22 @@ export class ManageLibraryComponent implements OnInit {
       fileUrl: resource.downloadUrl || undefined,
       coverImageUrl: resource.imageUrl || undefined,
       available: true,
-      price: 0
+      price: 0,
+      stockThreshold: this.resourceForm.get('stockThreshold')?.value ?? 5
     };
 
     this.libraryService.update(id, product).subscribe({
       next: () => {
         const index = this.resources.findIndex(r => r.id === id);
-        if (index > -1) this.resources[index] = { ...resource, id };
+        if (index > -1) {
+          this.resources[index] = {
+            ...resource,
+            id,
+            stockThreshold: this.resourceForm.get('stockThreshold')?.value ?? 5,
+            lowStock: (this.resources[index].stockQuantity ?? 0) <= (this.resourceForm.get('stockThreshold')?.value ?? 5)
+          };
+        }
+        this.lowStockCount = this.resources.filter(r => r.lowStock).length;
         this.filterAndSort();
         this.closeForm();
       },
@@ -280,6 +320,78 @@ export class ManageLibraryComponent implements OnInit {
 
   previousPage(): void { if (this.currentPage > 1) this.currentPage--; }
   nextPage(): void { if (this.currentPage < this.totalPages) this.currentPage++; }
+
+  // ─── Stock Management Methods ──────────────────────────────────────────────
+
+  toggleLowStockFilter(): void {
+    this.showLowStockOnly = !this.showLowStockOnly;
+    this.currentPage = 1;
+    this.filterAndSort();
+  }
+
+  openStockModal(resource: LibraryResource, action: 'add' | 'remove'): void {
+    this.stockResource = resource;
+    this.stockAction = action;
+    this.stockQuantity = 1;
+    this.stockReason = '';
+    this.showStockModal = true;
+  }
+
+  closeStockModal(): void {
+    this.showStockModal = false;
+    this.stockResource = null;
+    this.stockQuantity = 1;
+    this.stockReason = '';
+  }
+
+  submitStockAdjustment(): void {
+    if (!this.stockResource?.id || this.stockQuantity < 1) return;
+
+    const request = { quantity: this.stockQuantity, reason: this.stockReason };
+    const obs = this.stockAction === 'add'
+      ? this.libraryService.addStock(this.stockResource.id, request)
+      : this.libraryService.removeStock(this.stockResource.id, request);
+
+    obs.subscribe({
+      next: (updated) => {
+        const index = this.resources.findIndex(r => r.id === this.stockResource?.id);
+        if (index > -1) {
+          this.resources[index].stockQuantity = updated.stockQuantity ?? 0;
+          this.resources[index].lowStock = updated.lowStock ?? false;
+        }
+        this.lowStockCount = this.resources.filter(r => r.lowStock).length;
+        this.filterAndSort();
+        this.closeStockModal();
+      },
+      error: (err) => {
+        const errorMsg = err.error?.message || err.message || 'Stock adjustment failed';
+        this.error = `Stock adjustment failed: ${errorMsg}`;
+        this.closeStockModal();
+      }
+    });
+  }
+
+  openMovementsModal(resource: LibraryResource): void {
+    if (!resource.id) return;
+    this.movementsResource = resource;
+    this.stockMovements = [];
+    this.showMovementsModal = true;
+
+    this.libraryService.getStockMovements(resource.id).subscribe({
+      next: (movements) => {
+        this.stockMovements = movements;
+      },
+      error: () => {
+        this.error = 'Failed to load stock movements';
+      }
+    });
+  }
+
+  closeMovementsModal(): void {
+    this.showMovementsModal = false;
+    this.movementsResource = null;
+    this.stockMovements = [];
+  }
 
   getMockData(): LibraryResource[] {
     return [

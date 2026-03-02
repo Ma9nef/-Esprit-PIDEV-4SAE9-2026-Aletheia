@@ -62,7 +62,9 @@
 
     <router-outlet></router-outlet>
 
-    <section class="analytics-row" aria-label="Analytics overview">
+    <!-- Dashboard Content (hidden when child routes like manage-library or manage-users are active) -->
+    <ng-container *ngIf="showDashboardContent">
+      <section class="analytics-row" aria-label="Analytics overview">
       <div class="analytics-card">
         <span class="analytics-label">Total Revenue</span>
         <span class="analytics-value">$124,850</span>
@@ -190,5 +192,6 @@
         </table>
       </div>
     </section>
+    </ng-container>
   </main>
 </div>

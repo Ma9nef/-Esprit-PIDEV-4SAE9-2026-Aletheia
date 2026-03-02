@@ -12,7 +12,8 @@ const routes: Routes = [
     path: 'admin',
     component: AdminDashboardComponent,
     children: [
-      { path: 'manage-library', component: ManageLibraryComponent }
+      { path: 'manage-library', component: ManageLibraryComponent },
+      { path: 'manage-users', component: ManageUsersComponent }
     ]
   },
   { path: 'trainer', component: TrainerDashboardComponent },

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -10,6 +11,15 @@
         <module name="library_microservice" />
         <module name="eureka" />
         <module name="ApiGateway" />
+      </profile>
+      <profile name="Annotation profile for Library" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+        </processorPath>
+        <module name="Library" />
       </profile>
       <profile name="Annotation profile for Aletheia" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -20,15 +30,6 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
         </processorPath>
         <module name="user-service" />
-      </profile>
-      <profile name="Annotation profile for Library" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
-        </processorPath>
-        <module name="Library" />
       </profile>
     </annotationProcessing>
   </component>
