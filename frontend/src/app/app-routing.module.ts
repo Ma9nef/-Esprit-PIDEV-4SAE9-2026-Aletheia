@@ -9,6 +9,8 @@ import { HomeComponent } from './front-office/template/home/home.component';
 import { DashboardComponent } from './front-office/dashboard/dashboard.component';
 import { TrainerDashboardComponent } from './back-office/trainer-dashboard/trainer-dashboard.component';
 import { AdminDashboardComponent } from './back-office/admin-dashboard/admin-dashboard.component';
+import { ManageLibraryComponent } from './back-office/manage-library/manage-library.component';
+import { ManageUsersComponent } from './back-office/manage-users/manage-users.component';
 import { CatalogComponent } from './front-office/catalog/catalog.component';
 import { CourseDetailsComponent } from './front-office/course-details/course-details.component';
 import { CourseLearningComponent } from './front-office/course-learning/course-learning.component';
@@ -23,7 +25,14 @@ const routes: Routes = [
   {path:'contact', component: FooterComponent},
   {path: 'dashboardLearner',component: DashboardComponent},
   {path: 'dashboardInstructor',component: TrainerDashboardComponent},
-  {path: 'dashboardAdmin', component:AdminDashboardComponent },
+  {
+    path: 'dashboardAdmin',
+    component: AdminDashboardComponent,
+    children: [
+      { path: 'manage-library', component: ManageLibraryComponent },
+      { path: 'manage-users', component: ManageUsersComponent }
+    ]
+  },
   { path: 'front/courses', component: CatalogComponent },
   { path: 'front/course-details/:id', component: CourseDetailsComponent },
   { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },

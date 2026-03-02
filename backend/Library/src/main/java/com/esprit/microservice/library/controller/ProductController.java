@@ -38,6 +38,15 @@ public class ProductController {
     }
 
     /**
+     * GET /api/products/low-stock
+     * Returns products where stock quantity is at or below threshold
+     */
+    @GetMapping("/low-stock")
+    public ResponseEntity<List<ProductDTO>> getLowStockProducts() {
+        return ResponseEntity.ok(productService.getLowStockProducts());
+    }
+
+    /**
      * GET /api/products/{id}
      */
     @GetMapping("/{id}")

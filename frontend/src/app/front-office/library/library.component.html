@@ -92,6 +92,14 @@
               </svg>
             </div>
             <div class="resource-badge">{{ resource.resourceType }}</div>
+            <div class="stock-badge"
+              [class.stock-in]="(resource.stockQuantity ?? 0) > 0 && !resource.lowStock"
+              [class.stock-low]="resource.lowStock && (resource.stockQuantity ?? 0) > 0"
+              [class.stock-out]="(resource.stockQuantity ?? 0) === 0">
+              <span *ngIf="(resource.stockQuantity ?? 0) > 0 && !resource.lowStock">✓ In Stock ({{ resource.stockQuantity }})</span>
+              <span *ngIf="resource.lowStock && (resource.stockQuantity ?? 0) > 0">⚠ Low Stock ({{ resource.stockQuantity }})</span>
+              <span *ngIf="(resource.stockQuantity ?? 0) === 0">✗ Out of Stock</span>
+            </div>
           </div>
 
           <!-- Resource Info -->

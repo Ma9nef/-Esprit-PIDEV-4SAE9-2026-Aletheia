@@ -28,15 +28,15 @@ export class NavbarComponent implements OnInit {
     email: '',
     avatar: 'https://i.pravatar.cc/150?img=12'
   };
-  
+
   private updateCurrentUser(): void {
     const u = this.auth.getUserFromToken();
-  
+
     if (!u) {
       this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
       return;
     }
-  
+
     this.currentUser.email = u.email;
     this.currentUser.name = u.email.split('@')[0];
   }
@@ -62,16 +62,16 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateCurrentUser();
-  
+
     this.currentRoute = this.router.url;
-  
+
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
         this.currentRoute = this.router.url;
         this.updateCurrentUser(); // ✅ refresh user after login redirect
       });
-  
+
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(query => {
@@ -121,17 +121,32 @@ export class NavbarComponent implements OnInit {
     this.isUserDropdownOpen = false;
   }
 
+  onDashboardClick(): void {
+    const user = this.auth.getUserFromToken();
+    if (user) {
+      const role = user.role.toLowerCase();
+      if (role === 'admin') {
+        this.router.navigate(['/dashboardAdmin']);
+      } else if (role === 'trainer' || role === 'instructor') {
+        this.router.navigate(['/dashboardInstructor']);
+      } else {
+        this.router.navigate(['/dashboardLearner']);
+      }
+    }
+    this.isUserDropdownOpen = false;
+  }
+
   onLogout(): void {
     this.auth.logout();                  // remove token
     this.isUserDropdownOpen = false;
     this.isMobileMenuOpen = false;
-  
+
     this.currentUser = {
       name: '',
       email: '',
       avatar: 'https://i.pravatar.cc/150?img=12'
     };
-  
+
     this.router.navigate(['/home']);
   }
 }
