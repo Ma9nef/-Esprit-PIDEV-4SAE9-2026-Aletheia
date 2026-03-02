@@ -12,66 +12,66 @@ import { OfferRequestDTO, OfferType } from '../../../../core/models/offer.model'
   template: `
     <div class="offer-form-page">
       <div class="form-card">
-        <h1 class="form-title">{{ isEdit ? 'Modifier l\'offre' : 'Nouvelle offre' }}</h1>
-        <p class="form-description">Remplissez les champs obligatoires (*). Les dates doivent être cohérentes.</p>
+        <h1 class="form-title">{{ isEdit ? 'Edit Offer' : 'New Offer' }}</h1>
+        <p class="form-description">Fill in the required fields (*). Dates must be consistent.</p>
 
         <div *ngIf="successMessage" class="message-success" role="alert">{{ successMessage }}</div>
         <div *ngIf="error" class="message-error" role="alert">{{ error }}</div>
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label class="form-label" for="offer-name">Nom *</label>
-            <input id="offer-name" formControlName="name" type="text" class="form-input" placeholder="Ex: Réduction été" />
+            <label class="form-label" for="offer-name">Name *</label>
+            <input id="offer-name" formControlName="name" type="text" class="form-input" placeholder="e.g: Summer Sale" />
             <p *ngIf="getErrorMessage('name')" class="field-error">{{ getErrorMessage('name') }}</p>
           </div>
           <div class="form-group">
             <label class="form-label" for="offer-desc">Description *</label>
-            <textarea id="offer-desc" formControlName="description" rows="3" class="form-textarea" placeholder="Décrivez l'offre"></textarea>
+            <textarea id="offer-desc" formControlName="description" rows="3" class="form-textarea" placeholder="Describe the offer"></textarea>
             <p *ngIf="getErrorMessage('description')" class="field-error">{{ getErrorMessage('description') }}</p>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="offer-type">Type *</label>
               <select id="offer-type" formControlName="type" class="form-select">
-                <option value="PERCENTAGE">Pourcentage</option>
-                <option value="FIXED_AMOUNT">Montant fixe</option>
+                <option value="PERCENTAGE">Percentage</option>
+                <option value="FIXED_AMOUNT">Fixed amount</option>
               </select>
             </div>
             <div class="form-group">
-              <label class="form-label" for="offer-value">Valeur *</label>
+              <label class="form-label" for="offer-value">Value *</label>
               <input id="offer-value" formControlName="value" type="number" step="0.01" class="form-input" min="0" />
               <p *ngIf="getErrorMessage('value')" class="field-error">{{ getErrorMessage('value') }}</p>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="offer-start">Date début *</label>
+              <label class="form-label" for="offer-start">Start Date *</label>
               <input id="offer-start" formControlName="startDate" type="datetime-local" class="form-input" />
               <p *ngIf="getErrorMessage('startDate')" class="field-error">{{ getErrorMessage('startDate') }}</p>
             </div>
             <div class="form-group">
-              <label class="form-label" for="offer-end">Date fin *</label>
+              <label class="form-label" for="offer-end">End Date *</label>
               <input id="offer-end" formControlName="endDate" type="datetime-local" class="form-input" />
               <p *ngIf="getErrorMessage('endDate')" class="field-error">{{ getErrorMessage('endDate') }}</p>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="offer-max">Max utilisations</label>
-              <input id="offer-max" formControlName="maxUses" type="number" class="form-input" min="0" placeholder="Illimité" />
+              <label class="form-label" for="offer-max">Max uses</label>
+              <input id="offer-max" formControlName="maxUses" type="number" class="form-input" min="0" placeholder="Unlimited" />
               <p *ngIf="getErrorMessage('maxUses')" class="field-error">{{ getErrorMessage('maxUses') }}</p>
             </div>
             <div class="form-group">
-              <label class="form-label" for="offer-max-user">Max par utilisateur</label>
-              <input id="offer-max-user" formControlName="maxUsesPerUser" type="number" class="form-input" min="0" placeholder="Illimité" />
+              <label class="form-label" for="offer-max-user">Max per user</label>
+              <input id="offer-max-user" formControlName="maxUsesPerUser" type="number" class="form-input" min="0" placeholder="Unlimited" />
               <p *ngIf="getErrorMessage('maxUsesPerUser')" class="field-error">{{ getErrorMessage('maxUsesPerUser') }}</p>
             </div>
           </div>
           <div class="form-actions">
             <button type="submit" class="btn-primary" [disabled]="form.invalid || saving">
-              {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+              {{ saving ? 'Saving...' : 'Save' }}
             </button>
-            <a routerLink="/admin/offers" class="btn-cancel">Annuler</a>
+            <a routerLink="/admin/offers" class="btn-cancel">Cancel</a>
           </div>
         </form>
       </div>
@@ -151,12 +151,12 @@ export class OfferFormComponent implements OnInit {
     const c = this.form.get(controlName);
     if (!c?.touched || !c.errors) return '';
     const err = c.errors;
-    if (err['required']) return 'Champ obligatoire.';
-    if (err['minlength']) return `Minimum ${err['minlength'].requiredLength} caractères.`;
-    if (err['maxlength']) return `Maximum ${err['maxlength'].requiredLength} caractères.`;
-    if (err['min']) return `La valeur minimale est ${err['min'].min}.`;
-    if (err['max']) return `La valeur maximale est ${err['max'].max}.`;
-    return 'Valeur invalide.';
+    if (err['required']) return 'This field is required.';
+    if (err['minlength']) return `Minimum ${err['minlength'].requiredLength} characters.`;
+    if (err['maxlength']) return `Maximum ${err['maxlength'].requiredLength} characters.`;
+    if (err['min']) return `Minimum value is ${err['min'].min}.`;
+    if (err['max']) return `Maximum value is ${err['max'].max}.`;
+    return 'Invalid value.';
   }
 
   toDateTimeLocal(d: Date | string): string {
@@ -196,12 +196,12 @@ export class OfferFormComponent implements OnInit {
 
     req.subscribe({
       next: () => {
-        this.successMessage = this.isEdit ? 'Offre mise à jour avec succès.' : 'Offre créée avec succès.';
+        this.successMessage = this.isEdit ? 'Offer updated successfully.' : 'Offer created successfully.';
         this.saving = false;
         setTimeout(() => this.router.navigate(['/admin/offers']), 1500);
       },
       error: (e) => {
-        this.error = e?.error?.message || 'Erreur lors de l\'enregistrement.';
+        this.error = e?.error?.message || 'Error saving offer.';
         this.saving = false;
       }
     });

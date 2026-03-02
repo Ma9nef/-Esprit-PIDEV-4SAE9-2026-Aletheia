@@ -14,45 +14,45 @@ import { OfferResponseDTO } from '../../../../core/models/offer.model';
   template: `
     <div class="flash-sale-form-page">
       <div class="form-card">
-        <h1 class="form-title">{{ isEdit ? 'Modifier la Flash Sale' : 'Nouvelle Flash Sale' }}</h1>
-        <p class="form-description">La date de début doit être dans le futur. Nombre max d'utilisateurs : 1 à 10 000.</p>
+        <h1 class="form-title">{{ isEdit ? 'Edit Flash Sale' : 'New Flash Sale' }}</h1>
+        <p class="form-description">Start date must be in the future. Max users: 1 to 10,000.</p>
 
         <div *ngIf="successMessage" class="message-success" role="alert">{{ successMessage }}</div>
         <div *ngIf="error" class="message-error" role="alert">{{ error }}</div>
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="form-group">
-            <label class="form-label" for="fs-name">Nom *</label>
-            <input id="fs-name" formControlName="name" type="text" class="form-input" placeholder="Ex: Flash 24h" />
+            <label class="form-label" for="fs-name">Name *</label>
+            <input id="fs-name" formControlName="name" type="text" class="form-input" placeholder="e.g: 24h Flash Sale" />
             <p *ngIf="getErrorMessage('name')" class="field-error">{{ getErrorMessage('name') }}</p>
           </div>
           <div class="form-group">
             <label class="form-label" for="fs-desc">Description *</label>
-            <textarea id="fs-desc" formControlName="description" rows="3" class="form-textarea" placeholder="Description de la flash sale"></textarea>
+            <textarea id="fs-desc" formControlName="description" rows="3" class="form-textarea" placeholder="Flash sale description"></textarea>
             <p *ngIf="getErrorMessage('description')" class="field-error">{{ getErrorMessage('description') }}</p>
           </div>
           <div class="form-group">
-            <label class="form-label" for="fs-offer">Offre associée *</label>
+            <label class="form-label" for="fs-offer">Associated Offer *</label>
             <select id="fs-offer" formControlName="offerId" class="form-select">
-              <option value="">-- Sélectionner une offre --</option>
+              <option value="">-- Select an offer --</option>
               <option *ngFor="let o of offers" [value]="o.id">{{ o.name }}</option>
             </select>
             <p *ngIf="getErrorMessage('offerId')" class="field-error">{{ getErrorMessage('offerId') }}</p>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="fs-start">Début *</label>
+              <label class="form-label" for="fs-start">Start *</label>
               <input id="fs-start" formControlName="startTime" type="datetime-local" class="form-input" />
               <p *ngIf="getErrorMessage('startTime')" class="field-error">{{ getErrorMessage('startTime') }}</p>
             </div>
             <div class="form-group">
-              <label class="form-label" for="fs-end">Fin *</label>
+              <label class="form-label" for="fs-end">End *</label>
               <input id="fs-end" formControlName="endTime" type="datetime-local" class="form-input" />
               <p *ngIf="getErrorMessage('endTime')" class="field-error">{{ getErrorMessage('endTime') }}</p>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label" for="fs-max">Nombre max d'utilisateurs *</label>
+            <label class="form-label" for="fs-max">Max Users *</label>
             <input id="fs-max" formControlName="maxUsers" type="number" class="form-input" min="1" />
             <p *ngIf="getErrorMessage('maxUsers')" class="field-error">{{ getErrorMessage('maxUsers') }}</p>
           </div>
@@ -64,9 +64,9 @@ import { OfferResponseDTO } from '../../../../core/models/offer.model';
           </div>
           <div class="form-actions">
             <button type="submit" class="btn-primary" [disabled]="form.invalid || saving">
-              {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+              {{ saving ? 'Saving...' : 'Save' }}
             </button>
-            <a routerLink="/admin/flash-sales" class="btn-cancel">Annuler</a>
+            <a routerLink="/admin/flash-sales" class="btn-cancel">Cancel</a>
           </div>
         </form>
       </div>
@@ -149,12 +149,12 @@ export class FlashSaleFormComponent implements OnInit {
     const c = this.form.get(controlName);
     if (!c?.touched || !c.errors) return '';
     const err = c.errors;
-    if (err['required']) return 'Champ obligatoire.';
-    if (err['minlength']) return `Minimum ${err['minlength'].requiredLength} caractères.`;
-    if (err['maxlength']) return `Maximum ${err['maxlength'].requiredLength} caractères.`;
-    if (err['min']) return `La valeur minimale est ${err['min'].min}.`;
-    if (err['max']) return `La valeur maximale est ${err['max'].max}.`;
-    return 'Valeur invalide.';
+    if (err['required']) return 'This field is required.';
+    if (err['minlength']) return `Minimum ${err['minlength'].requiredLength} characters.`;
+    if (err['maxlength']) return `Maximum ${err['maxlength'].requiredLength} characters.`;
+    if (err['min']) return `Minimum value is ${err['min'].min}.`;
+    if (err['max']) return `Maximum value is ${err['max'].max}.`;
+    return 'Invalid value.';
   }
 
   toDateTimeLocal(d: Date | string): string {
@@ -195,12 +195,12 @@ export class FlashSaleFormComponent implements OnInit {
 
     req.subscribe({
       next: () => {
-        this.successMessage = this.isEdit ? 'Flash Sale mise à jour avec succès.' : 'Flash Sale créée avec succès.';
+        this.successMessage = this.isEdit ? 'Flash Sale updated successfully.' : 'Flash Sale created successfully.';
         this.saving = false;
         setTimeout(() => this.router.navigate(['/admin/flash-sales']), 1500);
       },
       error: (e) => {
-        this.error = e?.error?.message || 'Erreur lors de l\'enregistrement.';
+        this.error = e?.error?.message || 'Error saving flash sale.';
         this.saving = false;
       }
     });

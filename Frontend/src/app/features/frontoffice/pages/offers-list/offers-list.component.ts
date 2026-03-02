@@ -15,12 +15,12 @@ import { FlashSale } from '../../../../core/models/flash-sale.model';
   template: `
     <div class="offers-page">
       <header class="page-header">
-        <h1>Formations & Certifications</h1>
-        <p class="subtitle">Découvrez nos offres spéciales et formations à prix réduit</p>
+        <h1>Courses & Certifications</h1>
+        <p class="subtitle">Discover our special offers and discounted courses</p>
       </header>
 
       <section class="flash-sales" *ngIf="activeFlashSales.length > 0">
-        <h2>🔥 Flash Sales en cours</h2>
+        <h2>🔥 Active Flash Sales</h2>
         <div class="flash-sales-grid">
           <div class="flash-sale-card" *ngFor="let fs of activeFlashSales">
             <div class="fs-header">
@@ -29,9 +29,9 @@ import { FlashSale } from '../../../../core/models/flash-sale.model';
             </div>
             <p>{{ fs.description }}</p>
             <div class="fs-stats">
-              <span>{{ fs.currentUsers }} / {{ fs.maxUsers }} places</span>
+              <span>{{ fs.currentUsers }} / {{ fs.maxUsers }} spots</span>
               <a [routerLink]="['/checkout']" [queryParams]="{ flashSaleId: fs.id }" class="btn-cta">
-                Profiter de l'offre
+                Grab the offer
               </a>
             </div>
           </div>
@@ -39,7 +39,7 @@ import { FlashSale } from '../../../../core/models/flash-sale.model';
       </section>
 
       <section class="active-offers">
-        <h2>Offres actives</h2>
+        <h2>Active Offers</h2>
         <div class="offers-grid" *ngIf="!loading && activeOffers.length > 0">
           <app-offer-card
             *ngFor="let offer of activeOffers"
@@ -51,13 +51,13 @@ import { FlashSale } from '../../../../core/models/flash-sale.model';
           ></app-offer-card>
         </div>
         <p *ngIf="!loading && activeOffers.length === 0 && activeFlashSales.length === 0" class="empty-state">
-          Aucune offre disponible pour le moment.
+          No offers available at the moment.
         </p>
-        <p *ngIf="loading" class="loading">Chargement...</p>
+        <p *ngIf="loading" class="loading">Loading...</p>
       </section>
 
       <section class="checkout-cta">
-        <a routerLink="/checkout" class="btn-checkout">Passer à la caisse avec un code promo</a>
+        <a routerLink="/checkout" class="btn-checkout">Go to checkout with a promo code</a>
       </section>
     </div>
   `,

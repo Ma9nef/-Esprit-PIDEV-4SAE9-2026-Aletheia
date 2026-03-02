@@ -15,8 +15,8 @@ const CODE_PATTERN = /^[A-Za-z0-9_-]+$/;
   template: `
     <div class="coupon-form-page">
       <div class="form-card">
-        <h1 class="form-title">{{ isEdit ? 'Modifier le coupon' : 'Nouveau coupon' }}</h1>
-        <p class="form-description">Code : lettres, chiffres, tirets et underscores uniquement. Choisissez une offre existante.</p>
+        <h1 class="form-title">{{ isEdit ? 'Edit Coupon' : 'New Coupon' }}</h1>
+        <p class="form-description">Code: letters, numbers, hyphens and underscores only. Choose an existing offer.</p>
 
         <div *ngIf="successMessage" class="message-success" role="alert">{{ successMessage }}</div>
         <div *ngIf="error" class="message-error" role="alert">{{ error }}</div>
@@ -24,50 +24,50 @@ const CODE_PATTERN = /^[A-Za-z0-9_-]+$/;
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label class="form-label" for="coupon-code">Code *</label>
-            <input id="coupon-code" formControlName="code" type="text" class="form-input" placeholder="Ex: PROMO20" [readonly]="isEdit" />
+            <input id="coupon-code" formControlName="code" type="text" class="form-input" placeholder="e.g: PROMO20" [readonly]="isEdit" />
             <p *ngIf="getErrorMessage('code')" class="field-error">{{ getErrorMessage('code') }}</p>
           </div>
           <div class="form-group">
-            <label class="form-label" for="coupon-offer">Offre associée *</label>
+            <label class="form-label" for="coupon-offer">Associated Offer *</label>
             <select id="coupon-offer" formControlName="offerId" class="form-select">
-              <option value="">-- Sélectionner une offre --</option>
+              <option value="">-- Select an offer --</option>
               <option *ngFor="let o of offers" [value]="o.id">{{ o.name }}</option>
             </select>
             <p *ngIf="getErrorMessage('offerId')" class="field-error">{{ getErrorMessage('offerId') }}</p>
           </div>
           <div class="form-group">
             <label class="form-label" for="coupon-desc">Description *</label>
-            <textarea id="coupon-desc" formControlName="description" rows="2" class="form-textarea" placeholder="Description du coupon"></textarea>
+            <textarea id="coupon-desc" formControlName="description" rows="2" class="form-textarea" placeholder="Coupon description"></textarea>
             <p *ngIf="getErrorMessage('description')" class="field-error">{{ getErrorMessage('description') }}</p>
           </div>
           <div class="form-group checkbox-wrap">
             <label>
               <input formControlName="isUnique" type="checkbox" />
-              Code unique (usage unique)
+              Unique code (single use)
             </label>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label class="form-label" for="coupon-from">Valide du *</label>
+              <label class="form-label" for="coupon-from">Valid from *</label>
               <input id="coupon-from" formControlName="validFrom" type="datetime-local" class="form-input" />
               <p *ngIf="getErrorMessage('validFrom')" class="field-error">{{ getErrorMessage('validFrom') }}</p>
             </div>
             <div class="form-group">
-              <label class="form-label" for="coupon-until">Valide jusqu'au *</label>
+              <label class="form-label" for="coupon-until">Valid until *</label>
               <input id="coupon-until" formControlName="validUntil" type="datetime-local" class="form-input" />
               <p *ngIf="getErrorMessage('validUntil')" class="field-error">{{ getErrorMessage('validUntil') }}</p>
             </div>
           </div>
           <div class="form-group" *ngIf="!form.get('isUnique')?.value">
-            <label class="form-label" for="coupon-max">Max utilisations</label>
+            <label class="form-label" for="coupon-max">Max uses</label>
             <input id="coupon-max" formControlName="maxUses" type="number" class="form-input" min="1" />
             <p *ngIf="getErrorMessage('maxUses')" class="field-error">{{ getErrorMessage('maxUses') }}</p>
           </div>
           <div class="form-actions">
             <button type="submit" class="btn-primary" [disabled]="form.invalid || saving">
-              {{ saving ? 'Enregistrement...' : 'Enregistrer' }}
+              {{ saving ? 'Saving...' : 'Save' }}
             </button>
-            <a routerLink="/admin/coupons" class="btn-cancel">Annuler</a>
+            <a routerLink="/admin/coupons" class="btn-cancel">Cancel</a>
           </div>
         </form>
       </div>
@@ -151,13 +151,13 @@ export class CouponFormComponent implements OnInit {
     const c = this.form.get(controlName);
     if (!c?.touched || !c.errors) return '';
     const err = c.errors;
-    if (err['required']) return 'Champ obligatoire.';
-    if (err['minlength']) return `Minimum ${err['minlength'].requiredLength} caractères.`;
-    if (err['maxlength']) return `Maximum ${err['maxlength'].requiredLength} caractères.`;
-    if (err['min']) return `La valeur minimale est ${err['min'].min}.`;
-    if (err['max']) return `La valeur maximale est ${err['max'].max}.`;
-    if (err['pattern']) return 'Lettres, chiffres, tirets et underscores uniquement.';
-    return 'Valeur invalide.';
+    if (err['required']) return 'This field is required.';
+    if (err['minlength']) return `Minimum ${err['minlength'].requiredLength} characters.`;
+    if (err['maxlength']) return `Maximum ${err['maxlength'].requiredLength} characters.`;
+    if (err['min']) return `Minimum value is ${err['min'].min}.`;
+    if (err['max']) return `Maximum value is ${err['max'].max}.`;
+    if (err['pattern']) return 'Letters, numbers, hyphens and underscores only.';
+    return 'Invalid value.';
   }
 
   toDateTimeLocal(d: Date | string): string {
@@ -197,12 +197,12 @@ export class CouponFormComponent implements OnInit {
 
     req.subscribe({
       next: () => {
-        this.successMessage = this.isEdit ? 'Coupon mis à jour avec succès.' : 'Coupon créé avec succès.';
+        this.successMessage = this.isEdit ? 'Coupon updated successfully.' : 'Coupon created successfully.';
         this.saving = false;
         setTimeout(() => this.router.navigate(['/admin/coupons']), 1500);
       },
       error: (e) => {
-        this.error = e?.error?.message || 'Erreur lors de l\'enregistrement.';
+        this.error = e?.error?.message || 'Error saving coupon.';
         this.saving = false;
       }
     });

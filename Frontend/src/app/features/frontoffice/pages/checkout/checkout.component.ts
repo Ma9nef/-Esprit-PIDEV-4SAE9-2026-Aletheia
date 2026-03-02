@@ -12,25 +12,25 @@ import { AppliedOfferDTO } from '../../../../core/models/offer.model';
   template: `
     <div class="checkout-page">
       <header class="page-header">
-        <h1 class="form-title">Finaliser votre achat</h1>
-        <a routerLink="/offers" class="back-link">← Retour aux offres</a>
+        <h1 class="form-title">Complete Your Purchase</h1>
+        <a routerLink="/offers" class="back-link">← Back to Offers</a>
       </header>
 
       <div class="checkout-content form-card">
         <section class="order-summary">
-          <h2 class="section-title">Récapitulatif</h2>
+          <h2 class="section-title">Order Summary</h2>
           <div class="summary-row">
-            <span>Sous-total (formation)</span>
+            <span>Subtotal (training)</span>
             <span>{{ originalPrice | number:'1.2-2' }} €</span>
           </div>
           <div class="promo-section">
-            <label class="form-label">Code promo</label>
+            <label class="form-label">Promo Code</label>
             <div class="promo-input-group">
               <input
                 type="text"
                 class="form-input"
                 [(ngModel)]="promoCode"
-                placeholder="Entrez votre code (ex: PROMO20)"
+                placeholder="Enter your code (e.g: PROMO20)"
                 [disabled]="!!appliedResult?.success"
                 (keyup.enter)="applyPromo()"
               />
@@ -40,26 +40,26 @@ import { AppliedOfferDTO } from '../../../../core/models/offer.model';
                 (click)="applyPromo()"
                 [disabled]="!promoCode.trim() || applying"
               >
-                {{ applying ? 'Application...' : (appliedResult?.success ? 'Code appliqué' : 'Appliquer') }}
+                {{ applying ? 'Applying...' : (appliedResult?.success ? 'Code applied' : 'Apply') }}
               </button>
             </div>
             <div *ngIf="promoError" class="message-error" role="alert">{{ promoError }}</div>
             <div *ngIf="appliedResult?.success" class="message-success" role="alert">
-              Réduction de {{ (appliedResult?.totalDiscount ?? 0) | number:'1.2-2' }} € appliquée !
+              Discount of {{ (appliedResult?.totalDiscount ?? 0) | number:'1.2-2' }} € applied!
             </div>
           </div>
           <div class="summary-row total" *ngIf="appliedResult">
-            <span>Prix final</span>
+            <span>Final Price</span>
             <span class="final-price">{{ finalPrice | number:'1.2-2' }} €</span>
           </div>
         </section>
 
         <section class="checkout-actions">
           <p class="form-description">
-            Utilisez un code promo créé depuis le backoffice. Test avec userId = "user1".
+            Use a promo code created from the backoffice. Test with userId = "user1".
           </p>
           <button type="button" class="btn-pay" [disabled]="!appliedResult?.success" (click)="onPay()">
-            Payer {{ finalPrice | number:'1.2-2' }} €
+            Pay {{ finalPrice | number:'1.2-2' }} €
           </button>
         </section>
       </div>
@@ -140,7 +140,7 @@ export class CheckoutComponent {
         this.applying = false;
       },
       error: (err) => {
-        this.promoError = err?.error?.message || 'Erreur lors de l\'application du code.';
+        this.promoError = err?.error?.message || 'Error applying promo code.';
         this.applying = false;
       }
     });
@@ -148,6 +148,6 @@ export class CheckoutComponent {
 
   onPay(): void {
     if (!this.appliedResult?.success) return;
-    alert('Paiement simulé avec succès. Merci pour votre achat !');
+    alert('Payment simulated successfully. Thank you for your purchase!');
   }
 }

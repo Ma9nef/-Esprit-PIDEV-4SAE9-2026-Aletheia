@@ -9,12 +9,25 @@ import { OfferFormComponent } from './features/backoffice/pages/offer-form/offer
 import { CouponFormComponent } from './features/backoffice/pages/coupon-form/coupon-form.component';
 import { FlashSaleFormComponent } from './features/backoffice/pages/flash-sale-form/flash-sale-form.component';
 import {AdminAnalyticsComponent} from './features/backoffice/pages/admin-analytics/admin-analytics.component';
+import {
+  AdminSubscriptionPlansComponent
+} from './features/backoffice/pages/admin-subscription-plans/admin-subscription-plans.component';
+import {
+  SubscriptionPlanFormComponent
+} from './features/backoffice/pages/admin-subscription-plans/subscription-plan-form/subscription-plan-form.component';
+import {
+  AdminSubscriptionsComponent
+} from './features/backoffice/pages/admin-subscriptions/admin-subscriptions.component';
+import {
+  SubscriptionPlansListComponent
+} from './features/frontoffice/pages/subscription-plans-list/subscription-plans-list.component';
 
 export const routes: Routes = [
   // Frontoffice
   { path: '', redirectTo: '/offers', pathMatch: 'full' },
   { path: 'offers', component: OffersListComponent },
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'plans', component: SubscriptionPlansListComponent },
   // Backoffice
   {
     path: 'admin',
@@ -30,7 +43,12 @@ export const routes: Routes = [
       { path: 'flash-sales', component: AdminFlashSalesComponent },
       { path: 'flash-sales/new', component: FlashSaleFormComponent },
       { path: 'flash-sales/:id', component: FlashSaleFormComponent },
-      {path: 'analytics', component: AdminAnalyticsComponent}
+      {path: 'analytics', component: AdminAnalyticsComponent},
+      // Nouveaux : gestion des abonnements (backoffice)
+      { path: 'subscription-plans', component: AdminSubscriptionPlansComponent },
+      { path: 'subscription-plans/new', component: SubscriptionPlanFormComponent },
+      { path: 'subscription-plans/edit/:id', component: SubscriptionPlanFormComponent },
+      { path: 'subscriptions', component: AdminSubscriptionsComponent }
     ]
   },
   { path: '**', redirectTo: '/offers' }

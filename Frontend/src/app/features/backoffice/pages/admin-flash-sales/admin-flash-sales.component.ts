@@ -12,11 +12,11 @@ import { CountdownTimerComponent } from '../../../../shared/components/countdown
   template: `
     <div class="admin-flash-sales">
       <div class="page-header">
-        <h1>Gestion des Flash Sales</h1>
-        <a routerLink="/admin/flash-sales/new" class="btn-primary">+ Nouvelle Flash Sale</a>
+        <h1>Flash Sales Management</h1>
+        <a routerLink="/admin/flash-sales/new" class="btn-primary">+ New Flash Sale</a>
       </div>
 
-      <p *ngIf="loading">Chargement...</p>
+      <p *ngIf="loading">Loading...</p>
       <div class="flash-sales-grid" *ngIf="!loading && flashSales.length > 0">
         <div class="fs-card" *ngFor="let fs of flashSales">
           <div class="fs-header">
@@ -25,19 +25,19 @@ import { CountdownTimerComponent } from '../../../../shared/components/countdown
           </div>
           <p>{{ fs.description }}</p>
           <div class="fs-meta">
-            <span>{{ fs.currentUsers }} / {{ fs.maxUsers }} places</span>
+            <span>{{ fs.currentUsers }} / {{ fs.maxUsers }} spots</span>
             <app-countdown-timer *ngIf="FlashSaleHelper.isOngoing(fs)" [endDate]="fs.endTime"></app-countdown-timer>
           </div>
           <div class="fs-actions">
-            <a [routerLink]="['/admin/flash-sales', fs.id]" class="btn-edit">Modifier</a>
+            <a [routerLink]="['/admin/flash-sales', fs.id]" class="btn-edit">Edit</a>
             <button (click)="onToggle(fs)" class="btn-toggle">
-              {{ fs.isActive ? 'Désactiver' : 'Activer' }}
+              {{ fs.isActive ? 'Deactivate' : 'Activate' }}
             </button>
-            <button (click)="onDelete(fs.id)" class="btn-delete">Supprimer</button>
+            <button (click)="onDelete(fs.id)" class="btn-delete">Delete</button>
           </div>
         </div>
       </div>
-      <p *ngIf="!loading && flashSales.length === 0" class="empty">Aucune Flash Sale.</p>
+      <p *ngIf="!loading && flashSales.length === 0" class="empty">No flash sales found.</p>
       <p *ngIf="error" class="error">{{ error }}</p>
     </div>
   `,
@@ -101,7 +101,7 @@ export class AdminFlashSalesComponent implements OnInit {
         this.loading = false;
       },
       error: (e) => {
-        this.error = e?.error?.message || 'Erreur lors du chargement';
+        this.error = e?.error?.message || 'Error loading flash sales';
         this.loading = false;
       }
     });
@@ -115,16 +115,16 @@ export class AdminFlashSalesComponent implements OnInit {
     if (!fs.id) return;
     this.flashSaleService.toggleFlashSaleStatus(fs.id).subscribe({
       next: () => this.loadFlashSales(),
-      error: (e) => this.error = e?.error?.message || 'Erreur'
+      error: (e) => this.error = e?.error?.message || 'Error toggling flash sale'
     });
   }
 
   onDelete(id?: string): void {
     if (!id) return;
-    if (confirm('Supprimer cette Flash Sale ?')) {
+    if (confirm('Delete this flash sale?')) {
       this.flashSaleService.deleteFlashSale(id).subscribe({
         next: () => this.loadFlashSales(),
-        error: (e) => this.error = e?.error?.message || 'Erreur'
+        error: (e) => this.error = e?.error?.message || 'Error deleting flash sale'
       });
     }
   }

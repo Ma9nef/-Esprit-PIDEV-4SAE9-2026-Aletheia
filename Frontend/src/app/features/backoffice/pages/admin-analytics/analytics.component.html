@@ -2,79 +2,79 @@
 <div class="analytics-container">
 
   <div class="analytics-header">
-    <h1>📊 Tableau de bord analytique</h1>
+    <h1>📊 Analytics Dashboard</h1>
     <button class="refresh-btn" (click)="loadDashboard()" [disabled]="loading">
       @if (!loading) {
-        <span>⟳ Actualiser</span>
+        <span>⟳ Refresh</span>
       } @else {
-        <span>⟳ Rechargement...</span>
+        <span>⟳ Loading...</span>
       }
     </button>
   </div>
 
-  <!-- Message d'erreur -->
+  <!-- Error message -->
   @if (error) {
     <div class="error-message">
       {{ error }}
-      <button (click)="loadDashboard()">Réessayer</button>
+      <button (click)="loadDashboard()">Retry</button>
     </div>
   }
 
-  <!-- Loading - affiché pendant le chargement -->
+  <!-- Loading - displayed during loading -->
   @if (loading) {
     <div class="loading-state">
       <div class="spinner"></div>
-      <p>Chargement des données analytiques...</p>
+      <p>Loading analytics data...</p>
     </div>
   }
 
-  <!-- Message d'erreur -->
+  <!-- Error message -->
   @if (error && !loading) {
     <div class="error-message">
       {{ error }}
-      <button (click)="loadDashboard()">Réessayer</button>
+      <button (click)="loadDashboard()">Retry</button>
     </div>
   }
 
-  <!-- Dashboard Content - affiché dès que les données existent -->
+  <!-- Dashboard Content - displayed as soon as data exists -->
   @if (dashboardData && !loading) {
     <div class="dashboard-content">
 
-      <!-- Indicateur de rechargement (optionnel) -->
+      <!-- Reload indicator (optional) -->
       @if (loading) {
         <div class="reloading-indicator" style="text-align: center; padding: 10px; background: #e3f2fd; margin-bottom: 20px; border-radius: 8px;">
-          🔄 Mise à jour des données en cours...
+          🔄 Updating data...
         </div>
       }
 
-      <!-- Résumé -->
+      <!-- Summary -->
       <div class="summary-cards">
         <div class="summary-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
           <div class="card-icon">🏆</div>
           <div class="card-content">
-            <div class="card-label">Meilleur type d'offre</div>
-            <div class="card-value">{{ dashboardData.executiveSummary?.meilleur_type_offre }}</div>
+            <div class="card-label">Best Offer Type</div>
+            <div class="card-value">{{ dashboardData.executiveSummary?.best_offer_type }}</div>
           </div>
         </div>
 
         <div class="summary-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
           <div class="card-icon">📅</div>
           <div class="card-content">
-            <div class="card-label">Meilleure période</div>
-            <div class="card-value">{{ dashboardData.executiveSummary?.meilleure_periode }}</div>
+            <div class="card-label">Best Period</div>
+            <div class="card-value">{{ dashboardData.executiveSummary?.best_period }}</div>
           </div>
         </div>
 
         <div class="summary-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
           <div class="card-icon">👨‍🏫</div>
           <div class="card-content">
-            <div class="card-label">Meilleur instructeur</div>
-            <div class="card-value">{{ dashboardData.executiveSummary?.meilleur_instructeur }}</div>
+            <div class="card-label">Best Instructor</div>
+            <div class="card-value">{{ dashboardData.executiveSummary?.best_instructor }}</div>
           </div>
         </div>
       </div>
 
-      <!-- Question 1: Types d'offres -->
+      <!-- Question 1: Offer Types -->
       @if (dashboardData.conversionByType) {
         <section class="analytics-section">
           <div class="section-header">
@@ -93,11 +93,11 @@
                       <span class="stat-value">{{ formatNumber(type.totalConversions) }}</span>
                     </div>
                     <div class="stat-item">
-                      <span class="stat-label">Revenu</span>
+                      <span class="stat-label">Revenue</span>
                       <span class="stat-value">{{ formatCurrency(type.totalRevenue) }}</span>
                     </div>
                     <div class="stat-item">
-                      <span class="stat-label">Taux conversion</span>
+                      <span class="stat-label">Conversion Rate</span>
                       <span class="stat-value">{{ type.conversionRate }}</span>
                     </div>
                   </div>
@@ -108,7 +108,7 @@
         </section>
       }
 
-      <!-- Question 2: Périodes -->
+      <!-- Question 2: Periods -->
       @if (dashboardData.bestPeriod) {
         <section class="analytics-section">
           <div class="section-header">
@@ -121,10 +121,10 @@
               <div class="period-card">
                 <div class="period-icon">📆</div>
                 <div class="period-details">
-                  <h4>Meilleur mois</h4>
+                  <h4>Best Month</h4>
                   <div class="period-value">{{ dashboardData.bestPeriod.details.bestMonth }}</div>
                   <div class="period-meta">
-                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestMonthSales) }} ventes</span>
+                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestMonthSales) }} sales</span>
                     <span>{{ formatCurrency(dashboardData.bestPeriod.details.bestMonthRevenue) }}</span>
                   </div>
                 </div>
@@ -133,10 +133,10 @@
               <div class="period-card">
                 <div class="period-icon">📅</div>
                 <div class="period-details">
-                  <h4>Meilleur jour</h4>
+                  <h4>Best Day</h4>
                   <div class="period-value">{{ dashboardData.bestPeriod.details.bestDayOfWeek }}</div>
                   <div class="period-meta">
-                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestDaySales) }} ventes</span>
+                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestDaySales) }} sales</span>
                   </div>
                 </div>
               </div>
@@ -144,26 +144,26 @@
               <div class="period-card">
                 <div class="period-icon">⏱️</div>
                 <div class="period-details">
-                  <h4>Meilleure heure</h4>
+                  <h4>Best Hour</h4>
                   <div class="period-value">{{ dashboardData.bestPeriod.details.bestHour }}</div>
                   <div class="period-meta">
-                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestHourSales) }} ventes</span>
+                    <span>{{ formatNumber(dashboardData.bestPeriod.details.bestHourSales) }} sales</span>
                   </div>
                 </div>
               </div>
             </div>
           }
 
-          <!-- Tableau des mois -->
+          <!-- Monthly breakdown table -->
           @if (dashboardData.bestPeriod.monthlyBreakdown?.length > 0) {
             <div class="monthly-table">
-              <h3>Détail mensuel</h3>
+              <h3>Monthly Breakdown</h3>
               <table>
                 <thead>
                 <tr>
-                  <th>Mois</th>
-                  <th>Ventes</th>
-                  <th>Revenu</th>
+                  <th>Month</th>
+                  <th>Sales</th>
+                  <th>Revenue</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -181,7 +181,7 @@
         </section>
       }
 
-      <!-- Question 3: Top Instructeurs -->
+      <!-- Question 3: Top Instructors -->
       @if (dashboardData.topInstructors) {
         <section class="analytics-section">
           <div class="section-header">
@@ -194,11 +194,11 @@
               <table>
                 <thead>
                 <tr>
-                  <th>Rang</th>
-                  <th>Instructeur</th>
-                  <th>Ventes</th>
-                  <th>Revenu</th>
-                  <th>Étudiants</th>
+                  <th>Rank</th>
+                  <th>Instructor</th>
+                  <th>Sales</th>
+                  <th>Revenue</th>
+                  <th>Students</th>
                 </tr>
                 </thead>
                 <tbody>

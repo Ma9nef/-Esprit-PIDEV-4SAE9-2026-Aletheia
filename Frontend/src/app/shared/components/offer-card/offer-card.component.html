@@ -1,5 +1,5 @@
 <div class="offer-card" [ngClass]="getStatusClass()">
-  <!-- En-tête -->
+  <!-- Header -->
   <div class="offer-header">
     <div class="title-section">
       <h3>{{ offer.name }}</h3>
@@ -16,7 +16,7 @@
   <!-- Description -->
   <p class="description">{{ offer.description }}</p>
 
-  <!-- Détails de l'offre -->
+  <!-- Offer Details -->
   <div class="offer-details">
     <div class="detail-grid">
       <div class="detail-item">
@@ -25,15 +25,15 @@
       </div>
 
       <div class="detail-item">
-        <span class="label">Validité</span>
+        <span class="label">Validity</span>
         <span class="value">
-          du {{ formatDate(offer.startDate) }}<br>
-          au {{ formatDate(offer.endDate) }}
+          from {{ formatDate(offer.startDate) }}<br>
+          to {{ formatDate(offer.endDate) }}
         </span>
       </div>
 
       <div class="detail-item" *ngIf="offer.maxUses">
-        <span class="label">Utilisations</span>
+        <span class="label">Uses</span>
         <div class="usage-info">
           <span class="value">{{ offer.currentUses }} / {{ offer.maxUses }}</span>
           <div class="progress-bar">
@@ -43,37 +43,37 @@
       </div>
 
       <div class="detail-item" *ngIf="offer.maxUsesPerUser">
-        <span class="label">Max par utilisateur</span>
+        <span class="label">Max per user</span>
         <span class="value">{{ offer.maxUsesPerUser }}</span>
       </div>
     </div>
 
-    <!-- Ciblage -->
+    <!-- Targeting -->
     <div class="targeting-info" *ngIf="hasTargeting()">
-      <span class="label">🎯 Ciblage</span>
+      <span class="label">🎯 Targeting</span>
       <span class="value">{{ getTargetingText() }}</span>
     </div>
   </div>
 
-  <!-- Section prix (si un prix est fourni) -->
+  <!-- Price section (if a price is provided) -->
   <div class="price-section" *ngIf="hasValidPrice()">
     <div class="price-calculation">
       <span class="original-price">{{ applyPrice | number:'1.2-2' }} €</span>
       <span class="arrow">→</span>
       <span class="final-price">{{ getFinalPrice() | number:'1.2-2' }} €</span>
-      <span class="saved">(économisez {{ getDiscountAmount() | number:'1.2-2' }} €)</span>
+      <span class="saved">(save {{ getDiscountAmount() | number:'1.2-2' }} €)</span>
     </div>
   </div>
 
   <!-- Actions -->
   <div class="offer-footer">
     <div class="usage-info" *ngIf="offer.maxUses">
-      <span class="usage-count">{{ offer.currentUses }} utilisations</span>
+      <span class="usage-count">{{ offer.currentUses }} uses</span>
     </div>
 
     <div class="actions" *ngIf="showActions">
-      <button (click)="onViewDetails()" class="btn-view" title="Voir les détails">
-        Détails
+      <button (click)="onViewDetails()" class="btn-view" title="View details">
+        Details
       </button>
 
       <button
@@ -81,23 +81,23 @@
         (click)="onApplyOffer()"
         class="btn-apply"
         [disabled]="!isApplicable()"
-        title="Appliquer cette offre">
-        Appliquer
+        title="Apply this offer">
+        Apply
       </button>
 
-      <button (click)="onEdit()" class="btn-edit" title="Modifier">
-        Modifier
+      <button (click)="onEdit()" class="btn-edit" title="Edit">
+        Edit
       </button>
 
-      <button (click)="onDelete()" class="btn-delete" title="Supprimer">
-        Supprimer
+      <button (click)="onDelete()" class="btn-delete" title="Delete">
+        Delete
       </button>
     </div>
 
-    <!-- Message si non applicable -->
+    <!-- Message if not applicable -->
     <div class="not-applicable-message" *ngIf="showApplyButton && !isApplicable()">
-      <span *ngIf="!isActive()">Offre non active</span>
-      <span *ngIf="isFullyUsed()">Offre épuisée</span>
+      <span *ngIf="!isActive()">Offer not active</span>
+      <span *ngIf="isFullyUsed()">Offer fully used</span>
     </div>
   </div>
 </div>

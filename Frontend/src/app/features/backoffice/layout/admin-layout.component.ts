@@ -13,9 +13,11 @@ import { CommonModule } from '@angular/common';
           <a routerLink="/admin">Backoffice</a>
         </div>
         <ul class="nav-links">
-          <li><a routerLink="/admin/offers" routerLinkActive="active">Offres</a></li>
+          <li><a routerLink="/admin/offers" routerLinkActive="active">Offers</a></li>
           <li><a routerLink="/admin/coupons" routerLinkActive="active">Coupons</a></li>
           <li><a routerLink="/admin/flash-sales" routerLinkActive="active">Flash Sales</a></li>
+          <li><a routerLink="/admin/analytics" routerLinkActive="active">Analytics</a></li>
+          <li><a routerLink="/admin/subscription-plans" routerLinkActive="active">Subscription Plan</a></li>
         </ul>
         <a routerLink="/offers" class="nav-front">← Frontoffice</a>
       </nav>

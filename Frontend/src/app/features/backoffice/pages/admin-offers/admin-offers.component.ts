@@ -12,11 +12,11 @@ import { OfferResponseDTO } from '../../../../core/models/offer.model';
   template: `
     <div class="admin-offers">
       <div class="page-header">
-        <h1>Gestion des offres</h1>
-        <a routerLink="/admin/offers/new" class="btn-primary">+ Nouvelle offre</a>
+        <h1>Offer Management</h1>
+        <a routerLink="/admin/offers/new" class="btn-primary">+ New Offer</a>
       </div>
 
-      <p *ngIf="loading">Chargement...</p>
+      <p *ngIf="loading">Loading...</p>
       <div class="offers-grid" *ngIf="!loading && offers.length > 0">
         <app-offer-card
           *ngFor="let offer of offers"
@@ -28,7 +28,7 @@ import { OfferResponseDTO } from '../../../../core/models/offer.model';
           (viewDetails)="onViewDetails($event)"
         ></app-offer-card>
       </div>
-      <p *ngIf="!loading && offers.length === 0" class="empty">Aucune offre.</p>
+      <p *ngIf="!loading && offers.length === 0" class="empty">No offers found.</p>
       <p *ngIf="error" class="error">{{ error }}</p>
     </div>
   `,
@@ -73,7 +73,7 @@ export class AdminOffersComponent implements OnInit {
         this.loading = false;
       },
       error: (e) => {
-        this.error = e?.error?.message || 'Erreur lors du chargement';
+        this.error = e?.error?.message || 'Error loading offers';
         this.loading = false;
       }
     });
@@ -84,10 +84,10 @@ export class AdminOffersComponent implements OnInit {
   }
 
   onDelete(id: string): void {
-    if (confirm('Supprimer cette offre ?')) {
+    if (confirm('Delete this offer?')) {
       this.offerService.deleteOffer(id).subscribe({
         next: () => this.loadOffers(),
-        error: (e) => this.error = e?.error?.message || 'Erreur'
+        error: (e) => this.error = e?.error?.message || 'Error deleting offer'
       });
     }
   }

@@ -11,41 +11,41 @@ import { Coupon, CouponHelper } from '../../../../core/models/coupon.model';
   template: `
     <div class="admin-coupons">
       <div class="page-header">
-        <h1>Gestion des coupons</h1>
-        <a routerLink="/admin/coupons/new" class="btn-primary">+ Nouveau coupon</a>
+        <h1>Coupon Management</h1>
+        <a routerLink="/admin/coupons/new" class="btn-primary">+ New Coupon</a>
       </div>
 
-      <p *ngIf="loading">Chargement...</p>
+      <p *ngIf="loading">Loading...</p>
       <div class="table-container" *ngIf="!loading && coupons.length > 0">
         <table class="data-table">
           <thead>
-            <tr>
-              <th>Code</th>
-              <th>Offre</th>
-              <th>Type</th>
-              <th>Validité</th>
-              <th>Statut</th>
-              <th>Restant</th>
-              <th>Actions</th>
-            </tr>
+          <tr>
+            <th>Code</th>
+            <th>Offer</th>
+            <th>Type</th>
+            <th>Validity</th>
+            <th>Status</th>
+            <th>Remaining</th>
+            <th>Actions</th>
+          </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let c of coupons">
-              <td><code>{{ c.code }}</code></td>
-              <td>{{ c.offerId }}</td>
-              <td>{{ c.isUnique ? 'Unique' : 'Partagé' }}</td>
-              <td>{{ formatDate(c.validFrom) }} - {{ formatDate(c.validUntil) }}</td>
-              <td><span [class]="'status-' + getStatus(c).class">{{ getStatus(c).text }}</span></td>
-              <td>{{ getRemaining(c) }}</td>
-              <td>
-                <a [routerLink]="['/admin/coupons', c.id]" class="btn-edit">Modifier</a>
-                <button (click)="onDelete(c.id)" class="btn-delete">Supprimer</button>
-              </td>
-            </tr>
+          <tr *ngFor="let c of coupons">
+            <td><code>{{ c.code }}</code></td>
+            <td>{{ c.offerId }}</td>
+            <td>{{ c.isUnique ? 'Unique' : 'Shared' }}</td>
+            <td>{{ formatDate(c.validFrom) }} - {{ formatDate(c.validUntil) }}</td>
+            <td><span [class]="'status-' + getStatus(c).class">{{ getStatus(c).text }}</span></td>
+            <td>{{ getRemaining(c) }}</td>
+            <td>
+              <a [routerLink]="['/admin/coupons', c.id]" class="btn-edit">Edit</a>
+              <button (click)="onDelete(c.id)" class="btn-delete">Delete</button>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
-      <p *ngIf="!loading && coupons.length === 0" class="empty">Aucun coupon.</p>
+      <p *ngIf="!loading && coupons.length === 0" class="empty">No coupons found.</p>
       <p *ngIf="error" class="error">{{ error }}</p>
     </div>
   `,
@@ -92,7 +92,7 @@ export class AdminCouponsComponent implements OnInit {
         this.loading = false;
       },
       error: (e) => {
-        this.error = e?.error?.message || 'Erreur lors du chargement';
+        this.error = e?.error?.message || 'Error loading coupons';
         this.loading = false;
       }
     });
@@ -107,14 +107,18 @@ export class AdminCouponsComponent implements OnInit {
   }
 
   formatDate(d: Date): string {
-    return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    return new Date(d).toLocaleDateString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
   }
 
   onDelete(id: string): void {
-    if (confirm('Supprimer ce coupon ?')) {
+    if (confirm('Delete this coupon?')) {
       this.couponService.deleteCoupon(id).subscribe({
         next: () => this.loadCoupons(),
-        error: (e) => this.error = e?.error?.message || 'Erreur'
+        error: (e) => this.error = e?.error?.message || 'Error deleting coupon'
       });
     }
   }
