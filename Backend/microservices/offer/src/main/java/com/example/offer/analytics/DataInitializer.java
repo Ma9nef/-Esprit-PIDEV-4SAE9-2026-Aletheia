@@ -16,12 +16,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Vérifier si la base est vide
+        // Check if database is empty
         if (repository.count() == 0) {
-            System.out.println("📦 Ajout de données de test...");
+            System.out.println("📦 Adding test data...");
 
             Random random = new Random();
-            String[] offerTypes = {"FLASH_SALE", "OFFRE", "COUPON"};
+            String[] offerTypes = {"FLASH_SALE", "OFFER", "COUPON"};
             String[] instructors = {"instructor_1", "instructor_2", "instructor_3", "instructor_4"};
             String[] users = {"user_1", "user_2", "user_3", "user_4", "user_5", "user_6", "user_7", "user_8"};
 
@@ -32,21 +32,21 @@ public class DataInitializer implements CommandLineRunner {
                 history.setId(UUID.randomUUID().toString());
                 history.setOfferId(UUID.randomUUID().toString());
 
-                // Type d'offre aléatoire
+                // Random offer type
                 String offerType = offerTypes[random.nextInt(offerTypes.length)];
                 history.setOfferType(offerType);
 
-                // Instructeur aléatoire
+                // Random instructor
                 history.setInstructorId(instructors[random.nextInt(instructors.length)]);
 
-                // Utilisateur aléatoire
+                // Random user
                 history.setUserId(users[random.nextInt(users.length)]);
 
-                // Prix original entre 50 et 200€
+                // Original price between 50 and 200€
                 double originalPrice = 50 + random.nextInt(150);
                 history.setOriginalPrice(originalPrice);
 
-                // Réduction selon le type d'offre
+                // Discount based on offer type
                 double discountAmount;
                 if (offerType.equals("FLASH_SALE")) {
                     discountAmount = originalPrice * (0.3 + random.nextDouble() * 0.3);
@@ -57,20 +57,20 @@ public class DataInitializer implements CommandLineRunner {
                 }
                 history.setDiscountAmount(discountAmount);
 
-                // Prix final
+                // Final price
                 history.setFinalPrice(originalPrice - discountAmount);
 
-                // Date d'achat aléatoire
+                // Random purchase date
                 int daysAgo = random.nextInt(180);
                 history.setPurchaseDate(now.minusDays(daysAgo));
 
                 repository.save(history);
             }
 
-            System.out.println("✅ 50 enregistrements de test ajoutés !");
+            System.out.println("✅ 50 test records added!");
 
         } else {
-            System.out.println("📊 La base contient déjà " + repository.count() + " enregistrements");
+            System.out.println("📊 Database already contains " + repository.count() + " records");
         }
     }
 }

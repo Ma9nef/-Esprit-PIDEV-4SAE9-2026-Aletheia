@@ -22,13 +22,13 @@ public class OfferHistoryService {
     private final MongoTemplate mongoTemplate;
 
     // ============================================
-    // QUESTION 1 : QUEL TYPE D'OFFRE CONVERTIT LE PLUS ?
+    // QUESTION 1: WHICH OFFER TYPE CONVERTS THE MOST?
     // ============================================
 
     public Map<String, Object> getConversionByOfferType() {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        // Agrégation pour les ventes par type
+        // Aggregation for sales by type
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("offerType")
                         .count().as("totalConversions")
@@ -44,7 +44,7 @@ public class OfferHistoryService {
                 Document.class
         ).getMappedResults();
 
-        // Ajouter des métriques de conversion
+        // Add conversion metrics
         List<Map<String, Object>> enhancedTypes = new ArrayList<>();
 
         for (Document doc : salesByType) {
@@ -57,39 +57,39 @@ public class OfferHistoryService {
             typeInfo.put("totalDiscount", doc.getDouble("totalDiscount"));
             typeInfo.put("averageBasket", doc.getDouble("averageBasket"));
 
-            // Compter les utilisateurs distincts pour ce type d'offre
+            // Count distinct users for this offer type
             long uniqueUsers = countDistinctUsersByOfferType(offerType);
             typeInfo.put("uniqueCustomers", (int) uniqueUsers);
 
-            // TAUX DE CONVERSION
+            // CONVERSION RATE
             long totalOffersOfType = offerRepository.countByType(offerType);
             double conversionRate = totalOffersOfType > 0
                     ? (doc.getInteger("totalConversions") * 100.0) / totalOffersOfType
                     : 0;
             typeInfo.put("conversionRate", Math.round(conversionRate * 100.0) / 100.0 + "%");
 
-            // REVENU PAR CONVERSION
+            // REVENUE PER CONVERSION
             double revenuePerConversion = doc.getDouble("totalRevenue") / doc.getInteger("totalConversions");
             typeInfo.put("revenuePerConversion", Math.round(revenuePerConversion * 100.0) / 100.0);
 
             enhancedTypes.add(typeInfo);
         }
 
-        // Identifier le meilleur type
-        String bestType = enhancedTypes.isEmpty() ? "Aucune" :
+        // Identify the best type
+        String bestType = enhancedTypes.isEmpty() ? "None" :
                 enhancedTypes.stream()
                         .max(Comparator.comparing(t -> (Integer) t.get("totalConversions")))
                         .map(t -> (String) t.get("offerType"))
-                        .orElse("Inconnu");
+                        .orElse("Unknown");
 
-        result.put("question", "Quel type d'offre convertit le plus ?");
+        result.put("question", "Which offer type converts the most?");
         result.put("answer", bestType);
         result.put("details", enhancedTypes);
 
         return result;
     }
 
-    // Méthode utilitaire pour compter les utilisateurs distincts par type d'offre
+    // Utility method to count distinct users by offer type
     private long countDistinctUsersByOfferType(String offerType) {
         Aggregation agg = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("offerType").is(offerType)),
@@ -107,13 +107,13 @@ public class OfferHistoryService {
     }
 
     // ============================================
-    // QUESTION 2 : QUELLE PÉRIODE GÉNÈRE LE PLUS DE VENTES ?
+    // QUESTION 2: WHICH PERIOD GENERATES THE MOST SALES?
     // ============================================
 
     public Map<String, Object> getBestSalesPeriod() {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        // 1️⃣ ANALYSE PAR MOIS
+        // 1️⃣ ANALYSIS BY MONTH
         Aggregation monthAgg = Aggregation.newAggregation(
                 Aggregation.project()
                         .andExpression("year(purchaseDate)").as("year")
@@ -131,7 +131,7 @@ public class OfferHistoryService {
                 Document.class
         ).getMappedResults();
 
-        // Enrichir avec le nombre d'utilisateurs distincts par mois
+        // Enrich with distinct user count per month
         List<Document> enrichedMonthlySales = new ArrayList<>();
         for (Document monthDoc : monthlySales) {
             Document id = (Document) monthDoc.get("_id");
@@ -143,7 +143,7 @@ public class OfferHistoryService {
             enrichedMonthlySales.add(monthDoc);
         }
 
-        // 2️⃣ ANALYSE PAR JOUR DE LA SEMAINE
+        // 2️⃣ ANALYSIS BY DAY OF WEEK
         Aggregation dayAgg = Aggregation.newAggregation(
                 Aggregation.project()
                         .andExpression("dayOfWeek(purchaseDate)").as("dayOfWeek")
@@ -160,7 +160,7 @@ public class OfferHistoryService {
                 Document.class
         ).getMappedResults();
 
-        // 3️⃣ ANALYSE PAR HEURE
+        // 3️⃣ ANALYSIS BY HOUR
         Aggregation hourAgg = Aggregation.newAggregation(
                 Aggregation.project()
                         .andExpression("hour(purchaseDate)").as("hour")
@@ -177,10 +177,10 @@ public class OfferHistoryService {
                 Document.class
         ).getMappedResults();
 
-        // Traitement des résultats
+        // Process results
         Map<String, Object> periods = new HashMap<>();
 
-        // Meilleur mois
+        // Best month
         if (!enrichedMonthlySales.isEmpty()) {
             Document bestMonth = enrichedMonthlySales.get(0);
             Document monthId = (Document) bestMonth.get("_id");
@@ -193,17 +193,17 @@ public class OfferHistoryService {
             periods.put("bestMonthCustomers", bestMonth.getInteger("uniqueCustomers"));
         }
 
-        // Meilleur jour
+        // Best day
         if (!dailySales.isEmpty()) {
             Document bestDay = dailySales.get(0);
             int dayOfWeek = bestDay.getInteger("_id");
-            String[] days = {"", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"};
+            String[] days = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
             periods.put("bestDayOfWeek", days[dayOfWeek]);
             periods.put("bestDaySales", bestDay.getInteger("totalSales"));
         }
 
-        // Meilleure heure
+        // Best hour
         if (!hourlySales.isEmpty()) {
             Document bestHour = hourlySales.get(0);
             int hour = bestHour.getInteger("_id");
@@ -212,15 +212,15 @@ public class OfferHistoryService {
             periods.put("bestHourSales", bestHour.getInteger("totalSales"));
         }
 
-        result.put("question", "Quelle période génère le plus de ventes ?");
-        result.put("answer", periods.get("bestMonth") + " (meilleur mois)");
+        result.put("question", "Which period generates the most sales?");
+        result.put("answer", periods.get("bestMonth") + " (best month)");
         result.put("details", periods);
         result.put("monthlyBreakdown", enrichedMonthlySales);
 
         return result;
     }
 
-    // Méthode utilitaire pour compter les utilisateurs distincts par mois
+    // Utility method to count distinct users by year and month
     private long countDistinctUsersByYearMonth(int year, int month) {
         LocalDateTime start = LocalDateTime.of(year, month, 1, 0, 0);
         LocalDateTime end = start.plusMonths(1).minusSeconds(1);
@@ -241,13 +241,13 @@ public class OfferHistoryService {
     }
 
     // ============================================
-    // QUESTION 3 : QUEL INSTRUCTEUR PERFORME LE MIEUX EN PROMOTION ?
+    // QUESTION 3: WHICH INSTRUCTOR PERFORMS BEST WITH PROMOTIONS?
     // ============================================
 
     public Map<String, Object> getTopInstructorsWithDetails() {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        // Agrégation pour les instructeurs
+        // Aggregation for instructors
         Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("instructorId")
                         .count().as("totalSales")
@@ -265,7 +265,7 @@ public class OfferHistoryService {
                 Document.class
         ).getMappedResults();
 
-        // Enrichir avec les noms des instructeurs et métriques supplémentaires
+        // Enrich with instructor names and additional metrics
         List<Map<String, Object>> enhancedInstructors = new ArrayList<>();
 
         for (int i = 0; i < instructors.size(); i++) {
@@ -285,23 +285,23 @@ public class OfferHistoryService {
             instructorInfo.put("coursesSold", uniqueCourses != null ? uniqueCourses.size() : 0);
             instructorInfo.put("offerTypesUsed", uniqueOfferTypes != null ? uniqueOfferTypes.size() : 0);
 
-            // Compter les étudiants distincts pour cet instructeur
+            // Count distinct students for this instructor
             long uniqueStudents = countDistinctStudentsByInstructor(instructorId);
             instructorInfo.put("uniqueStudents", (int) uniqueStudents);
 
-            // REVENU PAR ÉTUDIANT
+            // REVENUE PER STUDENT
             double revenuePerStudent = uniqueStudents > 0
                     ? doc.getDouble("revenue") / uniqueStudents
                     : 0;
             instructorInfo.put("revenuePerStudent", Math.round(revenuePerStudent * 100.0) / 100.0);
 
-            // VENTES PAR COURS
+            // SALES PER COURSE
             double salesPerCourse = instructorInfo.get("coursesSold") != null && (int) instructorInfo.get("coursesSold") > 0
                     ? (double) doc.getInteger("totalSales") / (int) instructorInfo.get("coursesSold")
                     : 0;
             instructorInfo.put("salesPerCourse", Math.round(salesPerCourse * 100.0) / 100.0);
 
-            // EFFICACITÉ DE LA PROMOTION
+            // PROMOTION EFFECTIVENESS
             double totalOriginalValue = doc.getDouble("revenue") + doc.getDouble("totalDiscountGiven");
             double promoEffectiveness = totalOriginalValue > 0
                     ? (doc.getDouble("revenue") * 100.0) / totalOriginalValue
@@ -311,19 +311,19 @@ public class OfferHistoryService {
             enhancedInstructors.add(instructorInfo);
         }
 
-        // Identifier le meilleur instructeur
-        String topInstructor = enhancedInstructors.isEmpty() ? "Aucun" :
+        // Identify the best instructor
+        String topInstructor = enhancedInstructors.isEmpty() ? "None" :
                 enhancedInstructors.get(0).get("instructorId").toString();
 
-        result.put("question", "Quel instructeur performe le mieux en promotion ?");
-        result.put("answer", "Instructeur #" + topInstructor);
+        result.put("question", "Which instructor performs best with promotions?");
+        result.put("answer", "Instructor #" + topInstructor);
         result.put("topInstructor", enhancedInstructors.isEmpty() ? null : enhancedInstructors.get(0));
         result.put("allInstructors", enhancedInstructors);
 
         return result;
     }
 
-    // Méthode utilitaire pour compter les étudiants distincts par instructeur
+    // Utility method to count distinct students by instructor
     private long countDistinctStudentsByInstructor(String instructorId) {
         Aggregation agg = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("instructorId").is(instructorId)),
@@ -341,7 +341,7 @@ public class OfferHistoryService {
     }
 
     // ============================================
-    // MÉTHODE PRINCIPALE : TOUTES LES ANALYSES EN UNE FOIS
+    // MAIN METHOD: ALL ANALYSES IN ONE CALL
     // ============================================
 
     public Map<String, Object> getCompleteAnalytics() {
@@ -352,17 +352,17 @@ public class OfferHistoryService {
         dashboard.put("bestPeriod", getBestSalesPeriod());
         dashboard.put("topInstructors", getTopInstructorsWithDetails());
 
-        // Ajouter un résumé exécutif
+        // Add executive summary
         Map<String, String> executiveSummary = new LinkedHashMap<>();
 
         Map<String, Object> conversionData = (Map<String, Object>) dashboard.get("conversionByType");
-        executiveSummary.put("meilleur_type_offre", conversionData.get("answer").toString());
+        executiveSummary.put("best_offer_type", conversionData.get("answer").toString());
 
         Map<String, Object> periodData = (Map<String, Object>) dashboard.get("bestPeriod");
-        executiveSummary.put("meilleure_periode", periodData.get("answer").toString());
+        executiveSummary.put("best_period", periodData.get("answer").toString());
 
         Map<String, Object> instructorData = (Map<String, Object>) dashboard.get("topInstructors");
-        executiveSummary.put("meilleur_instructeur", instructorData.get("answer").toString());
+        executiveSummary.put("best_instructor", instructorData.get("answer").toString());
 
         dashboard.put("executiveSummary", executiveSummary);
 
@@ -370,7 +370,7 @@ public class OfferHistoryService {
     }
 
     // ============================================
-    // MÉTHODES ORIGINALES CONSERVÉES
+    // ORIGINAL METHODS RETAINED
     // ============================================
 
     public List<Document> getSalesByType() {

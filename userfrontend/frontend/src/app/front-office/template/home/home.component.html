@@ -1,0 +1,94 @@
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      <!-- Main Content -->
+      <div class="hero-text">
+        <h1 class="hero-headline">
+          Platform to learn
+          <span class="gradient-text">programming skills</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+          Discover expert-led courses, real certifications, live workshops, and personalized learning paths.
+        </p>
+
+       
+
+        <!-- Action Buttons -->
+        <div class="hero-actions">
+          <button class="btn-primary" (click)="navigateToCourses()">
+            <span>Browse Courses</span>
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+
+        </div>
+
+        <!-- Feature Badges -->
+        <div class="hero-badges">
+          <div class="badge">
+            <svg class="badge-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Certified courses</span>
+          </div>
+          <div class="badge">
+            <svg class="badge-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Live workshops</span>
+          </div>
+          <div class="badge">
+            <svg class="badge-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>AI recommendations</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Illustration: learning programming / online training -->
+      <div class="hero-illustration">
+        <div class="illustration-container">
+          <div class="learning-illustration" aria-hidden="true">
+            <svg class="illus-svg" viewBox="0 0 400 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Screen (monitor) -->
+              <rect x="80" y="40" width="240" height="150" rx="12" class="illus-screen" stroke-width="2"/>
+              <!-- Code lines placeholder -->
+              <rect x="100" y="60" width="120" height="8" rx="4" class="illus-line" opacity="0.8"/>
+              <rect x="100" y="78" width="180" height="8" rx="4" class="illus-line" opacity="0.6"/>
+              <rect x="100" y="96" width="100" height="8" rx="4" class="illus-line-accent"/>
+              <rect x="100" y="114" width="160" height="8" rx="4" class="illus-line" opacity="0.5"/>
+              <rect x="100" y="132" width="80" height="8" rx="4" class="illus-line" opacity="0.7"/>
+              <!-- Laptop base -->
+              <path d="M60 190 L340 190 L320 220 L80 220 Z" class="illus-base" stroke-width="1.5"/>
+              <!-- Tech badges: code brackets, HTML, Python -->
+              <circle cx="320" cy="70" r="28" class="illus-badge"/>
+              <text x="320" y="76" text-anchor="middle"
+              class="illus-badge-text"
+              font-size="20" font-weight="700">
+          {{ '{' }}{{ '}' }}
+        </text>              <circle cx="340" cy="160" r="24" class="illus-badge"/>
+              <text x="340" y="166" text-anchor="middle" class="illus-badge-text" font-size="16" font-weight="700">&lt;/&gt;</text>
+              <circle cx="75" cy="100" r="22" class="illus-badge"/>
+              <text x="75" y="106" text-anchor="middle" class="illus-badge-text" font-size="14" font-weight="700">Py</text>
+              <!-- Book icon -->
+              <rect x="310" y="200" width="48" height="36" rx="6" class="illus-badge" stroke-width="1.5"/>
+              <path d="M322 212 L334 212 M322 218 L338 218 M322 224 L330 224" fill="none" class="illus-accent-stroke" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="gradient-orb orb-1"></div>
+          <div class="gradient-orb orb-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Background Gradient Overlay -->
+  <div class="hero-background">
+    <div class="gradient-overlay"></div>
+  </div>
+
+</section>
+
