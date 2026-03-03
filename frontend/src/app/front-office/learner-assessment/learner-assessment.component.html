@@ -85,7 +85,22 @@
     <!-- VIEW 3: RESULT -->
     <div *ngIf="currentView === 'result'" class="result-view fade-in text-center">
       <div class="result-card card shadow-lg p-5 border-0 rounded-5">
-        <h1 class="display-1">🎊</h1>
+<style>
+  .celebrate-text {
+    font-weight: 800;
+    background: linear-gradient(to right, #f321d7, #ffec61, #21d4fd);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 3s linear infinite;
+  }
+
+  @keyframes gradientMove {
+    to { background-position: 200% center; }
+  }
+</style>
+
+<h1 class="display-1 celebrate-text">SUCCESS</h1>
         <h2 class="fw-bold text-dark">Examen terminé !</h2>
         
         <div class="score-circle my-4 mx-auto">
