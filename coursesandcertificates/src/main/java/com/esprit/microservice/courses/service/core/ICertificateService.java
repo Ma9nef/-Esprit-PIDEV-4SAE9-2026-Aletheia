@@ -1,6 +1,7 @@
 package com.esprit.microservice.courses.service.core;
 
 import com.esprit.microservice.courses.entity.Certificate;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletResponse;
 
 
@@ -12,6 +13,8 @@ public interface ICertificateService {
         Certificate generateCertificate(Long enrollmentId);
         List<Certificate> getAllCertificates();
         Certificate getByCode(String code);
+
+    void sendCertificateByEmail(Long certificateId, String recipientEmail) throws MessagingException;
 
     Certificate getById(Long id);
     // --- ADVANCED MÉTIER 1: Modern PDF with QR-Code Verification ---

@@ -94,6 +94,13 @@
             <td class="text-muted">{{ cert.issuedAt | date:'mediumDate' }}</td>
             <td class="text-end pe-4">
               <div class="btn-group gap-1">
+                 <button class="btn btn-info btn-sm rounded-2 text-white" 
+            (click)="sendEmail(cert)" 
+            [disabled]="isSendingEmail[cert.id]"
+            title="Send Email to Student">
+      <span *ngIf="isSendingEmail[cert.id]" class="spinner-border spinner-border-sm" role="status"></span>
+      <i *ngIf="!isSendingEmail[cert.id]" class="bi bi-envelope-at"></i>
+    </button>
                 <button class="btn btn-primary btn-sm rounded-2" (click)="savePDFToDatabase(cert)" title="Sync PDF to DB"><i class="bi bi-cloud-arrow-up"></i></button>
                 <button class="btn btn-outline-success btn-sm rounded-2" (click)="downloadPDF(cert)" title="Download Local"><i class="bi bi-download"></i></button>
                 <button class="btn btn-outline-dark btn-sm rounded-2" (click)="editCertificate(cert)" title="Edit Metadata"><i class="bi bi-pencil"></i></button>
