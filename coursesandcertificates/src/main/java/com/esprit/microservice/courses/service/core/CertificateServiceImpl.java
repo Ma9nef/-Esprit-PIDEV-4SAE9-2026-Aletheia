@@ -2,7 +2,6 @@ package com.esprit.microservice.courses.service.core;
 
 import com.esprit.microservice.courses.entity.Certificate;
 import com.esprit.microservice.courses.entity.Enrollment;
-import com.esprit.microservice.courses.entity.EnrollmentStatus;
 import com.esprit.microservice.courses.repository.CertificateRepository;
 import com.esprit.microservice.courses.repository.EnrollmentRepository;
 import com.esprit.microservice.courses.security.JwtReader;
@@ -16,10 +15,15 @@ import com.lowagie.text.Image;
 import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +54,8 @@ public class CertificateServiceImpl implements ICertificateService {
 
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private JavaMailSender mailSender;
 
     /**
      * MÉTHODE CORRIGÉE (MODE DEBUG POUR POSTMAN)
@@ -65,6 +71,30 @@ public class CertificateServiceImpl implements ICertificateService {
         }
 
         return jwtReader.extractUserId(authHeader);
+    }
+    @Override
+    public void sendCertificateByEmail(Long certificateId, String recipientEmail) throws MessagingException {
+        Certificate cert = certificateRepository.findById(certificateId)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
+
+        if (cert.getPdfContent() == null) {
+            throw new RuntimeException("No PDF content found for this certificate. Please sync to DB first.");
+        }
+
+        MimeMessage message = mailSender.createMimeMessage();
+        // Set 'true' for multipart/attachment
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setTo(recipientEmail);
+        helper.setSubject("Your Certificate of Completion - " + cert.getCertificateCode());
+        helper.setText("Congratulations! Please find your certificate for " +
+                cert.getEnrollment().getCourse().getTitle() + " attached.");
+
+        // Attach the PDF from the byte array stored in DB
+        helper.addAttachment("Certificate_" + cert.getCertificateCode() + ".pdf",
+                new ByteArrayResource(cert.getPdfContent()));
+
+        mailSender.send(message);
     }
     @Override
     public Certificate getById(Long id) {

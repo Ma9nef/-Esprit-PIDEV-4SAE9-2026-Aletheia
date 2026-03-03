@@ -8,6 +8,7 @@ import { Certificate } from '../models/certificate.model';
 })
 export class CertificateService {
  
+ 
 
   // ✅ Port 8081 + context-path /pidev
   private apiUrl = 'http://localhost:8081/pidev/certificate';
@@ -17,8 +18,8 @@ export class CertificateService {
  getAllCertificates(): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/all`);
 }
-sendEmail(certId: number, email: string) {
-  return this.http.post(`${this.apiUrl}/${certId}/send-email?email=${email}`, {});
+sendEmail(certId: number, email: string): Observable<any> {
+  return this.http.post(`${this.apiUrl}/${certId}/send-email`, { email });
 }
 // Add this to your CertificateService
 // inside certificate.service.ts

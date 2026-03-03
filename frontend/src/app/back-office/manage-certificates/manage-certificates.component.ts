@@ -16,7 +16,7 @@ declare var bootstrap: any;
 export class ManageCertificatesComponent implements OnInit, AfterViewInit {
   @ViewChild('sigCanvas') canvasContext!: ElementRef;
   signaturePad!: SignaturePad;
-
+isSendingEmail: { [key: number]: boolean } = {};
   // Data
   certificates: any[] = [];
   usersList: any[] = [];
@@ -60,7 +60,31 @@ export class ManageCertificatesComponent implements OnInit, AfterViewInit {
       this.loadAllEnrollments();
     });
   }
+sendEmail(cert: any) {
+  const userId = cert.enrollment?.userId || cert.enrollment?.user_id;
+  const user = this.usersList.find(u => u.id === +userId);
 
+  if (!user || !user.email) {
+    alert("This student does not have an email address associated with their account.");
+    return;
+  }
+
+  if (confirm(`Send certificate ${cert.certificateCode} to ${user.email}?`)) {
+    this.isSendingEmail[cert.id] = true; // Start loading for this specific row
+
+    this.certificateService.sendEmail(cert.id, user.email).subscribe({
+      next: () => {
+        alert(`✅ Success: Certificate sent to ${user.email}`);
+        this.isSendingEmail[cert.id] = false;
+      },
+      error: (err) => {
+        console.error(err);
+        alert("❌ Error: Could not send email. Check backend mailer configuration.");
+        this.isSendingEmail[cert.id] = false;
+      }
+    });
+  }
+}
   loadAllEnrollments() {
     this.enrollmentService.getAllEnrollments().subscribe({
       next: (data) => {

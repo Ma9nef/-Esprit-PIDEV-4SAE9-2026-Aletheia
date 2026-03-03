@@ -100,6 +100,20 @@ public class CertificateController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    @PostMapping("/{id}/send-email")
+    public ResponseEntity<Map<String, String>> sendCertificateEmail(@PathVariable Long id, @RequestBody Map<String, String> request) {
+        String recipientEmail = request.get("email");
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            certificateService.sendCertificateByEmail(id, recipientEmail);
+            response.put("message", "Email sent successfully to " + recipientEmail);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("error", "Failed to send email: " + e.getMessage());
+            return ResponseEntity.status(500).body(response);
+        }
+    }
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         // 1. Get the certificate object from database
@@ -116,3 +130,4 @@ public class CertificateController {
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(cert.getPdfContent());
     }}
+
