@@ -10,8 +10,12 @@ export class AuthInterceptor implements HttpInterceptor {
 
   private allowedHosts = [
     'http://localhost:8080',
+<<<<<<< HEAD
     'http://localhost:8081',
     'http://localhost:8089' // API Gateway
+=======
+    'http://localhost:8081'
+>>>>>>> origin/course-managment
   ];
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -27,4 +31,8 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(req);
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/course-managment

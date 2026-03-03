@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LibraryService, Product, StockMovement } from 'src/app/core/services/library.service';
@@ -15,12 +16,16 @@ interface LibraryResource {
   stockThreshold?: number;
   lowStock?: boolean;
 }
+=======
+import { Component } from '@angular/core';
+>>>>>>> origin/course-managment
 
 @Component({
   selector: 'app-manage-library',
   templateUrl: './manage-library.component.html',
   styleUrls: ['./manage-library.component.css']
 })
+<<<<<<< HEAD
 export class ManageLibraryComponent implements OnInit {
 
   resources: LibraryResource[] = [];
@@ -425,4 +430,8 @@ export class ManageLibraryComponent implements OnInit {
       }
     ];
   }
+=======
+export class ManageLibraryComponent {
+
+>>>>>>> origin/course-managment
 }

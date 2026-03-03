@@ -10,9 +10,15 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
+<<<<<<< HEAD
     public SecurityFilterChain filterChain(HttpSecurity http) {
         http
                 .csrf(csrf -> csrf.disable())  // Disable CSRF for REST API (appropriate for stateless APIs)
+=======
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(Customizer.withDefaults())       // Enable CSRF default handling (or disable if you want)
+>>>>>>> origin/course-managment
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()          // Allow all requests without authentication
                 )

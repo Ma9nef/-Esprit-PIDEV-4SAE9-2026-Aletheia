@@ -24,9 +24,12 @@ public class ProductMapper {
         dto.setFileUrl(product.getFileUrl());
         dto.setCoverImageUrl(product.getCoverImageUrl());
         dto.setAvailable(product.getAvailable());
+<<<<<<< HEAD
         dto.setStockQuantity(product.getStockQuantity());
         dto.setStockThreshold(product.getStockThreshold());
         dto.setLowStock(product.getStockQuantity() <= product.getStockThreshold());
+=======
+>>>>>>> origin/course-managment
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
 
@@ -49,8 +52,11 @@ public class ProductMapper {
         product.setFileUrl(dto.getFileUrl());
         product.setCoverImageUrl(dto.getCoverImageUrl());
         product.setAvailable(dto.getAvailable() != null ? dto.getAvailable() : true);
+<<<<<<< HEAD
         product.setStockQuantity(dto.getStockQuantity() != null ? dto.getStockQuantity() : 0);
         product.setStockThreshold(dto.getStockThreshold() != null ? dto.getStockThreshold() : 5);
+=======
+>>>>>>> origin/course-managment
 
         return product;
     }
@@ -68,6 +74,9 @@ public class ProductMapper {
         product.setFileUrl(dto.getFileUrl());
         product.setCoverImageUrl(dto.getCoverImageUrl());
         product.setAvailable(dto.getAvailable() != null ? dto.getAvailable() : true);
+<<<<<<< HEAD
         product.setStockThreshold(dto.getStockThreshold() != null ? dto.getStockThreshold() : 5);
+=======
+>>>>>>> origin/course-managment
     }
 }

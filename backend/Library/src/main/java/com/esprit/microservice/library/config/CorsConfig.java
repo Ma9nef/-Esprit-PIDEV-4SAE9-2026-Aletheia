@@ -14,8 +14,12 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:4200",
                         "http://localhost:4201",
+<<<<<<< HEAD
                         "http://localhost:4300",
                         "http://localhost:8082"
+=======
+                        "http://localhost:4300"
+>>>>>>> origin/course-managment
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

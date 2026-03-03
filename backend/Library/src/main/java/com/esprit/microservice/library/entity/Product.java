@@ -37,12 +37,15 @@ public class Product {
     @Column(nullable = false)
     private Boolean available = true;
 
+<<<<<<< HEAD
     @Column(nullable = false)
     private Integer stockQuantity = 0;
 
     @Column(nullable = false)
     private Integer stockThreshold = 5;
 
+=======
+>>>>>>> origin/course-managment
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -65,8 +68,11 @@ public class Product {
         this.fileUrl = fileUrl;
         this.coverImageUrl = coverImageUrl;
         this.available = available;
+<<<<<<< HEAD
         this.stockQuantity = 0;
         this.stockThreshold = 5;
+=======
+>>>>>>> origin/course-managment
     }
 
 
@@ -96,12 +102,15 @@ public class Product {
     public Boolean getAvailable() { return available; }
     public void setAvailable(Boolean available) { this.available = available; }
 
+<<<<<<< HEAD
     public Integer getStockQuantity() { return stockQuantity; }
     public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
 
     public Integer getStockThreshold() { return stockThreshold; }
     public void setStockThreshold(Integer stockThreshold) { this.stockThreshold = stockThreshold; }
 
+=======
+>>>>>>> origin/course-managment
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

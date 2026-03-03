@@ -30,6 +30,7 @@ public class ProductDTO {
 
     private Boolean available = true;
 
+<<<<<<< HEAD
     @Min(value = 0, message = "Stock quantity must be 0 or greater")
     private Integer stockQuantity = 0;
 
@@ -38,6 +39,8 @@ public class ProductDTO {
 
     private Boolean lowStock = false;
 
+=======
+>>>>>>> origin/course-managment
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -72,6 +75,7 @@ public class ProductDTO {
     public Boolean getAvailable() { return available; }
     public void setAvailable(Boolean available) { this.available = available; }
 
+<<<<<<< HEAD
     public Integer getStockQuantity() { return stockQuantity; }
     public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
 
@@ -81,6 +85,8 @@ public class ProductDTO {
     public Boolean getLowStock() { return lowStock; }
     public void setLowStock(Boolean lowStock) { this.lowStock = lowStock; }
 
+=======
+>>>>>>> origin/course-managment
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 

@@ -28,15 +28,26 @@ export class NavbarComponent implements OnInit {
     email: '',
     avatar: 'https://i.pravatar.cc/150?img=12'
   };
+<<<<<<< HEAD
 
   private updateCurrentUser(): void {
     const u = this.auth.getUserFromToken();
 
+=======
+  
+  private updateCurrentUser(): void {
+    const u = this.auth.getUserFromToken();
+  
+>>>>>>> origin/course-managment
     if (!u) {
       this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
       return;
     }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> origin/course-managment
     this.currentUser.email = u.email;
     this.currentUser.name = u.email.split('@')[0];
   }
@@ -62,16 +73,26 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateCurrentUser();
+<<<<<<< HEAD
 
     this.currentRoute = this.router.url;
 
+=======
+  
+    this.currentRoute = this.router.url;
+  
+>>>>>>> origin/course-managment
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
         this.currentRoute = this.router.url;
         this.updateCurrentUser(); // ✅ refresh user after login redirect
       });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> origin/course-managment
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(query => {
@@ -121,6 +142,7 @@ export class NavbarComponent implements OnInit {
     this.isUserDropdownOpen = false;
   }
 
+<<<<<<< HEAD
   onDashboardClick(): void {
     const user = this.auth.getUserFromToken();
     if (user) {
@@ -136,17 +158,30 @@ export class NavbarComponent implements OnInit {
     this.isUserDropdownOpen = false;
   }
 
+=======
+>>>>>>> origin/course-managment
   onLogout(): void {
     this.auth.logout();                  // remove token
     this.isUserDropdownOpen = false;
     this.isMobileMenuOpen = false;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> origin/course-managment
     this.currentUser = {
       name: '',
       email: '',
       avatar: 'https://i.pravatar.cc/150?img=12'
     };
+<<<<<<< HEAD
 
     this.router.navigate(['/home']);
   }
 }
+=======
+  
+    this.router.navigate(['/home']);
+  }
+}
+>>>>>>> origin/course-managment

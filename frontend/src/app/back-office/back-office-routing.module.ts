@@ -12,8 +12,12 @@ const routes: Routes = [
     path: 'admin',
     component: AdminDashboardComponent,
     children: [
+<<<<<<< HEAD
       { path: 'manage-library', component: ManageLibraryComponent },
       { path: 'manage-users', component: ManageUsersComponent }
+=======
+      { path: 'manage-library', component: ManageLibraryComponent }
+>>>>>>> origin/course-managment
     ]
   },
   { path: 'trainer', component: TrainerDashboardComponent },
@@ -26,4 +30,8 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
+<<<<<<< HEAD
 export class BackOfficeRoutingModule {}
+=======
+export class BackOfficeRoutingModule {}
+>>>>>>> origin/course-managment

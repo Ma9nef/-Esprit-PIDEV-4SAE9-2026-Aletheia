@@ -38,6 +38,7 @@ public class ProductController {
     }
 
     /**
+<<<<<<< HEAD
      * GET /api/products/low-stock
      * Returns products where stock quantity is at or below threshold
      */
@@ -47,6 +48,8 @@ public class ProductController {
     }
 
     /**
+=======
+>>>>>>> origin/course-managment
      * GET /api/products/{id}
      */
     @GetMapping("/{id}")

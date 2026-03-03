@@ -108,6 +108,7 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
     }
 
+<<<<<<< HEAD
     // ─── LOW STOCK ───────────────────────────────────────────────────────────────
 
     @Override
@@ -119,6 +120,8 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+=======
+>>>>>>> origin/course-managment
     // ─── PRIVATE HELPERS ─────────────────────────────────────────────────────────
 
     private Product findOrThrow(Long id) {
