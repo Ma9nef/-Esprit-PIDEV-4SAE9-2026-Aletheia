@@ -8,13 +8,15 @@ import { TrainerDashboardComponent } from './trainer-dashboard/trainer-dashboard
 
 import { BackOfficeRoutingModule } from './back-office-routing.module';
 import { TrainerCoursesComponent } from './trainer-courses/trainer-courses.component';
+import { ManageLibraryComponent } from './manage-library/manage-library.component';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
     ManageUsersComponent,
     TrainerDashboardComponent,
-    TrainerCoursesComponent
+    TrainerCoursesComponent,
+    ManageLibraryComponent
   ],
   imports: [
     CommonModule,
