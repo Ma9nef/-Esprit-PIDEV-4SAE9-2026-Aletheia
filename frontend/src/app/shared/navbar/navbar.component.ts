@@ -11,6 +11,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
@@ -78,7 +79,17 @@ export class NavbarComponent implements OnInit {
         this.searchQuery = query || '';
       });
   }
-
+  get isAdmin(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
+    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
+  }
+  
+  get isInstructor(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
+    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  }
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {

@@ -1,6 +1,6 @@
 <header class="navbar" [class.dark-theme]="themeService.isDark$ | async">
   <div class="nav-container">
-    
+
     <!-- LEFT SECTION: Logo + Desktop Menu -->
     <div class="nav-left">
       <div class="logo" (click)="navigateTo('/home')">
@@ -9,21 +9,37 @@
       </div>
 
       <nav class="desktop-menu">
-        <a 
-          *ngFor="let item of menuItems" 
+        <!-- Standard menu -->
+        <a
+          *ngFor="let item of menuItems"
           class="menu-item"
           [class.active]="currentRoute === item.route"
           (click)="navigateTo(item.route)">
           <span class="menu-icon">{{ item.icon }}</span>
           <span class="menu-label">{{ item.label }}</span>
         </a>
+
+        <!-- ✅ Dashboard: only for ADMIN -->
+        <a
+          *ngIf="isLoggedIn && isAdmin"
+          class="menu-item"
+          [class.active]="currentRoute.startsWith('/admin')"
+          (click)="navigateTo('/admin/dashboard')">
+          <span class="menu-icon">📊</span>
+          <span class="menu-label">Dashboard</span>
+        </a>
+
+        <!-- ✅ Dashboard: only for INSTRUCTOR -->
+        <a
+          *ngIf="isLoggedIn && isInstructor"
+          class="menu-item"
+          [class.active]="currentRoute.startsWith('/instructor')"
+          (click)="navigateTo('/instructor/dashboard')">
+          <span class="menu-icon">📊</span>
+          <span class="menu-label">Dashboard</span>
+        </a>
+
       </nav>
-      
-
-
-
-
-
     </div>
 
     <!-- CENTER SECTION: Search Bar -->
@@ -49,7 +65,7 @@
     <!-- RIGHT SECTION: Theme Toggle + Auth Buttons / User Menu -->
     <div class="nav-right">
       <!-- Theme Toggle -->
-      <button 
+      <button
         class="theme-toggle"
         (click)="toggleTheme()"
         [attr.aria-label]="(themeService.isDark$ | async) ? 'Switch to light mode' : 'Switch to dark mode'"
@@ -71,7 +87,7 @@
 
       <!-- User Menu (when logged in) -->
       <div *ngIf="isLoggedIn" class="user-menu" #userDropdown>
-        <button 
+        <button
           class="user-avatar-btn"
           (click)="toggleUserDropdown()"
           [class.active]="isUserDropdownOpen"
@@ -81,7 +97,7 @@
             <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        
+
         <div class="user-dropdown" [class.open]="isUserDropdownOpen">
           <div class="dropdown-header">
             <img [src]="currentUser.avatar" [alt]="currentUser.name" class="dropdown-avatar">
@@ -91,34 +107,30 @@
             </div>
           </div>
           <div class="dropdown-divider"></div>
+
+          <!-- ✅ Optional: dashboard inside dropdown too -->
+          <a class="dropdown-item" *ngIf="isAdmin" (click)="navigateTo('/admin/dashboard')">
+            <span>Dashboard</span>
+          </a>
+          <a class="dropdown-item" *ngIf="isInstructor" (click)="navigateTo('/instructor/dashboard')">
+            <span>Dashboard</span>
+          </a>
+
           <a class="dropdown-item" (click)="onProfileClick()">
-            <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
             <span>Profile</span>
           </a>
           <a class="dropdown-item" (click)="onMyCoursesClick()">
-            <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
             <span>My Courses</span>
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item logout" (click)="onLogout()">
-            <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
             <span>Logout</span>
           </a>
         </div>
       </div>
 
       <!-- Mobile Menu Toggle -->
-      <button 
+      <button
         class="mobile-menu-toggle"
         (click)="toggleMobileMenu()"
         [class.active]="isMobileMenuOpen"
@@ -132,7 +144,7 @@
 
   <!-- Mobile Menu Overlay -->
   <div class="mobile-menu-overlay" [class.open]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
-  
+
   <!-- Mobile Menu -->
   <div class="mobile-menu" [class.open]="isMobileMenuOpen">
     <div class="mobile-menu-header">
@@ -143,16 +155,36 @@
         </svg>
       </button>
     </div>
-    
- 
+
     <nav class="mobile-nav">
-      <a 
-        *ngFor="let item of menuItems" 
+      <!-- Standard menu -->
+      <a
+        *ngFor="let item of menuItems"
         class="mobile-menu-item"
         [class.active]="currentRoute === item.route"
         (click)="navigateTo(item.route)">
         <span class="mobile-menu-icon">{{ item.icon }}</span>
         <span>{{ item.label }}</span>
+      </a>
+
+      <!-- ✅ Mobile Dashboard: ADMIN -->
+      <a
+        *ngIf="isLoggedIn && isAdmin"
+        class="mobile-menu-item"
+        [class.active]="currentRoute.startsWith('/admin')"
+        (click)="navigateTo('/admin/dashboard')">
+        <span class="mobile-menu-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- ✅ Mobile Dashboard: INSTRUCTOR -->
+      <a
+        *ngIf="isLoggedIn && isInstructor"
+        class="mobile-menu-item"
+        [class.active]="currentRoute.startsWith('/instructor')"
+        (click)="navigateTo('/instructor/dashboard')">
+        <span class="mobile-menu-icon">📊</span>
+        <span>Dashboard</span>
       </a>
     </nav>
 
@@ -169,7 +201,7 @@
           <div class="mobile-user-email">{{ currentUser.email }}</div>
         </div>
       </div>
-     
+
       <a class="mobile-user-link" (click)="onMyCoursesClick()">My Courses</a>
       <a class="mobile-user-link logout" (click)="onLogout()">Logout</a>
     </div>
