@@ -108,6 +108,17 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
     }
 
+    // ─── LOW STOCK ───────────────────────────────────────────────────────────────
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductDTO> getLowStockProducts() {
+        return productRepository.findLowStockProducts()
+                .stream()
+                .map(productMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     // ─── PRIVATE HELPERS ─────────────────────────────────────────────────────────
 
     private Product findOrThrow(Long id) {

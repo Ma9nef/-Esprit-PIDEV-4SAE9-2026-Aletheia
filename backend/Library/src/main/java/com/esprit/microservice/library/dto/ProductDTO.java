@@ -30,6 +30,14 @@ public class ProductDTO {
 
     private Boolean available = true;
 
+    @Min(value = 0, message = "Stock quantity must be 0 or greater")
+    private Integer stockQuantity = 0;
+
+    @Min(value = 0, message = "Stock threshold must be 0 or greater")
+    private Integer stockThreshold = 5;
+
+    private Boolean lowStock = false;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -63,6 +71,15 @@ public class ProductDTO {
 
     public Boolean getAvailable() { return available; }
     public void setAvailable(Boolean available) { this.available = available; }
+
+    public Integer getStockQuantity() { return stockQuantity; }
+    public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
+
+    public Integer getStockThreshold() { return stockThreshold; }
+    public void setStockThreshold(Integer stockThreshold) { this.stockThreshold = stockThreshold; }
+
+    public Boolean getLowStock() { return lowStock; }
+    public void setLowStock(Boolean lowStock) { this.lowStock = lowStock; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
