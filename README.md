@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project was developed as part of the **PIDEV – 3rd Year Engineering Program** at **Esprit School of Engineering** (Academic Year 2025–2026).
+This project was developed as part of the **PIDEV – 4th Year Engineering Program** at **Esprit School of Engineering** (Academic Year 2025–2026).
 
 Aletheia is a full-stack microservices-based web application for library management and e-learning. It enables learners to browse and access a digital library, explore courses, and track their learning progress. Instructors can manage courses and content, while administrators oversee users, library resources, and the overall platform. The application also features an immersive **3D exploration** experience.
 
