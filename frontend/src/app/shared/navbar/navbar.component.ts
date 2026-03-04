@@ -15,7 +15,6 @@ export class NavbarComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
 
-  // ❌ REMOVE: isLoggedIn = false;
   isMobileMenuOpen = false;
   isUserDropdownOpen = false;
 
@@ -45,6 +44,7 @@ export class NavbarComponent implements OnInit {
     { label: 'Home', route: '/', icon: '🏠' },
     { label: 'About', route: '/about', icon: 'ℹ️' },
     { label: 'Services', route: '/services', icon: '⚙️' },
+    { label: 'Explore 3D', route: '/explore', icon: '🌌' },
     { label: 'Contact', route: '/contact', icon: '📧' }
   ];
 

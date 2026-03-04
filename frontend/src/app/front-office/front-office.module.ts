@@ -13,6 +13,7 @@ import { ServicesComponent } from './template/services/services.component';
 import { TemplateComponent } from './template/template.component';
 import { HomeComponent } from './template/home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { Explore3dComponent } from './explore3d/explore3d.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     AboutComponent,
     ServicesComponent,
     TemplateComponent,
-    DashboardComponent
+    DashboardComponent,
+    Explore3dComponent
   ],
   imports: [
     CommonModule,
@@ -39,7 +41,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     ProfileComponent,
     LibraryComponent,
     AboutComponent,
-    ServicesComponent
+    ServicesComponent,
+    Explore3dComponent
   ]
 })
 export class FrontOfficeModule { }

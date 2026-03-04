@@ -297,6 +297,38 @@
   transform: rotate(15deg);
 }
 
+/* Explore 3D Button */
+.btn-explore3d {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid rgba(99, 102, 241, 0.4);
+  white-space: nowrap;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15));
+  color: #818cf8;
+  backdrop-filter: blur(10px);
+}
+.btn-explore3d:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.35);
+  background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(139,92,246,0.3));
+  border-color: rgba(99, 102, 241, 0.6);
+}
+.btn-explore3d svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.3s ease;
+}
+.btn-explore3d:hover svg {
+  transform: rotate(15deg) scale(1.1);
+}
+
 /* ============================================
    FEATURE BADGES
    ============================================ */
