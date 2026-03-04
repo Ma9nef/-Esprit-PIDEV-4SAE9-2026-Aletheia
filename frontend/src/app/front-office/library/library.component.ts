@@ -186,7 +186,8 @@ export class LibraryComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error adding to cart:', err);
-        alert('Failed to add item to cart.');
+        const msg = err?.error?.message || err?.message || 'Unknown error';
+        alert('Failed to add item to cart: ' + msg);
       }
     });
   }
