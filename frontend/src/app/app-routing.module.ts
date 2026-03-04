@@ -16,6 +16,7 @@ import { CourseDetailsComponent } from './front-office/course-details/course-det
 import { CourseLearningComponent } from './front-office/course-learning/course-learning.component';
 import { ManageCoursesComponent } from './back-office/manage-courses/manage-courses.component';
 import { LibraryComponent } from './front-office/library/library.component';
+import { Explore3dComponent } from './front-office/explore3d/explore3d.component';
 
 const routes: Routes = [
   {path:"",component:TemplateComponent},
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'front/course-details/:id', component: CourseDetailsComponent },
   { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
   { path: 'front/library', component: LibraryComponent },
+  { path: 'explore', component: Explore3dComponent },
   {path: 'back-office/manage-courses',component: ManageCoursesComponent},
   {path: 'back-office',loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)},
 
