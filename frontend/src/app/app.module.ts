@@ -30,7 +30,8 @@ import { JwtInterceptor } from './core/interceptors/auth.interceptor';
     FormsModule  ,
     CommonModule,
     AuthModule,
-    HttpClientModule   
+    HttpClientModule,
+     FormsModule,  
 
   ],
   providers: [
