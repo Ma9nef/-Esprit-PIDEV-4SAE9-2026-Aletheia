@@ -22,6 +22,8 @@ public class ApiGatewayApplication {
                 .route("courses-service", r -> r.path("/api/courses/**").uri("lb://courses"))
                 .route("library-service", r -> r.path("/api/library/**").uri("lb://library-service"))
                 .route("products-service", r -> r.path("/api/products/**").uri("lb://library-service"))
+                .route("cart-service", r -> r.path("/api/cart/**").uri("lb://library-service"))
+                .route("orders-service", r -> r.path("/api/orders/**").uri("lb://library-service"))
                 .build();
     }
 }
