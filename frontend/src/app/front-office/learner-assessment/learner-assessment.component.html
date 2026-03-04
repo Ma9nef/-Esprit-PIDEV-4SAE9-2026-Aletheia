@@ -1,0 +1,123 @@
+<div class="main-wrapper min-vh-100 theme-bg">
+  
+  <header class="hero-banner shadow">
+    <div class="l-container">
+      <h1 class="hero-title">Certification Center</h1>
+      <p class="hero-subtitle">Validez vos compétences et obtenez vos certificats officiels.</p>
+    </div>
+  </header>
+
+  <main class="l-container py-5">
+    
+    <!-- VIEW 1: ASSESSMENT LISTING -->
+    <div *ngIf="currentView === 'list'" class="fade-in">
+      <h3 class="section-title mb-4">Examens disponibles</h3>
+      <div class="assessment-grid">
+        <article class="exam-card shadow-sm" *ngFor="let a of assessments">
+          <div class="card-inner">
+            <header class="card-meta">
+              <span class="course-badge">{{ getCourseTitle(a) }}</span>
+              <span class="points-label">{{ a.totalScore }} pts</span>
+            </header>
+            <h5 class="exam-title mt-2">{{ a.title }}</h5>
+            <p class="exam-desc">Testez vos acquis sur ce module.</p>
+            <button class="btn-start w-100" (click)="startAssessment(a)">Commencer</button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <!-- VIEW 2: ACTIVE QUIZ (Fixes visibility bug) -->
+    <div *ngIf="currentView === 'taking'" class="quiz-container fade-in">
+      
+      <div class="quiz-status-bar d-flex justify-content-between align-items-center mb-4">
+        <button class="btn-back shadow-sm" (click)="goBack()">Abandonner</button>
+        <h5 class="mb-0 text-primary fw-bold">{{ getCourseTitle(selectedAssessment) }}</h5>
+        <div class="timer-display" [class.text-danger]="timeLeft < 60">
+          <i class="bi bi-clock me-2"></i> {{ formatTime() }}
+        </div>
+      </div>
+
+      <div class="question-box card border-0 shadow-sm p-4 rounded-4" 
+           *ngIf="selectedAssessment.questions[currentQuestionIndex] as q">
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+           <h3 class="fw-bold mb-0 text-dark">{{ selectedAssessment.title }}</h3>
+           <span class="badge bg-primary-soft text-primary rounded-pill">Question {{ currentQuestionIndex + 1 }} / {{ selectedAssessment.questions.length }}</span>
+        </div>
+        <hr>
+        
+        <h4 class="question-text mb-4 text-dark">{{ q.text }}</h4>
+
+        <div class="options-grid">
+          <!-- SUPER FALLBACK LOOP: checks all common array names -->
+          <div *ngFor="let opt of q.options || q.choices || q.answers" 
+               class="option-item shadow-sm" 
+               [class.selected]="userAnswers[q.id] === opt.id"
+               (click)="selectOption(q.id, opt.id)">
+            
+            <div class="radio-ui"></div>
+            
+            <!-- SUPER FALLBACK TEXT: checks all common property names -->
+            <span class="option-text">
+              {{ opt.text || opt.optionText || opt.content || opt.label || opt.choice }}
+            </span>
+          </div>
+        </div>
+
+        <div class="nav-actions d-flex justify-content-between mt-5">
+          <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" 
+                  [disabled]="currentQuestionIndex === 0" (click)="prevQuestion()">Précédent</button>
+          
+          <button class="btn btn-primary rounded-pill px-4 fw-bold" 
+                  *ngIf="currentQuestionIndex < selectedAssessment.questions.length - 1"
+                  (click)="nextQuestion()">Suivant</button>
+
+          <button class="btn btn-success rounded-pill px-4 fw-bold shadow-sm" 
+                  *ngIf="currentQuestionIndex === selectedAssessment.questions.length - 1"
+                  [disabled]="loading" (click)="submitAssessment()">
+            {{ loading ? 'Envoi...' : 'Terminer' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: RESULT -->
+    <div *ngIf="currentView === 'result'" class="result-view fade-in text-center">
+      <div class="result-card card shadow-lg p-5 border-0 rounded-5">
+<style>
+  .celebrate-text {
+    font-weight: 800;
+    background: linear-gradient(to right, #f321d7, #ffec61, #21d4fd);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientMove 3s linear infinite;
+  }
+
+  @keyframes gradientMove {
+    to { background-position: 200% center; }
+  }
+</style>
+
+<h1 class="display-1 celebrate-text">SUCCESS</h1>
+        <h2 class="fw-bold text-dark">Examen terminé !</h2>
+        
+        <div class="score-circle my-4 mx-auto">
+          <span class="score-num">{{ finalScore }}</span>
+          <small class="text-muted">/ {{ selectedAssessment.totalScore }}</small>
+        </div>
+
+        <div class="status-alert p-3 rounded-4 mb-4" 
+             [ngClass]="finalScore >= (selectedAssessment.totalScore / 2) ? 'bg-success-soft' : 'bg-danger-soft'">
+          <h5 class="mb-0 fw-bold" [class.text-success]="finalScore >= (selectedAssessment.totalScore / 2)">
+             {{ finalScore >= (selectedAssessment.totalScore / 2) ? 'Examen Validé !' : 'Examen Non Validé' }}
+          </h5>
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm" (click)="goBack()">Retour à l'accueil</button>
+      </div>
+    </div>
+
+  </main>
+</div>
