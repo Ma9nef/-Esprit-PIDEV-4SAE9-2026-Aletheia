@@ -1,4 +1,4 @@
-#Aletheia – Intelligent Platform for Training & Professional Certifications
+# Aletheia – Intelligent Platform for Training & Professional Certifications
 ## Overview
 Aletheia est une plateforme intelligente de nouvelle génération dédiée à la gestion des formations et des certifications professionnelles. Elle a été conçue pour transformer l'apprentissage en entreprise en une expérience fluide, sécurisée et axée sur les données.
 Grâce à son architecture Microservices, Aletheia offre une modularité totale, permettant aux organisations de gérer des parcours pédagogiques complexes, des bibliothèques de ressources massives et des processus de certification rigoureux, tout en intégrant des interactions en temps réel.
