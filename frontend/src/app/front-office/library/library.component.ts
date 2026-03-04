@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../core/services/auth.service';
+import { CartService, Cart } from '../../core/services/cart.service';
 
 interface Product {
   id: number;
   title: string;
   description: string;
   author?: string;
-  type: string; // BOOK, PDF, CHILDREN_MATERIAL, EXAM
+  type: string;
   price?: number;
   fileUrl?: string;
   coverImageUrl?: string;
@@ -29,6 +31,7 @@ interface LibraryResource {
   createdDate?: string;
   stockQuantity?: number;
   lowStock?: boolean;
+  price?: number;
 }
 
 @Component({
@@ -44,6 +47,14 @@ export class LibraryComponent implements OnInit {
   searchQuery = '';
   selectedCategory = 'all';
   selectedResourceType = 'all';
+
+  // Cart state
+  cart: Cart | null = null;
+  cartOpen = false;
+  cartLoading = false;
+  checkoutLoading = false;
+  checkoutSuccess = false;
+  userId: number | null = null;
 
   categories = [
     { id: 'all', name: 'All Categories' },
@@ -61,20 +72,41 @@ export class LibraryComponent implements OnInit {
     { id: 'exam', name: 'Exam' }
   ];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
+    const user = this.authService.getUserFromToken();
+    if (user) {
+      this.userId = user.id;
+      this.loadCart();
+    }
     this.loadLibraryResources();
+  }
+
+  loadCart(): void {
+    if (!this.userId) return;
+    this.cartLoading = true;
+    this.cartService.getCart(this.userId).subscribe({
+      next: (cart) => {
+        this.cart = cart;
+        this.cartLoading = false;
+      },
+      error: () => {
+        this.cartLoading = false;
+      }
+    });
   }
 
   loadLibraryResources(): void {
     this.loading = true;
     this.error = null;
-    // Call the actual backend API endpoint
     this.http.get<Product[]>('/api/products')
       .subscribe({
         next: (data) => {
-          // Map Product objects to LibraryResource format
           this.libraryResources = data.map(product => ({
             id: product.id,
             title: product.title,
@@ -85,7 +117,8 @@ export class LibraryComponent implements OnInit {
             imageUrl: product.coverImageUrl,
             createdDate: product.createdAt || product.updatedAt,
             stockQuantity: product.stockQuantity ?? 0,
-            lowStock: product.lowStock ?? false
+            lowStock: product.lowStock ?? false,
+            price: product.price ?? 0
           }));
           this.filterResources();
           this.loading = false;
@@ -93,7 +126,6 @@ export class LibraryComponent implements OnInit {
         error: (err) => {
           console.error('Error loading library resources:', err);
           this.error = 'Failed to load resources. Using mock data.';
-          // Mock data for development
           this.libraryResources = this.getMockData();
           this.filterResources();
           this.loading = false;
@@ -127,6 +159,86 @@ export class LibraryComponent implements OnInit {
     this.filterResources();
   }
 
+  // Cart methods
+  isInCart(resourceId: number): boolean {
+    if (!this.cart) return false;
+    return this.cart.items.some(item => item.product.id === resourceId);
+  }
+
+  getCartItemCount(): number {
+    if (!this.cart) return 0;
+    return this.cart.items.reduce((sum, item) => sum + item.quantity, 0);
+  }
+
+  getCartTotal(): number {
+    if (!this.cart) return 0;
+    return this.cart.items.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+  }
+
+  addToCart(resource: LibraryResource): void {
+    if (!this.userId) {
+      alert('Please log in to add items to your cart.');
+      return;
+    }
+    this.cartService.addToCart(this.userId, resource.id).subscribe({
+      next: (cart) => {
+        this.cart = cart;
+      },
+      error: (err) => {
+        console.error('Error adding to cart:', err);
+        alert('Failed to add item to cart.');
+      }
+    });
+  }
+
+  removeFromCart(cartItemId: number): void {
+    if (!this.userId) return;
+    this.cartService.removeItem(this.userId, cartItemId).subscribe({
+      next: (cart) => {
+        this.cart = cart;
+      },
+      error: (err) => {
+        console.error('Error removing item:', err);
+      }
+    });
+  }
+
+  clearCart(): void {
+    if (!this.userId) return;
+    this.cartService.clearCart(this.userId).subscribe({
+      next: () => {
+        this.cart = null;
+        this.loadCart();
+      },
+      error: (err) => {
+        console.error('Error clearing cart:', err);
+      }
+    });
+  }
+
+  toggleCart(): void {
+    this.cartOpen = !this.cartOpen;
+    this.checkoutSuccess = false;
+  }
+
+  checkout(): void {
+    if (!this.userId) return;
+    this.checkoutLoading = true;
+    this.cartService.checkout(this.userId).subscribe({
+      next: () => {
+        this.checkoutLoading = false;
+        this.checkoutSuccess = true;
+        this.cart = null;
+        this.loadCart();
+      },
+      error: (err) => {
+        console.error('Error during checkout:', err);
+        this.checkoutLoading = false;
+        alert('Checkout failed. Please try again.');
+      }
+    });
+  }
+
   downloadResource(resource: LibraryResource): void {
     if (resource.downloadUrl) {
       window.open(resource.downloadUrl, '_blank');
@@ -141,7 +253,8 @@ export class LibraryComponent implements OnInit {
         description: 'Comprehensive guide to building microservices with Spring Boot and Spring Cloud.',
         category: 'pdf',
         resourceType: 'pdf',
-        imageUrl: 'assets/library/spring-boot.png'
+        imageUrl: 'assets/library/spring-boot.png',
+        price: 29.99
       },
       {
         id: 2,
@@ -149,7 +262,8 @@ export class LibraryComponent implements OnInit {
         description: 'Learn modern Angular patterns, dependency injection, and reactive programming.',
         category: 'pdf',
         resourceType: 'pdf',
-        imageUrl: 'assets/library/angular-best-practices.png'
+        imageUrl: 'assets/library/angular-best-practices.png',
+        price: 24.99
       },
       {
         id: 3,
@@ -157,7 +271,8 @@ export class LibraryComponent implements OnInit {
         description: 'Master data manipulation, analysis, and visualization with Python.',
         category: 'book',
         resourceType: 'book',
-        imageUrl: 'assets/library/python-ds.png'
+        imageUrl: 'assets/library/python-ds.png',
+        price: 34.99
       },
       {
         id: 4,
@@ -165,7 +280,8 @@ export class LibraryComponent implements OnInit {
         description: 'Complete guide to containerization and orchestration technologies.',
         category: 'book',
         resourceType: 'book',
-        imageUrl: 'assets/library/docker-k8s.png'
+        imageUrl: 'assets/library/docker-k8s.png',
+        price: 39.99
       },
       {
         id: 5,
@@ -173,7 +289,8 @@ export class LibraryComponent implements OnInit {
         description: 'Understanding ML algorithms: supervised, unsupervised, and deep learning.',
         category: 'pdf',
         resourceType: 'pdf',
-        imageUrl: 'assets/library/ml-algorithms.png'
+        imageUrl: 'assets/library/ml-algorithms.png',
+        price: 19.99
       },
       {
         id: 6,
@@ -181,23 +298,8 @@ export class LibraryComponent implements OnInit {
         description: 'Best practices for designing and building RESTful APIs.',
         category: 'pdf',
         resourceType: 'pdf',
-        imageUrl: 'assets/library/api-design.png'
-      },
-      {
-        id: 7,
-        title: 'TypeScript Advanced Patterns',
-        description: 'Learn advanced TypeScript patterns and techniques for scalable applications.',
-        category: 'pdf',
-        resourceType: 'pdf',
-        imageUrl: 'assets/library/typescript-patterns.png'
-      },
-      {
-        id: 8,
-        title: 'CI/CD Pipeline Setup',
-        description: 'Implement automated testing and deployment pipelines.',
-        category: 'exam',
-        resourceType: 'exam',
-        imageUrl: 'assets/library/cicd.png'
+        imageUrl: 'assets/library/api-design.png',
+        price: 14.99
       }
     ];
   }

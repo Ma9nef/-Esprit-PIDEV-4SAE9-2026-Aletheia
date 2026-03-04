@@ -46,11 +46,14 @@ public class OrderServiceImpl implements OrderService {
             oi.setProductTitle(ci.getProduct().getTitle());
             oi.setPriceAtPurchase(ci.getProduct().getPrice());
             oi.setQuantity(ci.getQuantity());
+            oi.setFileUrl(ci.getProduct().getFileUrl());
+            oi.setCoverImageUrl(ci.getProduct().getCoverImageUrl());
             return oi;
         }).toList();
 
         order.setItems(orderItems);
         order.setTotalAmount(cart.calculateTotal());
+        order.setStatus(OrderStatus.PAID);
 
         cart.setCheckedOut(true);
 
@@ -61,5 +64,10 @@ public class OrderServiceImpl implements OrderService {
     public Order getById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
+    }
+
+    @Override
+    public List<Order> getByUserId(Long userId) {
+        return orderRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 }
