@@ -1,62 +1,64 @@
 # Aletheia – Intelligent Platform for Training & Professional Certifications
 ## Overview
-Aletheia est une plateforme intelligente de nouvelle génération dédiée à la gestion des formations et des certifications professionnelles. Elle a été conçue pour transformer l'apprentissage en entreprise en une expérience fluide, sécurisée et axée sur les données.
-Grâce à son architecture Microservices, Aletheia offre une modularité totale, permettant aux organisations de gérer des parcours pédagogiques complexes, des bibliothèques de ressources massives et des processus de certification rigoureux, tout en intégrant des interactions en temps réel.
+Aletheia is a next-generation intelligent platform dedicated to the management of corporate training and professional certifications. It was designed to transform corporate learning into a fluid, secure, and data-driven experience.
+Built on a Microservices architecture, Aletheia offers total modularity, allowing organizations to manage complex pedagogical paths, massive digital resource libraries, and rigorous certification processes, while integrating real-time interactions.
 ## Contributors & Core Modules
-Le succès d'Aletheia repose sur la collaboration de cinq pôles d'expertise, chacun pilotant un microservice métier critique :
-Leader	Module	Focus Métier
-Manef Akrim	Course Management	Ingénierie pédagogique, structuration des modules et gestion du cycle de vie des cours.
-Jasser Noomani	Library Management	Gestion intelligente des actifs numériques et centralisation des ressources de formation.
-Skander Ferjani	Certification Management	Moteur d'évaluation avancé, algorithmes anti-triche (Shuffle), scoring en temps réel et correction pédagogique.
-Saif Ayed	Offre Management	Stratégies de monétisation, gestion des remises et marketing des offres de formation.
-Ayoub Bel Gacem	Live Room	Hub de collaboration synchrone et salles de classe virtuelles haute performance.
+Aletheia's success is driven by five core areas of expertise, each leading a critical business microservice:
+Leader	Module	Business Focus
+Manef Akrim	Course Management	Instructional engineering, module structuring, and course lifecycle management.
+Jasser Noomani	Library Management	Intelligent digital asset management and centralized training resource hub.
+Skander Ferjani	Certification Management	Advanced assessment engine, anti-cheat algorithms (Shuffle), real-time scoring, and pedagogical feedback.
+Saif Ayed	Offer Management	Monetization strategies, discount management, and training offer marketing.
+Ayoub Bel Gacem	Live Room	High-performance synchronous collaboration hub and virtual classrooms.
+
 ## Key Features
 ### Smart Learning Experience
-Centre de Certification Intelligent :
-Randomization Engine : Algorithme de mélange (Shuffle) des questions et des options pour garantir l'unicité de chaque tentative.
-Advanced Correction Mode : Système de revue post-examen permettant aux apprenants d'analyser leurs erreurs par rapport aux meilleures pratiques.
-Visual Feedback : Gamification avec barre de progression interactive et célébrations de succès (Confetti UI).
-Collaboration Live : Sessions interactives en temps réel pour briser l'isolement de l'apprentissage à distance.
+Intelligent Certification Center:
+Randomization Engine: A shuffling algorithm for questions and options to ensure a unique attempt for every learner.
+Advanced Correction Mode: A post-exam review system allowing learners to analyze their mistakes against best practices.
+Visual Feedback: Gamification features including interactive progress bars and success celebrations (Confetti UI).
+Live Collaboration: Real-time interactive sessions designed to break the isolation of remote learning.
 ### Professional Administration
-Pilotage de Catalogue : Création intuitive de contenus par les instructeurs.
-Ressources Centralisées : Accès instantané à une bibliothèque multimédia structurée.
-Gestion Commerciale : Optimisation des revenus grâce à un module d'offres flexible.
+Catalog Management: Intuitive content creation tools for instructors.
+Centralized Resources: Instant access to a structured multimedia library.
+Commercial Management: Revenue optimization through a flexible offer and discount module.
 ## Tech Stack
-Frontend (User Interface)
-Framework : Angular 16+
-Styling : Bootstrap 5 & SCSS (Custom theme)
-State & Logic : RxJS (Programmation réactive)
-Animations : Canvas-Confetti & CSS Transitions
+Framework: Angular 16+
+Styling: Bootstrap 5 & SCSS (Custom theme)
+State & Logic: RxJS (Reactive programming)
+Animations: Canvas-Confetti & CSS Transitions
 Backend (Distributed System)
-Framework : Spring Boot 3.x
-Infrastructure Cloud :
-Netflix Eureka : Service Discovery pour une communication fluide entre services.
-Spring Cloud Gateway : Point d'entrée unique gérant le routage intelligent (Port 8089).
-Data & Persistence : Spring Data JPA (Hibernate) & MySQL.
-Logging & Debug : Niveaux de trace TRACE/INFO pour une supervision précise des flux Gateway.
+Framework: Spring Boot 3.x
+Cloud Infrastructure:
+Netflix Eureka: Service Discovery for seamless inter-service communication.
+Spring Cloud Gateway: Single entry point managing intelligent routing (Port 8089).
+Data & Persistence: Spring Data JPA (Hibernate) & MySQL.
+Logging & Debug: Detailed TRACE/INFO levels for precise monitoring of Gateway flows.
 ## System Architecture
-Aletheia utilise un écosystème distribué où chaque service est autonome :
-Eureka Server : Annuaire centralisé des instances (Port 8761).
-Api Gateway : Routage dynamique des requêtes Frontend vers les microservices.
-Microservices Métiers :
-courses-service (Port 8081) : Cœur de l'apprentissage et des certifications.
-library-service (Port 8082) : Stockage et gestion documentaire.
-aletheia-platform (Port 8080) : Gestion des profils et de la sécurité.
+Aletheia utilizes a distributed ecosystem where each service is autonomous:
+Eureka Server: Centralized service registry (Port 8761).
+API Gateway: Dynamic routing of Frontend requests to specific microservices.
+Business Microservices:
+courses-service (Port 8081): The core of learning and certifications.
+library-service (Port 8082): Storage and document management.
+aletheia-platform (Port 8080): Profile management and security.
 ## Getting Started
 Installation
-Clone the Repository :
+Clone the Repository:
+code
+Bash
 git clone https://github.com/Ma9nef/pi-dev_OG-s.git
 ### Backend Startup Sequence :
-Lancez d'abord le microservice Eureka Server.
-Démarrez ensuite les microservices métiers (Course, Library, etc.).
-Enfin, lancez l'Api Gateway pour activer l'accès externe.
+Launch the Eureka Server microservice first.
+Start the business microservices (Course, Library, User, etc.).
+Launch the API Gateway last to enable external access.
 ### Frontend Startup :
 cd frontend
 npm install
 ng serve
-Accédez à la plateforme via : http://localhost:4200
+Access the platform via: http://localhost:4200
 ## Academic Context
-Ce projet a été développé dans le cadre du cursus d'ingénieur à l'ESPRIT. Il illustre la mise en œuvre de patterns d'architecture microservices pour répondre à des problématiques métier complexes dans le domaine de la EdTech.
+his project was developed as part of the engineering curriculum at ESPRIT. It demonstrates the implementation of microservices architecture patterns to solve complex business challenges in the EdTech sector.
 ## Acknowledgments
-L'équipe pédagogique d'ESPRIT pour le mentorat technique.
-Les communautés Spring et Angular pour la richesse de leurs écosystèmes.
+The ESPRIT teaching staff for technical mentorship.
+The Spring and Angular communities for their rich ecosystems.
