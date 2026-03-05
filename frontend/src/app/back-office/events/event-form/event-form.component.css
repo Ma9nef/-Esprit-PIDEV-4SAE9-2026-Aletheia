@@ -113,6 +113,87 @@ input:focus, textarea:focus, select:focus {
   margin-right: 8px;
 }
 
+
+
+
+
+
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+input.is-invalid, textarea.is-invalid, select.is-invalid {
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  animation: slideIn 0.3s ease;
+}
+
+.global-error, .summary-error {
+  background-color: #fff3f3;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border-left: 4px solid #dc3545;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
