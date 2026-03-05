@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CertificateService } from '../../core/services/certificate.service';
-import { UserService } from '../../core/services/user.service';
+
 import { EnrollmentService } from '../../core/services/enrollment.service';
 import { jsPDF } from 'jspdf';
 import * as QRCode from 'qrcode';
 import SignaturePad from 'signature_pad';
+import { UserService } from 'src/app/core/services/user.service';
 
 declare var bootstrap: any;
 
@@ -14,6 +15,7 @@ declare var bootstrap: any;
   styleUrls: ['./manage-certificates.component.css']
 })
 export class ManageCertificatesComponent implements OnInit, AfterViewInit {
+
   @ViewChild('sigCanvas') canvasContext!: ElementRef;
   signaturePad!: SignaturePad;
 isSendingEmail: { [key: number]: boolean } = {};
@@ -21,6 +23,10 @@ isSendingEmail: { [key: number]: boolean } = {};
   certificates: any[] = [];
   usersList: any[] = [];
   enrollments: any[] = [];
+selectedSuccessUserId: number | null = null;
+successResult: any = null;
+ 
+  isPredicting: boolean = false;
 
   // UI State
   selectedUserId: number | null = null; // Used for Admin Signature selection
@@ -60,30 +66,45 @@ isSendingEmail: { [key: number]: boolean } = {};
       this.loadAllEnrollments();
     });
   }
-sendEmail(cert: any) {
+async sendEmail(cert: any) {
   const userId = cert.enrollment?.userId || cert.enrollment?.user_id;
   const user = this.usersList.find(u => u.id === +userId);
 
-  if (!user || !user.email) {
-    alert("This student does not have an email address associated with their account.");
+  if (!user?.email) {
+    alert("User email not found!");
     return;
   }
+ 
 
-  if (confirm(`Send certificate ${cert.certificateCode} to ${user.email}?`)) {
-    this.isSendingEmail[cert.id] = true; // Start loading for this specific row
+  this.isSendingEmail[cert.id] = true;
 
-    this.certificateService.sendEmail(cert.id, user.email).subscribe({
-      next: () => {
-        alert(`✅ Success: Certificate sent to ${user.email}`);
-        this.isSendingEmail[cert.id] = false;
-      },
-      error: (err) => {
-        console.error(err);
-        alert("❌ Error: Could not send email. Check backend mailer configuration.");
-        this.isSendingEmail[cert.id] = false;
-      }
-    });
-  }
+  // STEP 1: Generate the PDF in the browser
+  const doc = await this.generateCertificateContent(cert);
+  const blob = doc.output('blob');
+
+  // STEP 2: Save it to the database first
+  this.certificateService.uploadCertificatePdf(cert.id, blob).subscribe({
+    next: () => {
+      console.log("PDF Saved. Now sending email...");
+      
+      // STEP 3: Send the email only after the PDF is safely in the DB
+      this.certificateService.sendEmail(cert.id, user.email).subscribe({
+        next: () => {
+          alert(`✅ Success: Certificate sent to ${user.email}`);
+          this.isSendingEmail[cert.id] = false;
+        },
+        error: (err) => {
+          console.error("Email Error:", err);
+          alert("❌ Server Error: Check your IntelliJ logs for 'MailAuthenticationException'");
+          this.isSendingEmail[cert.id] = false;
+        }
+      });
+    },
+    error: (err) => {
+      alert("❌ Failed to save PDF to database. Email cancelled.");
+      this.isSendingEmail[cert.id] = false;
+    }
+  });
 }
   loadAllEnrollments() {
     this.enrollmentService.getAllEnrollments().subscribe({
@@ -97,13 +118,22 @@ sendEmail(cert: any) {
     });
   }
 
-  loadUsers() {
-    this.userService.getAllUsers().subscribe(data => {
-      this.usersList = data.content || data;
-      this.calculateStats();
-    });
-  }
-
+loadUsers() {
+  this.userService.getAllUsers().subscribe({
+    next: (data: any) => {
+      // Handle different API structures (Paginated vs List)
+      this.usersList = data.content ? data.content : (Array.isArray(data) ? data : []);
+      
+      console.log("--- DEBUG USERS ---");
+      console.log("Total users received:", this.usersList.length);
+      if (this.usersList.length > 0) {
+        console.log("Fields in first user:", Object.keys(this.usersList[0]));
+        console.log("Signature of first user:", this.usersList[0].signature ? "EXISTS" : "MISSING/NULL");
+      }
+    },
+    error: (err) => console.error("Could not load users", err)
+  });
+}
   // --- 2. GETTERS & HELPERS ---
 
   getUserName(userId: any): string {
@@ -203,7 +233,6 @@ sendEmail(cert: any) {
   clearSignature() { this.signaturePad.clear(); }
 
 private async generateCertificateContent(cert: any): Promise<jsPDF> {
-  // Create PDF in Landscape A4
   const doc = new jsPDF('l', 'mm', 'a4');
   const w = doc.internal.pageSize.getWidth();
   const h = doc.internal.pageSize.getHeight();
@@ -213,84 +242,66 @@ private async generateCertificateContent(cert: any): Promise<jsPDF> {
   const Gold = [184, 134, 11];
   const LightGray = [127, 140, 141];
 
-  // --- 2. PROFESSIONAL BORDERS ---
-  // Thick Outer Navy Border
+  // --- 2. BORDERS ---
   doc.setDrawColor(NavyBlue[0], NavyBlue[1], NavyBlue[2]);
   doc.setLineWidth(5);
   doc.rect(5, 5, w - 10, h - 10);
-
-  // Thin Inner Gold Border
   doc.setDrawColor(Gold[0], Gold[1], Gold[2]);
   doc.setLineWidth(1);
   doc.rect(12, 12, w - 24, h - 24);
 
-  // Decorative Corner Accents (Triangles)
-  doc.setFillColor(NavyBlue[0], NavyBlue[1], NavyBlue[2]);
-  doc.triangle(5, 5, 30, 5, 5, 30, 'F'); // Top Left
-  doc.triangle(w - 5, 5, w - 30, 5, w - 5, 30, 'F'); // Top Right
-  doc.triangle(5, h - 5, 30, h - 5, 5, h - 30, 'F'); // Bottom Left
-  doc.triangle(w - 5, h - 5, w - 30, h - 5, w - 5, h - 30, 'F'); // Bottom Right
-
-  // --- 3. HEADER SECTION ---
+  // --- 3. TITLES ---
   doc.setFont('times', 'bold');
-  doc.setFontSize(12);
-  doc.setTextColor(NavyBlue[0], NavyBlue[1], NavyBlue[2]);
-  doc.text('PREMIUM E-LEARNING ALETHEIA', w / 2, 25, { align: 'center' });
-
   doc.setFontSize(42);
+  doc.setTextColor(NavyBlue[0], NavyBlue[1], NavyBlue[2]);
   doc.text('CERTIFICATE', w / 2, 48, { align: 'center' });
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'normal');
-  doc.text('OF COMPLETION AND ACHIEVEMENT', w / 2, 58, { align: 'center', charSpace: 2 });
 
-  // --- 4. RECIPIENT NAME SECTION ---
-  doc.setFontSize(18);
-  doc.setTextColor(LightGray[0], LightGray[1], LightGray[2]);
-  doc.text('This is to certify that', w / 2, 75, { align: 'center' });
-
+  // --- 4. RECIPIENT ---
   const learnerId = cert.enrollment?.userId || cert.enrollment?.user_id;
   const studentName = (this.getUserName(learnerId) || 'Valued Student').toUpperCase();
-  
   doc.setFont('times', 'bolditalic');
   doc.setFontSize(52);
   doc.setTextColor(Gold[0], Gold[1], Gold[2]);
   doc.text(studentName, w / 2, 95, { align: 'center' });
 
-  // --- 5. COURSE DETAILS ---
-  doc.setFont('helvetica', 'normal');
-  doc.setFontSize(18);
-  doc.setTextColor(LightGray[0], LightGray[1], LightGray[2]);
-  doc.text('has successfully demonstrated proficiency in the course:', w / 2, 112, { align: 'center' });
-
-  const courseTitle = cert.enrollment?.course?.title || 'Professional Certification Program';
+  // --- 5. COURSE ---
+  const courseTitle = cert.enrollment?.course?.title || 'Professional Certification';
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(28);
   doc.setTextColor(NavyBlue[0], NavyBlue[1], NavyBlue[2]);
   doc.text(courseTitle, w / 2, 128, { align: 'center' });
 
-  // Optional: Add Score if available
-  if (cert.score) {
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'italic');
-    doc.text(`Final Grade: ${cert.score}%`, w / 2, 138, { align: 'center' });
-  }
-
-  // --- 6. SIGNATURE & AUTHORITY ---
+  // --- 6. EMERGENCY SIGNATURE LOGIC ---
   const footerY = h - 45;
-  
-  // Signature Line (Left)
   doc.setDrawColor(LightGray[0], LightGray[1], LightGray[2]);
   doc.setLineWidth(0.5);
   doc.line(40, footerY + 10, 100, footerY + 10);
 
-  // Load Admin Signature
-  let sig = this.usersList.find(u => u.id === this.selectedUserId)?.signature;
-  if (sig) {
+  // LOGS FOR DEBUGGING (Open F12 to see these)
+  console.log("PDF Generation Started...");
+  console.log("Current Users List Length:", this.usersList.length);
+  console.log("Selected Admin ID:", this.selectedUserId);
+
+  // SEARCH LOGIC
+  // 1. Try the selected ID
+  let signee = this.usersList.find(u => u.id === this.selectedUserId);
+
+  // 2. If nothing selected or user has no signature, find the first person in DB who HAS a signature
+  if (!signee || !signee.signature) {
+    console.log("Target user not found or has no signature. Searching for fallback...");
+    signee = this.usersList.find(u => u.signature && u.signature.startsWith('data:image'));
+  }
+
+  if (signee && signee.signature) {
+    console.log("✅ Signature found for user:", signee.prenom);
     try {
-      doc.addImage(sig, 'PNG', 45, footerY - 15, 50, 25);
+      // Use the signature string directly from DB
+      doc.addImage(signee.signature, 'PNG', 45, footerY - 15, 50, 25);
     } catch (e) {
-      console.warn("Signature image error:", e);
+      console.error("❌ jsPDF failed to draw signature:", e);
     }
+  } else {
+    console.error("❌ CRITICAL: No signature data found in usersList at all!");
   }
 
   doc.setFont('helvetica', 'bold');
@@ -298,28 +309,19 @@ private async generateCertificateContent(cert: any): Promise<jsPDF> {
   doc.setTextColor(NavyBlue[0], NavyBlue[1], NavyBlue[2]);
   doc.text('DIRECTOR OF EDUCATION', 70, footerY + 16, { align: 'center' });
 
-  // --- 7. VERIFICATION (QR CODE) ---
-  const qrSize = 30;
-  const qrX = w - 40 - (qrSize / 2);
-  const qrY = footerY - 15;
+  // --- 7. QR CODE ---
+  try {
+    const qrData = await QRCode.toDataURL(`http://localhost:4200/verify/${cert.certificateCode}`);
+    doc.addImage(qrData, 'PNG', w - 50, footerY - 15, 30, 30);
+  } catch (e) {}
 
-  const qrData = await QRCode.toDataURL(`http://localhost:4200/verify/${cert.certificateCode}`);
-  doc.addImage(qrData, 'PNG', qrX, qrY, qrSize, qrSize);
-  
-  doc.setFontSize(8);
-  doc.setTextColor(LightGray[0], LightGray[1], LightGray[2]);
-  doc.text('SCAN TO VERIFY', qrX + (qrSize / 2), qrY + qrSize + 5, { align: 'center' });
-
-  // --- 8. FOOTER METADATA ---
-  doc.setFont('courier', 'normal');
+  // --- 8. FOOTER ---
   doc.setFontSize(9);
-  const date = cert.issuedAt || new Date().toISOString().split('T')[0];
-  doc.text(`Issued on: ${date}`, 15, h - 15);
-  doc.text(`Certificate ID: ${cert.certificateCode}`, w - 15, h - 15, { align: 'right' });
+  doc.text(`Issued on: ${cert.issuedAt}`, 15, h - 15);
+  doc.text(`ID: ${cert.certificateCode}`, w - 15, h - 15, { align: 'right' });
 
   return doc;
 }
-
 async savePDFToDatabase(cert: any) {
   // 1. Generate the PDF object
   const doc = await this.generateCertificateContent(cert);
@@ -374,4 +376,34 @@ async savePDFToDatabase(cert: any) {
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     if (modalInstance) modalInstance.hide();
   }
+   predictCertificationSuccess() {
+    if (!this.selectedSuccessUserId) return;
+
+    this.isPredicting = true;
+    this.successResult = null;
+
+    // Simulate calling a Deep Learning API (e.g., Python Flask with TensorFlow)
+    // In production, use: this.http.post('api/predict', { userId: this.selectedSuccessUserId })
+    setTimeout(() => {
+      const randomScore = Math.floor(Math.random() * 61) + 40; // Simulated result between 40 and 100
+      
+      let recommendation = "";
+      if (randomScore > 85) recommendation = "Student is highly likely to pass. Recommend immediate certification.";
+      else if (randomScore > 65) recommendation = "On track. Suggest one final review of Course Module 4.";
+      else recommendation = "High risk of failure. Recommend intervention and additional tutoring.";
+
+      this.successResult = {
+        score: randomScore,
+        recommendation: recommendation
+      };
+      this.isPredicting = false;
+    }, 2000);
+  }
+
+  getProbabilityColor(score: number): string {
+    if (score > 80) return 'success';
+    if (score > 60) return 'warning';
+    return 'danger';
+  }
+
 }

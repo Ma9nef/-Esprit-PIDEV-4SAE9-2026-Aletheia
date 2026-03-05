@@ -11,19 +11,8 @@ import { filter } from 'rxjs/operators';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
+
 export class NavbarComponent implements OnInit {
-goToAssessments() {
-
-  const role = localStorage.getItem('role'); // or from your auth service
-
-  if (role === 'ADMIN') {
-    this.router.navigate(['/manage-assessments']);
-  } 
-  else if (role === 'LEARNER') {
-    this.router.navigate(['/assessment']);
-  }
-
-}
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
 
@@ -50,12 +39,7 @@ goToAssessments() {
     }
   
     this.currentUser.email = u.email;
-    // if the token contains first/last name use them, otherwise fall back to email prefix
-    if (u.prenom || u.nom) {
-      this.currentUser.name = `${u.prenom || ''} ${u.nom || ''}`.trim();
-    } else {
-      this.currentUser.name = u.email.split('@')[0];
-    }
+    this.currentUser.name = u.email.split('@')[0];
   }
 
   menuItems = [
@@ -95,7 +79,40 @@ goToAssessments() {
         this.searchQuery = query || '';
       });
   }
+  get isAdmin(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
+    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
+  }
+   onMyCertificatesClick(): void {
+     const role = localStorage.getItem('role'); // or from your auth service
 
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-certificates']);
+  } 
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/my-certificates']);
+  }
+ 
+ 
+}
+ goToAssessments() {
+
+  const role = localStorage.getItem('role'); // or from your auth service
+
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-assessments']);
+  } 
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/assessment']);
+  }
+
+} 
+  get isInstructor(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
+    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  }
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {
@@ -134,14 +151,9 @@ goToAssessments() {
   }
 
   onMyCoursesClick(): void {
-    this.router.navigate(['/front/my-courses']);
+    this.router.navigate(['front/courses']);
     this.isUserDropdownOpen = false;
   }
-  onMyCertificatesClick(): void {
- 
-  this.router.navigate(['/my-certificates']); 
-  this.isUserDropdownOpen = false;
-}
 
   onLogout(): void {
     this.auth.logout();                  // remove token

@@ -15,15 +15,20 @@ export class HomeComponent {
   onSearchSubmit(): void {
     const query = this.searchControl.value?.trim();
     if (query) {
-      this.router.navigate(['/courses'], { queryParams: { search: query } });
+      // ✅ goes to CatalogComponent (course list)
+      this.router.navigate(['/front/courses'], { queryParams: { search: query } });
+    } else {
+      this.router.navigate(['/front/courses']);
     }
   }
 
   navigateToCourses(): void {
-    this.router.navigate(['/courses']);
+    // ✅ goes to CatalogComponent (course list)
+    this.router.navigate(['/front/courses']);
   }
 
   navigateToLiveSessions(): void {
+    // ⚠️ Only keep this if you REALLY have this route in AppRoutingModule
     this.router.navigate(['/live-sessions']);
   }
 }
