@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CourseApiService, CoursePublicDTO } from '../../core/services/course-api.service';
+import {
+  CourseApiService,
+  CoursePublicDTO,
+  EnrollmentDTO
+} from '../../core/services/course-api.service';
 
 @Component({
   selector: 'app-course-details',
@@ -9,6 +13,7 @@ import { CourseApiService, CoursePublicDTO } from '../../core/services/course-ap
 export class CourseDetailsComponent implements OnInit {
 
   course: CoursePublicDTO | null = null;
+
   loading = false;
   error = '';
 
@@ -23,6 +28,7 @@ export class CourseDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     const courseId = Number(this.route.snapshot.paramMap.get('id'));
+
     if (!courseId) {
       this.router.navigate(['/front/courses']);
       return;
@@ -34,8 +40,6 @@ export class CourseDetailsComponent implements OnInit {
       next: (data) => {
         this.course = data;
         this.loading = false;
-
-        // Check enrollment after course is loaded
         this.checkEnrollment(courseId);
       },
       error: () => {
@@ -47,14 +51,10 @@ export class CourseDetailsComponent implements OnInit {
 
   private checkEnrollment(courseId: number): void {
     this.courseApi.myEnrollments().subscribe({
-      next: (enrollments) => {
-        const enrolled = enrollments.some(e => (e.course?.id ?? e.courseId) === courseId);
-
-        if (enrolled) {
-          this.isEnrolled = true;
-          // ✅ redirect directly to learning
-          this.router.navigate(['/front/courses', courseId, 'learn']);
-        }
+      next: (enrollments: EnrollmentDTO[]) => {
+        this.isEnrolled = enrollments.some(e =>
+          (e.course?.id ?? e.courseId) === courseId
+        );
       },
       error: () => {
         // not logged in -> ignore
@@ -63,18 +63,17 @@ export class CourseDetailsComponent implements OnInit {
   }
 
   enroll(): void {
-    if (!this.course || this.isEnrolled) return;
+    if (!this.course || this.enrolling) return;
 
     this.enrolling = true;
-    const courseId = this.course.id;
 
-    this.courseApi.enroll(courseId).subscribe({
+    this.courseApi.enroll(this.course.id).subscribe({
       next: () => {
         this.isEnrolled = true;
         this.enrolling = false;
 
-        // ✅ redirect to learning
-        this.router.navigate(['/front/courses', courseId, 'learn']);
+        // ✅ after enroll → go to lessons
+        this.goToLearning();
       },
       error: (err) => {
         this.enrolling = false;
@@ -85,15 +84,21 @@ export class CourseDetailsComponent implements OnInit {
         }
 
         if (err.status === 409) {
-          // already enrolled -> redirect anyway
+          // already enrolled
           this.isEnrolled = true;
-          this.router.navigate(['/front/courses', courseId, 'learn']);
+          this.goToLearning();
           return;
         }
 
         this.error = 'Enrollment failed.';
       }
     });
+  }
+
+  goToLearning(): void {
+    if (!this.course) return;
+
+    this.router.navigate(['/front/courses', this.course.id, 'learn']);
   }
 
   back(): void {

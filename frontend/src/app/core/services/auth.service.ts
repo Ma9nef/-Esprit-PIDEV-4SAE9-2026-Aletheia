@@ -6,8 +6,6 @@ export type JwtUser = {
   id: number;
   email: string;
   role: string;
-  prenom?: string; // first name (may be absent if token doesn't include it)
-  nom?: string;    // last name
 };
 
 @Injectable({ providedIn: 'root' })
@@ -57,15 +55,7 @@ export class AuthService {
       return {
         id: Number(payload.id),
         email: String(payload.sub),     // subject = email
-        role: String(payload.role),
-        prenom: payload.prenom ? String(payload.prenom) :
-                payload.firstName ? String(payload.firstName) :
-                payload.given_name ? String(payload.given_name) :
-                undefined,
-        nom: payload.nom ? String(payload.nom) :
-             payload.lastName ? String(payload.lastName) :
-             payload.family_name ? String(payload.family_name) :
-             undefined
+        role: String(payload.role)
       };
     } catch {
       return null;

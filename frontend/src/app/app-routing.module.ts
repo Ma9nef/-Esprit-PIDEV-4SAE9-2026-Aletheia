@@ -11,11 +11,13 @@ import { TrainerDashboardComponent } from './back-office/trainer-dashboard/train
 import { AdminDashboardComponent } from './back-office/admin-dashboard/admin-dashboard.component';
 import { CatalogComponent } from './front-office/catalog/catalog.component';
 import { CourseDetailsComponent } from './front-office/course-details/course-details.component';
+import { CourseLearningComponent } from './front-office/course-learning/course-learning.component';
+import { ManageCoursesComponent } from './back-office/manage-courses/manage-courses.component';
 import { ManageAssessmentsComponent } from './back-office/manage-assessments/manage-assessments.component';
-import { AssessmentFormComponent } from './back-office/assessment-form/assessment-form.component';
-import { LearnerCertificatesComponent } from './front-office/learner-certificates/learner-certificates.component';
 import { VerifyCertificateComponent } from './front-office/verify-certificate/verify-certificate.component';
+import { AssessmentFormComponent } from './back-office/assessment-form/assessment-form.component';
 import { ManageCertificatesComponent } from './back-office/manage-certificates/manage-certificates.component';
+import { LearnerCertificatesComponent } from './front-office/learner-certificates/learner-certificates.component';
 import { LearnerAssessmentComponent } from './front-office/learner-assessment/learner-assessment.component';
 
 const routes: Routes = [
@@ -29,13 +31,17 @@ const routes: Routes = [
   {path: 'dashboardAdmin', component:AdminDashboardComponent },
   { path: 'front/courses', component: CatalogComponent },
   { path: 'front/course-details/:id', component: CourseDetailsComponent },
-    {path: 'manage-assessments', component:ManageAssessmentsComponent },
+  { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
+  {path: 'back-office/manage-courses',component: ManageCoursesComponent},
+     {path: 'manage-assessments', component:ManageAssessmentsComponent },
   { path: 'verify/:code', component: VerifyCertificateComponent },
     { path: 'add-assessment', component: AssessmentFormComponent }, 
      { path: 'manage-certificates', component: ManageCertificatesComponent },
   { path: 'edit-assessment/:id', component: AssessmentFormComponent  },
   { path: 'my-certificates', component: LearnerCertificatesComponent }, 
-   { path: 'assessment', component: LearnerAssessmentComponent }, 
+   { path: 'assessment', component: LearnerAssessmentComponent },
+  {path: 'back-office',loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)},
+
   {
     path: 'auth',
     loadChildren: () =>

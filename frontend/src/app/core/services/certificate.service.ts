@@ -7,6 +7,9 @@ import { Certificate } from '../models/certificate.model';
   providedIn: 'root'
 })
 export class CertificateService {
+predictSuccess(userId: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/ai/predict/${userId}`);
+}
  
  
 
@@ -37,15 +40,11 @@ uploadCertificatePdf(id: number, blob: Blob): Observable<string> {
    updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {
     return this.http.put<Certificate>(`${this.apiUrl}/update/${id}`, certificate);
   }
-  addCertificate(enrollmentId: number): Observable<string> {
-    // On ajoute { responseType: 'text' as 'json' } pour dire à Angular 
-    // de ne pas essayer de parser le retour comme du JSON.
-    return this.http.post<string>(
-      `${this.apiUrl}/generate/${enrollmentId}`, 
-      {}, 
-      { responseType: 'text' as 'json' }
-    );
-  }
+// Angular Service (Your current code)
+addCertificate(enrollmentId: number): Observable<any> {
+    // REMOVE responseType: 'text'. Your controller returns a JSON Map.
+    return this.http.post<any>(`${this.apiUrl}/generate/${enrollmentId}`, {});
+}
   // Call the modern export
 downloadModernPdf(id: number): Observable<Blob> {
   return this.http.get(`${this.apiUrl}/export-modern/${id}`, { responseType: 'blob' });
