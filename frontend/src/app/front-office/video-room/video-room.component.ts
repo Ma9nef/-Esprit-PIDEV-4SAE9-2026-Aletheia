@@ -66,6 +66,11 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   participantSearch: string = '';
   isTyping: boolean = false;
 
+  // ==================== TYPING INDICATOR PROPERTIES ====================
+  typingUsers: Set<string> = new Set();
+  private typingTimeout: any = null;
+  private typingDebounceTime = 1000; // 1 seconde sans taper = arrêt
+
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -122,6 +127,54 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         isOwn: false
       });
     }, 1000);
+  }
+
+  // ==================== TYPING INDICATOR METHODS ====================
+
+  onTyping() {
+    // Envoyer un signal de frappe
+    this.safeSendWebSocket({
+      type: 'typing',
+      isTyping: true,
+      name: this.username
+    });
+
+    // Clear previous timeout
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+    }
+
+    // Set new timeout to stop typing after 1 second of inactivity
+    this.typingTimeout = setTimeout(() => {
+      this.onStopTyping();
+    }, this.typingDebounceTime);
+  }
+
+  onStopTyping() {
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+      this.typingTimeout = null;
+    }
+
+    this.safeSendWebSocket({
+      type: 'typing',
+      isTyping: false,
+      name: this.username
+    });
+  }
+
+  getTypingUsersList(): string[] {
+    return Array.from(this.typingUsers);
+  }
+
+  getTypingMessage(): string {
+    const typingList = Array.from(this.typingUsers);
+    
+    if (typingList.length === 0) return '';
+    if (typingList.length === 1) return `${typingList[0]} écrit...`;
+    if (typingList.length === 2) return `${typingList[0]} et ${typingList[1]} écrivent...`;
+    
+    return `${typingList[0]} et ${typingList.length - 1} autres personnes écrivent...`;
   }
 
   // ==================== WEBSOCKET AVEC API GATEWAY ====================
@@ -213,6 +266,20 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // ===== TYPING INDICATOR =====
+    if (data.type === 'typing') {
+      this.ngZone.run(() => {
+        const userName = data.name || 'Quelqu\'un';
+        
+        if (data.isTyping) {
+          this.typingUsers.add(userName);
+        } else {
+          this.typingUsers.delete(userName);
+        }
+      });
+      return;
+    }
+
     switch (data.type) {
       case 'chat':
         const isOwn = data.from === this.wsId;
@@ -223,6 +290,11 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
           isOwn: isOwn
         });
         this.scrollChatToBottom();
+        
+        // Arrêter le typing quand on reçoit un message
+        if (!isOwn && this.typingUsers.has(data.name)) {
+          this.typingUsers.delete(data.name);
+        }
         break;
 
       case 'existing-user':
@@ -308,6 +380,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         console.log(`👋 Utilisateur parti: ${data.name} (${data.id})`);
         
         this.participants = this.participants.filter(p => p.id !== data.id);
+        this.typingUsers.delete(data.name); // Supprimer des typing users
         
         this.ngZone.run(() => {
           this.removeUserVideo(data.id);
@@ -680,6 +753,8 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   toggleParticipants() {
     this.showParticipants = !this.showParticipants;
   }
+  
+  /*
 
   sendMessage() {
     if (this.newMessage.trim()) {
@@ -689,9 +764,41 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         name: this.username
       });
       
+      // Arrêter le typing après envoi
+      this.onStopTyping();
+      
       this.newMessage = '';
     }
   }
+*/
+
+sendMessage() {
+  if (this.newMessage.trim()) {
+    const messageText = this.newMessage;
+    const messageData = {
+      type: 'chat',
+      message: messageText,
+      name: this.username
+    };
+    
+    // AJOUTER LE MESSAGE LOCALEMENT IMMÉDIATEMENT
+    this.messages.push({
+      sender: this.username,
+      text: messageText,
+      time: new Date().toLocaleTimeString(),
+      isOwn: true  // Important : marquer comme "mon message"
+    });
+    
+    // Envoyer via WebSocket
+    this.safeSendWebSocket(messageData);
+    
+    // Arrêter le typing après envoi
+    this.onStopTyping();
+    
+    this.newMessage = '';
+    this.scrollChatToBottom();
+  }
+}
 
   scrollChatToBottom() {
     setTimeout(() => {
@@ -1118,15 +1225,20 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   }
 
   onChatFocus() {
-    // Indiquer que l'utilisateur tape
+    this.onTyping();
   }
 
   onChatBlur() {
+    this.onStopTyping();
     this.isTyping = false;
   }
 
   ngOnDestroy() {
     console.log('🧹 Nettoyage complet du composant');
+    
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+    }
     
     if (this.reconnectInterval) {
       clearTimeout(this.reconnectInterval);

@@ -73,6 +73,18 @@
             <span class="time">{{ msg.time }}</span>
           </div>
         </div>
+
+        <!-- Indicateur de frappe -->
+<div class="typing-indicator" *ngIf="typingUsers.size > 0">
+  <div class="typing-content">
+    <span class="typing-text">{{ getTypingMessage() }}</span>
+    <span class="typing-dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </span>
+  </div>
+</div>
         <div class="chat-input">
           <input 
             type="text" 
