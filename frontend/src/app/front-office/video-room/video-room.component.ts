@@ -13,7 +13,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
 
   @ViewChild('chatMessages') chatMessagesRef!: ElementRef;
 
-  // Propriétés WebRTC
+  // WebRTC properties
   peers: { [key: string]: RTCPeerConnection } = {};
   localStream!: MediaStream;
   private ws!: WebSocket;
@@ -24,7 +24,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   peerNames: { [key: string]: string } = {};
   processingOffers: { [key: string]: boolean } = {};
   
-  // Propriétés UI
+  // UI properties
   peerCount: number = 0;
   microEnabled: boolean = true;
   cameraEnabled: boolean = true;
@@ -53,7 +53,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
 
   private removingPeers: Set<string> = new Set();
 
-  // WebSocket améliorations
+  // WebSocket improvements
   private messageQueue: any[] = [];
   private reconnectAttempts = 0;
   private maxReconnectAttempts = 5;
@@ -62,14 +62,14 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   private token: string | null = null;
   private isAuthenticated = false;
 
-  // Propriétés supplémentaires
+  // Additional properties
   participantSearch: string = '';
   isTyping: boolean = false;
 
   // ==================== TYPING INDICATOR PROPERTIES ====================
   typingUsers: Set<string> = new Set();
   private typingTimeout: any = null;
-  private typingDebounceTime = 1000; // 1 seconde sans taper = arrêt
+  private typingDebounceTime = 1000; // 1 second without typing = stop
 
   constructor(
     private route: ActivatedRoute,
@@ -81,12 +81,12 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.coursId = this.route.snapshot.paramMap.get('id');
     this.token = localStorage.getItem('token');
-    this.username = localStorage.getItem('username') || 'Moi';
+    this.username = localStorage.getItem('username') || 'Me';
 
-    console.log('🚀 Initialisation avec username:', this.username);
-    console.log('🔑 Token présent:', !!this.token);
+    console.log('🚀 Initializing with username:', this.username);
+    console.log('🔑 Token present:', !!this.token);
 
-    // Initialiser WebSocket
+    // Initialize WebSocket
     this.initWebSocket();
 
     try {
@@ -98,20 +98,20 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         }, 
         audio: true 
       });
-      console.log('📹 Stream local obtenu');
+      console.log('📹 Local stream obtained');
       
       this.addVideo(this.localStream, this.username, true, 'local');
       
       this.participants.push({
         id: 'local',
-        name: `${this.username} (Moi)`,
+        name: `${this.username} (Me)`,
         isSpeaking: false,
         audioMuted: false,
         videoMuted: false
       });
     } catch (error) {
-      console.error('❌ Erreur accès caméra:', error);
-      alert('Impossible d\'accéder à la caméra/microphone');
+      console.error('❌ Camera access error:', error);
+      alert('Unable to access camera/microphone');
     }
 
     this.setupAudioDetection();
@@ -121,8 +121,8 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   ngAfterViewInit() {
     setTimeout(() => {
       this.messages.push({
-        sender: 'Système',
-        text: '👋 Bienvenue dans la salle ! Vous pouvez maintenant discuter.',
+        sender: 'System',
+        text: '👋 Welcome to the room! You can now chat.',
         time: new Date().toLocaleTimeString(),
         isOwn: false
       });
@@ -132,7 +132,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   // ==================== TYPING INDICATOR METHODS ====================
 
   onTyping() {
-    // Envoyer un signal de frappe
+    // Send typing signal
     this.safeSendWebSocket({
       type: 'typing',
       isTyping: true,
@@ -171,13 +171,13 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     const typingList = Array.from(this.typingUsers);
     
     if (typingList.length === 0) return '';
-    if (typingList.length === 1) return `${typingList[0]} écrit...`;
-    if (typingList.length === 2) return `${typingList[0]} et ${typingList[1]} écrivent...`;
+    if (typingList.length === 1) return `${typingList[0]} is typing...`;
+    if (typingList.length === 2) return `${typingList[0]} and ${typingList[1]} are typing...`;
     
-    return `${typingList[0]} et ${typingList.length - 1} autres personnes écrivent...`;
+    return `${typingList[0]} and ${typingList.length - 1} others are typing...`;
   }
 
-  // ==================== WEBSOCKET AVEC API GATEWAY ====================
+  // ==================== WEBSOCKET WITH API GATEWAY ====================
 
   initWebSocket() {
     if (this.ws) {
@@ -187,50 +187,50 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     }
     
     if (!this.coursId || !this.token) {
-        console.error('❌ coursId ou token manquant');
-        this.showConnectionError('Identifiants de session manquants');
+        console.error('❌ Missing coursId or token');
+        this.showConnectionError('Missing session credentials');
         return;
     }
     
-    console.log('🔑 Token utilisé:', this.token.substring(0, 20) + '...');
+    console.log('🔑 Token used:', this.token.substring(0, 20) + '...');
     
     const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;
-    console.log('🔌 Tentative de connexion WebSocket à:', wsUrl);
+    console.log('🔌 Attempting WebSocket connection to:', wsUrl);
     
     try {
         this.ws = new WebSocket(wsUrl);
         
         this.ws.onopen = () => {
-            console.log("✅ Connecté à l'API Gateway");
+            console.log("✅ Connected to API Gateway");
             this.reconnectAttempts = 0;
             
             const authMessage = {
                 type: 'auth',
                 token: this.token
             };
-            console.log('📤 Envoi authentification...');
+            console.log('📤 Sending authentication...');
             this.ws.send(JSON.stringify(authMessage));
         };
         
         this.ws.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                console.log('📩 Message reçu:', data);
+                console.log('📩 Message received:', data);
                 this.handleWebSocketMessage(data);
             } catch (error) {
-                console.error('❌ Erreur parsing message:', error);
+                console.error('❌ Error parsing message:', error);
             }
         };
         
         this.ws.onerror = (error) => {
-            console.error("❌ Erreur WebSocket:", error);
+            console.error("❌ WebSocket error:", error);
         };
         
         this.ws.onclose = (event) => {
-            console.log(`🔌 Connexion WebSocket fermée: ${event.reason || 'Inconnue'} (code: ${event.code})`);
+            console.log(`🔌 WebSocket connection closed: ${event.reason || 'Unknown'} (code: ${event.code})`);
             
             if (event.code === 1006) {
-                console.log('⚠️ Code 1006 = Authentification probablement refusée ou timeout');
+                console.log('⚠️ Code 1006 = Authentication probably refused or timeout');
             }
             
             if (event.code !== 1000 && this.reconnectAttempts < this.maxReconnectAttempts) {
@@ -239,21 +239,21 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         };
         
     } catch (error) {
-        console.error('❌ Erreur création WebSocket:', error);
-        this.showConnectionError('Impossible de créer la connexion');
+        console.error('❌ Error creating WebSocket:', error);
+        this.showConnectionError('Unable to create connection');
     }
   }
 
   private handleWebSocketMessage(data: any) {
-    console.log('📩 Message reçu:', data);
+    console.log('📩 Message received:', data);
 
     if (data.type === 'your-id') {
       this.wsId = data.id;
-      console.log('🆔 Mon ID reçu du serveur:', this.wsId);
+      console.log('🆔 My ID received from server:', this.wsId);
       this.isAuthenticated = true;
       
       setTimeout(() => {
-        console.log('📤 Rejoindre la salle...');
+        console.log('📤 Joining room...');
         this.safeSendWebSocket({
           type: 'join',
           name: this.username
@@ -269,7 +269,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     // ===== TYPING INDICATOR =====
     if (data.type === 'typing') {
       this.ngZone.run(() => {
-        const userName = data.name || 'Quelqu\'un';
+        const userName = data.name || 'Someone';
         
         if (data.isTyping) {
           this.typingUsers.add(userName);
@@ -284,14 +284,14 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
       case 'chat':
         const isOwn = data.from === this.wsId;
         this.messages.push({
-          sender: data.name || 'Inconnu',
+          sender: data.name || 'Unknown',
           text: data.message,
           time: new Date().toLocaleTimeString(),
           isOwn: isOwn
         });
         this.scrollChatToBottom();
         
-        // Arrêter le typing quand on reçoit un message
+        // Stop typing when receiving a message
         if (!isOwn && this.typingUsers.has(data.name)) {
           this.typingUsers.delete(data.name);
         }
@@ -313,7 +313,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         }
         
         if (data.id !== this.wsId && !this.peers[data.id] && !this.processingOffers[data.id]) {
-          console.log(`🔄 Création peer pour ${data.name}`);
+          console.log(`🔄 Creating peer for ${data.name}`);
           this.processingOffers[data.id] = true;
           setTimeout(() => {
             this.createPeerAndSendOffer(data.id, data.name);
@@ -348,10 +348,10 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
               });
             })
             .catch(err => {
-              console.error('❌ Erreur traitement offre:', err);
+              console.error('❌ Error processing offer:', err);
             });
         } catch (err) {
-          console.error('❌ Erreur traitement offre:', err);
+          console.error('❌ Error processing offer:', err);
         }
         break;
 
@@ -362,7 +362,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         if (this.peers[data.from]) {
           this.peers[data.from].setRemoteDescription(new RTCSessionDescription(data.answer))
             .catch(err => {
-              console.error('❌ Erreur traitement answer:', err);
+              console.error('❌ Error processing answer:', err);
             });
         }
         break;
@@ -371,23 +371,23 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         if (data.from !== this.wsId && this.peers[data.from]) {
           this.peers[data.from].addIceCandidate(new RTCIceCandidate(data.candidate))
             .catch(err => {
-              console.error('❌ Erreur ajout candidat ICE:', err);
+              console.error('❌ Error adding ICE candidate:', err);
             });
         }
         break;
 
       case 'user-left':
-        console.log(`👋 Utilisateur parti: ${data.name} (${data.id})`);
+        console.log(`👋 User left: ${data.name} (${data.id})`);
         
         this.participants = this.participants.filter(p => p.id !== data.id);
-        this.typingUsers.delete(data.name); // Supprimer des typing users
+        this.typingUsers.delete(data.name); // Remove from typing users
         
         this.ngZone.run(() => {
           this.removeUserVideo(data.id);
           
           this.messages.push({
-            sender: 'Système',
-            text: `👋 ${data.name} a quitté la salle`,
+            sender: 'System',
+            text: `👋 ${data.name} left the room`,
             time: new Date().toLocaleTimeString(),
             isOwn: false
           });
@@ -421,12 +421,12 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
         this.ws.send(JSON.stringify(data));
         return true;
       } catch (error) {
-        console.error('❌ Erreur envoi WebSocket:', error);
+        console.error('❌ WebSocket send error:', error);
         this.addToMessageQueue(data);
         return false;
       }
     } else {
-      console.warn(`⚠️ WebSocket non disponible (état: ${this.ws?.readyState}, auth: ${this.isAuthenticated}), message mis en file d'attente`);
+      console.warn(`⚠️ WebSocket unavailable (state: ${this.ws?.readyState}, auth: ${this.isAuthenticated}), message queued`);
       this.addToMessageQueue(data);
       
       if (!this.ws || this.ws.readyState === WebSocket.CLOSED) {
@@ -439,13 +439,13 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
 
   private addToMessageQueue(data: any) {
     this.messageQueue.push(data);
-    console.log(`📦 Message mis en file d'attente (${this.messageQueue.length} messages en attente)`);
+    console.log(`📦 Message queued (${this.messageQueue.length} messages waiting)`);
   }
 
   private processMessageQueue() {
     if (this.messageQueue.length === 0) return;
     
-    console.log(`🔄 Traitement de ${this.messageQueue.length} messages en attente...`);
+    console.log(`🔄 Processing ${this.messageQueue.length} queued messages...`);
     
     while (this.messageQueue.length > 0) {
       const message = this.messageQueue.shift();
@@ -467,27 +467,27 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
       this.reconnectAttempts++;
       const delay = Math.min(10000 * Math.pow(2, this.reconnectAttempts), 30000);
       
-      console.log(`🔄 Tentative de reconnexion ${this.reconnectAttempts}/${this.maxReconnectAttempts} dans ${delay}ms`);
+      console.log(`🔄 Reconnection attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts} in ${delay}ms`);
       
       if (this.reconnectAttempts === 1) {
         this.messages.push({
-          sender: 'Système',
-          text: '🔄 Connexion perdue, tentative de reconnexion...',
+          sender: 'System',
+          text: '🔄 Connection lost, attempting to reconnect...',
           time: new Date().toLocaleTimeString(),
           isOwn: false
         });
       }
       
       this.reconnectInterval = setTimeout(() => {
-        console.log(`🔄 Reconnexion... (tentative ${this.reconnectAttempts})`);
+        console.log(`🔄 Reconnecting... (attempt ${this.reconnectAttempts})`);
         this.isAuthenticated = false;
         this.initWebSocket();
       }, delay);
     } else {
-      console.error('❌ Maximum de tentatives de reconnexion atteint');
+      console.error('❌ Maximum reconnection attempts reached');
       this.messages.push({
-        sender: 'Système',
-        text: '❌ Impossible de se reconnecter. Veuillez rafraîchir la page.',
+        sender: 'System',
+        text: '❌ Unable to reconnect. Please refresh the page.',
         time: new Date().toLocaleTimeString(),
         isOwn: false
       });
@@ -496,8 +496,8 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
 
   showConnectionError(message: string) {
     this.messages.push({
-      sender: 'Système',
-      text: `⚠️ Erreur de connexion: ${message}. Vérifiez que l'API Gateway est démarrée sur http://localhost:8090`,
+      sender: 'System',
+      text: `⚠️ Connection error: ${message}. Check that the API Gateway is running on http://localhost:8090`,
       time: new Date().toLocaleTimeString(),
       isOwn: false
     });
@@ -509,16 +509,16 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     try {
       await this.faceDetectionService.checkHealth().toPromise();
       this.mlServiceAvailable = true;
-      console.log('✅ ML Service disponible');
+      console.log('✅ ML Service available');
     } catch (error) {
       this.mlServiceAvailable = false;
-      console.error('❌ ML Service non disponible');
+      console.error('❌ ML Service unavailable');
     }
   }
 
   toggleFaceDetection() {
     if (!this.mlServiceAvailable) {
-      alert('Service ML non disponible. Vérifiez que l\'API FastAPI est lancée sur http://localhost:8000');
+      alert('ML Service unavailable. Check that FastAPI is running on http://localhost:8000');
       return;
     }
     
@@ -540,7 +540,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
       this.captureAndDetectFace();
     }, 5000);
     
-    console.log('🔄 Face detection démarrée');
+    console.log('🔄 Face detection started');
   }
 
   stopFaceDetection() {
@@ -548,7 +548,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
       clearInterval(this.faceDetectionInterval);
       this.faceDetectionInterval = null;
     }
-    console.log('⏹️ Face detection arrêtée');
+    console.log('⏹️ Face detection stopped');
   }
 
   captureAndDetectFace() {
@@ -559,7 +559,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     }
     
     if (!videoElement) {
-      console.log('⚠️ Aucune vidéo trouvée');
+      console.log('⚠️ No video found');
       return;
     }
     
@@ -595,7 +595,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
           });
         },
         error: (error) => {
-          console.error('❌ Erreur face detection:', error);
+          console.error('❌ Face detection error:', error);
         }
       });
     }, 'image/jpeg', 0.7);
@@ -603,11 +603,11 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
 
   showFaceDetectionWarning(result: FaceDetectionResult) {
     const warningMessage = result.class_name === 'covered' 
-      ? '⚠️ Attention: Visage partiellement couvert détecté' 
-      : '⚠️ Attention: Aucun visage détecté';
+      ? '⚠️ Warning: Partially covered face detected' 
+      : '⚠️ Warning: No face detected';
     
     this.messages.push({
-      sender: 'Système',
+      sender: 'System',
       text: warningMessage,
       time: new Date().toLocaleTimeString(),
       isOwn: false
@@ -718,7 +718,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
           screenBtn.classList.add('active');
         }
       } catch (error) {
-        console.error('Erreur partage écran:', error);
+        console.error('Screen sharing error:', error);
       }
     } else {
       this.stopScreenSharing();
@@ -754,51 +754,33 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     this.showParticipants = !this.showParticipants;
   }
   
-  /*
-
   sendMessage() {
     if (this.newMessage.trim()) {
-      this.safeSendWebSocket({
+      const messageText = this.newMessage;
+      const messageData = {
         type: 'chat',
-        message: this.newMessage,
+        message: messageText,
         name: this.username
+      };
+      
+      // ADD MESSAGE LOCALLY IMMEDIATELY
+      this.messages.push({
+        sender: this.username,
+        text: messageText,
+        time: new Date().toLocaleTimeString(),
+        isOwn: true  // Important: mark as "my message"
       });
       
-      // Arrêter le typing après envoi
+      // Send via WebSocket
+      this.safeSendWebSocket(messageData);
+      
+      // Stop typing after sending
       this.onStopTyping();
       
       this.newMessage = '';
+      this.scrollChatToBottom();
     }
   }
-*/
-
-sendMessage() {
-  if (this.newMessage.trim()) {
-    const messageText = this.newMessage;
-    const messageData = {
-      type: 'chat',
-      message: messageText,
-      name: this.username
-    };
-    
-    // AJOUTER LE MESSAGE LOCALEMENT IMMÉDIATEMENT
-    this.messages.push({
-      sender: this.username,
-      text: messageText,
-      time: new Date().toLocaleTimeString(),
-      isOwn: true  // Important : marquer comme "mon message"
-    });
-    
-    // Envoyer via WebSocket
-    this.safeSendWebSocket(messageData);
-    
-    // Arrêter le typing après envoi
-    this.onStopTyping();
-    
-    this.newMessage = '';
-    this.scrollChatToBottom();
-  }
-}
 
   scrollChatToBottom() {
     setTimeout(() => {
@@ -841,10 +823,10 @@ sendMessage() {
     this.router.navigate(['/']);
   }
 
-  // ==================== MÉTHODES DE NETTOYAGE AMÉLIORÉES ====================
+  // ==================== IMPROVED CLEANUP METHODS ====================
 
   removeUserVideo(peerId: string) {
-    console.log(`🗑️ Suppression de la vidéo pour ${peerId}`);
+    console.log(`🗑️ Removing video for ${peerId}`);
     
     const container = document.getElementById('videoContainer');
     if (!container) return;
@@ -852,32 +834,32 @@ sendMessage() {
     const wrappers = container.querySelectorAll(`[data-peer-id="${peerId}"]`);
     
     wrappers.forEach(wrapper => {
-      console.log(`🧹 Nettoyage du wrapper pour ${peerId}`);
+      console.log(`🧹 Cleaning wrapper for ${peerId}`);
       
-      // 1. Arrêter l'animation frame
+      // 1. Stop animation frame
       if (this.animationFrames.has(peerId)) {
         cancelAnimationFrame(this.animationFrames.get(peerId)!);
         this.animationFrames.delete(peerId);
-        console.log(`⏹️ Animation frame arrêtée pour ${peerId}`);
+        console.log(`⏹️ Animation frame stopped for ${peerId}`);
       }
       
-      // 2. Fermer et nettoyer l'audio context
+      // 2. Close and clean audio context
       if (this.audioContexts.has(peerId)) {
         this.audioContexts.get(peerId)?.close();
         this.audioContexts.delete(peerId);
-        console.log(`🔇 Audio context fermé pour ${peerId}`);
+        console.log(`🔇 Audio context closed for ${peerId}`);
       }
       
-      // 3. Nettoyer la vidéo
+      // 3. Clean video
       const video = wrapper.querySelector('video');
       if (video) {
-        console.log(`🎥 Nettoyage de la vidéo pour ${peerId}`);
+        console.log(`🎥 Cleaning video for ${peerId}`);
         
         if (video.srcObject) {
           const stream = video.srcObject as MediaStream;
           stream.getTracks().forEach(track => {
             track.stop();
-            console.log(`⏹️ Piste arrêtée: ${track.kind}`);
+            console.log(`⏹️ Track stopped: ${track.kind}`);
           });
           video.srcObject = null;
         }
@@ -891,14 +873,14 @@ sendMessage() {
         }
       }
       
-      // 4. Supprimer le wrapper du DOM
+      // 4. Remove wrapper from DOM
       wrapper.remove();
-      console.log(`✅ Wrapper supprimé pour ${peerId}`);
+      console.log(`✅ Wrapper removed for ${peerId}`);
     });
     
-    // 5. Nettoyer la connexion peer
+    // 5. Clean peer connection
     if (this.peers[peerId]) {
-      console.log(`🔌 Fermeture de la connexion peer pour ${peerId}`);
+      console.log(`🔌 Closing peer connection for ${peerId}`);
       const pc = this.peers[peerId];
       
       const receivers = pc.getReceivers();
@@ -910,34 +892,34 @@ sendMessage() {
       
       pc.close();
       delete this.peers[peerId];
-      console.log(`✅ Connexion peer fermée pour ${peerId}`);
+      console.log(`✅ Peer connection closed for ${peerId}`);
     }
     
-    // 6. Nettoyer les références
+    // 6. Clean references
     delete this.peerNames[peerId];
     this.speakingUsers.delete(peerId);
     
-    // 7. Mettre à jour le compteur
+    // 7. Update counter
     this.updatePeerCount();
     
-    // 8. Forcer un rafraîchissement
+    // 8. Force refresh
     setTimeout(() => {
       this.forceRefreshVideoContainer();
     }, 100);
     
-    console.log(`📊 Nouveau nombre de peers: ${this.peerCount}`);
+    console.log(`📊 New peer count: ${this.peerCount}`);
   }
 
   forceRefreshVideoContainer() {
     const container = document.getElementById('videoContainer');
     if (container) {
       const allWrappers = container.querySelectorAll('[data-peer-id]');
-      console.log(`🔍 Vérification: ${allWrappers.length} wrappers dans le container`);
+      console.log(`🔍 Verification: ${allWrappers.length} wrappers in container`);
       
       allWrappers.forEach(wrapper => {
         const peerId = wrapper.getAttribute('data-peer-id');
         if (peerId && peerId !== this.wsId && !this.peers[peerId] && peerId !== 'local') {
-          console.log(`🧹 Nettoyage wrapper orphelin: ${peerId}`);
+          console.log(`🧹 Cleaning orphan wrapper: ${peerId}`);
           const video = wrapper.querySelector('video');
           if (video) {
             if (video.srcObject) {
@@ -951,26 +933,26 @@ sendMessage() {
     }
   }
 
-  // ==================== MÉTHODES WEBCAM ====================
+  // ==================== WEBCAM METHODS ====================
 
   updateLocalVideoId(newId: string) {
     const container = document.getElementById('videoContainer');
     if (!container) return;
     
-    console.log('🔄 Mise à jour ID local de "local" vers:', newId);
+    console.log('🔄 Updating local ID from "local" to:', newId);
     
     const tempWrapper = container.querySelector('[data-peer-id="local"]');
     
     if (tempWrapper) {
       tempWrapper.setAttribute('data-peer-id', newId);
-      console.log(`✅ ID vidéo locale mis à jour: ${newId}`);
+      console.log(`✅ Local video ID updated: ${newId}`);
       
       const localParticipant = this.participants.find(p => p.id === 'local');
       if (localParticipant) {
         localParticipant.id = newId;
       }
     } else {
-      console.log('⚠️ Wrapper "local" non trouvé');
+      console.log('⚠️ "local" wrapper not found');
     }
   }
 
@@ -1003,7 +985,7 @@ sendMessage() {
 
       delete this.processingOffers[peerId];
     } catch (error) {
-      console.error('❌ Erreur création offre:', error);
+      console.error('❌ Error creating offer:', error);
       delete this.processingOffers[peerId];
     }
   }
@@ -1046,11 +1028,11 @@ sendMessage() {
     };
 
     pc.oniceconnectionstatechange = () => {
-      console.log(`🔄 État ICE pour ${peerId}:`, pc.iceConnectionState);
+      console.log(`🔄 ICE state for ${peerId}:`, pc.iceConnectionState);
     };
 
     pc.onconnectionstatechange = () => {
-      console.log(`🔗 État connexion pour ${peerId}:`, pc.connectionState);
+      console.log(`🔗 Connection state for ${peerId}:`, pc.connectionState);
     };
 
     return pc;
@@ -1078,7 +1060,7 @@ sendMessage() {
     video.playsInline = true;
 
     video.onloadedmetadata = () => {
-      video.play().catch(e => console.error('Erreur play video:', e));
+      video.play().catch(e => console.error('Error playing video:', e));
     };
 
     const label = document.createElement('div');
@@ -1089,7 +1071,7 @@ sendMessage() {
     label.appendChild(micIcon);
     
     const nameSpan = document.createElement('span');
-    nameSpan.textContent = muted ? `${name} (Moi)` : name;
+    nameSpan.textContent = muted ? `${name} (Me)` : name;
     label.appendChild(nameSpan);
 
     wrapper.appendChild(video);
@@ -1140,7 +1122,7 @@ sendMessage() {
       checkAudio();
       this.audioContexts.set(peerId, audioContext);
     } catch (error) {
-      console.error('Erreur setup audio detection:', error);
+      console.error('Error setting up audio detection:', error);
     }
   }
 
@@ -1169,12 +1151,12 @@ sendMessage() {
 
         checkLocalAudio();
       } catch (error) {
-        console.error('Erreur setup audio detection locale:', error);
+        console.error('Error setting up local audio detection:', error);
       }
     }
   }
 
-  // ==================== MÉTHODES UTILITAIRES ====================
+  // ==================== UTILITY METHODS ====================
 
   get filteredParticipants() {
     if (!this.participantSearch) return this.participants;
@@ -1190,8 +1172,8 @@ sendMessage() {
   copyInviteLink() {
     navigator.clipboard.writeText(this.getInviteLink()).then(() => {
       this.messages.push({
-        sender: 'Système',
-        text: '🔗 Lien d\'invitation copié dans le presse-papiers',
+        sender: 'System',
+        text: '🔗 Invitation link copied to clipboard',
         time: new Date().toLocaleTimeString(),
         isOwn: false
       });
@@ -1200,9 +1182,9 @@ sendMessage() {
 
   getFaceStatusLabel(className: string): string {
     const labels: { [key: string]: string } = {
-      'visible': 'Visage détecté',
-      'covered': 'Visage partiellement couvert',
-      'no_face': 'Aucun visage'
+      'visible': 'Face detected',
+      'covered': 'Partially covered face',
+      'no_face': 'No face'
     };
     return labels[className] || className;
   }
@@ -1234,7 +1216,7 @@ sendMessage() {
   }
 
   ngOnDestroy() {
-    console.log('🧹 Nettoyage complet du composant');
+    console.log('🧹 Complete component cleanup');
     
     if (this.typingTimeout) {
       clearTimeout(this.typingTimeout);
@@ -1263,13 +1245,13 @@ sendMessage() {
     
     this.animationFrames.forEach((frameId, peerId) => {
       cancelAnimationFrame(frameId);
-      console.log(`⏹️ Animation arrêtée pour ${peerId}`);
+      console.log(`⏹️ Animation stopped for ${peerId}`);
     });
     this.animationFrames.clear();
     
     this.audioContexts.forEach((context, peerId) => {
       context.close();
-      console.log(`🔇 Contexte audio fermé pour ${peerId}`);
+      console.log(`🔇 Audio context closed for ${peerId}`);
     });
     this.audioContexts.clear();
     
@@ -1287,7 +1269,7 @@ sendMessage() {
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => {
         track.stop();
-        console.log(`⏹️ Track local arrêté: ${track.kind}`);
+        console.log(`⏹️ Local track stopped: ${track.kind}`);
       });
       this.localStream = null as any;
     }
@@ -1305,9 +1287,9 @@ sendMessage() {
       });
       
       container.innerHTML = '';
-      console.log('🧹 Container vidéo vidé');
+      console.log('🧹 Video container cleared');
     }
     
-    console.log('✅ Nettoyage terminé');
+    console.log('✅ Cleanup complete');
   }
 }
