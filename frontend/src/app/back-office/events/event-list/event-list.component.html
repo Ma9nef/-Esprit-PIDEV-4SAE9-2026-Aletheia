@@ -1,0 +1,98 @@
+ <div class="events-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Gestion des Événements</h1>
+    <button class="btn-add" (click)="navigateToCreate()">
+      <span class="plus-icon">+</span>
+      Nouvel Événement
+    </button>
+  </div>
+
+  <!-- Filtres -->
+  <div class="filters-card">
+    <div class="filters-grid">
+      <div class="search-box">
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="onSearch()"
+          placeholder="Rechercher..."
+          class="search-input">
+      </div>
+      
+      <div class="status-filter">
+        <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="status-select">
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ status === 'ALL' ? 'Tous' : status }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <div class="loader-container" *ngIf="loading">
+    <div class="loader"></div>
+  </div>
+
+  <!-- Liste des événements -->
+  <div class="events-grid" *ngIf="!loading">
+    <div class="event-card" *ngFor="let event of filteredEvents">
+      <div class="card-header">
+        <h3>{{ event.title }}</h3>
+        <span class="status-badge" [ngClass]="getStatusClass(event.status)">
+          {{ event.status }}
+        </span>
+      </div>
+      
+      <div class="card-body">
+        <p class="description">{{ event.description }}</p>
+        
+        <div class="event-details">
+          <div class="detail-item">
+            <span class="icon">📅</span>
+            <span>{{ formatDate(event.startDate) }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="icon">📍</span>
+            <span>{{ event.location }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="icon">👤</span>
+            <span>{{ event.organizer }}</span>
+          </div>
+          <div class="detail-item" *ngIf="event.expectedAttendees">
+            <span class="icon">👥</span>
+            <span>{{ event.expectedAttendees }} participants</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card-actions">
+        <button class="btn-edit" (click)="navigateToEdit(event.id!)" title="Modifier">
+          ✏️
+        </button>
+        <button class="btn-delete" (click)="confirmDelete(event.id!)" title="Supprimer">
+          🗑️
+        </button>
+      </div>
+    </div>
+
+    <!-- Message si aucun événement -->
+    <div class="no-events" *ngIf="filteredEvents.length === 0">
+      <p>Aucun événement trouvé</p>
+    </div>
+  </div>
+
+  <!-- Modal de confirmation -->
+  <div class="modal-overlay" *ngIf="showDeleteModal">
+    <div class="modal-content">
+      <h3>Confirmer la suppression</h3>
+      <p>Êtes-vous sûr de vouloir supprimer cet événement ?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
+        <button class="btn-confirm-delete" (click)="deleteEvent()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+</div>

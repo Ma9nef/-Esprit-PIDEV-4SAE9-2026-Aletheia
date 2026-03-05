@@ -1,0 +1,86 @@
+<div class="form-container">
+  <div class="form-card">
+    <h2>{{ isEditMode ? 'Modifier' : 'Créer' }} un Événement</h2>
+
+    <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label>Titre *</label>
+        <input type="text" formControlName="title" placeholder="Titre de l'événement">
+        <div class="error" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">
+          Titre requis (min 3 caractères)
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Description *</label>
+        <textarea formControlName="description" rows="4" placeholder="Description"></textarea>
+        <div class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
+          Description requise
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Début *</label>
+          <input type="datetime-local" formControlName="startDate">
+          <div class="error" *ngIf="eventForm.get('startDate')?.invalid && eventForm.get('startDate')?.touched">
+            Date requise
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Fin *</label>
+          <input type="datetime-local" formControlName="endDate">
+          <div class="error" *ngIf="eventForm.get('endDate')?.invalid && eventForm.get('endDate')?.touched">
+            Date requise
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Lieu *</label>
+          <input type="text" formControlName="location" placeholder="Lieu">
+          <div class="error" *ngIf="eventForm.get('location')?.invalid && eventForm.get('location')?.touched">
+            Lieu requis
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Organisateur *</label>
+          <input type="text" formControlName="organizer" placeholder="Organisateur">
+          <div class="error" *ngIf="eventForm.get('organizer')?.invalid && eventForm.get('organizer')?.touched">
+            Organisateur requis
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Statut *</label>
+          <select formControlName="status">
+            <option *ngFor="let status of statuses" [value]="status">
+              {{ status }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Participants</label>
+          <input type="number" formControlName="expectedAttendees" placeholder="Nombre">
+          <div class="error" *ngIf="eventForm.get('expectedAttendees')?.invalid && eventForm.get('expectedAttendees')?.touched">
+            Nombre positif requis
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" (click)="cancel()">Annuler</button>
+        <button type="submit" class="btn-submit" [disabled]="loading">
+          <span *ngIf="loading" class="spinner"></span>
+          {{ isEditMode ? 'Modifier' : 'Créer' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -36,7 +36,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ApiGateway" options="-parameters" />
       <module name="Library" options="-parameters" />
-      <module name="courses" options="-parameters" />
+      <module name="courses" options="" />
       <module name="eureka" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>

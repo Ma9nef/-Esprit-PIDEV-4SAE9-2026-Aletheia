@@ -6,6 +6,11 @@ import { TrainerDashboardComponent } from './trainer-dashboard/trainer-dashboard
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { TrainerCoursesComponent } from './trainer-courses/trainer-courses.component';
 import { ManageLibraryComponent } from './manage-library/manage-library.component';
+import { EventFormComponent } from './events/event-form/event-form.component';
+import { EventListComponent } from './events/event-list/event-list.component';
+import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
+import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
+import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
 
 const routes: Routes = [
   {
@@ -16,10 +21,22 @@ const routes: Routes = [
       { path: 'manage-users', component: ManageUsersComponent }
     ]
   },
+    { path: 'events', component: EventListComponent },
+  { path: 'events/new', component: EventFormComponent },
+  { path: 'events/edit/:id', component: EventFormComponent },
+
   { path: 'trainer', component: TrainerDashboardComponent },
   { path: 'manage-users', component: ManageUsersComponent },
   { path: 'trainer-courses', component: TrainerCoursesComponent }, // ✅ NEW
-  { path: 'trainer/courses', component: TrainerCoursesComponent }
+  { path: 'trainer/courses', component: TrainerCoursesComponent },
+
+
+  
+   { path: 'allocations', component: AllocationListComponent },
+  { path: 'allocations/new', component: AllocationFormComponent },
+  { path: 'allocations/edit/:id', component: AllocationFormComponent },
+  { path: 'allocations/:id', component: AllocationDetailComponent },
+  
 ];
 
 @NgModule({
