@@ -1,0 +1,45 @@
+<div class="container py-4">
+  <button class="btn btn-link p-0 mb-3" (click)="back()">← Back to courses</button>
+
+  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="course" class="card">
+    <div class="card-body">
+      <h2 class="mb-2">{{ course.title }}</h2>
+      <p class="text-muted mb-3">Instructor: {{ course.instructorName }}</p>
+
+      <p class="mb-4">{{ course.description }}</p>
+
+      <div class="d-flex gap-4 flex-wrap">
+        <div><strong>Duration:</strong> {{ course.durationHours }} hours</div>
+        <div><strong>Price:</strong> {{ course.price }} $</div>
+        <div><strong>Created:</strong> {{ course.createdAt | date:'medium' }}</div>
+      </div>
+
+      <!-- ✅ Actions -->
+      <div class="mt-4 d-flex align-items-center gap-3 flex-wrap">
+
+        <!-- If enrolled -->
+        <ng-container *ngIf="isEnrolled; else enrollBlock">
+          <span class="badge bg-success fs-6">✓ You are enrolled in this course</span>
+
+          <button class="btn btn-success" (click)="goToLearning()">
+            Continue Learning
+          </button>
+        </ng-container>
+
+        <!-- If NOT enrolled -->
+        <ng-template #enrollBlock>
+          <button
+            class="btn btn-primary"
+            [disabled]="enrolling"
+            (click)="enroll()">
+            {{ enrolling ? 'Enrolling...' : 'Enroll' }}
+          </button>
+        </ng-template>
+
+      </div>
+    </div>
+  </div>
+</div>

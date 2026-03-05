@@ -1,0 +1,91 @@
+<div class="page">
+    <div class="header">
+      <div>
+        <h2>Manage Courses (Instructor)</h2>
+        <p class="muted">Créer, modifier et supprimer vos cours.</p>
+      </div>
+  
+      <button class="btn btn-secondary" (click)="startCreate()">+ New Course</button>
+    </div>
+  
+    <div *ngIf="error" class="alert">{{ error }}</div>
+    <div *ngIf="loading" class="muted">Loading...</div>
+  
+    <div class="grid">
+      <!-- Form -->
+      <div class="card">
+        <h3>{{ editingId ? 'Edit course' : 'Create course' }}</h3>
+  
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <label>
+            Title
+            <input type="text" formControlName="title" placeholder="Course title" />
+            <small class="err" *ngIf="form.controls.title.touched && form.controls.title.invalid">
+              Title is required (min 3 chars).
+            </small>
+          </label>
+  
+          <label>
+            Description
+            <textarea formControlName="description" rows="5" placeholder="Course description"></textarea>
+            <small class="err" *ngIf="form.controls.description.touched && form.controls.description.invalid">
+              Description is required (min 10 chars).
+            </small>
+          </label>
+  
+          <div class="row">
+            <label>
+              Price
+              <input type="number" formControlName="price" min="0" step="0.01" />
+            </label>
+  
+            <label>
+              Duration (hours)
+              <input type="number" formControlName="durationHours" min="1" step="1" />
+            </label>
+          </div>
+  
+          <div class="actions">
+            <button class="btn btn-primary" type="submit" [disabled]="loading">
+              {{ editingId ? 'Save changes' : 'Create' }}
+            </button>
+  
+            <button *ngIf="editingId" class="btn btn-ghost" type="button" (click)="cancelEdit()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+  
+      <!-- List -->
+      <div class="card">
+        <h3>Your courses</h3>
+  
+        <div *ngIf="!loading && courses.length === 0" class="muted">
+          No courses yet.
+        </div>
+  
+        <div class="table" *ngIf="courses.length">
+          <div class="thead">
+            <div>Title</div>
+            <div>Price</div>
+            <div>Hours</div>
+            <div class="right">Actions</div>
+          </div>
+  
+          <div class="trow" *ngFor="let c of courses">
+            <div class="title">
+              <div class="t">{{ c.title }}</div>
+              <div class="d muted">{{ c.description }}</div>
+            </div>
+            <div>{{ c.price }} $</div>
+            <div>{{ c.durationHours }}</div>
+            <div class="right">
+              <button class="btn btn-small" (click)="startEdit(c)">Edit</button>
+              <button class="btn btn-small danger" (click)="remove(c.id)">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
