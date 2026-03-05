@@ -17,6 +17,7 @@ import { EventService } from './events/event.service';
 import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
 import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
 import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
+import { BackOfficeDashboardComponent } from './back-office-dashboard/back-office-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,9 @@ import { AllocationListComponent } from './allocations/allocation-list/allocatio
     TrainerCoursesComponent,
     ManageLibraryComponent,
     EventFormComponent,    // ← Une seule fois
-    EventListComponent, AllocationDetailComponent, AllocationFormComponent, AllocationListComponent     // ← Une seule fois
+    EventListComponent, AllocationDetailComponent, AllocationFormComponent, AllocationListComponent, BackOfficeDashboardComponent  ,
+    BackOfficeDashboardComponent
+    // ← Une seule fois
     // ⚠️ SUPPRIMEZ EventService d'ici !
   ],
   imports: [
@@ -41,7 +44,7 @@ import { AllocationListComponent } from './allocations/allocation-list/allocatio
   ],
   exports: [
     EventFormComponent,
-    EventListComponent,AllocationDetailComponent, AllocationFormComponent, AllocationListComponent
+    EventListComponent,AllocationDetailComponent, AllocationFormComponent, AllocationListComponent,BackOfficeDashboardComponent
   ]
 })
 export class BackOfficeModule { }

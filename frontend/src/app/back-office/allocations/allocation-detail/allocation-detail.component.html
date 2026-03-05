@@ -1,21 +1,21 @@
 <!-- src/app/allocations/allocation-detail/allocation-detail.component.html -->
 
 <div class="detail-container">
-    <!-- Header avec navigation -->
+    <!-- Header with navigation -->
     <div class="detail-header">
         <button class="btn-back" (click)="goBack()">
             <span class="back-icon">←</span>
-            Retour aux allocations
+            Back to allocations
         </button>
 
         <div class="header-actions" *ngIf="allocation">
             <button class="btn-edit" (click)="goToEdit()">
                 <span class="action-icon">✏️</span>
-                Modifier
+                Edit
             </button>
             <button class="btn-delete" (click)="confirmDelete()">
                 <span class="action-icon">🗑️</span>
-                Supprimer
+                Delete
             </button>
         </div>
     </div>
@@ -23,33 +23,33 @@
     <!-- Loader -->
     <div class="loader-container" *ngIf="loading">
         <div class="loader"></div>
-        <p>Chargement des détails...</p>
+        <p>Loading details...</p>
     </div>
 
-    <!-- Message d'erreur -->
+    <!-- Error message -->
     <div class="error-container" *ngIf="error">
         <div class="error-icon">⚠️</div>
-        <h3>Erreur</h3>
+        <h3>Error</h3>
         <p>{{ error }}</p>
-        <button class="btn-retry" (click)="loadAllocation()">Réessayer</button>
+        <button class="btn-retry" (click)="loadAllocation()">Retry</button>
     </div>
 
-    <!-- Détails de l'allocation -->
+    <!-- Allocation details -->
     <div class="detail-content" *ngIf="allocation && !loading">
-        <!-- En-tête avec titre -->
+        <!-- Header with title -->
         <div class="content-header">
-            <h1>Détails de l'allocation #{{ allocation.id }}</h1>
+            <h1>Allocation Details #{{ allocation.id }}</h1>
             <div class="header-badge">
                 <span class="allocation-id">ID: {{ allocation.id }}</span>
             </div>
         </div>
 
-        <!-- Grille d'information -->
+        <!-- Information grid -->
         <div class="info-grid">
-            <!-- Carte Ressource -->
+            <!-- Resource Card -->
             <div class="info-card resource-card">
                 <div class="card-header">
-                    <h2>Ressource allouée</h2>
+                    <h2>Allocated Resource</h2>
                 </div>
                 <div class="card-body">
                     <div class="resource-icon-large"
@@ -59,7 +59,7 @@
                     </div>
 
                     <div class="resource-details">
-                        <h3>{{ allocation.resource?.name || 'Nom non disponible' }}</h3>
+                        <h3>{{ allocation.resource?.name || 'Name not available' }}</h3>
                         <span class="resource-type-badge"
                               *ngIf="allocation.resource?.type"
                               [style.background]="getResourceTypeInfo(allocation.resource.type).color + '20'"
@@ -74,19 +74,19 @@
                             </div>
 
                             <div class="meta-item" *ngIf="hasProperty(allocation.resource, 'totalQuantity')">
-                                <span class="meta-label">Quantité totale:</span>
+                                <span class="meta-label">Total quantity:</span>
                                 <span class="meta-value">{{ allocation.resource.totalQuantity }}</span>
                             </div>
 
                             <div class="meta-item" *ngIf="hasProperty(allocation.resource, 'reusable')">
-                                <span class="meta-label">Réutilisable:</span>
+                                <span class="meta-label">Reusable:</span>
                                 <span class="meta-value" [class.yes]="allocation.resource.reusable" [class.no]="!allocation.resource.reusable">
-                                    {{ allocation.resource.reusable ? 'Oui' : 'Non' }}
+                                    {{ allocation.resource.reusable ? 'Yes' : 'No' }}
                                 </span>
                             </div>
 
                             <div class="meta-item" *ngIf="allocation.resource?.location">
-                                <span class="meta-label">Emplacement:</span>
+                                <span class="meta-label">Location:</span>
                                 <span class="meta-value">{{ allocation.resource.location }}</span>
                             </div>
                         </div>
@@ -94,10 +94,10 @@
                 </div>
             </div>
 
-            <!-- Carte Événement -->
+            <!-- Event Card -->
             <div class="info-card event-card">
                 <div class="card-header">
-                    <h2>Événement associé</h2>
+                    <h2>Associated Event</h2>
                     <span class="event-status" *ngIf="allocation.event?.status" 
                           [ngClass]="getStatusInfo(allocation.event.status).class">
                         {{ getStatusInfo(allocation.event.status).label }}
@@ -107,21 +107,21 @@
                     <div class="event-icon-large">📅</div>
 
                     <div class="event-details">
-                        <h3>{{ allocation.event?.title || 'Titre non disponible' }}</h3>
+                        <h3>{{ allocation.event?.title || 'Title not available' }}</h3>
 
                         <div class="event-meta">
                             <div class="meta-item" *ngIf="allocation.event?.location">
-                                <span class="meta-label">📍 Lieu:</span>
+                                <span class="meta-label">📍 Location:</span>
                                 <span class="meta-value">{{ allocation.event.location }}</span>
                             </div>
 
                             <div class="meta-item" *ngIf="allocation.event?.startDate">
-                                <span class="meta-label">📅 Date début:</span>
+                                <span class="meta-label">📅 Start date:</span>
                                 <span class="meta-value">{{ formatDate(allocation.event.startDate) }}</span>
                             </div>
 
                             <div class="meta-item" *ngIf="allocation.event?.endDate">
-                                <span class="meta-label">📅 Date fin:</span>
+                                <span class="meta-label">📅 End date:</span>
                                 <span class="meta-value">{{ formatDate(allocation.event.endDate) }}</span>
                             </div>
 
@@ -131,12 +131,12 @@
                             </div>
 
                             <div class="meta-item" *ngIf="allocation.event?.organizer">
-                                <span class="meta-label">👤 Organisateur:</span>
+                                <span class="meta-label">👤 Organizer:</span>
                                 <span class="meta-value">{{ allocation.event.organizer }}</span>
                             </div>
 
                             <div class="meta-item" *ngIf="allocation.event?.expectedAttendees">
-                                <span class="meta-label">👥 Participants:</span>
+                                <span class="meta-label">👥 Attendees:</span>
                                 <span class="meta-value">{{ allocation.event.expectedAttendees }}</span>
                             </div>
                         </div>
@@ -144,17 +144,17 @@
                 </div>
             </div>
 
-            <!-- Carte Allocation -->
+            <!-- Allocation Card -->
             <div class="info-card allocation-card full-width">
                 <div class="card-header">
-                    <h2>Détails de l'allocation</h2>
+                    <h2>Allocation Details</h2>
                 </div>
                 <div class="card-body">
                     <div class="allocation-stats">
                         <div class="stat-item">
                             <span class="stat-icon">📊</span>
                             <div class="stat-content">
-                                <span class="stat-label">Quantité utilisée</span>
+                                <span class="stat-label">Quantity used</span>
                                 <span class="stat-value">{{ allocation.quantityUsed || 0 }}</span>
                             </div>
                         </div>
@@ -162,7 +162,7 @@
                         <div class="stat-item">
                             <span class="stat-icon">⏱️</span>
                             <div class="stat-content">
-                                <span class="stat-label">Durée</span>
+                                <span class="stat-label">Duration</span>
                                 <span class="stat-value">{{ calculateDuration() }}</span>
                             </div>
                         </div>
@@ -170,12 +170,12 @@
 
                     <div class="time-periods">
                         <div class="period-item" *ngIf="allocation.startTime">
-                            <span class="period-label">Début de l'allocation</span>
+                            <span class="period-label">Allocation start</span>
                             <span class="period-value">{{ formatDateTime(allocation.startTime) }}</span>
                         </div>
 
                         <div class="period-item" *ngIf="allocation.endTime">
-                            <span class="period-label">Fin de l'allocation</span>
+                            <span class="period-label">Allocation end</span>
                             <span class="period-value">{{ formatDateTime(allocation.endTime) }}</span>
                         </div>
                     </div>
@@ -192,16 +192,16 @@
         </div>
     </div>
 
-    <!-- Modal de confirmation de suppression -->
+    <!-- Delete confirmation modal -->
     <div class="modal-overlay" *ngIf="showDeleteModal">
         <div class="modal-content">
             <div class="modal-icon">⚠️</div>
-            <h3>Confirmer la suppression</h3>
-            <p>Êtes-vous sûr de vouloir supprimer cette allocation ?</p>
-            <p class="warning">Cette action est irréversible.</p>
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this allocation?</p>
+            <p class="warning">This action is irreversible.</p>
             <div class="modal-actions">
-                <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
-                <button class="btn-confirm-delete" (click)="deleteAllocation()">Supprimer</button>
+                <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+                <button class="btn-confirm-delete" (click)="deleteAllocation()">Delete</button>
             </div>
         </div>
     </div>

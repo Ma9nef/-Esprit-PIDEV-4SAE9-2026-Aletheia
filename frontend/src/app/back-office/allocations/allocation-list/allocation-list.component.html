@@ -5,23 +5,23 @@
     <div class="header">
         <h1>
             <span class="header-icon">🔗</span>
-            Gestion des Allocations
+            Allocation Management
         </h1>
         <button class="btn-add" (click)="navigateToCreate()">
             <span class="plus-icon">+</span>
-            Nouvelle Allocation
+            New Allocation
         </button>
     </div>
 
-    <!-- Message d'erreur -->
+    <!-- Error message -->
     <div class="error-container" *ngIf="error">
         <div class="error-icon">⚠️</div>
-        <h3>Erreur</h3>
+        <h3>Error</h3>
         <p>{{ error }}</p>
-        <button class="btn-retry" (click)="loadAllocations()">Réessayer</button>
+        <button class="btn-retry" (click)="loadAllocations()">Retry</button>
     </div>
 
-    <!-- Filtres -->
+    <!-- Filters -->
     <div class="filters-card" *ngIf="!error">
         <div class="filters-grid">
             <div class="search-box">
@@ -30,7 +30,7 @@
                     type="text"
                     [(ngModel)]="searchTerm"
                     (input)="onSearch()"
-                    placeholder="Rechercher par événement, ressource..."
+                    placeholder="Search by event, resource..."
                     class="search-input">
             </div>
 
@@ -38,7 +38,7 @@
                 <span class="filter-icon">🏷️</span>
                 <select [(ngModel)]="selectedResourceType" (change)="onResourceTypeChange()" class="type-select">
                     <option *ngFor="let type of resourceTypes" [value]="type">
-                        {{ type === 'ALL' ? 'Tous les types' : getResourceTypeLabel(type) }}
+                        {{ type === 'ALL' ? 'All types' : getResourceTypeLabel(type) }}
                     </option>
                 </select>
             </div>
@@ -48,10 +48,10 @@
     <!-- Loader -->
     <div class="loader-container" *ngIf="loading">
         <div class="loader"></div>
-        <p>Chargement des allocations...</p>
+        <p>Loading allocations...</p>
     </div>
 
-    <!-- Statistiques -->
+    <!-- Statistics -->
     <div class="stats-container" *ngIf="!loading && !error && allocations.length > 0">
         <div class="stat-card">
             <span class="stat-icon">📊</span>
@@ -64,34 +64,34 @@
             <span class="stat-icon">⚙️</span>
             <div class="stat-info">
                 <span class="stat-value">{{ getUniqueResourcesCount() }}</span>
-                <span class="stat-label">Ressources utilisées</span>
+                <span class="stat-label">Resources used</span>
             </div>
         </div>
         <div class="stat-card">
             <span class="stat-icon">📅</span>
             <div class="stat-info">
                 <span class="stat-value">{{ getUniqueEventsCount() }}</span>
-                <span class="stat-label">Événements concernés</span>
+                <span class="stat-label">Events concerned</span>
             </div>
         </div>
     </div>
 
-    <!-- Grille des allocations -->
+    <!-- Allocations grid -->
     <div class="allocations-grid" *ngIf="!loading && !error">
-        <!-- Message si aucune allocation -->
+        <!-- Message if no allocations -->
         <div class="no-allocations" *ngIf="filteredAllocations.length === 0">
             <div class="no-data-icon">📭</div>
-            <h3>Aucune allocation trouvée</h3>
-            <p *ngIf="allocations.length === 0">Commencez par créer une nouvelle allocation</p>
-            <p *ngIf="allocations.length > 0">Aucun résultat ne correspond à vos filtres</p>
+            <h3>No allocations found</h3>
+            <p *ngIf="allocations.length === 0">Start by creating a new allocation</p>
+            <p *ngIf="allocations.length > 0">No results match your filters</p>
             <button class="btn-reset-filters" *ngIf="searchTerm || selectedResourceType !== 'ALL'" (click)="resetFilters()">
-                Réinitialiser les filtres
+                Reset filters
             </button>
         </div>
 
-        <!-- Cartes d'allocations -->
+        <!-- Allocation cards -->
         <div class="allocation-card" *ngFor="let allocation of filteredAllocations">
-            <!-- En-tête avec type de ressource -->
+            <!-- Header with resource type -->
             <div class="card-header"
                  [style.background]="allocation.resource ? (getResourceTypeColor(allocation.resource.type) + '15') : '#f0f0f0'"
                  [style.borderLeftColor]="allocation.resource ? getResourceTypeColor(allocation.resource.type) : '#999'">
@@ -102,7 +102,7 @@
                         <span class="resource-icon">{{ allocation.resource ? getResourceTypeIcon(allocation.resource.type) : '❓' }}</span>
                     </div>
                     <div class="resource-details">
-<h3>{{ allocation.resource.name || 'Ressource inconnue' }}</h3>
+                        <h3>{{ allocation.resource?.name || 'Unknown resource' }}</h3>
                         <div class="resource-meta">
                             <span class="resource-type"
                                   *ngIf="allocation.resource"
@@ -111,7 +111,7 @@
                                 {{ getResourceTypeLabel(allocation.resource.type) }}
                             </span>
                             <span class="resource-type" *ngIf="!allocation.resource">
-                                Non disponible
+                                Not available
                             </span>
                             <span class="resource-location" *ngIf="allocation.resource?.location">
                                 📍 {{ allocation.resource.location }}
@@ -126,19 +126,19 @@
                 </div>
             </div>
 
-            <!-- Corps de la carte -->
+            <!-- Card body -->
             <div class="card-body">
-                <!-- Informations sur l'événement -->
+                <!-- Event information -->
                 <div class="event-info">
-                  <div class="event-icon-wrapper" [ngClass]="getStatusInfo(allocation.event.status).class">
-    <span class="event-icon">{{ getStatusInfo(allocation.event.status).icon }}</span>
-</div>
+                    <div class="event-icon-wrapper" [ngClass]="getStatusInfo(allocation.event?.status).class">
+                        <span class="event-icon">{{ getStatusInfo(allocation.event?.status).icon }}</span>
+                    </div>
                     <div class="event-details">
-<h4>{{ allocation.event.title || 'Événement inconnu' }}</h4>
+                        <h4>{{ allocation.event?.title || 'Unknown event' }}</h4>
                         <div class="event-meta">
-                           <span class="event-status-badge" [ngClass]="getStatusInfo(allocation.event.status).class">
-    {{ getStatusInfo(allocation.event.status).label }}
-</span>
+                            <span class="event-status-badge" [ngClass]="getStatusInfo(allocation.event?.status).class">
+                                {{ getStatusInfo(allocation.event?.status).label }}
+                            </span>
                             <span class="event-location" *ngIf="allocation.event?.location">
                                 📍 {{ allocation.event.location }}
                             </span>
@@ -146,25 +146,25 @@
                     </div>
                 </div>
 
-                <!-- Période d'allocation -->
+                <!-- Allocation period -->
                 <div class="time-info">
                     <div class="time-item">
                         <span class="time-icon">▶️</span>
                         <div class="time-content">
-                            <span class="time-label">Début</span>
+                            <span class="time-label">Start</span>
                             <span class="time-value">{{ formatDateTime(allocation.startTime) }}</span>
                         </div>
                     </div>
                     <div class="time-item">
                         <span class="time-icon">⏹️</span>
                         <div class="time-content">
-                            <span class="time-label">Fin</span>
+                            <span class="time-label">End</span>
                             <span class="time-value">{{ formatDateTime(allocation.endTime) }}</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Durée calculée -->
+                <!-- Calculated duration -->
                 <div class="duration-badge">
                     <span class="duration-icon">⏱️</span>
                     <span class="duration-text">{{ calculateDuration(allocation) }}</span>
@@ -174,7 +174,7 @@
                 <div class="notes" *ngIf="allocation.notes">
                     <span class="notes-icon">📝</span>
                     <div class="notes-content">
-                        <span class="notes-label">Notes :</span>
+                        <span class="notes-label">Notes:</span>
                         <p>{{ allocation.notes }}</p>
                     </div>
                 </div>
@@ -182,44 +182,44 @@
 
             <!-- Actions -->
             <div class="card-actions">
-                <button class="btn-view" (click)="viewDetails(allocation.id)" title="Voir détails">
+                <button class="btn-view" (click)="viewDetails(allocation.id)" title="View details">
                     <span class="action-icon">👁️</span>
-                    <span class="action-text">Détails</span>
+                    <span class="action-text">Details</span>
                 </button>
-                <button class="btn-edit" (click)="navigateToEdit(allocation.id)" title="Modifier">
+                <button class="btn-edit" (click)="navigateToEdit(allocation.id)" title="Edit">
                     <span class="action-icon">✏️</span>
-                    <span class="action-text">Modifier</span>
+                    <span class="action-text">Edit</span>
                 </button>
-                <button class="btn-delete" (click)="confirmDelete(allocation.id)" title="Supprimer">
+                <button class="btn-delete" (click)="confirmDelete(allocation.id)" title="Delete">
                     <span class="action-icon">🗑️</span>
-                    <span class="action-text">Supprimer</span>
+                    <span class="action-text">Delete</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal de confirmation de suppression -->
+    <!-- Delete confirmation modal -->
     <div class="modal-overlay" *ngIf="showDeleteModal">
         <div class="modal-content">
             <div class="modal-icon">⚠️</div>
-            <h3>Confirmer la suppression</h3>
-            <p>Êtes-vous sûr de vouloir supprimer cette allocation ?</p>
-            <p class="warning">Cette action est irréversible.</p>
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this allocation?</p>
+            <p class="warning">This action is irreversible.</p>
             <div class="modal-actions">
                 <button class="btn-cancel" (click)="cancelDelete()">
                     <span class="btn-icon">✖️</span>
-                    Annuler
+                    Cancel
                 </button>
                 <button class="btn-confirm-delete" (click)="deleteAllocation()">
                     <span class="btn-icon">🗑️</span>
-                    Supprimer
+                    Delete
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Bouton retour en haut -->
-    <button class="scroll-top-btn" *ngIf="showScrollTop" (click)="scrollToTop()" title="Retour en haut">
+    <!-- Back to top button -->
+    <button class="scroll-top-btn" *ngIf="showScrollTop" (click)="scrollToTop()" title="Back to top">
         ↑
     </button>
 </div>

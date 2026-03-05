@@ -11,6 +11,7 @@ import { EventListComponent } from './events/event-list/event-list.component';
 import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
 import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
 import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
+import { BackOfficeDashboardComponent } from './back-office-dashboard/back-office-dashboard.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,8 @@ const routes: Routes = [
       { path: 'manage-users', component: ManageUsersComponent }
     ]
   },
+    { path: 'dashboard', component: BackOfficeDashboardComponent },
+
     { path: 'events', component: EventListComponent },
   { path: 'events/new', component: EventFormComponent },
   { path: 'events/edit/:id', component: EventFormComponent },

@@ -1,100 +1,100 @@
 <div class="form-container">
   <div class="form-card">
-    <!-- En-tête -->
+    <!-- Header -->
     <div class="form-header">
-      <h2>{{ isEditMode ? 'Modifier' : 'Créer' }} une Allocation</h2>
+      <h2>{{ isEditMode ? 'Edit' : 'Create' }} an Allocation</h2>
       <p class="header-subtitle">
-        {{ isEditMode ? 'Modifiez les détails de l\'allocation' : 'Allouez une ressource à un événement' }}
+        {{ isEditMode ? 'Modify allocation details' : 'Allocate a resource to an event' }}
       </p>
     </div>
 
     <!-- Loader -->
     <div class="loader-container" *ngIf="loading">
       <div class="loader"></div>
-      <p>Chargement en cours...</p>
+      <p>Loading...</p>
     </div>
 
-    <!-- Formulaire -->
+    <!-- Form -->
     <form [formGroup]="allocationForm" (ngSubmit)="onSubmit()" *ngIf="!loading">
-      <!-- Sélection de l'événement -->
+      <!-- Event Selection -->
       <div class="form-section">
         <h3 class="section-title">
           <span class="section-icon">📅</span>
-          Événement
+          Event
         </h3>
         
         <div class="form-group">
           <label for="eventId">
-            Événement <span class="required">*</span>
+            Event <span class="required">*</span>
           </label>
           <select 
             id="eventId" 
             formControlName="eventId"
             [class.invalid]="allocationForm.get('eventId')?.invalid && allocationForm.get('eventId')?.touched"
             class="form-select">
-            <option value="" disabled selected>Sélectionnez un événement</option>
+            <option value="" disabled selected>Select an event</option>
             <option *ngFor="let event of events" [value]="event.id">
               {{ event.title }} - {{ event.startDate | date:'short' }}
             </option>
           </select>
           <div class="error-message" *ngIf="allocationForm.get('eventId')?.invalid && allocationForm.get('eventId')?.touched">
-            Veuillez sélectionner un événement
+            Please select an event
           </div>
         </div>
       </div>
 
-      <!-- Sélection de la ressource -->
+      <!-- Resource Selection -->
       <div class="form-section">
         <h3 class="section-title">
           <span class="section-icon">⚙️</span>
-          Ressource
+          Resource
         </h3>
 
         <div class="form-row">
           <div class="form-group">
             <label for="resourceType">
-              Type de ressource <span class="required">*</span>
+              Resource Type <span class="required">*</span>
             </label>
             <select 
               id="resourceType" 
               formControlName="resourceType"
               [class.invalid]="allocationForm.get('resourceType')?.invalid && allocationForm.get('resourceType')?.touched"
               class="form-select">
-              <option value="" disabled selected>Sélectionnez un type</option>
-              <option value="ROOM">🏢 Salle</option>
-              <option value="EQUIPMENT">⚙️ Équipement</option>
-              <option value="HUMAN">👤 Ressource Humaine</option>
-              <option value="SOFTWARE">💻 Logiciel</option>
-              <option value="MATERIAL">📦 Matériel</option>
+              <option value="" disabled selected>Select a type</option>
+              <option value="ROOM">🏢 Room</option>
+              <option value="EQUIPMENT">⚙️ Equipment</option>
+              <option value="HUMAN">👤 Human Resource</option>
+              <option value="SOFTWARE">💻 Software</option>
+              <option value="MATERIAL">📦 Material</option>
             </select>
             <div class="error-message" *ngIf="allocationForm.get('resourceType')?.invalid && allocationForm.get('resourceType')?.touched">
-              Veuillez sélectionner un type
+              Please select a type
             </div>
           </div>
 
           <div class="form-group">
             <label for="resourceId">
-              Ressource <span class="required">*</span>
+              Resource <span class="required">*</span>
             </label>
             <select 
               id="resourceId" 
               formControlName="resourceId"
               [class.invalid]="allocationForm.get('resourceId')?.invalid && allocationForm.get('resourceId')?.touched"
               class="form-select">
-              <option value="" disabled selected>Sélectionnez une ressource</option>
+              <option value="" disabled selected>Select a resource</option>
               <option *ngFor="let resource of filteredResources" [value]="resource.id">
-                {{ resource.name }} ({{ resource.totalQuantity }} disponible(s))
+                {{ resource.name }} ({{ resource.totalQuantity }} available)
               </option>
             </select>
             <div class="error-message" *ngIf="allocationForm.get('resourceId')?.invalid && allocationForm.get('resourceId')?.touched">
-              Veuillez sélectionner une ressource
+              Please select a resource
             </div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="quantityUsed">
-            Quantité utilisée <span class="required">*</span>
+            Quantity used <span class="required">*</span>
           </label>
           <input 
             type="number" 
@@ -103,24 +103,24 @@
             [class.invalid]="allocationForm.get('quantityUsed')?.invalid && allocationForm.get('quantityUsed')?.touched"
             class="form-input"
             min="1"
-            placeholder="Quantité à allouer">
+            placeholder="Quantity to allocate">
           <div class="error-message" *ngIf="allocationForm.get('quantityUsed')?.invalid && allocationForm.get('quantityUsed')?.touched">
-            La quantité doit être d'au moins 1
+            Quantity must be at least 1
           </div>
         </div>
       </div>
 
-      <!-- Période d'allocation -->
+      <!-- Allocation Period -->
       <div class="form-section">
         <h3 class="section-title">
           <span class="section-icon">⏰</span>
-          Période d'allocation
+          Allocation Period
         </h3>
 
         <div class="form-row">
           <div class="form-group">
             <label for="startTime">
-              Date de début <span class="required">*</span>
+              Start Date <span class="required">*</span>
             </label>
             <input 
               type="datetime-local" 
@@ -129,13 +129,13 @@
               [class.invalid]="allocationForm.get('startTime')?.invalid && allocationForm.get('startTime')?.touched"
               class="form-input">
             <div class="error-message" *ngIf="allocationForm.get('startTime')?.invalid && allocationForm.get('startTime')?.touched">
-              Date de début requise
+              Start date is required
             </div>
           </div>
 
           <div class="form-group">
             <label for="endTime">
-              Date de fin <span class="required">*</span>
+              End Date <span class="required">*</span>
             </label>
             <input 
               type="datetime-local" 
@@ -144,23 +144,23 @@
               [class.invalid]="allocationForm.get('endTime')?.invalid && allocationForm.get('endTime')?.touched"
               class="form-input">
             <div class="error-message" *ngIf="allocationForm.get('endTime')?.invalid && allocationForm.get('endTime')?.touched">
-              Date de fin requise
+              End date is required
             </div>
           </div>
         </div>
 
-        <!-- Bouton de vérification de disponibilité -->
+        <!-- Availability check button -->
         <div class="availability-check">
           <button 
             type="button" 
             class="btn-check" 
             (click)="checkAvailability()"
             [disabled]="allocationForm.invalid || checkingAvailability">
-            <span *ngIf="!checkingAvailability">🔍 Vérifier la disponibilité</span>
+            <span *ngIf="!checkingAvailability">🔍 Check availability</span>
             <span *ngIf="checkingAvailability" class="checking-spinner"></span>
           </button>
 
-          <!-- Message de disponibilité -->
+          <!-- Availability message -->
           <div class="availability-message" *ngIf="availabilityMessage" [class.available]="isAvailable" [class.unavailable]="isAvailable === false">
             {{ availabilityMessage }}
           </div>
@@ -175,34 +175,34 @@
         </h3>
 
         <div class="form-group">
-          <label for="notes">Notes (optionnel)</label>
+          <label for="notes">Notes (optional)</label>
           <textarea 
             id="notes" 
             formControlName="notes"
             class="form-textarea"
             rows="3"
-            placeholder="Ajoutez des notes ou instructions particulières..."></textarea>
+            placeholder="Add notes or special instructions..."></textarea>
         </div>
       </div>
 
-      <!-- Boutons d'action -->
+      <!-- Action buttons -->
       <div class="form-actions">
         <button type="button" class="btn-cancel" (click)="cancel()">
-          Annuler
+          Cancel
         </button>
         <button 
           type="submit" 
           class="btn-submit" 
           [disabled]="allocationForm.invalid || loading">
-          <span *ngIf="!loading">{{ isEditMode ? 'Modifier' : 'Créer' }}</span>
+          <span *ngIf="!loading">{{ isEditMode ? 'Edit' : 'Create' }}</span>
           <span *ngIf="loading" class="submit-spinner"></span>
         </button>
       </div>
 
-      <!-- Message d'information pour la vérification -->
+      <!-- Info message for verification -->
       <div class="info-message" *ngIf="!isEditMode && !isAvailable">
         <span class="info-icon">ℹ️</span>
-        <p>N'oubliez pas de vérifier la disponibilité de la ressource avant de créer l'allocation.</p>
+        <p>Don't forget to check resource availability before creating the allocation.</p>
       </div>
     </form>
   </div>

@@ -38,7 +38,7 @@ export class LoginComponent implements AfterViewInit {
           this.router.navigate(['/back-office/trainer']);
         } 
         else if (role === 'ADMIN') {
-          this.router.navigate(['/back-office/admin']);
+          this.router.navigate(['/back-office/dashboard']);
         } 
         else {
           this.router.navigate(['/front/room/5']);
