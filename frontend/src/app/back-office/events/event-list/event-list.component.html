@@ -1,14 +1,14 @@
- <div class="events-container">
+<div class="events-container">
   <!-- Header -->
   <div class="header">
-    <h1>Gestion des Événements</h1>
+    <h1>Event Management</h1>
     <button class="btn-add" (click)="navigateToCreate()">
       <span class="plus-icon">+</span>
-      Nouvel Événement
+      New Event
     </button>
   </div>
 
-  <!-- Filtres -->
+  <!-- Filters -->
   <div class="filters-card">
     <div class="filters-grid">
       <div class="search-box">
@@ -16,14 +16,14 @@
           type="text" 
           [(ngModel)]="searchTerm" 
           (input)="onSearch()"
-          placeholder="Rechercher..."
+          placeholder="Search..."
           class="search-input">
       </div>
       
       <div class="status-filter">
         <select [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="status-select">
           <option *ngFor="let status of statuses" [value]="status">
-            {{ status === 'ALL' ? 'Tous' : status }}
+            {{ status === 'ALL' ? 'All' : status }}
           </option>
         </select>
       </div>
@@ -35,7 +35,7 @@
     <div class="loader"></div>
   </div>
 
-  <!-- Liste des événements -->
+  <!-- Events list -->
   <div class="events-grid" *ngIf="!loading">
     <div class="event-card" *ngFor="let event of filteredEvents">
       <div class="card-header">
@@ -63,35 +63,35 @@
           </div>
           <div class="detail-item" *ngIf="event.expectedAttendees">
             <span class="icon">👥</span>
-            <span>{{ event.expectedAttendees }} participants</span>
+            <span>{{ event.expectedAttendees }} attendees</span>
           </div>
         </div>
       </div>
       
       <div class="card-actions">
-        <button class="btn-edit" (click)="navigateToEdit(event.id!)" title="Modifier">
+        <button class="btn-edit" (click)="navigateToEdit(event.id!)" title="Edit">
           ✏️
         </button>
-        <button class="btn-delete" (click)="confirmDelete(event.id!)" title="Supprimer">
+        <button class="btn-delete" (click)="confirmDelete(event.id!)" title="Delete">
           🗑️
         </button>
       </div>
     </div>
 
-    <!-- Message si aucun événement -->
+    <!-- Message if no events -->
     <div class="no-events" *ngIf="filteredEvents.length === 0">
-      <p>Aucun événement trouvé</p>
+      <p>No events found</p>
     </div>
   </div>
 
-  <!-- Modal de confirmation -->
+  <!-- Confirmation modal -->
   <div class="modal-overlay" *ngIf="showDeleteModal">
     <div class="modal-content">
-      <h3>Confirmer la suppression</h3>
-      <p>Êtes-vous sûr de vouloir supprimer cet événement ?</p>
+      <h3>Confirm Deletion</h3>
+      <p>Are you sure you want to delete this event?</p>
       <div class="modal-actions">
-        <button class="btn-cancel" (click)="cancelDelete()">Annuler</button>
-        <button class="btn-confirm-delete" (click)="deleteEvent()">Supprimer</button>
+        <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+        <button class="btn-confirm-delete" (click)="deleteEvent()">Delete</button>
       </div>
     </div>
   </div>

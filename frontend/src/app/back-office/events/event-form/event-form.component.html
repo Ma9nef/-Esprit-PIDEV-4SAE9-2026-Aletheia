@@ -1,13 +1,13 @@
 <div class="form-container">
   <div class="form-card">
-    <h2>{{ isEditMode ? 'Modifier' : 'Créer' }} un Événement</h2>
+    <h2>{{ isEditMode ? 'Edit' : 'Create' }} an Event</h2>
 
     <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label>Titre *</label>
-        <input type="text" formControlName="title" placeholder="Titre de l'événement">
+        <label>Title *</label>
+        <input type="text" formControlName="title" placeholder="Event title">
         <div class="error" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">
-          Titre requis (min 3 caractères)
+          Title required (min 3 characters)
         </div>
       </div>
 
@@ -15,49 +15,49 @@
         <label>Description *</label>
         <textarea formControlName="description" rows="4" placeholder="Description"></textarea>
         <div class="error" *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched">
-          Description requise
+          Description required
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Début *</label>
+          <label>Start *</label>
           <input type="datetime-local" formControlName="startDate">
           <div class="error" *ngIf="eventForm.get('startDate')?.invalid && eventForm.get('startDate')?.touched">
-            Date requise
+            Start date required
           </div>
         </div>
 
         <div class="form-group">
-          <label>Fin *</label>
+          <label>End *</label>
           <input type="datetime-local" formControlName="endDate">
           <div class="error" *ngIf="eventForm.get('endDate')?.invalid && eventForm.get('endDate')?.touched">
-            Date requise
+            End date required
           </div>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Lieu *</label>
-          <input type="text" formControlName="location" placeholder="Lieu">
+          <label>Location *</label>
+          <input type="text" formControlName="location" placeholder="Location">
           <div class="error" *ngIf="eventForm.get('location')?.invalid && eventForm.get('location')?.touched">
-            Lieu requis
+            Location required
           </div>
         </div>
 
         <div class="form-group">
-          <label>Organisateur *</label>
-          <input type="text" formControlName="organizer" placeholder="Organisateur">
+          <label>Organizer *</label>
+          <input type="text" formControlName="organizer" placeholder="Organizer">
           <div class="error" *ngIf="eventForm.get('organizer')?.invalid && eventForm.get('organizer')?.touched">
-            Organisateur requis
+            Organizer required
           </div>
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Statut *</label>
+          <label>Status *</label>
           <select formControlName="status">
             <option *ngFor="let status of statuses" [value]="status">
               {{ status }}
@@ -66,19 +66,19 @@
         </div>
 
         <div class="form-group">
-          <label>Participants</label>
-          <input type="number" formControlName="expectedAttendees" placeholder="Nombre">
+          <label>Attendees</label>
+          <input type="number" formControlName="expectedAttendees" placeholder="Number">
           <div class="error" *ngIf="eventForm.get('expectedAttendees')?.invalid && eventForm.get('expectedAttendees')?.touched">
-            Nombre positif requis
+            Positive number required
           </div>
         </div>
       </div>
 
       <div class="form-actions">
-        <button type="button" class="btn-cancel" (click)="cancel()">Annuler</button>
+        <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
         <button type="submit" class="btn-submit" [disabled]="loading">
           <span *ngIf="loading" class="spinner"></span>
-          {{ isEditMode ? 'Modifier' : 'Créer' }}
+          {{ isEditMode ? 'Edit' : 'Create' }}
         </button>
       </div>
     </form>
