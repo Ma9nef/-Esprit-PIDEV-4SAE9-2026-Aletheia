@@ -21,17 +21,35 @@ import {
 import {
   SubscriptionPlansListComponent
 } from './features/frontoffice/pages/subscription-plans-list/subscription-plans-list.component';
+import { AboutComponent } from './features/frontoffice/template/about/about.component';
+import { ServicesComponent } from './features/frontoffice/template/services/services.component';
+import { FooterComponent } from './shared/footer/footer.component';
+import { TemplateComponent } from './features/frontoffice/template/template.component';
+import { HomeComponent } from './features/frontoffice/template/home/home.component';
+import {AuthGuard} from './core/guards/auth.guards';
+import {RoleGuard} from './core/guards/role.guard';
 
 export const routes: Routes = [
   // Frontoffice
   { path: '', redirectTo: '/offers', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'services', component: ServicesComponent },
+  {path:'contact', component: FooterComponent},
   { path: 'offers', component: OffersListComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'plans', component: SubscriptionPlansListComponent },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./auth/auth.module').then(m => m.AuthModule)
+  },
   // Backoffice
   {
     path: 'admin',
     component: AdminLayoutComponent,
+    canActivate: [AuthGuard, RoleGuard],          // ← protection
+    data: { expectedRole: 'ADMIN' },
     children: [
       { path: '', redirectTo: 'offers', pathMatch: 'full' },
       { path: 'offers', component: AdminOffersComponent },

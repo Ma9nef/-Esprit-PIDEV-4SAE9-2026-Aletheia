@@ -83,7 +83,7 @@ export interface DashboardData {
 export class AnalyticsService {
 
   // CORRECTION: Port 8083 (votre backend tourne sur ce port)
-  private apiUrl = 'http://localhost:8083/api/analytics';
+  private apiUrl = 'api/analytics';
 
   constructor(private http: HttpClient) {
     console.log('🔌 Analytics Service connecté à:', this.apiUrl);
