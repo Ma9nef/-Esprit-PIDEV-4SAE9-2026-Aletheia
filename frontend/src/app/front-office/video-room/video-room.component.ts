@@ -16,7 +16,7 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   // Propriétés WebRTC
   peers: { [key: string]: RTCPeerConnection } = {};
   localStream!: MediaStream;
-  private ws!: WebSocket;  // WebSocket natif
+  private ws!: WebSocket;
   wsId: string = '';
   
   username!: string;
@@ -61,6 +61,10 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
   private coursId: string | null = null;
   private token: string | null = null;
   private isAuthenticated = false;
+
+  // Propriétés supplémentaires
+  participantSearch: string = '';
+  isTyping: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -109,6 +113,17 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     await this.checkMLService();
   }
 
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.messages.push({
+        sender: 'Système',
+        text: '👋 Bienvenue dans la salle ! Vous pouvez maintenant discuter.',
+        time: new Date().toLocaleTimeString(),
+        isOwn: false
+      });
+    }, 1000);
+  }
+
   // ==================== WEBSOCKET AVEC API GATEWAY ====================
 
   initWebSocket() {
@@ -126,8 +141,8 @@ export class VideoRoomComponent implements OnInit, OnDestroy {
     
     console.log('🔑 Token utilisé:', this.token.substring(0, 20) + '...');
     
-    // Utiliser le port 8090 comme dans le script de test
-const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;    console.log('🔌 Tentative de connexion WebSocket à:', wsUrl);
+    const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;
+    console.log('🔌 Tentative de connexion WebSocket à:', wsUrl);
     
     try {
         this.ws = new WebSocket(wsUrl);
@@ -136,7 +151,6 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
             console.log("✅ Connecté à l'API Gateway");
             this.reconnectAttempts = 0;
             
-            // Envoyer le token immédiatement
             const authMessage = {
                 type: 'auth',
                 token: this.token
@@ -149,9 +163,7 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
             try {
                 const data = JSON.parse(event.data);
                 console.log('📩 Message reçu:', data);
-                
                 this.handleWebSocketMessage(data);
-                
             } catch (error) {
                 console.error('❌ Erreur parsing message:', error);
             }
@@ -187,7 +199,6 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
       console.log('🆔 Mon ID reçu du serveur:', this.wsId);
       this.isAuthenticated = true;
       
-      // Une fois authentifié, rejoindre la salle (comme dans le script de test)
       setTimeout(() => {
         console.log('📤 Rejoindre la salle...');
         this.safeSendWebSocket({
@@ -295,19 +306,30 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
 
       case 'user-left':
         console.log(`👋 Utilisateur parti: ${data.name} (${data.id})`);
+        
         this.participants = this.participants.filter(p => p.id !== data.id);
+        
         this.ngZone.run(() => {
           this.removeUserVideo(data.id);
+          
+          this.messages.push({
+            sender: 'Système',
+            text: `👋 ${data.name} a quitté la salle`,
+            time: new Date().toLocaleTimeString(),
+            isOwn: false
+          });
+          
+          setTimeout(() => {
+            this.forceRefreshVideoContainer();
+            this.updatePeerCount();
+          }, 50);
         });
         
         if (this.peers[data.id]) {
-          const pc = this.peers[data.id];
-          pc.close();
           delete this.peers[data.id];
         }
         
         delete this.peerNames[data.id];
-        this.updatePeerCount();
         break;
 
       case 'audio-mute':
@@ -385,7 +407,7 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
       
       this.reconnectInterval = setTimeout(() => {
         console.log(`🔄 Reconnexion... (tentative ${this.reconnectAttempts})`);
-        this.isAuthenticated = false; // Reset auth state
+        this.isAuthenticated = false;
         this.initWebSocket();
       }, delay);
     } else {
@@ -712,50 +734,113 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
     this.router.navigate(['/']);
   }
 
-  ngOnDestroy() {
-    console.log('🧹 Nettoyage composant');
+  // ==================== MÉTHODES DE NETTOYAGE AMÉLIORÉES ====================
+
+  removeUserVideo(peerId: string) {
+    console.log(`🗑️ Suppression de la vidéo pour ${peerId}`);
     
-    if (this.reconnectInterval) {
-      clearTimeout(this.reconnectInterval);
-    }
+    const container = document.getElementById('videoContainer');
+    if (!container) return;
     
-    this.messageQueue = [];
+    const wrappers = container.querySelectorAll(`[data-peer-id="${peerId}"]`);
     
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.close();
-    }
-    
-    if (this.faceDetectionInterval) {
-      clearInterval(this.faceDetectionInterval);
-    }
-    
-    this.animationFrames.forEach((frameId) => {
-      cancelAnimationFrame(frameId);
+    wrappers.forEach(wrapper => {
+      console.log(`🧹 Nettoyage du wrapper pour ${peerId}`);
+      
+      // 1. Arrêter l'animation frame
+      if (this.animationFrames.has(peerId)) {
+        cancelAnimationFrame(this.animationFrames.get(peerId)!);
+        this.animationFrames.delete(peerId);
+        console.log(`⏹️ Animation frame arrêtée pour ${peerId}`);
+      }
+      
+      // 2. Fermer et nettoyer l'audio context
+      if (this.audioContexts.has(peerId)) {
+        this.audioContexts.get(peerId)?.close();
+        this.audioContexts.delete(peerId);
+        console.log(`🔇 Audio context fermé pour ${peerId}`);
+      }
+      
+      // 3. Nettoyer la vidéo
+      const video = wrapper.querySelector('video');
+      if (video) {
+        console.log(`🎥 Nettoyage de la vidéo pour ${peerId}`);
+        
+        if (video.srcObject) {
+          const stream = video.srcObject as MediaStream;
+          stream.getTracks().forEach(track => {
+            track.stop();
+            console.log(`⏹️ Piste arrêtée: ${track.kind}`);
+          });
+          video.srcObject = null;
+        }
+        
+        video.pause();
+        video.removeAttribute('src');
+        video.load();
+        
+        while (video.firstChild) {
+          video.removeChild(video.firstChild);
+        }
+      }
+      
+      // 4. Supprimer le wrapper du DOM
+      wrapper.remove();
+      console.log(`✅ Wrapper supprimé pour ${peerId}`);
     });
-    this.animationFrames.clear();
     
-    this.audioContexts.forEach((context) => {
-      context.close();
-    });
-    this.audioContexts.clear();
-    
-    Object.values(this.peers).forEach(pc => {
+    // 5. Nettoyer la connexion peer
+    if (this.peers[peerId]) {
+      console.log(`🔌 Fermeture de la connexion peer pour ${peerId}`);
+      const pc = this.peers[peerId];
+      
       const receivers = pc.getReceivers();
       receivers.forEach(receiver => {
         if (receiver.track) {
           receiver.track.stop();
         }
       });
+      
       pc.close();
-    });
-    
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => track.stop());
+      delete this.peers[peerId];
+      console.log(`✅ Connexion peer fermée pour ${peerId}`);
     }
     
+    // 6. Nettoyer les références
+    delete this.peerNames[peerId];
+    this.speakingUsers.delete(peerId);
+    
+    // 7. Mettre à jour le compteur
+    this.updatePeerCount();
+    
+    // 8. Forcer un rafraîchissement
+    setTimeout(() => {
+      this.forceRefreshVideoContainer();
+    }, 100);
+    
+    console.log(`📊 Nouveau nombre de peers: ${this.peerCount}`);
+  }
+
+  forceRefreshVideoContainer() {
     const container = document.getElementById('videoContainer');
     if (container) {
-      container.innerHTML = '';
+      const allWrappers = container.querySelectorAll('[data-peer-id]');
+      console.log(`🔍 Vérification: ${allWrappers.length} wrappers dans le container`);
+      
+      allWrappers.forEach(wrapper => {
+        const peerId = wrapper.getAttribute('data-peer-id');
+        if (peerId && peerId !== this.wsId && !this.peers[peerId] && peerId !== 'local') {
+          console.log(`🧹 Nettoyage wrapper orphelin: ${peerId}`);
+          const video = wrapper.querySelector('video');
+          if (video) {
+            if (video.srcObject) {
+              (video.srcObject as MediaStream).getTracks().forEach(t => t.stop());
+            }
+            video.srcObject = null;
+          }
+          wrapper.remove();
+        }
+      });
     }
   }
 
@@ -982,116 +1067,135 @@ const wsUrl = `ws://localhost:8090/room/${this.coursId}?token=${this.token}`;   
     }
   }
 
-  removeUserVideo(peerId: string) {
+  // ==================== MÉTHODES UTILITAIRES ====================
+
+  get filteredParticipants() {
+    if (!this.participantSearch) return this.participants;
+    return this.participants.filter(p => 
+      p.name.toLowerCase().includes(this.participantSearch.toLowerCase())
+    );
+  }
+
+  getInviteLink(): string {
+    return window.location.href;
+  }
+
+  copyInviteLink() {
+    navigator.clipboard.writeText(this.getInviteLink()).then(() => {
+      this.messages.push({
+        sender: 'Système',
+        text: '🔗 Lien d\'invitation copié dans le presse-papiers',
+        time: new Date().toLocaleTimeString(),
+        isOwn: false
+      });
+    });
+  }
+
+  getFaceStatusLabel(className: string): string {
+    const labels: { [key: string]: string } = {
+      'visible': 'Visage détecté',
+      'covered': 'Visage partiellement couvert',
+      'no_face': 'Aucun visage'
+    };
+    return labels[className] || className;
+  }
+
+  getAvatarColor(id: string): string {
+    const colors = [
+      '#1a73e8', '#34a853', '#fbbc04', '#ea4335', 
+      '#9334e8', '#e834a8', '#34e8a8', '#e8a834'
+    ];
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = ((hash << 5) - hash) + id.charCodeAt(i);
+      hash |= 0;
+    }
+    return colors[Math.abs(hash) % colors.length];
+  }
+
+  getAvatarInitial(name: string): string {
+    return name ? name.charAt(0).toUpperCase() : '?';
+  }
+
+  onChatFocus() {
+    // Indiquer que l'utilisateur tape
+  }
+
+  onChatBlur() {
+    this.isTyping = false;
+  }
+
+  ngOnDestroy() {
+    console.log('🧹 Nettoyage complet du composant');
+    
+    if (this.reconnectInterval) {
+      clearTimeout(this.reconnectInterval);
+      this.reconnectInterval = null;
+    }
+    
+    if (this.faceDetectionInterval) {
+      clearInterval(this.faceDetectionInterval);
+      this.faceDetectionInterval = null;
+    }
+    
+    this.messageQueue = [];
+    
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      try {
+        this.ws.send(JSON.stringify({ type: 'leave' }));
+        setTimeout(() => this.ws.close(), 100);
+      } catch (e) {
+        this.ws.close();
+      }
+    }
+    
+    this.animationFrames.forEach((frameId, peerId) => {
+      cancelAnimationFrame(frameId);
+      console.log(`⏹️ Animation arrêtée pour ${peerId}`);
+    });
+    this.animationFrames.clear();
+    
+    this.audioContexts.forEach((context, peerId) => {
+      context.close();
+      console.log(`🔇 Contexte audio fermé pour ${peerId}`);
+    });
+    this.audioContexts.clear();
+    
+    Object.values(this.peers).forEach(pc => {
+      const receivers = pc.getReceivers();
+      receivers.forEach(receiver => {
+        if (receiver.track) {
+          receiver.track.stop();
+        }
+      });
+      pc.close();
+    });
+    this.peers = {};
+    
+    if (this.localStream) {
+      this.localStream.getTracks().forEach(track => {
+        track.stop();
+        console.log(`⏹️ Track local arrêté: ${track.kind}`);
+      });
+      this.localStream = null as any;
+    }
+    
     const container = document.getElementById('videoContainer');
-    if (!container) return;
-    
-    const wrappers = container.querySelectorAll(`[data-peer-id="${peerId}"]`);
-    
-    wrappers.forEach(wrapper => {
-      if (this.animationFrames.has(peerId)) {
-        cancelAnimationFrame(this.animationFrames.get(peerId)!);
-        this.animationFrames.delete(peerId);
-      }
-      
-      if (this.audioContexts.has(peerId)) {
-        this.audioContexts.get(peerId)?.close();
-        this.audioContexts.delete(peerId);
-      }
-      
-      const video = wrapper.querySelector('video');
-      if (video) {
+    if (container) {
+      const videos = container.querySelectorAll('video');
+      videos.forEach(video => {
         if (video.srcObject) {
-          const stream = video.srcObject as MediaStream;
-          stream.getTracks().forEach(track => track.stop());
-          video.srcObject = null;
+          (video.srcObject as MediaStream).getTracks().forEach(t => t.stop());
         }
         video.pause();
         video.removeAttribute('src');
         video.load();
-      }
+      });
       
-      wrapper.remove();
-    });
+      container.innerHTML = '';
+      console.log('🧹 Container vidéo vidé');
+    }
+    
+    console.log('✅ Nettoyage terminé');
   }
-
-
-
-// Propriétés supplémentaires à ajouter
-participantSearch: string = '';
-isTyping: boolean = false;
-
-// Getter pour les participants filtrés
-get filteredParticipants() {
-  if (!this.participantSearch) return this.participants;
-  return this.participants.filter(p => 
-    p.name.toLowerCase().includes(this.participantSearch.toLowerCase())
-  );
-}
-
-// Méthodes utilitaires
-getInviteLink(): string {
-  return window.location.href;
-}
-
-copyInviteLink() {
-  navigator.clipboard.writeText(this.getInviteLink()).then(() => {
-    this.messages.push({
-      sender: 'Système',
-      text: '🔗 Lien d\'invitation copié dans le presse-papiers',
-      time: new Date().toLocaleTimeString(),
-      isOwn: false
-    });
-  });
-}
-
-getFaceStatusLabel(className: string): string {
-  const labels: { [key: string]: string } = {
-    'visible': 'Visage détecté',
-    'covered': 'Visage partiellement couvert',
-    'no_face': 'Aucun visage'
-  };
-  return labels[className] || className;
-}
-
-getAvatarColor(id: string): string {
-  const colors = [
-    '#1a73e8', '#34a853', '#fbbc04', '#ea4335', 
-    '#9334e8', '#e834a8', '#34e8a8', '#e8a834'
-  ];
-  let hash = 0;
-  for (let i = 0; i < id.length; i++) {
-    hash = ((hash << 5) - hash) + id.charCodeAt(i);
-    hash |= 0;
-  }
-  return colors[Math.abs(hash) % colors.length];
-}
-
-getAvatarInitial(name: string): string {
-  return name ? name.charAt(0).toUpperCase() : '?';
-}
-
-onChatFocus() {
-  // Indiquer que l'utilisateur tape
-}
-
-onChatBlur() {
-  this.isTyping = false;
-}
-
-// Animation de bienvenue
-ngAfterViewInit() {
-  setTimeout(() => {
-    this.messages.push({
-      sender: 'Système',
-      text: '👋 Bienvenue dans la salle ! Vous pouvez maintenant discuter.',
-      time: new Date().toLocaleTimeString(),
-      isOwn: false
-    });
-  }, 1000);
-}
-
-
-
-  
 }
