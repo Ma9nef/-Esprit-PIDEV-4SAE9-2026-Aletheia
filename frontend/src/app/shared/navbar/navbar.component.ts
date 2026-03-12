@@ -46,7 +46,9 @@ export class NavbarComponent implements OnInit {
     { label: 'Home', route: '/' },
     { label: 'About', route: '/about' },
     { label: 'Services', route: '/services'},
-    { label: 'Contact', route: '/contact' }
+    { label: 'Contact', route: '/contact' },
+    { label: 'Library', route: '/library',}
+
   ];
 
   constructor(

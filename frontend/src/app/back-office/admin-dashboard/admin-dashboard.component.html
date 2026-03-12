@@ -1,66 +1,119 @@
 <div class="aletheia-dashboard aletheia-admin">
+
+  <!-- SIDEBAR -->
   <aside class="sidebar" aria-label="Admin navigation">
+
     <div class="sidebar-brand">
       <span class="brand-text">ALETHEIA</span>
       <span class="brand-role">Admin</span>
     </div>
+
     <nav class="sidebar-nav" aria-label="Admin menu">
+
+      <!-- Dashboard -->
+      <a routerLink="/back-office/admin" routerLinkActive="nav-item--active"
+         [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 13h8V3H3z"/>
+            <path d="M13 21h8V11h-8z"/>
+          </svg>
         </span>
         <span class="nav-label">Dashboard</span>
       </a>
+
+      <!-- Users -->
+      <a routerLink="/back-office/admin/users"
+         routerLinkActive="nav-item--active"
+         class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M17 11c2.21 0 4 1.79 4 4v3H13v-3c0-2.21 1.79-4 4-4z"/>
+          </svg>
         </span>
         <span class="nav-label">Users</span>
       </a>
+
+      <!-- Courses -->
+      <a routerLink="/back-office/admin/courses"
+         routerLinkActive="nav-item--active"
+         class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 3h20v6H2z"/>
+            <path d="M2 13h20v8H2z"/>
+          </svg>
         </span>
         <span class="nav-label">Courses</span>
       </a>
-      <a routerLink="manage-library" class="nav-item" routerLinkActive="nav-item--active" [routerLinkActiveOptions]="{exact:true}">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+
+      <!-- Library -->
+      <a routerLink="/back-office/admin/manage-library"
+         routerLinkActive="nav-item--active"
+         [routerLinkActiveOptions]="{exact:true}"
+         class="nav-item">
+
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
         </span>
+
         <span class="nav-label">Library</span>
       </a>
-      <a href="#" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+
+      <!-- Revenue -->
+      <a class="nav-item">
+        <span class="nav-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="1" x2="12" y2="23"/>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
         </span>
         <span class="nav-label">Revenue</span>
       </a>
-      <!-- ... Existing Nav Items (Users, Courses, Library, Revenue) ... -->
-
-          </svg>
-        </span>
-      </a>
 
     </nav>
+
   </aside>
 
 
   <!-- MAIN CONTENT -->
   <main class="main-content">
 
+    <!-- HEADER -->
     <header class="top-header">
+
       <div class="header-left">
         <h1 class="page-title">Admin Dashboard</h1>
       </div>
+
       <div class="header-right">
+
         <button type="button" class="icon-btn" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="badge-dot" aria-hidden="true">5</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="badge-dot">5</span>
         </button>
-        <div class="avatar-wrap" aria-hidden="true">
+
+        <div class="avatar-wrap">
           <span class="avatar">AD</span>
         </div>
+
       </div>
+
     </header>
+
 
     <!-- ROUTER VIEW -->
     <router-outlet></router-outlet>
 
 
     <!-- DASHBOARD CONTENT -->
-    <!-- visible only on /back-office/admin -->
-
     <section *ngIf="showDashboardWidgets" class="analytics-row">
 
       <div class="analytics-card">
@@ -68,46 +121,57 @@
         <span class="analytics-value">$124,850</span>
         <span class="analytics-trend analytics-trend--up">+12.5% vs last month</span>
       </div>
+
       <div class="analytics-card">
         <span class="analytics-label">Active Users</span>
         <span class="analytics-value">8,432</span>
         <span class="analytics-trend analytics-trend--up">+8.2% vs last month</span>
       </div>
+
       <div class="analytics-card">
         <span class="analytics-label">Courses Published</span>
         <span class="analytics-value">156</span>
         <span class="analytics-trend analytics-trend--up">+3 new</span>
       </div>
+
       <div class="analytics-card">
         <span class="analytics-label">Certificates Issued</span>
         <span class="analytics-value">2,841</span>
         <span class="analytics-trend analytics-trend--up">+18% vs last month</span>
       </div>
+
     </section>
 
 
     <section *ngIf="showDashboardWidgets" class="stats-blocks">
 
       <div class="stats-block">
+
         <h2 class="stats-block-title">Users Statistics</h2>
-          <li class="stats-list-item">
-          </li>
-          <li class="stats-list-item">
-          </li>
-          <li class="stats-list-item">
-          </li>
+
+        <ul class="stats-list">
+          <li class="stats-list-item">Total users</li>
+          <li class="stats-list-item">Active users</li>
+          <li class="stats-list-item">New registrations</li>
         </ul>
+
       </div>
+
+
       <div class="stats-block">
+
         <h2 class="stats-block-title">Courses Statistics</h2>
-          <li class="stats-list-item">
-          </li>
-          <li class="stats-list-item">
-          </li>
-          <li class="stats-list-item">
-          </li>
+
+        <ul class="stats-list">
+          <li class="stats-list-item">Published courses</li>
+          <li class="stats-list-item">Enrollments</li>
+          <li class="stats-list-item">Completed courses</li>
         </ul>
+
       </div>
+
     </section>
+
   </main>
+
 </div>
