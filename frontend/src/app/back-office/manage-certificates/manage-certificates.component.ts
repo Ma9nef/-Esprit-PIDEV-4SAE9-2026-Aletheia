@@ -15,6 +15,7 @@ declare var bootstrap: any;
   styleUrls: ['./manage-certificates.component.css']
 })
 export class ManageCertificatesComponent implements OnInit, AfterViewInit {
+
   @ViewChild('sigCanvas') canvasContext!: ElementRef;
   signaturePad!: SignaturePad;
 isSendingEmail: { [key: number]: boolean } = {};
@@ -22,6 +23,10 @@ isSendingEmail: { [key: number]: boolean } = {};
   certificates: any[] = [];
   usersList: any[] = [];
   enrollments: any[] = [];
+selectedSuccessUserId: number | null = null;
+successResult: any = null;
+
+  isPredicting: boolean = false;
 
   // UI State
   selectedUserId: number | null = null; // Used for Admin Signature selection
@@ -70,6 +75,7 @@ async sendEmail(cert: any) {
     return;
   }
 
+
   this.isSendingEmail[cert.id] = true;
 
   // STEP 1: Generate the PDF in the browser
@@ -80,7 +86,7 @@ async sendEmail(cert: any) {
   this.certificateService.uploadCertificatePdf(cert.id, blob).subscribe({
     next: () => {
       console.log("PDF Saved. Now sending email...");
-      
+
       // STEP 3: Send the email only after the PDF is safely in the DB
       this.certificateService.sendEmail(cert.id, user.email).subscribe({
         next: () => {
@@ -117,7 +123,7 @@ loadUsers() {
     next: (data: any) => {
       // Handle different API structures (Paginated vs List)
       this.usersList = data.content ? data.content : (Array.isArray(data) ? data : []);
-      
+
       console.log("--- DEBUG USERS ---");
       console.log("Total users received:", this.usersList.length);
       if (this.usersList.length > 0) {
@@ -137,8 +143,8 @@ loadUsers() {
   }
 
   get learnersOnly() {
-    return this.usersList.filter(u => 
-      u.role === 'LEARNER' || 
+    return this.usersList.filter(u =>
+      u.role === 'LEARNER' ||
       u.roles?.some((r: any) => r.name === 'LEARNER')
     );
   }
@@ -319,7 +325,7 @@ private async generateCertificateContent(cert: any): Promise<jsPDF> {
 async savePDFToDatabase(cert: any) {
   // 1. Generate the PDF object
   const doc = await this.generateCertificateContent(cert);
-  
+
   // 2. Convert to Blob
   const blob = doc.output('blob');
 
@@ -349,7 +355,7 @@ async savePDFToDatabase(cert: any) {
       const course = c.enrollment?.course?.title || 'N/A';
       return `${c.certificateCode},${name},${course},${c.issuedAt}`;
     }).join("\n");
-    
+
     const blob = new Blob([headers + content], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -358,11 +364,11 @@ async savePDFToDatabase(cert: any) {
     a.click();
   }
 
-  openAddModal() { 
+  openAddModal() {
     this.selectedLearnerIdForAdd = null;
     this.newEnrollmentId = null;
     this.loadAllEnrollments();
-    new bootstrap.Modal(document.getElementById('addModal')).show(); 
+    new bootstrap.Modal(document.getElementById('addModal')).show();
   }
 
   closeModal(id: string) {
@@ -370,4 +376,34 @@ async savePDFToDatabase(cert: any) {
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     if (modalInstance) modalInstance.hide();
   }
+   predictCertificationSuccess() {
+    if (!this.selectedSuccessUserId) return;
+
+    this.isPredicting = true;
+    this.successResult = null;
+
+    // Simulate calling a Deep Learning API (e.g., Python Flask with TensorFlow)
+    // In production, use: this.http.post('api/predict', { userId: this.selectedSuccessUserId })
+    setTimeout(() => {
+      const randomScore = Math.floor(Math.random() * 61) + 40; // Simulated result between 40 and 100
+
+      let recommendation = "";
+      if (randomScore > 85) recommendation = "Student is highly likely to pass. Recommend immediate certification.";
+      else if (randomScore > 65) recommendation = "On track. Suggest one final review of Course Module 4.";
+      else recommendation = "High risk of failure. Recommend intervention and additional tutoring.";
+
+      this.successResult = {
+        score: randomScore,
+        recommendation: recommendation
+      };
+      this.isPredicting = false;
+    }, 2000);
+  }
+
+  getProbabilityColor(score: number): string {
+    if (score > 80) return 'success';
+    if (score > 60) return 'warning';
+    return 'danger';
+  }
+
 }

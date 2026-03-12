@@ -82,6 +82,11 @@ public class Course {
     @Column(length = 120)
     private String topic; // optionnel
 
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Assessment> assessments;
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -114,11 +119,7 @@ public class Course {
     @OrderBy("orderIndex ASC")
     @JsonManagedReference
     private List<Lesson> lessons = new ArrayList<>();
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private List<Assessment> assessments;
+
     // ======= GETTERS / SETTERS =======
 
     public Long getId() { return id; }

@@ -1,6 +1,7 @@
 import { Question } from "./question.model";
 
 export interface Assessment {
+  timeLimit: number;
   id?: number;
   title: string;
   type: string;

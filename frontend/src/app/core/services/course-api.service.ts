@@ -82,7 +82,6 @@ export class CourseApiService {
     return this.http.get<CoursePublicDTO[]>(this.COURSE_API);
   }
 
-
   getPublicCourse(id: number): Observable<CoursePublicDTO> {
     return this.http.get<CoursePublicDTO>(`${this.COURSE_API}/${id}`);
   }
@@ -200,14 +199,14 @@ export class CourseApiService {
       { headers: this.authHeaders() }
     );
   }
-  
+
   getAdminCourse(id: number): Observable<CourseAdminDTO> {
     return this.http.get<CourseAdminDTO>(
       `${this.ADMIN_COURSE_API}/${id}`,
       { headers: this.authHeaders() }
     );
   }
-  
+
   archiveCourse(id: number): Observable<CourseAdminDTO> {
     return this.http.patch<CourseAdminDTO>(
       `${this.ADMIN_COURSE_API}/${id}/archive`,
@@ -215,7 +214,7 @@ export class CourseApiService {
       { headers: this.authHeaders() }
     );
   }
-  
+
   unarchiveCourse(id: number): Observable<CourseAdminDTO> {
     return this.http.patch<CourseAdminDTO>(
       `${this.ADMIN_COURSE_API}/${id}/unarchive`,

@@ -3,6 +3,7 @@ package com.esprit.microservice.courses.entity.progress;
 import com.esprit.microservice.courses.entity.Certificate;
 import com.esprit.microservice.courses.entity.content.Course;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
         name = "enrollments",
         uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "course_id"})
 )
+// Prevent errors when serializing Hibernate proxies to JSON
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Enrollment {
 
     @Id
@@ -30,15 +33,17 @@ public class Enrollment {
 
     @Column(nullable=false)
     private LocalDateTime enrolledAt;
-    @JsonIgnore
-    // A Certificate is generated only for an Enrollment
-    @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL)
 
+    @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL)
+    @JsonIgnore // Prevent infinite loop if Certificate refers back to Enrollment
     private Certificate certificate;
 
     @PrePersist
     public void onCreate() {
         this.enrolledAt = LocalDateTime.now();
+        if (this.status == null) {
+            this.status = EnrollmentStatus.ENROLLED;
+        }
     }
 
     public Enrollment() {}
@@ -46,6 +51,7 @@ public class Enrollment {
     public Enrollment(Long userId, Course course) {
         this.userId = userId;
         this.course = course;
+        this.status = EnrollmentStatus.ENROLLED; // Ensure status is set
     }
 
     public Long getId() {
@@ -72,17 +78,15 @@ public class Enrollment {
         this.course = course;
     }
 
-    public EnrollmentStatus getStatus() {
-        return status;
-    }
 
-    public void setStatus(EnrollmentStatus status) {
-        this.status = status;
-    }
 
-    public LocalDateTime getEnrolledAt() {
-        return enrolledAt;
-    }
+    public EnrollmentStatus getStatus() { return status; }
+    public void setStatus(EnrollmentStatus status) { this.status = status; }
+
+    public LocalDateTime getEnrolledAt() { return enrolledAt; }
+
+    public Certificate getCertificate() { return certificate; }
+    public void setCertificate(Certificate certificate) { this.certificate = certificate; }
 
     public void setEnrolledAt(LocalDateTime enrolledAt) {
         this.enrolledAt = enrolledAt;

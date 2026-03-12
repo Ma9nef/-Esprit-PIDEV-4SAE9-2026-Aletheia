@@ -27,7 +27,6 @@ public class CourseMapper {
         dto.setArchived(course.isArchived());
         dto.setCreatedAt(course.getCreatedAt());
         dto.setUpdatedAt(course.getUpdatedAt());
-
         return dto;
     }
 

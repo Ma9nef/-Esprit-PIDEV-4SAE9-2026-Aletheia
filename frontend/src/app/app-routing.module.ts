@@ -33,10 +33,10 @@ const routes: Routes = [
   { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
      {path: 'manage-assessments', component:ManageAssessmentsComponent },
   { path: 'verify/:code', component: VerifyCertificateComponent },
-    { path: 'add-assessment', component: AssessmentFormComponent }, 
+    { path: 'add-assessment', component: AssessmentFormComponent },
      { path: 'manage-certificates', component: ManageCertificatesComponent },
   { path: 'edit-assessment/:id', component: AssessmentFormComponent  },
-  { path: 'my-certificates', component: LearnerCertificatesComponent }, 
+  { path: 'my-certificates', component: LearnerCertificatesComponent },
    { path: 'assessment', component: LearnerAssessmentComponent },
   {path: 'back-office',loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)},
 
@@ -45,7 +45,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./auth/auth.module').then(m => m.AuthModule)
   }
-  
+
 ];
 
 @NgModule({

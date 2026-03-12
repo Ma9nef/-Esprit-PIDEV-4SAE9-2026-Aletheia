@@ -29,15 +29,15 @@ export class NavbarComponent implements OnInit {
     email: '',
     avatar: 'https://i.pravatar.cc/150?img=12'
   };
-  
+
   private updateCurrentUser(): void {
     const u = this.auth.getUserFromToken();
-  
+
     if (!u) {
       this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
       return;
     }
-  
+
     this.currentUser.email = u.email;
     this.currentUser.name = u.email.split('@')[0];
   }
@@ -63,16 +63,16 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateCurrentUser();
-  
+
     this.currentRoute = this.router.url;
-  
+
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
         this.currentRoute = this.router.url;
         this.updateCurrentUser(); // ✅ refresh user after login redirect
       });
-  
+
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(query => {
@@ -84,7 +84,30 @@ export class NavbarComponent implements OnInit {
     // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
     return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
   }
-  
+   onMyCertificatesClick(): void {
+     const role = localStorage.getItem('role'); // or from your auth service
+
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-certificates']);
+  }
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/my-certificates']);
+  }
+
+
+}
+ goToAssessments() {
+
+  const role = localStorage.getItem('role'); // or from your auth service
+
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-assessments']);
+  }
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/assessment']);
+  }
+
+}
   get isInstructor(): boolean {
     const u = this.auth.getUserFromToken();
     // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
@@ -136,13 +159,13 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();                  // remove token
     this.isUserDropdownOpen = false;
     this.isMobileMenuOpen = false;
-  
+
     this.currentUser = {
       name: '',
       email: '',
       avatar: 'https://i.pravatar.cc/150?img=12'
     };
-  
+
     this.router.navigate(['/home']);
   }
 }

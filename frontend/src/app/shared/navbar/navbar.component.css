@@ -1010,17 +1010,3 @@ input:focus-visible {
   z-index: 3000;
   overflow: visible;
 }
-
-.nav-container,
-.nav-left,
-.desktop-menu {
-  overflow: visible;
-}
-
-/* Le wrapper qui héberge Explore */
-.explore-host {
-  position: relative;
-  overflow: visible;
-  padding: 0; /* pour que le composant gère son padding */
-  background: transparent;
-}

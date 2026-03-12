@@ -2,6 +2,8 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+  "esModuleInterop": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -20,8 +22,8 @@
     "module": "ESNext",
     "useDefineForClassFields": false,
     "lib": [
-      "ESNext", 
-      "ESNext.AsyncIterable", 
+      "ESNext",
+      "ESNext.AsyncIterable",
       "dom"
     ],
     "skipLibCheck": true,
