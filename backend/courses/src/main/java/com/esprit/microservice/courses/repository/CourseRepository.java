@@ -19,9 +19,7 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
 
     List<Course> findByInstructorId(Long instructorId);
     Optional<Course> findByIdAndInstructorId(Long id, Long instructorId);
-
     long countByInstructorIdAndArchivedFalse(Long instructorId);
-
     @Query("""
         select new com.esprit.microservice.courses.dto.InstructorCourseRowDTO(
           c.id,

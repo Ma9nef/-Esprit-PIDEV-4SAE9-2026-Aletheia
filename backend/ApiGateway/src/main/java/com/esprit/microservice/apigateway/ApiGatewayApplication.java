@@ -24,6 +24,17 @@ public class ApiGatewayApplication {
                 .route("courses-lesson", r -> r.path("/lesson/**").uri("lb://COURSES-SERVICE"))
                 .route("library-service", r -> r.path("/api/library/**").uri("lb://LIBRARY-SERVICE"))
                 .route("products-service", r -> r.path("/api/products/**").uri("lb://LIBRARY-SERVICE"))
+
+                // --- NEW ROUTES FOR THE 4 CONTROLLERS ---
+
+                // Routes for Assessment, Certificate, and Questions (all start with /pidev)
+                .route("pidev-features", r -> r.path("/pidev/**")
+                        .uri("lb://COURSES-SERVICE"))
+
+                // Route for Submissions (starts with /api/assessment-results)
+                .route("assessment-results", r -> r.path("/api/assessment-results/**")
+                        .uri("lb://COURSES-SERVICE"))
+
                 .build();
     }
 }

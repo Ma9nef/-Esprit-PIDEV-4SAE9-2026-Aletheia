@@ -13,13 +13,12 @@ import { CourseBuilderComponent } from './courses/course-builder/course-builder.
 import { EditCourseComponent } from './edit-course/edit-course.component';
 
 const routes: Routes = [
-
   {
     path: 'admin',
     component: AdminDashboardComponent,
     children: [
       { path: 'manage-library', component: ManageLibraryComponent },
-  
+
       // ✅ AJOUT
       { path: 'courses', component: ManageCoursesComponent }
     ]
@@ -44,7 +43,9 @@ const routes: Routes = [
     ]
   },
 
+  { path: 'trainer', component: TrainerDashboardComponent },
   { path: 'manage-users', component: ManageUsersComponent },
+
 ];
 
 @NgModule({

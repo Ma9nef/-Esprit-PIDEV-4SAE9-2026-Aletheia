@@ -310,4 +310,5 @@ public class CertificateServiceImpl implements ICertificateService {
             return ResponseEntity.status(500).body("Error reading PDF file");
         }
     }
+
 }

@@ -1,6 +1,8 @@
 package com.esprit.microservice.courses.service.core;
 
 import com.esprit.microservice.courses.entity.Assessment;
+import com.esprit.microservice.courses.entity.QuestionCertif;
+import com.esprit.microservice.courses.entity.QuestionOption;
 import com.esprit.microservice.courses.repository.AssessmentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,21 @@ public class AssessmentServiceImpl implements IAssessmentService {
     @Override
     @Transactional
     public Assessment addAssessment(Assessment assessment) {
+        // 1. Link Questions to the Assessment
+        if (assessment.getQuestions() != null) {
+            for (QuestionCertif q : assessment.getQuestions()) {
+                q.setAssessment(assessment); // Set the parent link!
+
+                // 2. Link Options to each Question
+                if (q.getOptions() != null) {
+                    for (QuestionOption o : q.getOptions()) {
+                        o.setQuestion(q); // Set the parent link!
+                    }
+                }
+            }
+        }
+
+        // 3. Now save the whole tree
         return assessmentRepository.save(assessment);
     }
 
