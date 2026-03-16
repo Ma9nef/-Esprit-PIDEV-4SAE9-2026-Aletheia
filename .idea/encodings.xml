@@ -8,5 +8,6 @@
     <file url="file://$PROJECT_DIR$/backend/coursesandcertificates/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/eureka/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/user-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
   </component>
 </project>

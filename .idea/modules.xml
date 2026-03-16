@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/pi-dev_OG-s-course-managment.iml" filepath="$PROJECT_DIR$/.idea/pi-dev_OG-s-course-managment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/pi-dev_OG-s.iml" filepath="$PROJECT_DIR$/.idea/pi-dev_OG-s.iml" />
     </modules>
   </component>
 </project>

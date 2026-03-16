@@ -116,9 +116,9 @@ export class CourseDetailsComponent implements OnInit, OnDestroy {
             return;
           }
 
-          this.error = 'Enrollment failed.';
-        }
-      });
+        this.error = 'Enrollment failed.';
+      }
+    });
   }
 
   goToLearning(): void {

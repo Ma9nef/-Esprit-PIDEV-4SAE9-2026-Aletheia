@@ -5,6 +5,7 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { CourseDetailsComponent } from './course-details/course-details.component';
 import { CourseLearningComponent } from './course-learning/course-learning.component'; // ✅ ADD
 import { ProfileComponent } from './profile/profile.component';
+import { LibraryComponent } from './library/library.component';
 
 import { SharedModule } from '../shared/shared.module';
 import { AboutComponent } from './template/about/about.component';
@@ -16,6 +17,7 @@ import { VerifyCertificateComponent } from './verify-certificate/verify-certific
 import { LearnerCertificatesComponent } from './learner-certificates/learner-certificates.component';
 import { LearnerAssessmentComponent } from './learner-assessment/learner-assessment.component';
 import { FormsModule } from '@angular/forms';
+import { Explore3dComponent } from './explore3d/explore3d.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +26,15 @@ import { FormsModule } from '@angular/forms';
     CourseDetailsComponent,
     CourseLearningComponent, // ✅ ADD
     ProfileComponent,
+    LibraryComponent,
     AboutComponent,
     ServicesComponent,
     TemplateComponent,
     DashboardComponent,
+    Explore3dComponent,
       VerifyCertificateComponent,
     LearnerCertificatesComponent,
-    LearnerAssessmentComponent,
+    LearnerAssessmentComponent
   ],
   imports: [
     CommonModule,
@@ -43,8 +47,10 @@ import { FormsModule } from '@angular/forms';
     CourseDetailsComponent,
     CourseLearningComponent, // ✅ optional (export only if used outside)
     ProfileComponent,
+    LibraryComponent,
     AboutComponent,
-    ServicesComponent
+    ServicesComponent,
+    Explore3dComponent
   ]
 })
 export class FrontOfficeModule { }

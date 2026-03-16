@@ -11,12 +11,10 @@ import { filter } from 'rxjs/operators';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-
 export class NavbarComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
 
-  // ❌ REMOVE: isLoggedIn = false;
   isMobileMenuOpen = false;
   isUserDropdownOpen = false;
 
@@ -154,6 +152,21 @@ export class NavbarComponent implements OnInit {
 
   onMyCoursesClick(): void {
     this.router.navigate(['/front/my-courses']);
+    this.isUserDropdownOpen = false;
+  }
+
+  onDashboardClick(): void {
+    const user = this.auth.getUserFromToken();
+    if (user) {
+      const role = user.role.toLowerCase();
+      if (role === 'admin') {
+        this.router.navigate(['/dashboardAdmin']);
+      } else if (role === 'trainer' || role === 'instructor') {
+        this.router.navigate(['/dashboardInstructor']);
+      } else {
+        this.router.navigate(['/dashboardLearner']);
+      }
+    }
     this.isUserDropdownOpen = false;
   }
 
