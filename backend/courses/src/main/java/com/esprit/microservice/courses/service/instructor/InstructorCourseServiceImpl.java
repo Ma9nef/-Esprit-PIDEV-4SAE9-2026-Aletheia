@@ -118,9 +118,9 @@ public class InstructorCourseServiceImpl implements InstructorCourseService {
     }
 
     private void enforceInstructorRole(String bearer) {
-        String role = jwtReader.extractRole(bearer); // à implémenter dans JwtReader
-        if (!"INSTRUCTOR".equals(role)) {
-            throw new AccessDeniedException("Forbidden");
-        }
-    }
+         String role = jwtReader.extractRole(bearer); // à implémenter dans JwtReader
+         if (!"INSTRUCTOR".equals(role)) {
+             throw new AccessDeniedException("Forbidden");
+         }
+     }
 }

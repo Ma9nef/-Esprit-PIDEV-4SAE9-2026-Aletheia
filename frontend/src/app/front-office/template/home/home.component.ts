@@ -27,6 +27,15 @@ export class HomeComponent {
     this.router.navigate(['/front/courses']);
   }
 
+  navigateToLibrary(): void {
+    // ✅ goes to LibraryComponent
+    this.router.navigate(['/front/library']);
+  }
+
+  navigateToExplore3d(): void {
+    this.router.navigate(['/explore']);
+  }
+
   navigateToLiveSessions(): void {
     // ⚠️ Only keep this if you REALLY have this route in AppRoutingModule
     this.router.navigate(['/live-sessions']);

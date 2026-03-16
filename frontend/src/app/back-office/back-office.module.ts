@@ -31,6 +31,7 @@ import { EditCourseComponent } from './edit-course/edit-course.component';
     CreateLessonComponent,
     CourseBuilderComponent,
     EditCourseComponent,
+    TrainerCoursesComponent
   ],
   imports: [
     CommonModule,

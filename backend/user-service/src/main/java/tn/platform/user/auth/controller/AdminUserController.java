@@ -1,7 +1,6 @@
 package tn.platform.user.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.platform.user.auth.dto.AuthResponse;

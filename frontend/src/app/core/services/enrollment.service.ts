@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class EnrollmentService {
 
- private API = 'http://localhost:8081/course/public/enrollments';
+  private API = 'http://localhost:8081/course/public/enrollments';
 
   constructor(private http: HttpClient) {}
 
@@ -15,7 +15,7 @@ export class EnrollmentService {
     return this.http.post(`${this.API}/${courseId}`, {});
   }
    getAllEnrollments(): Observable<any[]> {
-    return this.http.get<any[]>(this.API); 
+    return this.http.get<any[]>(this.API);
   }
 
   myEnrollments() {
