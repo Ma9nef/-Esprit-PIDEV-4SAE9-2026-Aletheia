@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="courses" />
-        <module name="library_microservice" />
         <module name="eureka" />
         <module name="ApiGateway" />
       </profile>
@@ -28,7 +27,6 @@
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
-          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
         </processorPath>
         <module name="user-service" />
       </profile>
@@ -40,7 +38,6 @@
       <module name="Library" options="-parameters" />
       <module name="courses" options="-parameters" />
       <module name="eureka" options="-parameters" />
-      <module name="library_microservice" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

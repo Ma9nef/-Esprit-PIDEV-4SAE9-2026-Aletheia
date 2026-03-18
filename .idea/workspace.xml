@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="df2c488d-a629-4959-acc6-880317ae429e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/pi-dev_OG-s.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/backend.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/copilot.data.migration.ask2agent.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/copilot.data.migration.ask2agent.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/test/java/com/esprit/microservice/apigateway/ApiGatewayApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/test/java/com/esprit/microservice/apigateway/ApiGatewayApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/LibraryApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/LibraryApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/DataInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/CartController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/CartController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/FileUploadController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/FileUploadController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/PaymentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/PaymentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/ProductController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/ReceiptController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/ReceiptController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/StockMovementController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/StockMovementController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/dto/ProductDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/dto/ProductDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/dto/StockAdjustmentRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/dto/StockAdjustmentRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/dto/StockMovementDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/dto/StockMovementDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Cart.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Cart.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/CartItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/CartItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Order.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/OrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/OrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Payment.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Payment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Product.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Receipt.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/Receipt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/StockMovement.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/entity/StockMovement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/MovementType.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/MovementType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/OrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/OrderStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/PaymentStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/PaymentStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/ProductType.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/enums/ProductType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/ProductNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/ProductNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/mapper/ProductMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/mapper/ProductMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/mapper/StockMovementMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/mapper/StockMovementMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/CartRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/CartRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/OrderRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/OrderRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/PaymentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/PaymentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/ProductRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/ProductRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/ReceiptRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/ReceiptRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/StockMovementRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/StockMovementRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/CartService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/CartService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/CartServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/CartServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/PaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/PaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/PaymentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/PaymentServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ProductService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ProductService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ProductServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ProductServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ReceiptService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ReceiptService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ReceiptServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/ReceiptServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/StockMovementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/StockMovementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/StockMovementServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/StockMovementServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/resources/data-seed.sql" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/resources/data-seed.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/LibraryApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/LibraryApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/CoursesApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/CoursesApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/AdminCourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/AdminCourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/InstructorCourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/InstructorCourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/InstructorDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/InstructorDashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/PublicCourseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/PublicCourseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/PublicEnrollmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/PublicEnrollmentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/lesson/InstructorLessonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/lesson/InstructorLessonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/lesson/LearningLessonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/lesson/LearningLessonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/lesson/ProgressController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/lesson/ProgressController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/InstructorCourseRowDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/InstructorCourseRowDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/InstructorStatsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/InstructorStatsDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/admin/CourseAdminDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/admin/CourseAdminDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/command/CourseCreateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/command/CourseCreateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/command/CourseUpdateDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/command/CourseUpdateDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/publicDto/CoursePublicDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/course/publicDto/CoursePublicDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/admin/LessonAdminDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/admin/LessonAdminDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/command/LessonUpsertDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/command/LessonUpsertDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/learning/LessonLearningDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/learning/LessonLearningDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/publicDto/CourseProgressResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/publicDto/CourseProgressResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/publicDto/LessonPublicDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/dto/lesson/publicDto/LessonPublicDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/content/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/content/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/content/CourseModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/content/CourseModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/content/Lesson.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/content/Lesson.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/Answer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/CourseResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/CourseResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/Question.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/Quiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/Quiz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/QuizAttempt.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/evaluation/QuizAttempt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/progress/Enrollment.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/progress/Enrollment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/progress/EnrollmentStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/progress/EnrollmentStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/progress/LessonProgress.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/entity/progress/LessonProgress.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/CourseRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/CourseRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/EnrollmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/EnrollmentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/LessonProgressRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/LessonProgressRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/LessonRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/LessonRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/ModuleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/repository/ModuleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/JwtAuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/JwtReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/JwtReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminCourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminCourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminCourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminCourseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminLessonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminLessonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminLessonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/admin/AdminLessonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/CourseCoreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/CourseCoreService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/CourseCoreServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/CourseCoreServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/EnrollmentCoreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/EnrollmentCoreService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/LessonCoreService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/LessonCoreService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/LessonCoreServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/LessonCoreServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/LessonProgressService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/core/LessonProgressService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorCourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorCourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorCourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorCourseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorDashboardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorDashboardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorLessonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorLessonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorLessonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/instructor/InstructorLessonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/mapper/CourseMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/mapper/CourseMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/mapper/LessonMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/mapper/LessonMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/LearningLessonService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/LearningLessonService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/LearningLessonServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/LearningLessonServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/PublicCourseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/PublicCourseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/PublicCourseServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/PublicCourseServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/PublicEnrollmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/service/publicApi/PublicEnrollmentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/src/test/java/com/esprit/microservice/courses/CoursesApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/test/java/com/esprit/microservice/courses/CoursesApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/src/main/java/com/esprit/microservice/eureka/EurekaApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/src/main/java/com/esprit/microservice/eureka/EurekaApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/src/test/java/com/esprit/microservice/eureka/EurekaApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/src/test/java/com/esprit/microservice/eureka/EurekaApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/Readme.txt.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/Readme.txt.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/AletheiaApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/AletheiaApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/controller/AdminUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/controller/AdminUserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/AuthResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/AuthResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/CreateInstructorRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/CreateInstructorRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/RegisterRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/dto/RegisterRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/exception/AuthException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/exception/AuthException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/mapper/AuthMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/mapper/AuthMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/service/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/auth/service/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/common/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/common/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/config/AdminSeeder.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/config/AdminSeeder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/config/CloudinaryConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/config/CloudinaryConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/media/service/CloudinaryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/media/service/CloudinaryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/config/PasswordConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/config/PasswordConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/jwt/JwtAuthEntryPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/jwt/JwtAuthEntryPoint.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/jwt/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/jwt/JwtAuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/jwt/JwtService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/jwt/JwtService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/user/CustomUserDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/user/CustomUserDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/user/UserPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/security/user/UserPrincipal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/ChangePasswordRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/ChangePasswordRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/CreateUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/CreateUserRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/UpdateUserRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/UpdateUserRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/UserResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/UserResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/entity/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/entity/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/exception/EmailAlreadyExistsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/exception/EmailAlreadyExistsException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/exception/UserNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/exception/UserNotFoundException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/test/java/tn/platform/user/AletheiaApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/test/java/tn/platform/user/AletheiaApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.editorconfig" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/.editorconfig" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/proxy.conf.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/proxy.conf.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/auth-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/auth-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/auth.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/auth.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/login/login.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/auth/register/register.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/instructor-course-api.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/instructor-course-api.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-courses/manage-courses.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-library/manage-library.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-courses/trainer-courses.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-courses/trainer-courses.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-courses/trainer-courses.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-courses/trainer-courses.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-courses/trainer-courses.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-courses/trainer-courses.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/core.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/core.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/guards/auth.guards.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/guards/auth.guards.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/interceptors/auth.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/interceptors/auth.interceptor.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/cart.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/cart.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/course-api.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/course-api.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/enrollment.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/enrollment.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/library.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/library.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/theme.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/theme.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/catalog/catalog.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/course-details/course-details.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/course-details/course-details.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/course-details/course-details.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/course-details/course-details.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/course-details/course-details.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/course-details/course-details.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/course-learning/course-learning.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/course-learning/course-learning.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/course-learning/course-learning.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/course-learning/course-learning.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/profile/profile.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/profile/profile.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/profile/profile.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/profile/profile.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/profile/profile.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/profile/profile.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/about/about.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/home/home.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/services/services.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/template.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/template.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/template.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/template.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/template/template.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/template/template.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/course-card/course-card.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/course-card/course-card.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/course-card/course-card.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/course-card/course-card.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/course-card/course-card.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/course-card/course-card.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/footer/footer.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.spec.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.spec.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/shared.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/shared.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.app.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.spec.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.spec.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/Jasser Noomani/Desktop/aletheia-platform" value="3B7nRqqqL6m4eXbJnO7kf4KNTw8" />
+    </persistenceIdMap>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="3B7nRqqqL6m4eXbJnO7kf4KNTw8" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.AletheiaApplication.executor": "Run",
+    "Spring Boot.ApiGatewayApplication.executor": "Run",
+    "Spring Boot.CoursesApplication.executor": "Run",
+    "Spring Boot.EurekaApplication.executor": "Run",
+    "Spring Boot.LibraryApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Library__managment",
+    "ignore.virus.scanning.warn.message": "true",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Jasser Noomani/Desktop/aletheia-platform",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.configurations.included.in.services": "true",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.EurekaApplication">
+    <configuration name="AletheiaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="user-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="tn.platform.user.AletheiaApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ApiGatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="ApiGateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.apigateway.ApiGatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CoursesApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="courses" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.courses.CoursesApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="eureka" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.eureka.EurekaApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.esprit.microservice.eureka.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LibraryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Library" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.library.LibraryApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Spring Boot.EurekaApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="df2c488d-a629-4959-acc6-880317ae429e" name="Changes" comment="" />
+      <created>1773848971084</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1773848971084</updated>
+      <workItem from="1773848972143" duration="840000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>
