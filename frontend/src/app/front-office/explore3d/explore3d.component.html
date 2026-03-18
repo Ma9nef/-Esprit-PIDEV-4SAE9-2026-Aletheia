@@ -1,0 +1,102 @@
+<!-- ═══════════════════════════════════════════════
+     ALETHEIA  ·  3D City Map Explorer
+     ═══════════════════════════════════════════════ -->
+<div class="explore3d-wrapper">
+
+  <!-- ── Loading overlay ── -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loader-container">
+      <div class="loader-ring"></div>
+      <div class="loader-ring loader-ring-2"></div>
+    </div>
+    <p class="loader-text">Building Aletheia City…</p>
+    <p class="loader-sub">Preparing your adventure</p>
+  </div>
+
+  <!-- ── Three.js Canvas ── -->
+  <canvas #canvas3d class="scene-canvas" tabindex="0"></canvas>
+
+  <!-- ── Top bar ── -->
+  <div class="top-bar">
+    <button class="glass-btn back-btn" (click)="goHome()">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M19 12H5M5 12L12 19M5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Home</span>
+    </button>
+    <div class="title-group">
+      <h1 class="page-title">
+        <span class="title-icon">🏙️</span>
+        <span class="title-text">Aletheia City</span>
+      </h1>
+      <span class="title-sub">Interactive 3D Campus</span>
+    </div>
+    <div class="title-spacer"></div>
+  </div>
+
+  <!-- ── Minimap / Building list (right side) ── -->
+  <div class="side-panel glass-panel">
+    <div class="panel-header">
+      <span class="panel-logo">🗺️</span>
+      <span>Buildings</span>
+    </div>
+    <button
+      *ngFor="let b of buildings"
+      class="panel-item"
+      [class.panel-item-active]="nearBuilding === b"
+      (click)="navigateTo(b.route)">
+      <span class="panel-icon">{{ b.icon }}</span>
+      <div class="panel-text">
+        <span class="panel-label">{{ b.label }}</span>
+        <span class="panel-desc">{{ b.description }}</span>
+      </div>
+      <svg class="panel-arrow" viewBox="0 0 24 24" fill="none">
+        <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Interaction prompt ── -->
+  <div class="interact-prompt" *ngIf="interactPrompt && nearBuilding">
+    <div class="prompt-card glass-panel">
+      <div class="prompt-glow"></div>
+      <span class="prompt-icon">{{ nearBuilding.icon }}</span>
+      <div class="prompt-info">
+        <strong>{{ nearBuilding.label }}</strong>
+        <p>{{ nearBuilding.description }}</p>
+      </div>
+      <button class="prompt-btn" (click)="interact()">
+        <span class="key-badge">E</span>
+        Enter
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Instructions overlay ── -->
+  <div class="instructions glass-panel" [class.fade-out]="!showInstructions">
+    <div class="instruction-item">
+      <div class="key-group">
+        <span class="key-badge">W</span>
+        <span class="key-badge">A</span>
+        <span class="key-badge">S</span>
+        <span class="key-badge">D</span>
+      </div>
+      <span class="inst-text">Move</span>
+    </div>
+    <div class="instruction-divider"></div>
+    <div class="instruction-item">
+      <span class="key-badge key-wide">⇧ Shift</span>
+      <span class="inst-text">Sprint</span>
+    </div>
+    <div class="instruction-divider"></div>
+    <div class="instruction-item">
+      <span class="key-badge">E</span>
+      <span class="inst-text">Enter Building</span>
+    </div>
+  </div>
+
+  <!-- ── Bottom HUD ── -->
+  <div class="bottom-hud glass-panel">
+    <span class="hud-icon">🧭</span>
+    <span class="hud-label">Walk to a building and press <strong>E</strong> to enter</span>
+  </div>
+</div>
+

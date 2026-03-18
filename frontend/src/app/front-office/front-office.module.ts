@@ -1,0 +1,48 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { CatalogComponent } from './catalog/catalog.component';
+import { CourseDetailsComponent } from './course-details/course-details.component';
+import { CourseLearningComponent } from './course-learning/course-learning.component';
+import { ProfileComponent } from './profile/profile.component';
+import { LibraryComponent } from './library/library.component';
+
+import { SharedModule } from '../shared/shared.module';
+import { AboutComponent } from './template/about/about.component';
+import { ServicesComponent } from './template/services/services.component';
+import { TemplateComponent } from './template/template.component';
+import { HomeComponent } from './template/home/home.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { Explore3dComponent } from './explore3d/explore3d.component';
+
+@NgModule({
+  declarations: [
+    HomeComponent,
+    CatalogComponent,
+    CourseDetailsComponent,
+    CourseLearningComponent,
+    ProfileComponent,
+    LibraryComponent,
+    AboutComponent,
+    ServicesComponent,
+    TemplateComponent,
+    DashboardComponent,
+    Explore3dComponent
+  ],
+  imports: [
+    CommonModule,
+    SharedModule
+  ],
+  exports: [
+    HomeComponent,
+    CatalogComponent,
+    CourseDetailsComponent,
+    CourseLearningComponent,
+    ProfileComponent,
+    LibraryComponent,
+    AboutComponent,
+    ServicesComponent,
+    Explore3dComponent
+  ]
+})
+export class FrontOfficeModule { }
