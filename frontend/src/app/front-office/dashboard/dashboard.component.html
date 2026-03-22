@@ -50,17 +50,24 @@
         <h1 class="page-title" *ngIf="activeSection === 'workshops'">Workshops</h1>
         <h1 class="page-title" *ngIf="activeSection === 'certificates'">Certificates</h1>
       </div>
+  
       <div class="header-right">
+        <app-explore-mega-menu></app-explore-mega-menu>
+  
         <button type="button" class="icon-btn" aria-label="Notifications">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
           <span class="badge-dot" aria-hidden="true">3</span>
         </button>
+  
         <div class="avatar-wrap" aria-hidden="true">
           <span class="avatar">{{ userName ? (userName | slice:0:2 | uppercase) : 'JD' }}</span>
         </div>
       </div>
     </header>
-
+  
     <!-- ═══════════ DASHBOARD SECTION ═══════════ -->
     <div *ngIf="activeSection === 'dashboard'">
       <section class="welcome-section" aria-labelledby="welcome-heading">
