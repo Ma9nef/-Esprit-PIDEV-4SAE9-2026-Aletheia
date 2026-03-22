@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user")
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor

@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-catalog',
-  templateUrl: './catalog.component.html'
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css']
 })

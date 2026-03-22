@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { CatalogComponent } from './catalog/catalog.component';
 import { CourseDetailsComponent } from './course-details/course-details.component';
-import { CourseLearningComponent } from './course-learning/course-learning.component'; // ✅ ADD
 import { CourseLearningComponent } from './course-learning/course-learning.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LibraryComponent } from './library/library.component';
@@ -26,7 +25,6 @@ import { Explore3dComponent } from './explore3d/explore3d.component';
     CatalogComponent,
     CourseDetailsComponent,
     CourseLearningComponent,
-    CourseLearningComponent, // ✅ ADD
     ProfileComponent,
     LibraryComponent,
     AboutComponent,
@@ -34,23 +32,20 @@ import { Explore3dComponent } from './explore3d/explore3d.component';
     TemplateComponent,
     DashboardComponent,
     Explore3dComponent,
-    Explore3dComponent,
-      VerifyCertificateComponent,
+    VerifyCertificateComponent,
     LearnerCertificatesComponent,
     LearnerAssessmentComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
-     FormsModule,
-    SharedModule
+    FormsModule
   ],
   exports: [
     HomeComponent,
     CatalogComponent,
     CourseDetailsComponent,
     CourseLearningComponent,
-    CourseLearningComponent, // ✅ optional (export only if used outside)
     ProfileComponent,
     LibraryComponent,
     AboutComponent,

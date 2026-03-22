@@ -23,29 +23,20 @@ const routes: Routes = [
       { path: 'courses', component: ManageCoursesComponent }
     ]
   },
-  { path: 'trainer', component: TrainerDashboardComponent },
   {
     path: 'trainer',
     component: TrainerDashboardComponent,
     children: [
       { path: '', component: TrainerHomeComponent },
-
       { path: 'manage-courses', component: ManageCoursesComponent },
-
       { path: 'create-course', component: CreateCourseComponent },
-
-      {
-        path: 'courses/:courseId/lessons/create',
-        component: CreateLessonComponent
-      },
-      { path: 'courses/:courseId/builder', component: CourseBuilderComponent },
       { path: 'courses/:courseId/lessons/create', component: CreateLessonComponent },
+      { path: 'courses/:courseId/builder', component: CourseBuilderComponent },
       { path: 'courses/:id/edit', component: EditCourseComponent }
     ]
   },
-
   { path: 'manage-users', component: ManageUsersComponent },
-  { path: 'trainer-courses', component: TrainerCoursesComponent }, // ✅ NEW
+  { path: 'trainer-courses', component: TrainerCoursesComponent },
   { path: 'trainer/courses', component: TrainerCoursesComponent }
 ];
 

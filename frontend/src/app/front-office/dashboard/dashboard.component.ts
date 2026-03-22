@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
-import { CartService, Order } from '../../core/services/cart.service';
-import { CatalogMenuService } from '../../core/services/catalog-menu.service'; // ✅ ADD
 import { CartService, Order, OrderItem } from '../../core/services/cart.service';
+import { CatalogMenuService } from '../../core/services/catalog-menu.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
@@ -24,20 +23,19 @@ export class DashboardComponent implements OnInit {
   viewerOpen = false;
   viewerItem: OrderItem | null = null;
   viewerUrl: SafeResourceUrl | null = null;
-  // ===== EXPLORE (NEW) =====
+
+  // ===== EXPLORE =====
   menu: any[] = [];
   topCourses: any[] = [];
-
   isExploreOpen = false;
   selectedCategory: any = null;
   selectedSubCategory: string | null = null;
-
-  private exploreTimeout: any; // prevents flicker
+  private exploreTimeout: any;
 
   constructor(
     private authService: AuthService,
     private cartService: CartService,
-    private catalogMenuService: CatalogMenuService // ✅ ADD
+    private catalogMenuService: CatalogMenuService,
     private sanitizer: DomSanitizer
   ) {}
 
@@ -92,9 +90,6 @@ export class DashboardComponent implements OnInit {
       case 'BOOK': return 'Physical Book';
       case 'CHILDREN_MATERIAL': return 'Children Material';
       default: return 'Resource';
-  downloadItem(fileUrl: string | undefined): void {
-    if (fileUrl) {
-      window.open(fileUrl, '_blank');
     }
   }
 
@@ -115,14 +110,8 @@ export class DashboardComponent implements OnInit {
     if (!item.fileUrl) return;
     this.viewerItem = item;
 
-    // Use Google Docs viewer for PDF files as a fallback, or embed directly
     const url = item.fileUrl;
-    if (url.toLowerCase().endsWith('.pdf')) {
-      this.viewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    } else {
-      // For other digital files, try direct embed
-      this.viewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    }
+    this.viewerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.viewerOpen = true;
   }
 
@@ -137,17 +126,20 @@ export class DashboardComponent implements OnInit {
     return this.orders.reduce((sum, o) => sum + o.items.length, 0);
   }
 
+  getDigitalItemsCount(): number {
+    return this.orders.reduce((sum, o) =>
+      sum + o.items.filter(i => this.isDigitalProduct(i)).length, 0);
+  }
+
   // ===== EXPLORE METHODS =====
 
   openExplore(): void {
     clearTimeout(this.exploreTimeout);
     this.isExploreOpen = true;
 
-    // load menu only once
     if (this.menu.length === 0) {
       this.catalogMenuService.getMenu().subscribe(data => {
         this.menu = data;
-
         if (data.length > 0) {
           this.selectCategory(data[0]);
         }
@@ -156,19 +148,14 @@ export class DashboardComponent implements OnInit {
   }
 
   closeExplore(): void {
-    // delay prevents flicker when moving mouse
     this.exploreTimeout = setTimeout(() => {
       this.isExploreOpen = false;
     }, 200);
-  getDigitalItemsCount(): number {
-    return this.orders.reduce((sum, o) =>
-      sum + o.items.filter(i => this.isDigitalProduct(i)).length, 0);
   }
 
   selectCategory(cat: any): void {
     this.selectedCategory = cat;
     this.selectedSubCategory = null;
-
     this.loadTopCourses(cat.category);
   }
 

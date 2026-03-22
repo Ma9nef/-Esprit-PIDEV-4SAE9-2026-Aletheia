@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -13,7 +12,6 @@ export class AdminDashboardComponent implements OnInit {
   showDashboardContent = true;
   showDashboardWidgets = true;   // ✅ ADD THIS LINE
 
-  constructor(private activatedRoute: ActivatedRoute) {}
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute

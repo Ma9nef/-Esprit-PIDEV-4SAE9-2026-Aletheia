@@ -6,5 +6,4 @@ public enum ProductType {
     PDF,
     EXAM,
     OTHER
-    EXAM
 }

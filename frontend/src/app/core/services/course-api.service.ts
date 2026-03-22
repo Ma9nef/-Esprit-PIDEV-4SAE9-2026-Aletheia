@@ -22,11 +22,8 @@ export interface CoursePublicDTO {
   durationHours: number;
   createdAt: string;
   imageUrl?: string;
-
-  // ✅ add these (even if backend doesn't send them yet)
   category?: string | null;
   subCategory?: string | null;
-  imageUrl?: string; // ✅ ajout
 }
 
 export interface LessonLearningDTO {
