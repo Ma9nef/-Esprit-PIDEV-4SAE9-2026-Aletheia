@@ -1,11 +1,16 @@
 package com.esprit.microservice.courses.dto.course.command;
 
 public class CourseCreateDTO {
+
     private String title;
     private String description;
     private String instructorName;
     private Double price;
     private Integer durationHours;
+    private String imageUrl;
+
+    private String category;
+    private String subCategory;
 
     public String getTitle() {
         return title;
@@ -45,5 +50,29 @@ public class CourseCreateDTO {
 
     public void setDurationHours(Integer durationHours) {
         this.durationHours = durationHours;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 }

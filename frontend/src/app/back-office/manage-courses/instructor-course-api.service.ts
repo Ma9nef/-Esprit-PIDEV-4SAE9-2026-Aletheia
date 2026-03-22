@@ -2,14 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-export type CourseAdminDTO = {
+export interface CourseAdminDTO {
   id: number;
   title: string;
   description: string;
   price: number;
   durationHours: number;
+
+  archived?: boolean;
+
   createdAt?: string;
-};
+  updatedAt?: string;
+}
 
 export type CourseCreateDTO = {
   title: string;

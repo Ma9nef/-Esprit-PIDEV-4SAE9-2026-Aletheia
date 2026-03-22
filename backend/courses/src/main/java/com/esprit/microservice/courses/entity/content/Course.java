@@ -1,5 +1,7 @@
 package com.esprit.microservice.courses.entity.content;
 
+import com.esprit.microservice.courses.entity.Assessment;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -37,9 +39,54 @@ public class Course {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
+    @Column(length = 120)
+    private String category;
+
+    @Column(length = 120)
+    private String subCategory;
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    @Column(length = 120)
+    private String topic; // optionnel
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Assessment> assessments;
 
     @PrePersist
     protected void onCreate() {

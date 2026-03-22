@@ -1,45 +1,168 @@
-<div class="container py-4">
-  <button class="btn btn-link p-0 mb-3" (click)="back()">← Back to courses</button>
+<div class="container py-4 cd">
 
-  <div *ngIf="loading">Loading...</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <a class="cd-back" (click)="back()">← Back to courses</a>
 
-  <div *ngIf="course" class="card">
-    <div class="card-body">
-      <h2 class="mb-2">{{ course.title }}</h2>
-      <p class="text-muted mb-3">Instructor: {{ course.instructorName }}</p>
+  <div *ngIf="loading" class="cd-loading">Loading...</div>
+  <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
 
-      <p class="mb-4">{{ course.description }}</p>
+  <ng-container *ngIf="course">
 
-      <div class="d-flex gap-4 flex-wrap">
-        <div><strong>Duration:</strong> {{ course.durationHours }} hours</div>
-        <div><strong>Price:</strong> {{ course.price }} $</div>
-        <div><strong>Created:</strong> {{ course.createdAt | date:'medium' }}</div>
-      </div>
+    <!-- HERO -->
+    <div class="cd-hero">
+      <div class="cd-hero-inner">
+        <div class="cd-hero-left">
+          <div class="cd-breadcrumb">
+            <span class="dot"></span>
+            <span class="muted">Course</span>
+          </div>
 
-      <!-- ✅ Actions -->
-      <div class="mt-4 d-flex align-items-center gap-3 flex-wrap">
+          <h1 class="cd-title">{{ course.title }}</h1>
 
-        <!-- If enrolled -->
-        <ng-container *ngIf="isEnrolled; else enrollBlock">
-          <span class="badge bg-success fs-6">✓ You are enrolled in this course</span>
+          <div class="cd-subline">
+            <span class="cd-pill">
+              <span class="ico"></span>
+              Instructor: <b>{{ course.instructorName || '—' }}</b>
+            </span>
 
-          <button class="btn btn-success" (click)="goToLearning()">
-            Continue Learning
-          </button>
-        </ng-container>
+            <span class="cd-pill" *ngIf="course.category">
+              <span class="ico"></span>
+              {{ course.category }}
+            </span>
 
-        <!-- If NOT enrolled -->
-        <ng-template #enrollBlock>
-          <button
-            class="btn btn-primary"
-            [disabled]="enrolling"
-            (click)="enroll()">
-            {{ enrolling ? 'Enrolling...' : 'Enroll' }}
-          </button>
-        </ng-template>
+            <span class="cd-pill" *ngIf="course.subCategory">
+              <span class="ico"></span>
+              {{ course.subCategory }}
+            </span>
+          </div>
 
+          <p class="cd-desc">
+            {{ course.description }}
+          </p>
+
+          <div class="cd-quick">
+            <div class="q">
+              <div class="q-label">Duration</div>
+              <div class="q-value">{{ course.durationHours }}h</div>
+            </div>
+            <div class="q">
+              <div class="q-label">Created</div>
+              <div class="q-value">{{ course.createdAt | date:'mediumDate' }}</div>
+            </div>
+            <div class="q">
+              <div class="q-label">Access</div>
+              <div class="q-value">Lifetime (demo)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cd-hero-right">
+          <!-- Decorative block -->
+          <div class="cd-hero-art"></div>
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- MAIN GRID -->
+    <div class="cd-grid">
+
+      <!-- LEFT: content sections -->
+      <div class="cd-main">
+
+        <!-- About -->
+        <section class="cd-section">
+          <h3 class="cd-h3">About this course</h3>
+          <p class="cd-text">
+            {{ course.description }}
+          </p>
+        </section>
+
+        <!-- What you'll learn (demo but looks real) -->
+        <section class="cd-section">
+          <h3 class="cd-h3">What you’ll learn</h3>
+
+          <div class="cd-learn-grid">
+            <div class="learn-item"> Build clean REST APIs with Spring Boot</div>
+            <div class="learn-item"> Structure your project (controller/service/repo)</div>
+            <div class="learn-item"> Handle validation, errors and best practices</div>
+            <div class="learn-item">Prepare your app for real production use</div>
+          </div>
+
+          <div class="cd-hint">
+            (Replace these later with real learning outcomes.)
+          </div>
+        </section>
+
+        <!-- Requirements (demo) -->
+        <section class="cd-section">
+          <h3 class="cd-h3">Requirements</h3>
+          <ul class="cd-list">
+            <li>Basic Java knowledge</li>
+            <li>Understanding of HTTP basics</li>
+            <li>Motivation to build real APIs</li>
+          </ul>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: sticky purchase/enroll card -->
+      <aside class="cd-side">
+        <div class="cd-card">
+          <div class="cd-price">
+            <div class="price-label">Price</div>
+            <div class="price-value">{{ course.price }} <span>$</span></div>
+          </div>
+
+          <div class="cd-meta">
+            <div class="meta-row">
+              <span class="meta-ico"></span>
+              <span class="meta-txt"><b>{{ course.durationHours }}</b> hours of content</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-ico"></span>
+              <span class="meta-txt">Created <b>{{ course.createdAt | date:'mediumDate' }}</b></span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-ico"></span>
+              <span class="meta-txt">Certificate (demo)</span>
+            </div>
+          </div>
+
+          <div class="cd-divider"></div>
+
+          <!-- Actions -->
+          <ng-container *ngIf="isEnrolled; else enrollBlock">
+            <div class="cd-enrolled">
+              <span class="check">✓</span>
+              <span>Enrolled</span>
+            </div>
+
+            <button class="cd-btn cd-btn-success" (click)="goToLearning()">
+              Continue Learning
+            </button>
+          </ng-container>
+
+          <ng-template #enrollBlock>
+            <button
+              class="cd-btn cd-btn-primary"
+              [disabled]="enrolling"
+              (click)="enroll()">
+              {{ enrolling ? 'Enrolling...' : 'Enroll now' }}
+            </button>
+
+            <div class="cd-note">
+              Instant access after enrollment
+            </div>
+          </ng-template>
+
+          <div class="cd-perks">
+            <div class="perk"> Full lifetime access</div>
+            <div class="perk">Progress tracking</div>
+            <div class="perk"> Learn at your pace</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+  </ng-container>
 </div>

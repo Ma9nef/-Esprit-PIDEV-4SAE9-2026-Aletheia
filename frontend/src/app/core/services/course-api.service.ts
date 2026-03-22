@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+export interface CourseAdminDTO {
+  id: number;
+  title: string;
+  description: string;
+  instructorName: string;
+  price: number;
+  durationHours: number;
+  archived: boolean;
+  createdAt: string;
+  updatedAt?: string;
+}
 
 export interface CoursePublicDTO {
   id: number;
@@ -10,6 +21,11 @@ export interface CoursePublicDTO {
   price: number;
   durationHours: number;
   createdAt: string;
+  imageUrl?: string;
+
+  // ✅ add these (even if backend doesn't send them yet)
+  category?: string | null;
+  subCategory?: string | null;
   imageUrl?: string; // ✅ ajout
 }
 
@@ -45,6 +61,7 @@ export class CourseApiService {
   private COURSE_API = 'http://localhost:8081/course/public/courses';
   private ENROLL_API = 'http://localhost:8081/course/public/enrollments';
   private LESSON_LEARN_API = 'http://localhost:8081/lesson/learn';
+  private ADMIN_COURSE_API = 'http://localhost:8081/course/admin/courses';
 
   // ✅ Progress API
   private PROGRESS_API = 'http://localhost:8081/progress';
@@ -175,6 +192,35 @@ export class CourseApiService {
   openLesson(courseId: number, lessonId: number): Observable<void> {
     return this.http.post<void>(
       `${this.PROGRESS_API}/courses/${courseId}/lessons/${lessonId}/open`,
+      {},
+      { headers: this.authHeaders() }
+    );
+  }
+  getAdminCourses(): Observable<CourseAdminDTO[]> {
+    return this.http.get<CourseAdminDTO[]>(
+      this.ADMIN_COURSE_API,
+      { headers: this.authHeaders() }
+    );
+  }
+
+  getAdminCourse(id: number): Observable<CourseAdminDTO> {
+    return this.http.get<CourseAdminDTO>(
+      `${this.ADMIN_COURSE_API}/${id}`,
+      { headers: this.authHeaders() }
+    );
+  }
+
+  archiveCourse(id: number): Observable<CourseAdminDTO> {
+    return this.http.patch<CourseAdminDTO>(
+      `${this.ADMIN_COURSE_API}/${id}/archive`,
+      {},
+      { headers: this.authHeaders() }
+    );
+  }
+
+  unarchiveCourse(id: number): Observable<CourseAdminDTO> {
+    return this.http.patch<CourseAdminDTO>(
+      `${this.ADMIN_COURSE_API}/${id}/unarchive`,
       {},
       { headers: this.authHeaders() }
     );

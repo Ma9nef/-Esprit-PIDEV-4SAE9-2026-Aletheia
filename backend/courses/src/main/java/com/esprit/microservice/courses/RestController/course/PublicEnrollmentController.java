@@ -19,6 +19,10 @@ public class PublicEnrollmentController {
         this.service = service;
         this.jwtReader = jwtReader;
     }
+    @GetMapping("")
+    public ResponseEntity<List<Enrollment>> getAllEnrollments() {
+        return ResponseEntity.ok(service.findAll());
+    }
 
     @PostMapping("/{courseId}")
     public ResponseEntity<Enrollment> enroll(@PathVariable Long courseId,
@@ -32,4 +36,5 @@ public class PublicEnrollmentController {
         Long userId = jwtReader.extractUserId(authorization);
         return ResponseEntity.ok(service.myEnrollments(userId));
     }
+
 }

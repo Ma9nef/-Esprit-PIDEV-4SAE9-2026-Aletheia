@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: tn.platform.user.AletheiaApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 9.301 s -- in tn.platform.user.AletheiaApplicationTests

@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
+import { CartService, Order } from '../../core/services/cart.service';
+import { CatalogMenuService } from '../../core/services/catalog-menu.service'; // ✅ ADD
 import { CartService, Order, OrderItem } from '../../core/services/cart.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
@@ -9,6 +11,8 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+
+  // ===== EXISTING =====
   activeSection = 'dashboard';
   orders: Order[] = [];
   ordersLoading = false;
@@ -20,10 +24,20 @@ export class DashboardComponent implements OnInit {
   viewerOpen = false;
   viewerItem: OrderItem | null = null;
   viewerUrl: SafeResourceUrl | null = null;
+  // ===== EXPLORE (NEW) =====
+  menu: any[] = [];
+  topCourses: any[] = [];
+
+  isExploreOpen = false;
+  selectedCategory: any = null;
+  selectedSubCategory: string | null = null;
+
+  private exploreTimeout: any; // prevents flicker
 
   constructor(
     private authService: AuthService,
     private cartService: CartService,
+    private catalogMenuService: CatalogMenuService // ✅ ADD
     private sanitizer: DomSanitizer
   ) {}
 
@@ -36,6 +50,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // ===== EXISTING METHODS =====
+
   setActiveSection(section: string): void {
     this.activeSection = section;
     if (section === 'purchases' && this.orders.length === 0) {
@@ -46,6 +62,7 @@ export class DashboardComponent implements OnInit {
   loadOrders(): void {
     if (!this.userId) return;
     this.ordersLoading = true;
+
     this.cartService.getOrdersByUser(this.userId).subscribe({
       next: (orders) => {
         this.orders = orders;
@@ -75,6 +92,9 @@ export class DashboardComponent implements OnInit {
       case 'BOOK': return 'Physical Book';
       case 'CHILDREN_MATERIAL': return 'Children Material';
       default: return 'Resource';
+  downloadItem(fileUrl: string | undefined): void {
+    if (fileUrl) {
+      window.open(fileUrl, '_blank');
     }
   }
 
@@ -117,8 +137,51 @@ export class DashboardComponent implements OnInit {
     return this.orders.reduce((sum, o) => sum + o.items.length, 0);
   }
 
+  // ===== EXPLORE METHODS =====
+
+  openExplore(): void {
+    clearTimeout(this.exploreTimeout);
+    this.isExploreOpen = true;
+
+    // load menu only once
+    if (this.menu.length === 0) {
+      this.catalogMenuService.getMenu().subscribe(data => {
+        this.menu = data;
+
+        if (data.length > 0) {
+          this.selectCategory(data[0]);
+        }
+      });
+    }
+  }
+
+  closeExplore(): void {
+    // delay prevents flicker when moving mouse
+    this.exploreTimeout = setTimeout(() => {
+      this.isExploreOpen = false;
+    }, 200);
   getDigitalItemsCount(): number {
     return this.orders.reduce((sum, o) =>
       sum + o.items.filter(i => this.isDigitalProduct(i)).length, 0);
+  }
+
+  selectCategory(cat: any): void {
+    this.selectedCategory = cat;
+    this.selectedSubCategory = null;
+
+    this.loadTopCourses(cat.category);
+  }
+
+  selectSubCategory(sub: string): void {
+    this.selectedSubCategory = sub;
+
+    this.loadTopCourses(this.selectedCategory.category, sub);
+  }
+
+  loadTopCourses(category: string, subCategory?: string): void {
+    this.catalogMenuService.getTop(category, subCategory)
+      .subscribe(data => {
+        this.topCourses = data;
+      });
   }
 }

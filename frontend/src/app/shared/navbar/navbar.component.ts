@@ -41,6 +41,12 @@ export class NavbarComponent implements OnInit {
   }
 
   menuItems = [
+    { label: 'Home', route: '/' },
+    { label: 'About', route: '/about' },
+    { label: 'Services', route: '/services'},
+    { label: 'Contact', route: '/contact' },
+    { label: 'Library', route: '/library',},
+
     { label: 'Home', route: '/', icon: '🏠' },
     { label: 'About', route: '/about', icon: 'ℹ️' },
     { label: 'Services', route: '/services', icon: '⚙️' },
@@ -78,7 +84,40 @@ export class NavbarComponent implements OnInit {
         this.searchQuery = query || '';
       });
   }
+  get isAdmin(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
+    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
+  }
+   onMyCertificatesClick(): void {
+     const role = localStorage.getItem('role'); // or from your auth service
 
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-certificates']);
+  }
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/my-certificates']);
+  }
+
+
+}
+ goToAssessments() {
+
+  const role = localStorage.getItem('role'); // or from your auth service
+
+  if (role === 'ADMIN') {
+    this.router.navigate(['/manage-assessments']);
+  }
+  else if (role === 'LEARNER') {
+    this.router.navigate(['/assessment']);
+  }
+
+}
+  get isInstructor(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
+    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  }
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {

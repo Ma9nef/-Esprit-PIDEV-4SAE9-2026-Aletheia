@@ -49,6 +49,14 @@ public class InstructorCourseServiceImpl implements InstructorCourseService {
         course.setPrice(dto.getPrice());
         course.setDurationHours(dto.getDurationHours());
 
+        // ✅ NEW: category + subCategory
+        course.setCategory(dto.getCategory());
+        course.setSubCategory(dto.getSubCategory());
+
+        // ✅ SAVE IMAGE URL
+        course.setImageUrl(dto.getImageUrl());
+
+        // archived=true waiting admin validation
         course.setArchived(true);
 
         System.out.println("About to save course, instructorId=" + course.getInstructorId());
@@ -70,9 +78,20 @@ public class InstructorCourseServiceImpl implements InstructorCourseService {
 
         course.setTitle(dto.getTitle());
         course.setDescription(dto.getDescription());
+
+        // ⚠️ Attention: ça permet de modifier le nom instructor manuellement.
+        // Si tu veux forcer celui du JWT, remplace par jwtReader.extractName(bearer).
         course.setInstructorName(dto.getInstructorName());
+
         course.setPrice(dto.getPrice());
         course.setDurationHours(dto.getDurationHours());
+
+        // ✅ NEW: allow updating category + subCategory
+        course.setCategory(dto.getCategory());
+        course.setSubCategory(dto.getSubCategory());
+
+        // ✅ (Optionnel mais logique) update image too if provided
+        course.setImageUrl(dto.getImageUrl());
 
         // toute modif => revalidation
         course.setArchived(true);

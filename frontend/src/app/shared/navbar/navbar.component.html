@@ -9,6 +9,7 @@
       </div>
 
       <nav class="desktop-menu">
+        <!-- Standard menu -->
         <a
           *ngFor="let item of menuItems"
           class="menu-item"
@@ -17,6 +18,29 @@
           <span class="menu-icon">{{ item.icon }}</span>
           <span class="menu-label">{{ item.label }}</span>
         </a>
+
+        <app-explore-mega-menu></app-explore-mega-menu>
+
+        <!-- ✅ Dashboard: only for ADMIN -->
+        <a
+          *ngIf="isLoggedIn && isAdmin"
+          class="menu-item"
+          [class.active]="currentRoute.startsWith('/admin')"
+          (click)="navigateTo('dashboardAdmin')">
+
+          <span class="menu-label">Dashboard</span>
+        </a>
+
+        <!-- ✅ Dashboard: only for INSTRUCTOR -->
+        <a
+          *ngIf="isLoggedIn && isInstructor"
+          class="menu-item"
+          [class.active]="currentRoute.startsWith('/instructor')"
+          (click)="navigateTo('/instructor/dashboard')">
+
+          <span class="menu-label">Dashboard</span>
+        </a>
+
       </nav>
 
 
@@ -91,6 +115,15 @@
             </div>
           </div>
           <div class="dropdown-divider"></div>
+
+          <!-- ✅ Optional: dashboard inside dropdown too -->
+          <a class="dropdown-item" *ngIf="isAdmin" (click)="navigateTo('/admin/dashboard')">
+            <span>Dashboard</span>
+          </a>
+          <a class="dropdown-item" *ngIf="isInstructor" (click)="navigateTo('/instructor/dashboard')">
+            <span>Dashboard</span>
+          </a>
+
           <a class="dropdown-item" (click)="onProfileClick()">
             <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -106,21 +139,40 @@
             <span>My Courses</span>
           </a>
           <a class="dropdown-item" (click)="onDashboardClick()">
+
+          <div class="dropdown-divider"></div>
+
+          <a class="dropdown-item" (click)="onMyCertificatesClick()">
             <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 15L10 20L12 19L14 20L12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="12" cy="8" r="6" stroke="currentColor" stroke-width="2"/>
+              <path d="M9 8L11 10L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+            <span>My Certificates</span>
             <span>Dashboard</span>
           </a>
+
           <div class="dropdown-divider"></div>
           <a class="dropdown-item logout" (click)="onLogout()">
+
+          <a class="dropdown-item" (click)="goToAssessments()">
             <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
               <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M9 11L12 14L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 12V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H16"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
+            <span>My Assessments</span>
+          </a>
+
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item logout" (click)="onLogout()">
             <span>Logout</span>
           </a>
         </div>
@@ -162,6 +214,26 @@
         (click)="navigateTo(item.route)">
         <span class="mobile-menu-icon">{{ item.icon }}</span>
         <span>{{ item.label }}</span>
+      </a>
+
+      <!-- ✅ Mobile Dashboard: ADMIN -->
+      <a
+        *ngIf="isLoggedIn && isAdmin"
+        class="mobile-menu-item"
+        [class.active]="currentRoute.startsWith('/admin')"
+        (click)="navigateTo('/admin/dashboard')">
+        <span class="mobile-menu-icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- ✅ Mobile Dashboard: INSTRUCTOR -->
+      <a
+        *ngIf="isLoggedIn && isInstructor"
+        class="mobile-menu-item"
+        [class.active]="currentRoute.startsWith('/instructor')"
+        (click)="navigateTo('/instructor/dashboard')">
+        <span class="mobile-menu-icon">📊</span>
+        <span>Dashboard</span>
       </a>
     </nav>
 

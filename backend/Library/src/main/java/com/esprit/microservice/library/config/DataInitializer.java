@@ -15,6 +15,7 @@ import java.sql.Statement;
 public class DataInitializer {
 
     @Bean
+    public CommandLineRunner initializeData(ProductRepository productRepository) {
     public CommandLineRunner initializeData(ProductRepository productRepository, DataSource dataSource) {
         return args -> {
             // Ensure columns can hold large data (base64 data URLs for auto-generated covers)

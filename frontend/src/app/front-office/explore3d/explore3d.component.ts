@@ -699,9 +699,11 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
   private updateAvatar(delta: number, t: number): void {
     let dx = 0, dz = 0;
 
+    if (this.keys['z'] || this.keys['arrowup'])    dz -= 1;
     if (this.keys['w'] || this.keys['arrowup'])    dz -= 1;
     if (this.keys['s'] || this.keys['arrowdown'])  dz += 1;
     if (this.keys['a'] || this.keys['arrowleft'])  dx -= 1;
+    if (this.keys['q'] || this.keys['arrowleft'])  dx -= 1;
     if (this.keys['d'] || this.keys['arrowright']) dx += 1;
 
     this.isMoving = dx !== 0 || dz !== 0;

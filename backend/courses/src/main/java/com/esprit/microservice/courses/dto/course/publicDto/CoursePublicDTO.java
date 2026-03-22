@@ -11,6 +11,9 @@ public class CoursePublicDTO  {
     private Double price;
     private Integer durationHours;
     private LocalDateTime createdAt;
+    private String imageUrl;
+    private String category;
+    private String subCategory;
 
     public Long getId() {
         return id;
@@ -66,5 +69,29 @@ public class CoursePublicDTO  {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 }
