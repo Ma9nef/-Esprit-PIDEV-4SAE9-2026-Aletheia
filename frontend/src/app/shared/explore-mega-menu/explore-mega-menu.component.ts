@@ -1,6 +1,10 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CatalogMenuService, MenuCategoryDTO, CourseMiniDTO } from 'src/app/core/services/catalog-menu.service';
+import {
+  CatalogMenuService,
+  MenuCategoryDTO,
+  CourseMiniDTO
+} from 'src/app/core/services/catalog-menu.service';
 
 @Component({
   selector: 'app-explore-mega-menu',
@@ -8,7 +12,6 @@ import { CatalogMenuService, MenuCategoryDTO, CourseMiniDTO } from 'src/app/core
   styleUrls: ['./explore-mega-menu.component.css']
 })
 export class ExploreMegaMenuComponent implements OnInit {
-
   open = false;
 
   menu: MenuCategoryDTO[] = [];
@@ -20,7 +23,6 @@ export class ExploreMegaMenuComponent implements OnInit {
   loadingMenu = false;
   loadingTop = false;
 
-  // cache: évite de spammer l’API pendant les hover
   private topCache = new Map<string, CourseMiniDTO[]>();
 
   constructor(
@@ -29,50 +31,85 @@ export class ExploreMegaMenuComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // on charge le menu au démarrage pour une ouverture instantanée
     this.loadMenu();
   }
+
   toggle(): void {
     this.open = !this.open;
+
+    if (this.open && this.menu.length === 0) {
+      this.loadMenu();
+    }
   }
+
+  openMenu(): void {
+    this.open = true;
+
+    if (this.menu.length === 0) {
+      this.loadMenu();
+    }
+  }
+
   close(): void {
     this.open = false;
   }
+
   loadMenu(): void {
-    this.api.getMenu().subscribe(res => {
-      console.log("MENU FROM API:", res);
-      this.menu = res;
+    this.loadingMenu = true;
+
+    this.api.getMenu().subscribe({
+      next: (res) => {
+        this.menu = res || [];
+        this.loadingMenu = false;
+
+        if (this.menu.length > 0 && !this.activeCategory) {
+          this.setCategory(this.menu[0]);
+        }
+      },
+      error: () => {
+        this.menu = [];
+        this.loadingMenu = false;
+      }
     });
   }
+
   setCategory(cat: MenuCategoryDTO): void {
     this.activeCategory = cat;
-  
-    // ✅ reset subCategory selection (optional)
     this.activeSubCategory = undefined;
-  
-    // ✅ fetch TOP courses by CATEGORY only (no subCategory)
     this.loadTopByCategoryOnly();
   }
+
   setSubCategory(sc: string): void {
     this.activeSubCategory = sc;
     this.loadTop();
   }
 
+  private getCategoryName(cat?: MenuCategoryDTO): string {
+    if (!cat) return '';
+
+    const candidate = cat as any;
+    return candidate.label ?? candidate.category ?? '';
+  }
+
   private loadTop(): void {
-    if (!this.activeCategory) {
+    const categoryName = this.getCategoryName(this.activeCategory);
+
+    if (!categoryName) {
       this.topCourses = [];
       return;
     }
-  
-    const key = `${this.activeCategory.label}::${this.activeSubCategory ?? ''}`;
+
+    const key = `${categoryName}::${this.activeSubCategory ?? ''}`;
     const cached = this.topCache.get(key);
+
     if (cached) {
       this.topCourses = cached;
       return;
     }
-  
+
     this.loadingTop = true;
-    this.api.getTop(this.activeCategory.label, this.activeSubCategory, 10).subscribe({
+
+    this.api.getTop(categoryName, this.activeSubCategory, 10).subscribe({
       next: (list) => {
         const safe = list || [];
         this.topCache.set(key, safe);
@@ -85,22 +122,26 @@ export class ExploreMegaMenuComponent implements OnInit {
       }
     });
   }
-  
+
   private loadTopByCategoryOnly(): void {
-    if (!this.activeCategory) {
+    const categoryName = this.getCategoryName(this.activeCategory);
+
+    if (!categoryName) {
       this.topCourses = [];
       return;
     }
-  
-    const key = `${this.activeCategory.label}::`; // no subCategory
+
+    const key = `${categoryName}::`;
     const cached = this.topCache.get(key);
+
     if (cached) {
       this.topCourses = cached;
       return;
     }
-  
+
     this.loadingTop = true;
-    this.api.getTop(this.activeCategory.label, undefined, 10).subscribe({
+
+    this.api.getTop(categoryName, undefined, 10).subscribe({
       next: (list) => {
         const safe = list || [];
         this.topCache.set(key, safe);
@@ -113,33 +154,37 @@ export class ExploreMegaMenuComponent implements OnInit {
       }
     });
   }
+
   goToCourse(courseId: number): void {
     this.close();
     this.router.navigate(['/front/course-details', courseId]);
   }
 
   viewAll(): void {
-    if (!this.activeCategory) return;
+    const categoryName = this.getCategoryName(this.activeCategory);
+    if (!categoryName) return;
 
     this.close();
-    // Page catalogue filtrée (si vous l’avez). Sinon on peut la créer.
     this.router.navigate(['/catalog'], {
       queryParams: {
-        category: this.activeCategory.label,
+        category: categoryName,
         subCategory: this.activeSubCategory
       }
     });
   }
 
-  // Fermer au clic en dehors
   @HostListener('document:click', ['$event'])
-  onDocClick(ev: MouseEvent) {
+  onDocClick(ev: MouseEvent): void {
     if (!this.open) return;
+
     const target = ev.target as HTMLElement;
-    if (!target.closest('.explore-wrap')) this.close();
+    if (!target.closest('.explore-wrap')) {
+      this.close();
+    }
   }
 
-  // Fermer avec ESC
   @HostListener('document:keydown.escape')
-  onEsc() { this.close(); }
+  onEsc(): void {
+    this.close();
+  }
 }

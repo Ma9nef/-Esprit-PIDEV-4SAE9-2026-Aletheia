@@ -19,8 +19,6 @@ const routes: Routes = [
     component: AdminDashboardComponent,
     children: [
       { path: 'manage-library', component: ManageLibraryComponent },
-
-      // ✅ AJOUT
       { path: 'courses', component: ManageCoursesComponent }
     ]
   },
@@ -44,7 +42,6 @@ const routes: Routes = [
     ]
   },
 
-  { path: 'trainer', component: TrainerDashboardComponent },
   { path: 'manage-users', component: ManageUsersComponent },
 ];
 
