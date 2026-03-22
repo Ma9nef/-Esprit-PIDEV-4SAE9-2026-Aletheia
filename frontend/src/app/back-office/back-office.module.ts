@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';   // ✅ ADD THIS
+import { RouterModule } from '@angular/router';
 
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
@@ -19,7 +18,6 @@ import { CreateCourseComponent } from './create-course/create-course.component';
 import { CreateLessonComponent } from './create-lesson/create-lesson.component';
 import { CourseBuilderComponent } from './courses/course-builder/course-builder.component';
 import { EditCourseComponent } from './edit-course/edit-course.component';
-import { TrainerCoursesComponent } from './trainer-courses/trainer-courses.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +26,6 @@ import { TrainerCoursesComponent } from './trainer-courses/trainer-courses.compo
     TrainerDashboardComponent,
     TrainerCoursesComponent,
     ManageLibraryComponent,
-    ManageLibraryComponent,
     ManageCertificatesComponent,
     AssessmentFormComponent,
     ManageAssessmentsComponent,
@@ -36,16 +33,14 @@ import { TrainerCoursesComponent } from './trainer-courses/trainer-courses.compo
     CreateCourseComponent,
     CreateLessonComponent,
     CourseBuilderComponent,
-    EditCourseComponent,
-    TrainerCoursesComponent
+    EditCourseComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     BackOfficeRoutingModule,
-    RouterModule ,  // ✅ THIS LINE FIXES YOUR ERROR
-    BackOfficeRoutingModule   // 👈 ADD THIS
+    RouterModule
   ]
 })
 export class BackOfficeModule { }

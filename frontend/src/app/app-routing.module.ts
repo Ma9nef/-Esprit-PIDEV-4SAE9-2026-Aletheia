@@ -25,14 +25,13 @@ import { LibraryComponent } from './front-office/library/library.component';
 import { Explore3dComponent } from './front-office/explore3d/explore3d.component';
 
 const routes: Routes = [
-  {path:"",component:TemplateComponent},
+  { path: '', component: TemplateComponent },
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
   { path: 'services', component: ServicesComponent },
-  {path:'contact', component: FooterComponent},
-  {path: 'dashboardLearner',component: DashboardComponent},
-  {path: 'dashboardInstructor',component: TrainerDashboardComponent},
-  {path: 'dashboardAdmin', component:AdminDashboardComponent },
+  { path: 'contact', component: FooterComponent },
+  { path: 'dashboardLearner', component: DashboardComponent },
+  { path: 'dashboardInstructor', component: TrainerDashboardComponent },
   {
     path: 'dashboardAdmin',
     component: AdminDashboardComponent,
@@ -44,24 +43,24 @@ const routes: Routes = [
   { path: 'front/courses', component: CatalogComponent },
   { path: 'front/course-details/:id', component: CourseDetailsComponent },
   { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
-     {path: 'manage-assessments', component:ManageAssessmentsComponent },
+  { path: 'manage-assessments', component: ManageAssessmentsComponent },
   { path: 'verify/:code', component: VerifyCertificateComponent },
-    { path: 'add-assessment', component: AssessmentFormComponent },
-     { path: 'manage-certificates', component: ManageCertificatesComponent },
-  { path: 'edit-assessment/:id', component: AssessmentFormComponent  },
+  { path: 'add-assessment', component: AssessmentFormComponent },
+  { path: 'manage-certificates', component: ManageCertificatesComponent },
+  { path: 'edit-assessment/:id', component: AssessmentFormComponent },
   { path: 'my-certificates', component: LearnerCertificatesComponent },
-   { path: 'assessment', component: LearnerAssessmentComponent },
+  { path: 'assessment', component: LearnerAssessmentComponent },
   { path: 'front/library', component: LibraryComponent },
   { path: 'explore', component: Explore3dComponent },
-  {path: 'back-office/manage-courses',component: ManageCoursesComponent},
-  {path: 'back-office',loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)},
-
+  { path: 'back-office/manage-courses', component: ManageCoursesComponent },
+  {
+    path: 'back-office',
+    loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)
+  },
   {
     path: 'auth',
-    loadChildren: () =>
-      import('./auth/auth.module').then(m => m.AuthModule)
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   }
-
 ];
 
 @NgModule({

@@ -13,7 +13,6 @@ public class CourseAdminDTO {
     private String imageUrl;
 
     private boolean archived;
-    private boolean archived;        // 🔥 ajouté
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

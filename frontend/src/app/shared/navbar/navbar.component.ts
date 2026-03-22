@@ -1,11 +1,10 @@
 import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -28,29 +27,12 @@ export class NavbarComponent implements OnInit {
     avatar: 'https://i.pravatar.cc/150?img=12'
   };
 
-  private updateCurrentUser(): void {
-    const u = this.auth.getUserFromToken();
-
-    if (!u) {
-      this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
-      return;
-    }
-
-    this.currentUser.email = u.email;
-    this.currentUser.name = u.email.split('@')[0];
-  }
-
   menuItems = [
-    { label: 'Home', route: '/' },
-    { label: 'About', route: '/about' },
-    { label: 'Services', route: '/services'},
-    { label: 'Contact', route: '/contact' },
-    { label: 'Library', route: '/library',},
-
     { label: 'Home', route: '/', icon: '🏠' },
     { label: 'About', route: '/about', icon: 'ℹ️' },
     { label: 'Services', route: '/services', icon: '⚙️' },
     { label: 'Explore 3D', route: '/explore', icon: '🌌' },
+    { label: 'Library', route: '/front/library', icon: '📖' },
     { label: 'Contact', route: '/contact', icon: '📧' }
   ];
 
@@ -64,6 +46,18 @@ export class NavbarComponent implements OnInit {
   // ✅ Always reads current token from localStorage
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
+  }
+
+  get isAdmin(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
+    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
+  }
+
+  get isInstructor(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
+    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
   }
 
   ngOnInit(): void {
@@ -84,40 +78,39 @@ export class NavbarComponent implements OnInit {
         this.searchQuery = query || '';
       });
   }
-  get isAdmin(): boolean {
+
+  private updateCurrentUser(): void {
     const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
-    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
-  }
-   onMyCertificatesClick(): void {
-     const role = localStorage.getItem('role'); // or from your auth service
 
-  if (role === 'ADMIN') {
-    this.router.navigate(['/manage-certificates']);
-  }
-  else if (role === 'LEARNER') {
-    this.router.navigate(['/my-certificates']);
+    if (!u) {
+      this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
+      return;
+    }
+
+    this.currentUser.email = u.email;
+    this.currentUser.name = u.email.split('@')[0];
   }
 
+  onMyCertificatesClick(): void {
+    const role = localStorage.getItem('role'); // or from your auth service
 
-}
- goToAssessments() {
-
-  const role = localStorage.getItem('role'); // or from your auth service
-
-  if (role === 'ADMIN') {
-    this.router.navigate(['/manage-assessments']);
-  }
-  else if (role === 'LEARNER') {
-    this.router.navigate(['/assessment']);
+    if (role === 'ADMIN') {
+      this.router.navigate(['/manage-certificates']);
+    } else if (role === 'LEARNER') {
+      this.router.navigate(['/my-certificates']);
+    }
   }
 
-}
-  get isInstructor(): boolean {
-    const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
-    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  goToAssessments(): void {
+    const role = localStorage.getItem('role'); // or from your auth service
+
+    if (role === 'ADMIN') {
+      this.router.navigate(['/manage-assessments']);
+    } else if (role === 'LEARNER') {
+      this.router.navigate(['/assessment']);
+    }
   }
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {
