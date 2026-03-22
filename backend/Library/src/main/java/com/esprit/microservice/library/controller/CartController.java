@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final CartService cartService;
+    public static final Long userId = 1L;
 
 
     public CartController(CartService cartService) {

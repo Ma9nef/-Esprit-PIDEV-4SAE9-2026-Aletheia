@@ -2,6 +2,9 @@ package com.esprit.microservice.courses.entity.progress;
 
 
 public enum EnrollmentStatus {
+    ACTIVE,
+    COMPLETED,
+    CANCELLED,
     ENROLLED,
-    CANCELLED
+    DROPPED
 }

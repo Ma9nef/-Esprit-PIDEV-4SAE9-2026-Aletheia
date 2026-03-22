@@ -9,6 +9,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule,  } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -22,7 +23,9 @@ import { AuthModule } from './auth/auth.module';
     SharedModule,
     FormsModule  ,
     AuthModule,
-    HttpClientModule   
+    HttpClientModule,
+    CommonModule,
+    HttpClientModule
 
   ],
   providers: [

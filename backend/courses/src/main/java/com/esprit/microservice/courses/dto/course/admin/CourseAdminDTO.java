@@ -10,9 +10,15 @@ public class CourseAdminDTO {
     private String instructorName;
     private Double price;
     private Integer durationHours;
+    private String imageUrl;
+
+    private boolean archived;
     private boolean archived;        // 🔥 ajouté
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private String category;
+    private String subCategory;
 
     public Long getId() {
         return id;
@@ -62,7 +68,13 @@ public class CourseAdminDTO {
         this.durationHours = durationHours;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     public boolean isArchived() {
         return archived;
@@ -86,5 +98,21 @@ public class CourseAdminDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
     }
 }

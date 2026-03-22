@@ -10,4 +10,5 @@ public class UpdateUserRequest {
     private String phone;
     private String photoUrl;
     private String bio;
+    private String signature;
 }

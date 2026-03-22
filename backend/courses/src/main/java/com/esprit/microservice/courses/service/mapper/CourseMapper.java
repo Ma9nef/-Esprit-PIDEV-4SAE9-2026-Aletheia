@@ -18,6 +18,12 @@ public class CourseMapper {
         dto.setInstructorName(course.getInstructorName());
         dto.setPrice(course.getPrice());
         dto.setDurationHours(course.getDurationHours());
+
+        // ✅ NEW
+        dto.setCategory(course.getCategory());
+        dto.setSubCategory(course.getSubCategory());
+
+        dto.setImageUrl(course.getImageUrl());
         dto.setArchived(course.isArchived());
         dto.setCreatedAt(course.getCreatedAt());
         dto.setUpdatedAt(course.getUpdatedAt());
@@ -34,7 +40,14 @@ public class CourseMapper {
         dto.setInstructorName(course.getInstructorName());
         dto.setPrice(course.getPrice());
         dto.setDurationHours(course.getDurationHours());
+
+        // ✅ NEW
+        dto.setCategory(course.getCategory());
+        dto.setSubCategory(course.getSubCategory());
+
         dto.setCreatedAt(course.getCreatedAt());
+        dto.setImageUrl(course.getImageUrl());
+
         return dto;
     }
 }

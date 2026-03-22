@@ -1,91 +1,181 @@
-<div class="page">
-    <div class="header">
-      <div>
-        <h2>Manage Courses (Instructor)</h2>
-        <p class="muted">Créer, modifier et supprimer vos cours.</p>
-      </div>
-  
-      <button class="btn btn-secondary" (click)="startCreate()">+ New Course</button>
+<div class="mc">
+
+  <div class="mc-header">
+    <div>
+      <h1 class="mc-title">
+        {{ isAdmin ? 'All Courses' : 'My Courses' }}
+      </h1>
     </div>
-  
-    <div *ngIf="error" class="alert">{{ error }}</div>
-    <div *ngIf="loading" class="muted">Loading...</div>
-  
-    <div class="grid">
-      <!-- Form -->
-      <div class="card">
-        <h3>{{ editingId ? 'Edit course' : 'Create course' }}</h3>
-  
-        <form [formGroup]="form" (ngSubmit)="submit()">
-          <label>
-            Title
-            <input type="text" formControlName="title" placeholder="Course title" />
-            <small class="err" *ngIf="form.controls.title.touched && form.controls.title.invalid">
-              Title is required (min 3 chars).
-            </small>
-          </label>
-  
-          <label>
-            Description
-            <textarea formControlName="description" rows="5" placeholder="Course description"></textarea>
-            <small class="err" *ngIf="form.controls.description.touched && form.controls.description.invalid">
-              Description is required (min 10 chars).
-            </small>
-          </label>
-  
-          <div class="row">
-            <label>
-              Price
-              <input type="number" formControlName="price" min="0" step="0.01" />
-            </label>
-  
-            <label>
-              Duration (hours)
-              <input type="number" formControlName="durationHours" min="1" step="1" />
-            </label>
-          </div>
-  
-          <div class="actions">
-            <button class="btn btn-primary" type="submit" [disabled]="loading">
-              {{ editingId ? 'Save changes' : 'Create' }}
-            </button>
-  
-            <button *ngIf="editingId" class="btn btn-ghost" type="button" (click)="cancelEdit()">
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
-  
-      <!-- List -->
-      <div class="card">
-        <h3>Your courses</h3>
-  
-        <div *ngIf="!loading && courses.length === 0" class="muted">
-          No courses yet.
-        </div>
-  
-        <div class="table" *ngIf="courses.length">
-          <div class="thead">
-            <div>Title</div>
-            <div>Price</div>
-            <div>Hours</div>
-            <div class="right">Actions</div>
-          </div>
-  
-          <div class="trow" *ngFor="let c of courses">
-            <div class="title">
-              <div class="t">{{ c.title }}</div>
-              <div class="d muted">{{ c.description }}</div>
-            </div>
-            <div>{{ c.price }} $</div>
-            <div>{{ c.durationHours }}</div>
-            <div class="right">
-              <button class="btn btn-small" (click)="startEdit(c)">Edit</button>
-              <button class="btn btn-small danger" (click)="remove(c.id)">Delete</button>
-            </div>
-          </div>
-        </div>
-      </div>
+
+    <div class="mc-actions">
+
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="load()"
+        [disabled]="listLoading || saving">
+        Refresh
+      </button>
+      <button
+      *ngIf="!isAdmin"
+      type="button"
+      class="btn btn-primary"
+      routerLink="/back-office/trainer/create-course"
+    >
+      + New Course
+    </button>
+
     </div>
   </div>
+
+  <!-- Alerts -->
+  <div class="mc-alert mc-alert--error" *ngIf="error && error !== 'Forbidden'">
+    {{ error }}
+  </div>
+
+  <div class="mc-alert mc-alert--success" *ngIf="success">
+    {{ success }}
+  </div>
+
+  <!-- Toolbar -->
+  <div class="mc-toolbar">
+
+    <input
+      class="mc-search"
+      type="text"
+      placeholder="Search (title / description)…"
+      [(ngModel)]="q"
+      name="q"
+    />
+
+    <div class="mc-sort">
+
+      <span class="mc-sort-label">Sort:</span>
+
+      <button class="chip" type="button" (click)="toggleSort('updatedAt')">
+        Last updated
+        <span *ngIf="sortKey === 'updatedAt'">{{ sortDir }}</span>
+      </button>
+
+      <button class="chip" type="button" (click)="toggleSort('title')">
+        Title
+        <span *ngIf="sortKey === 'title'">{{ sortDir }}</span>
+      </button>
+
+      <button class="chip" type="button" (click)="toggleSort('price')">
+        Price
+        <span *ngIf="sortKey === 'price'">{{ sortDir }}</span>
+      </button>
+
+      <button class="chip" type="button" (click)="toggleSort('durationHours')">
+        Duration
+        <span *ngIf="sortKey === 'durationHours'">{{ sortDir }}</span>
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- Course List -->
+  <section class="card">
+
+    <div class="card-header">
+      <h3 class="card-title">Course List</h3>
+      <span class="badge">{{ filteredSortedCourses.length }} courses</span>
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="table">
+
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th style="width:200px">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngIf="listLoading">
+            <td colspan="5" class="muted">Loading…</td>
+          </tr>
+
+          <tr *ngIf="!listLoading && filteredSortedCourses.length === 0">
+            <td colspan="5" class="muted">No courses found.</td>
+          </tr>
+
+          <tr *ngFor="let c of filteredSortedCourses; trackBy: trackById">
+
+            <td class="title-cell">
+              <div class="title">{{ c.title }}</div>
+              <div class="sub" *ngIf="c.updatedAt">
+                Updated: {{ c.updatedAt | date:'short' }}
+              </div>
+            </td>
+
+            <td>{{ c.price | number:'1.0-2' }}</td>
+            <td>{{ c.durationHours }}</td>
+
+            <td>
+              <span class="status" [class.status--archived]="c.archived">
+                {{ c.archived ? 'Archived / Pending approval' : 'Active' }}
+              </span>
+            </td>
+
+            <td class="actions">
+
+              <!-- Instructor actions -->
+              <ng-container *ngIf="!isAdmin">
+
+                <button
+                  class="btn btn-outline-secondary btn-sm"
+                  [routerLink]="['/back-office/trainer/courses', c.id, 'edit']">
+                  Edit
+                </button>
+
+                <button
+                  class="btn btn-danger btn-sm"
+                  type="button"
+                  (click)="remove(c)"
+                  [disabled]="saving || isDeleting(c.id)">
+                  {{ isDeleting(c.id) ? 'Deleting…' : 'Delete' }}
+                </button>
+
+              </ng-container>
+
+              <!-- Admin actions -->
+              <ng-container *ngIf="isAdmin">
+
+                <button
+                  *ngIf="!c.archived"
+                  class="btn btn-warning btn-sm"
+                  (click)="archive(c)">
+                  Archive
+                </button>
+
+                <button
+                  *ngIf="c.archived"
+                  class="btn btn-success btn-sm"
+                  (click)="unarchive(c)">
+                  Unarchive
+                </button>
+
+              </ng-container>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

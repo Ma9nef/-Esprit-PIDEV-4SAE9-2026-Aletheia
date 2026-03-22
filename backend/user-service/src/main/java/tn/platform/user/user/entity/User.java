@@ -43,6 +43,9 @@ public class User {
     private LocalDateTime lastLogin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String signature;
 
     @PrePersist
     public void onCreate() {

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { CatalogComponent } from './catalog/catalog.component';
 import { CourseDetailsComponent } from './course-details/course-details.component';
+import { CourseLearningComponent } from './course-learning/course-learning.component'; // ✅ ADD
 import { CourseLearningComponent } from './course-learning/course-learning.component';
 import { ProfileComponent } from './profile/profile.component';
 import { LibraryComponent } from './library/library.component';
@@ -13,6 +14,10 @@ import { ServicesComponent } from './template/services/services.component';
 import { TemplateComponent } from './template/template.component';
 import { HomeComponent } from './template/home/home.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { VerifyCertificateComponent } from './verify-certificate/verify-certificate.component';
+import { LearnerCertificatesComponent } from './learner-certificates/learner-certificates.component';
+import { LearnerAssessmentComponent } from './learner-assessment/learner-assessment.component';
+import { FormsModule } from '@angular/forms';
 import { Explore3dComponent } from './explore3d/explore3d.component';
 
 @NgModule({
@@ -21,16 +26,23 @@ import { Explore3dComponent } from './explore3d/explore3d.component';
     CatalogComponent,
     CourseDetailsComponent,
     CourseLearningComponent,
+    CourseLearningComponent, // ✅ ADD
     ProfileComponent,
     LibraryComponent,
     AboutComponent,
     ServicesComponent,
     TemplateComponent,
     DashboardComponent,
-    Explore3dComponent
+    Explore3dComponent,
+    Explore3dComponent,
+      VerifyCertificateComponent,
+    LearnerCertificatesComponent,
+    LearnerAssessmentComponent
   ],
   imports: [
     CommonModule,
+    SharedModule,
+     FormsModule,
     SharedModule
   ],
   exports: [
@@ -38,6 +50,7 @@ import { Explore3dComponent } from './explore3d/explore3d.component';
     CatalogComponent,
     CourseDetailsComponent,
     CourseLearningComponent,
+    CourseLearningComponent, // ✅ optional (export only if used outside)
     ProfileComponent,
     LibraryComponent,
     AboutComponent,

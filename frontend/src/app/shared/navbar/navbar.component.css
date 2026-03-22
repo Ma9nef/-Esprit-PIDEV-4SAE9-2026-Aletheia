@@ -1004,3 +1004,9 @@ input:focus-visible {
 .mobile-menu::-webkit-scrollbar-thumb:hover {
   background: rgba(99, 102, 241, 0.5);
 }
+/* Important: le mega-menu est en position absolute; il doit “dépasser” le header */
+.navbar {
+  position: relative;
+  z-index: 3000;
+  overflow: visible;
+}
