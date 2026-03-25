@@ -33,6 +33,7 @@ public class ApiGatewayApplication {
                 .route("products-service", r -> r.path("/api/products/**").uri("lb://LIBRARY-SERVICE"))
                 .route("cart-service", r -> r.path("/api/cart/**").uri("lb://LIBRARY-SERVICE"))
                 .route("orders-service", r -> r.path("/api/orders/**").uri("lb://LIBRARY-SERVICE"))
+
                 // --- NEW ROUTES FOR THE 4 CONTROLLERS ---
 
                 // Routes for Assessment, Certificate, and Questions (all start with /pidev)
@@ -42,6 +43,17 @@ public class ApiGatewayApplication {
                 // Route for Submissions (starts with /api/assessment-results)
                 .route("assessment-results", r -> r.path("/api/assessment-results/**")
                         .uri("lb://COURSES-SERVICE"))
+
+                .route("offer-service", r -> r.path("/api/offers/**")
+                        .uri("lb://offer"))
+                .route("flash-sales", r -> r.path("/api/flash-sales/**")
+                        .uri("lb://offer"))
+                .route("coupons", r -> r.path("/api/coupons/**")
+                        .uri("lb://offer"))
+                .route("analytics", r -> r.path("/api/analytics/**")
+                        .uri("lb://offer"))
+                .route("subscription-plans", r -> r.path("/api/subscription-plans/**")
+                        .uri("lb://offer"))
 
 
                 .build();
