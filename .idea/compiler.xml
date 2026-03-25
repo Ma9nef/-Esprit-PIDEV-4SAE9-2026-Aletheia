@@ -2,15 +2,14 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="offer" />
         <module name="courses" />
-        <module name="library_microservice" />
-        <module name="eureka" />
         <module name="ApiGateway" />
+        <module name="eureka" />
       </profile>
       <profile name="Annotation profile for Library" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -33,18 +32,14 @@
         <module name="user-service" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="courses (1)" target="17" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ApiGateway" options="-parameters" />
       <module name="Library" options="-parameters" />
       <module name="courses" options="-parameters" />
-      <module name="courses (1)" options="-parameters" />
       <module name="eureka" options="-parameters" />
-      <module name="library_microservice" options="-parameters" />
+      <module name="offer" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>
