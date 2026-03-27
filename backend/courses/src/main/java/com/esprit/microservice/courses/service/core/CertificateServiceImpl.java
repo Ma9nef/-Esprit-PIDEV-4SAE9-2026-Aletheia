@@ -1,5 +1,6 @@
 package com.esprit.microservice.courses.service.core;
 
+
 import com.esprit.microservice.courses.entity.Certificate;
 import com.esprit.microservice.courses.entity.progress.Enrollment;
 import com.esprit.microservice.courses.entity.progress.EnrollmentStatus;
@@ -31,15 +32,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.core.Attribute;
+import weka.core.DenseInstance;
+import weka.core.Instance;
+import weka.core.Instances;
 
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import java.time.LocalDate;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Service
 public class CertificateServiceImpl implements ICertificateService {
@@ -310,5 +315,67 @@ public class CertificateServiceImpl implements ICertificateService {
             return ResponseEntity.status(500).body("Error reading PDF file");
         }
     }
+    public Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception {
+        // 1. Define Attributes
+        Attribute progressAttr = new Attribute("progress");
 
+        // Match these to your EnrollmentStatus enum values
+        ArrayList<String> statusLabels = new ArrayList<>(Arrays.asList("OTHER", "COMPLETED"));
+        Attribute targetAttr = new Attribute("target_status", statusLabels);
+
+        ArrayList<Attribute> attributes = new ArrayList<>();
+        attributes.add(progressAttr);
+        attributes.add(targetAttr);
+
+        // 2. Build Training Set
+        Instances trainingData = new Instances("PredictionRelation", attributes, 0);
+        trainingData.setClassIndex(1);
+
+        List<Enrollment> allData = enrollmentRepository.findAll();
+
+        // Optimization: If you have less than 2 records, AI can't learn.
+        if (allData.size() < 2) {
+            throw new RuntimeException("Not enough historical data to run AI prediction.");
+        }
+
+        for (Enrollment e : allData) {
+            Instance inst = new DenseInstance(2);
+            inst.setValue(progressAttr, e.getProgress() != null ? e.getProgress() : 0);
+
+            // Map Enum to AI categories
+            String aiStatus = (e.getStatus() == EnrollmentStatus.COMPLETED) ? "COMPLETED" : "OTHER";
+            inst.setValue(targetAttr, aiStatus);
+            trainingData.add(inst);
+        }
+
+        // 3. Train Model
+        NaiveBayes model = new NaiveBayes();
+        model.buildClassifier(trainingData);
+
+        // 4. Predict
+        Enrollment target = enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+
+        Instance testInstance = new DenseInstance(2);
+        testInstance.setDataset(trainingData);
+        testInstance.setValue(progressAttr, target.getProgress());
+
+        double[] distribution = model.distributionForInstance(testInstance);
+
+        // distribution[1] corresponds to the probability of "COMPLETED"
+        int probabilityScore = (int) (distribution[1] * 100);
+
+        // Custom Recommendations based on score
+        String recommendation;
+        if (probabilityScore > 85) recommendation = "Success highly likely. Proceed to final exam.";
+        else if (probabilityScore > 60) recommendation = "Good progress. Complete remaining labs to ensure pass.";
+        else recommendation = "At risk of incompletion. Recommend tutor intervention.";
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("score", probabilityScore);
+        result.put("recommendation", recommendation);
+        result.put("currentProgress", target.getProgress());
+
+        return result;
+    }
 }

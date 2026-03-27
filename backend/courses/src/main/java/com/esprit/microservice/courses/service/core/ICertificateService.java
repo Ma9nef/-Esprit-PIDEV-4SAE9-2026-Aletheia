@@ -28,4 +28,5 @@ public interface ICertificateService {
 
     void savePdfContent(Long id, byte[] bytes);
 
+    Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception;
 }
