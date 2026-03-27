@@ -34,7 +34,8 @@ public class Enrollment {
 
     @Column(nullable=false)
     private LocalDateTime enrolledAt;
-
+    @Column(nullable = false)
+    private Integer progress = 0;
     @OneToOne(mappedBy = "enrollment", cascade = CascadeType.ALL)
     @JsonIgnore // Prevent infinite loop if Certificate refers back to Enrollment
     private Certificate certificate;
@@ -46,7 +47,8 @@ public class Enrollment {
             this.status = EnrollmentStatus.ENROLLED;
         }
     }
-
+    public Integer getProgress() { return progress; }
+    public void setProgress(Integer progress) { this.progress = progress; }
     public Enrollment() {}
 
     public Enrollment(Long userId, Course course) {

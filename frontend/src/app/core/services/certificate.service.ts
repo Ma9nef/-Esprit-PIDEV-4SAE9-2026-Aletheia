@@ -67,6 +67,9 @@ downloadCertificateFile(id: number): Observable<Blob> {
     responseType: 'blob' // This is the most important part
   });
 }
-
+ getCertificationPrediction(enrollmentId: number): Observable<any> {
+    // This matches the @GetMapping("/predict/{enrollmentId}") in your Java Controller
+    return this.http.get<any>(`${this.apiUrl}/predict/${enrollmentId}`);
+  }
 
 }
