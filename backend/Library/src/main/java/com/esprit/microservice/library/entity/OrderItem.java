@@ -1,7 +1,5 @@
 package com.esprit.microservice.library.entity;
 
-import com.esprit.microservice.library.enums.ProductType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,18 +15,8 @@ public class OrderItem {
     private Double priceAtPurchase;
     private int quantity;
 
-    @Column(columnDefinition = "TEXT")
-    private String fileUrl;
-
-    @Column(columnDefinition = "LONGTEXT")
-    private String coverImageUrl;
-
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    @JsonIgnore
     private Order order;
 
     public OrderItem() {}
@@ -67,30 +55,6 @@ public class OrderItem {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public String getFileUrl() {
-        return fileUrl;
-    }
-
-    public void setFileUrl(String fileUrl) {
-        this.fileUrl = fileUrl;
-    }
-
-    public String getCoverImageUrl() {
-        return coverImageUrl;
-    }
-
-    public void setCoverImageUrl(String coverImageUrl) {
-        this.coverImageUrl = coverImageUrl;
-    }
-
-    public ProductType getProductType() {
-        return productType;
-    }
-
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
     }
 
     public Order getOrder() {

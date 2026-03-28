@@ -7,28 +7,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.Statement;
-
 @Configuration
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner initializeData(ProductRepository productRepository, DataSource dataSource) {
+    public CommandLineRunner initializeData(ProductRepository productRepository) {
         return args -> {
-            // Ensure columns can hold large data (base64 data URLs for auto-generated covers)
-            try (Connection conn = dataSource.getConnection(); Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate("ALTER TABLE products MODIFY COLUMN cover_image_url LONGTEXT");
-                stmt.executeUpdate("ALTER TABLE products MODIFY COLUMN file_url TEXT");
-                stmt.executeUpdate("ALTER TABLE order_items MODIFY COLUMN cover_image_url LONGTEXT");
-                stmt.executeUpdate("ALTER TABLE order_items MODIFY COLUMN file_url TEXT");
-                System.out.println("✅ Column types updated for products & order_items tables");
-            } catch (Exception e) {
-                // Table may not exist yet on first run — Hibernate will create it with correct types
-                System.out.println("ℹ️ Column migration skipped (table may not exist yet): " + e.getMessage());
-            }
-
             // Only insert sample data if database is empty
             if (productRepository.count() == 0) {
                 System.out.println("===============================================");
