@@ -33,7 +33,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  min-height: 78px;
   gap: 2rem;
 }
 
@@ -47,14 +47,11 @@
   gap: 3rem;
   flex: 0 0 auto;
 }
-
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  position: relative;
-  transition: transform 0.3s ease;
+  gap: 0.35rem;
+  min-height: 78px;
 }
 
 .logo:hover {
@@ -81,14 +78,12 @@
 }
 
 .logo-accent {
-  position: absolute;
-  right: -8px;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
+  transform: none;
   width: 6px;
   height: 6px;
-  background: linear-gradient(135deg, #6366f1, #ec4899);
   border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
   animation: pulse 2s ease-in-out infinite;
   box-shadow: 0 0 10px rgba(99, 102, 241, 0.6);
 }
@@ -104,26 +99,21 @@
   }
 }
 
-.desktop-menu {
+.desktop-menu,
+.nav-right,
+.nav-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1rem;
-  border-radius: 0.5rem;
-  color: #475569;
-  font-weight: 500;
-  font-size: 0.9375rem;
+  min-height: 44px;
+  padding: 0.625rem 0.9rem;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  cursor: pointer;
-  white-space: nowrap;
+
 }
 
 .dark-theme .menu-item {
@@ -279,9 +269,9 @@
 .theme-toggle {
   background: transparent;
   border: 2px solid rgba(99, 102, 241, 0.2);
-  border-radius: 0.5rem;
-  width: 2.75rem;
-  height: 2.75rem;
+  border-radius: 12px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -382,6 +372,8 @@
   padding: 0.25rem 0.5rem 0.25rem 0.25rem;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 42px;
+
 }
 
 .dark-theme .user-avatar-btn {
