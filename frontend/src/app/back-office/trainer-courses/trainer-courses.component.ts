@@ -19,8 +19,7 @@ export class TrainerCoursesComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  private API = 'http://localhost:8081/instructor/dashboard/courses';
-
+  private API = '/api/instructor/dashboard/courses';
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {

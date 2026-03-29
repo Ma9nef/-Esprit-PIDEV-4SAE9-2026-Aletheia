@@ -44,7 +44,6 @@ export class EditCourseComponent implements OnInit {
   currentImageUrl: string | null = null;
 
   private readonly API_URL = '/api/instructor/courses';
-
   private readonly CLOUDINARY_CLOUD_NAME = 'doobtx5fl';
   private readonly CLOUDINARY_UPLOAD_PRESET = 'courses_unsigned';
   private readonly CLOUDINARY_UPLOAD_URL =

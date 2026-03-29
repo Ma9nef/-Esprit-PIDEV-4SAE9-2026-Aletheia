@@ -75,7 +75,6 @@
               View
             </button>
 
-            <!-- If enrolled: Continue Learning -->
             <button
               *ngIf="enrolledCourseIds.has(c.id)"
               class="btn-ui btn-ui--success"
@@ -85,7 +84,6 @@
               Continue
             </button>
 
-            <!-- If NOT enrolled: Enroll -->
             <button
               *ngIf="!enrolledCourseIds.has(c.id)"
               class="btn-ui btn-ui--primary"

@@ -15,7 +15,6 @@
           class="menu-item"
           [class.active]="currentRoute === item.route"
           (click)="navigateTo(item.route)">
-          <span class="menu-icon">{{ item.icon }}</span>
           <span class="menu-label">{{ item.label }}</span>
         </a>
 
@@ -199,7 +198,6 @@
         class="mobile-menu-item"
         [class.active]="currentRoute === item.route"
         (click)="navigateTo(item.route)">
-        <span class="mobile-menu-icon">{{ item.icon }}</span>
         <span>{{ item.label }}</span>
       </a>
 
@@ -209,7 +207,6 @@
         class="mobile-menu-item"
         [class.active]="currentRoute.startsWith('/admin')"
         (click)="navigateTo('/admin/dashboard')">
-        <span class="mobile-menu-icon">📊</span>
         <span>Dashboard</span>
       </a>
 
@@ -219,7 +216,6 @@
         class="mobile-menu-item"
         [class.active]="currentRoute.startsWith('/instructor')"
         (click)="navigateTo('/instructor/dashboard')">
-        <span class="mobile-menu-icon">📊</span>
         <span>Dashboard</span>
       </a>
     </nav>
