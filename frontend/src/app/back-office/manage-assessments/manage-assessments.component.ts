@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { AssessmentService } from '../../core/services/assessment.service';
 import { Assessment } from '../../core/models/assessment.model';
 import { CourseApiService, CoursePublicDTO } from '../../core/services/course-api.service';
+
+import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-manage-assessments',
@@ -20,6 +24,9 @@ export class ManageAssessmentsComponent implements OnInit {
   sortOrder: 'asc' | 'desc' = 'asc';
   selectedIds: Set<number> = new Set();
   loading: boolean = false;
+    @ViewChild('distributionChart') chartCanvas!: ElementRef;
+  private searchSubject = new Subject<string>();
+  private myChart: any;
   
   stats = { total: 0, avgScore: 0, urgentCount: 0, quizCount: 0 };
 
@@ -77,6 +84,12 @@ export class ManageAssessmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadInitialData();
+      this.searchSubject.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(term => {
+      this.searchTerm = term;
+    });
   }
 
   loadInitialData() {
@@ -94,6 +107,48 @@ export class ManageAssessmentsComponent implements OnInit {
       }
     });
   }
+ ngAfterViewInit() {
+    // Initializing chart after view loads
+    this.initChart();
+  }
+  onSearchChange(term: string) {
+    this.searchSubject.next(term);
+  }
+   initChart() {
+    if (this.myChart) this.myChart.destroy();
+    
+    // Group assessments by score ranges
+    const low = this.assessments.filter(a => (a.totalScore || 0) < 20).length;
+    const mid = this.assessments.filter(a => (a.totalScore || 0) >= 20 && (a.totalScore || 0) < 70).length;
+    const high = this.assessments.filter(a => (a.totalScore || 0) >= 70).length;
+
+    this.myChart = new Chart(this.chartCanvas.nativeElement, {
+      type: 'doughnut',
+      data: {
+        labels: ['Easy (<20)', 'Moderate (20-70)', 'Hard (>70)'],
+        datasets: [{
+          data: [low, mid, high],
+          backgroundColor: ['#0dcaf0', '#ffc107', '#dc3545'],
+          borderWidth: 0,
+          hoverOffset: 15
+        }]
+      },
+      options: {
+        cutout: '80%',
+        plugins: { legend: { display: false } }
+      }
+    });
+  } getTimeRemainingProgress(dueDate: any): number {
+    if (!dueDate) return 0;
+    const end = new Date(dueDate).getTime();
+    const now = new Date().getTime();
+    const start = end - (7 * 24 * 60 * 60 * 1000); // Created 1 week before due
+    
+    const progress = ((now - start) / (end - start)) * 100;
+    return Math.min(Math.max(progress, 0), 100);
+    
+  }
+
 
   loadData() {
     this.assessmentService.getAllAssessments().subscribe({

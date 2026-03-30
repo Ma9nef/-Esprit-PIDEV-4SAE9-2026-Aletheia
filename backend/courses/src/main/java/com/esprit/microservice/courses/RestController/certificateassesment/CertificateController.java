@@ -123,6 +123,20 @@ public class CertificateController {
             return ResponseEntity.status(500).body(response);
         }
     }
+    @GetMapping("/predict/{enrollmentId}")
+    public ResponseEntity<Map<String, Object>> predictSuccess(@PathVariable Long enrollmentId) {
+        try {
+            // This calls the ML logic we added to the service
+            Map<String, Object> aiResult = certificateService.predictCertificationSuccess(enrollmentId);
+            return ResponseEntity.ok(aiResult);
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "AI Engine Error: " + e.getMessage());
+            return ResponseEntity.status(500).body(error);
+        }
+    }
+    // URL: GET http://localhost:8081/pidev/certificate/predict/1
+
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> download(@PathVariable Long id) {
         // 1. Get the certificate object from database

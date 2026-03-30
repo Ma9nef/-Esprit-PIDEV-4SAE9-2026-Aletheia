@@ -15,6 +15,15 @@ declare var bootstrap: any;
   styleUrls: ['./manage-certificates.component.css']
 })
 export class ManageCertificatesComponent implements OnInit, AfterViewInit {
+getProbabilityColor(score: number): string {
+  if (score >= 80) {
+    return 'success'; // Green: High probability of passing
+  } else if (score >= 50) {
+    return 'warning'; // Yellow/Orange: Moderate risk
+  } else {
+    return 'danger';  // Red: High risk of failure
+  }
+}
 
   @ViewChild('sigCanvas') canvasContext!: ElementRef;
   signaturePad!: SignaturePad;
@@ -23,10 +32,11 @@ isSendingEmail: { [key: number]: boolean } = {};
   certificates: any[] = [];
   usersList: any[] = [];
   enrollments: any[] = [];
-selectedSuccessUserId: number | null = null;
-successResult: any = null;
 
-  isPredicting: boolean = false;
+
+selectedEnrollmentIdForPredict: number | null = null; // Changed from UserID to EnrollmentID
+successResult: any = null;
+isPredicting: boolean = false;
 
   // UI State
   selectedUserId: number | null = null; // Used for Admin Signature selection
@@ -376,34 +386,25 @@ async savePDFToDatabase(cert: any) {
     const modalInstance = bootstrap.Modal.getInstance(modalElement);
     if (modalInstance) modalInstance.hide();
   }
-   predictCertificationSuccess() {
-    if (!this.selectedSuccessUserId) return;
+predictCertificationSuccess() {
+  if (!this.selectedEnrollmentIdForPredict) return;
 
-    this.isPredicting = true;
-    this.successResult = null;
+  this.isPredicting = true;
+  this.successResult = null;
 
-    // Simulate calling a Deep Learning API (e.g., Python Flask with TensorFlow)
-    // In production, use: this.http.post('api/predict', { userId: this.selectedSuccessUserId })
-    setTimeout(() => {
-      const randomScore = Math.floor(Math.random() * 61) + 40; // Simulated result between 40 and 100
-
-      let recommendation = "";
-      if (randomScore > 85) recommendation = "Student is highly likely to pass. Recommend immediate certification.";
-      else if (randomScore > 65) recommendation = "On track. Suggest one final review of Course Module 4.";
-      else recommendation = "High risk of failure. Recommend intervention and additional tutoring.";
-
-      this.successResult = {
-        score: randomScore,
-        recommendation: recommendation
-      };
-      this.isPredicting = false;
-    }, 2000);
-  }
-
-  getProbabilityColor(score: number): string {
-    if (score > 80) return 'success';
-    if (score > 60) return 'warning';
-    return 'danger';
-  }
+  this.certificateService.getCertificationPrediction(this.selectedEnrollmentIdForPredict)
+    .subscribe({
+      next: (data) => {
+        // data matches your Postman response: { currentProgress, score, recommendation }
+        this.successResult = data;
+        this.isPredicting = false;
+      },
+      error: (err) => {
+        console.error("AI Service Error:", err);
+        alert(err.error?.error || "ML Error: Check database data.");
+        this.isPredicting = false;
+      }
+    });
+}
 
 }
