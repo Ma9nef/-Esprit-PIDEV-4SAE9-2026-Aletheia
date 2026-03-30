@@ -18,6 +18,7 @@ import { LearnerCertificatesComponent } from './learner-certificates/learner-cer
 import { LearnerAssessmentComponent } from './learner-assessment/learner-assessment.component';
 import { FormsModule } from '@angular/forms';
 import { Explore3dComponent } from './explore3d/explore3d.component';
+import { VideoRoomComponent } from './video-room/video-room.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,9 @@ import { Explore3dComponent } from './explore3d/explore3d.component';
     Explore3dComponent,
     VerifyCertificateComponent,
     LearnerCertificatesComponent,
-    LearnerAssessmentComponent
+    LearnerAssessmentComponent,
+    VideoRoomComponent
+
   ],
   imports: [
     CommonModule,

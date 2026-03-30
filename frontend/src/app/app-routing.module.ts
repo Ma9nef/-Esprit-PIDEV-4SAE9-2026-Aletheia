@@ -26,6 +26,7 @@ import { Explore3dComponent } from './front-office/explore3d/explore3d.component
 import {OffersListComponent} from "./front-office/offers-list/offers-list.component";
 import {CheckoutComponent} from "./front-office/checkout/checkout.component";
 import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
+import { VideoRoomComponent } from './front-office/video-room/video-room.component';
 
 const routes: Routes = [
   { path: '', component: TemplateComponent },
@@ -38,6 +39,8 @@ const routes: Routes = [
   { path: 'offers', component: OffersListComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'plans', component: SubscriptionPlansListComponent },
+  { path: 'front/room/:id', component: VideoRoomComponent },
+
   {
     path: 'dashboardAdmin',
     component: AdminDashboardComponent,
