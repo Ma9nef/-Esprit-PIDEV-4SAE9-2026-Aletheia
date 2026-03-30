@@ -23,7 +23,11 @@ import {AdminSubscriptionPlansComponent} from "./admin-subscription-plans/admin-
 import {
   SubscriptionPlanFormComponent
 } from "./admin-subscription-plans/subscription-plan-form/subscription-plan-form.component";
-
+import { EventFormComponent } from './events/event-form/event-form.component';
+import { EventListComponent } from './events/event-list/event-list.component';
+import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
+import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
+import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -45,7 +49,14 @@ const routes: Routes = [
       { path: 'subscription-plans', component: AdminSubscriptionPlansComponent },
       { path: 'subscription-plans/new', component: SubscriptionPlanFormComponent },
       { path: 'subscription-plans/edit/:id', component: SubscriptionPlanFormComponent },
-
+      { path: 'events', component: EventListComponent },
+      { path: 'events/new', component: EventFormComponent },
+      { path: 'events/edit/:id', component: EventFormComponent },
+        
+   { path: 'allocations', component: AllocationListComponent },
+   { path: 'allocations/new', component: AllocationFormComponent },
+   { path: 'allocations/edit/:id', component: AllocationFormComponent },
+   { path: 'allocations/:id', component: AllocationDetailComponent },
     ]
   },
 
