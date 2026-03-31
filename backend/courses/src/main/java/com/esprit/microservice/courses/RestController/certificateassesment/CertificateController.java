@@ -6,6 +6,7 @@ import com.esprit.microservice.courses.service.core.ICertificateService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -135,6 +136,17 @@ public class CertificateController {
             return ResponseEntity.status(500).body(error);
         }
     }
+    @GetMapping("/{enrollmentId}/ai-path")
+    public ResponseEntity<Map<String, Object>> getAiCareerPath(@PathVariable Long enrollmentId) {
+        try {
+            // Appelle la nouvelle méthode de prédiction dans le service
+            Map<String, Object> prediction = certificateService.generateAiCareerPath(enrollmentId);
+            return ResponseEntity.ok(prediction);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     // URL: GET http://localhost:8081/pidev/certificate/predict/1
 
     @GetMapping("/{id}/download")

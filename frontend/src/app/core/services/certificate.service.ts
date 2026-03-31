@@ -71,5 +71,10 @@ downloadCertificateFile(id: number): Observable<Blob> {
     // This matches the @GetMapping("/predict/{enrollmentId}") in your Java Controller
     return this.http.get<any>(`${this.apiUrl}/predict/${enrollmentId}`);
   }
+   getAiCareerPath(enrollmentId: number): Observable<any> {
+    // CORRECTION : On utilise ${this.apiUrl} qui contient déjà /pidev/certificate
+    // L'URL finale sera : http://localhost:8081/pidev/certificate/8/ai-path
+    return this.http.get(`${this.apiUrl}/${enrollmentId}/ai-path`);
+  }
 
 }

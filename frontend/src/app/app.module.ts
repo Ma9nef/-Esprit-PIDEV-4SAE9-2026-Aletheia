@@ -10,11 +10,13 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { FormsModule,  } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from '@angular/common';
+import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ExploreCertificatesComponent
   ],
   imports: [
     BrowserModule,
