@@ -21,16 +21,15 @@ public class Enrollment {
     private Long id;
 
     @Column(name="user_id", nullable=false)
-    private Long userId; // Removed @JsonIgnore so you can see who owns the enrollment
+    private Long userId;
 
-    // Changed to EAGER so the Course details are included in the JSON response
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="course_id", nullable=false)
     private Course course;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private EnrollmentStatus status ; // Default value
+    private EnrollmentStatus status;
 
     @Column(nullable=false)
     private LocalDateTime enrolledAt;
@@ -57,28 +56,50 @@ public class Enrollment {
         this.status = EnrollmentStatus.ENROLLED; // Ensure status is set
     }
 
-    // Standard Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Long getId() {
+        return id;
+    }
 
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Course getCourse() { return course; }
-    public void setCourse(Course course) { this.course = course; }
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+
 
     public EnrollmentStatus getStatus() { return status; }
     public void setStatus(EnrollmentStatus status) { this.status = status; }
 
     public LocalDateTime getEnrolledAt() { return enrolledAt; }
-    public void setEnrolledAt(LocalDateTime enrolledAt) { this.enrolledAt = enrolledAt; }
 
     public Certificate getCertificate() { return certificate; }
     public void setCertificate(Certificate certificate) { this.certificate = certificate; }
 
+    public void setEnrolledAt(LocalDateTime enrolledAt) {
+        this.enrolledAt = enrolledAt;
+    }
     @Override
     public String toString() {
-        return "Enrollment{" + "id=" + id + ", userId=" + userId +
-                ", status=" + status + ", enrolledAt=" + enrolledAt + '}';
+        return "Enrollment{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", status=" + status +
+                ", enrolledAt=" + enrolledAt +
+                '}';
     }
 }

@@ -23,6 +23,7 @@ public class PublicEnrollmentController {
     public ResponseEntity<List<Enrollment>> getAllEnrollments() {
         return ResponseEntity.ok(service.findAll());
     }
+
     @PostMapping("/{courseId}")
     public ResponseEntity<Enrollment> enroll(@PathVariable Long courseId,
                                              @RequestHeader("Authorization") String authorization) {

@@ -1,5 +1,5 @@
 <div class="main-wrapper min-vh-100 theme-bg">
-  
+
   <header class="hero-banner shadow">
     <div class="l-container">
       <h1 class="hero-title">Certification Center</h1>
@@ -8,7 +8,7 @@
   </header>
 
   <main class="l-container py-5">
-    
+
     <!-- VIEW 1: LISTING -->
     <div *ngIf="currentView === 'list'" class="fade-in">
       <h3 class="section-title mb-4 text-dark fw-bold">Available Exams</h3>
@@ -30,7 +30,7 @@
 
     <!-- VIEW 2: ACTIVE QUIZ -->
     <div *ngIf="currentView === 'taking'" class="quiz-container fade-in">
-      
+
       <div class="quiz-status-bar d-flex justify-content-between align-items-center mb-3">
         <button class="btn-back shadow-sm" (click)="goBack()">Abandon</button>
         <h5 class="mb-0 text-primary fw-bold">{{ getCourseTitle(selectedAssessment) }}</h5>
@@ -40,13 +40,13 @@
       </div>
 
       <div class="progress mb-4" style="height: 8px; border-radius: 10px;">
-        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
              [style.width.%]="progressPercentage"></div>
       </div>
 
-      <div class="question-box card border-0 shadow-sm p-4 rounded-4" 
+      <div class="question-box card border-0 shadow-sm p-4 rounded-4"
            *ngIf="!loading && getQuestionsArray()[currentQuestionIndex] as q">
-        
+
         <div class="d-flex justify-content-between align-items-center mb-3">
            <h3 class="fw-bold mb-0 text-dark">{{ selectedAssessment.title }}</h3>
            <span class="badge bg-primary-soft text-primary rounded-pill px-3 py-2">
@@ -54,12 +54,12 @@
            </span>
         </div>
         <hr>
-        
+
         <h4 class="question-text mb-4 text-dark">{{ q.text || q.questionText }}</h4>
 
         <div class="options-grid">
-          <div *ngFor="let opt of q.options || q.choices || q.answers" 
-               class="option-item shadow-sm" 
+          <div *ngFor="let opt of q.options || q.choices || q.answers"
+               class="option-item shadow-sm"
                [class.selected]="userAnswers[q.id] === opt.id"
                (click)="selectOption(q.id, opt.id)">
             <div class="radio-ui"></div>
@@ -70,14 +70,14 @@
         </div>
 
         <div class="nav-actions d-flex justify-content-between mt-5">
-          <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold" 
+          <button class="btn btn-outline-secondary rounded-pill px-4 fw-bold"
                   [disabled]="currentQuestionIndex === 0" (click)="prevQuestion()">Previous</button>
-          
-          <button class="btn btn-primary rounded-pill px-4 fw-bold" 
+
+          <button class="btn btn-primary rounded-pill px-4 fw-bold"
                   *ngIf="currentQuestionIndex < getQuestionsArray().length - 1"
                   (click)="nextQuestion()">Next</button>
 
-          <button class="btn btn-success rounded-pill px-5 fw-bold shadow-sm" 
+          <button class="btn btn-success rounded-pill px-5 fw-bold shadow-sm"
                   *ngIf="currentQuestionIndex === getQuestionsArray().length - 1"
                   [disabled]="loading" (click)="submitAssessment()">
             {{ loading ? 'Sending...' : 'Finish Exam' }}
@@ -89,7 +89,7 @@
     <!-- VIEW 3: RESULT (English) -->
     <div *ngIf="currentView === 'result'" class="result-view fade-in text-center">
       <div class="result-card card shadow-lg p-5 border-0 rounded-5">
-        
+
         <div class="mb-3">
           <i *ngIf="hasPassed" class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
           <i *ngIf="!hasPassed" class="bi bi-exclamation-triangle-fill text-danger" style="font-size: 5rem;"></i>
@@ -97,7 +97,7 @@
 
         <h2 class="fw-bold mb-1 text-dark">{{ hasPassed ? 'Exam Passed!' : 'Exam Failed' }}</h2>
         <p class="text-muted">{{ hasPassed ? 'Congratulations on your performance!' : 'You did not reach the minimum score (50%).' }}</p>
-        
+
         <div class="score-circle my-4 mx-auto" [class.border-success]="hasPassed" [class.border-danger]="!hasPassed">
           <span class="score-num" [class.text-success]="hasPassed" [class.text-danger]="!hasPassed">
             {{ finalScore | number:'1.0-1' }}
@@ -133,25 +133,25 @@
         <button class="btn btn-dark rounded-pill px-4" (click)="currentView = 'result'">Back to score</button>
       </div>
 
-      <div class="question-box card border-0 shadow-sm p-4 rounded-4" 
+      <div class="question-box card border-0 shadow-sm p-4 rounded-4"
            *ngIf="getQuestionsArray()[currentQuestionIndex] as q">
-        
+
         <div class="d-flex justify-content-between align-items-center mb-3">
            <h3 class="fw-bold mb-0 text-primary">{{ selectedAssessment.title }}</h3>
            <span class="badge bg-secondary rounded-pill px-3">Correction: Question {{ currentQuestionIndex + 1 }}</span>
         </div>
         <hr>
-        
+
         <h4 class="question-text mb-4 text-dark">{{ q.text || q.questionText }}</h4>
 
         <div class="options-grid">
-          <div *ngFor="let opt of q.options || q.choices || q.answers" 
-               class="option-item border-2 shadow-none cursor-default" 
+          <div *ngFor="let opt of q.options || q.choices || q.answers"
+               class="option-item border-2 shadow-none cursor-default"
                [class.border-success]="opt.isCorrect"
                [class.bg-success-soft]="opt.isCorrect"
                [class.border-danger]="userAnswers[q.id] === opt.id && !opt.isCorrect"
                [class.bg-danger-soft]="userAnswers[q.id] === opt.id && !opt.isCorrect">
-            
+
             <div class="d-flex justify-content-between align-items-center w-100">
               <span class="option-text fw-medium">{{ opt.text || opt.optionText || opt.content }}</span>
               <div class="status-badges">
@@ -164,9 +164,9 @@
         </div>
 
         <div class="nav-actions d-flex justify-content-between mt-5">
-          <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" 
+          <button class="btn btn-outline-dark rounded-pill px-4 fw-bold"
                   [disabled]="currentQuestionIndex === 0" (click)="prevQuestion()">Previous</button>
-          <button class="btn btn-outline-dark rounded-pill px-4 fw-bold" 
+          <button class="btn btn-outline-dark rounded-pill px-4 fw-bold"
                   *ngIf="currentQuestionIndex < getQuestionsArray().length - 1"
                   (click)="nextQuestion()">Next</button>
         </div>

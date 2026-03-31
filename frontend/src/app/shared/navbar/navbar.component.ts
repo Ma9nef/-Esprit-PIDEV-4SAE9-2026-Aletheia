@@ -1,22 +1,19 @@
 import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-
 export class NavbarComponent implements OnInit {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
 
-  // ❌ REMOVE: isLoggedIn = false;
   isMobileMenuOpen = false;
   isUserDropdownOpen = false;
 
@@ -29,23 +26,13 @@ export class NavbarComponent implements OnInit {
     email: '',
     avatar: 'https://i.pravatar.cc/150?img=12'
   };
-  
-  private updateCurrentUser(): void {
-    const u = this.auth.getUserFromToken();
-  
-    if (!u) {
-      this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
-      return;
-    }
-  
-    this.currentUser.email = u.email;
-    this.currentUser.name = u.email.split('@')[0];
-  }
 
   menuItems = [
     { label: 'Home', route: '/', icon: '🏠' },
     { label: 'About', route: '/about', icon: 'ℹ️' },
     { label: 'Services', route: '/services', icon: '⚙️' },
+    { label: 'Explore 3D', route: '/explore', icon: '🌌' },
+    { label: 'Library', route: '/front/library', icon: '📖' },
     { label: 'Contact', route: '/contact', icon: '📧' }
   ];
 
@@ -61,58 +48,69 @@ export class NavbarComponent implements OnInit {
     return this.auth.isLoggedIn();
   }
 
+  get isAdmin(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
+    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
+  }
+
+  get isInstructor(): boolean {
+    const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
+    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  }
+
   ngOnInit(): void {
     this.updateCurrentUser();
-  
+
     this.currentRoute = this.router.url;
-  
+
     this.router.events
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
         this.currentRoute = this.router.url;
         this.updateCurrentUser(); // ✅ refresh user after login redirect
       });
-  
+
     this.searchControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe(query => {
         this.searchQuery = query || '';
       });
   }
-  get isAdmin(): boolean {
+
+  private updateCurrentUser(): void {
     const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
-    return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
-  }
-   onMyCertificatesClick(): void {
-     const role = localStorage.getItem('role'); // or from your auth service
 
-  if (role === 'ADMIN') {
-    this.router.navigate(['/manage-certificates']);
-  } 
-  else if (role === 'LEARNER') {
-    this.router.navigate(['/my-certificates']);
-  }
- 
- 
-}
- goToAssessments() {
+    if (!u) {
+      this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
+      return;
+    }
 
-  const role = localStorage.getItem('role'); // or from your auth service
-
-  if (role === 'ADMIN') {
-    this.router.navigate(['/manage-assessments']);
-  } 
-  else if (role === 'LEARNER') {
-    this.router.navigate(['/assessment']);
+    this.currentUser.email = u.email;
+    this.currentUser.name = u.email.split('@')[0];
   }
 
-} 
-  get isInstructor(): boolean {
-    const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
-    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  onMyCertificatesClick(): void {
+    const role = localStorage.getItem('role'); // or from your auth service
+
+    if (role === 'ADMIN') {
+      this.router.navigate(['/manage-certificates']);
+    } else if (role === 'LEARNER') {
+      this.router.navigate(['/my-certificates']);
+    }
   }
+
+  goToAssessments(): void {
+    const role = localStorage.getItem('role'); // or from your auth service
+
+    if (role === 'ADMIN') {
+      this.router.navigate(['/manage-assessments']);
+    } else if (role === 'LEARNER') {
+      this.router.navigate(['/assessment']);
+    }
+  }
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {
@@ -151,7 +149,22 @@ export class NavbarComponent implements OnInit {
   }
 
   onMyCoursesClick(): void {
-    this.router.navigate(['front/courses']);
+    this.router.navigate(['/front/my-courses']);
+    this.isUserDropdownOpen = false;
+  }
+
+  onDashboardClick(): void {
+    const user = this.auth.getUserFromToken();
+    if (user) {
+      const role = user.role.toLowerCase();
+      if (role === 'admin') {
+        this.router.navigate(['/dashboardAdmin']);
+      } else if (role === 'trainer' || role === 'instructor') {
+        this.router.navigate(['/dashboardInstructor']);
+      } else {
+        this.router.navigate(['/dashboardLearner']);
+      }
+    }
     this.isUserDropdownOpen = false;
   }
 
@@ -159,13 +172,13 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();                  // remove token
     this.isUserDropdownOpen = false;
     this.isMobileMenuOpen = false;
-  
+
     this.currentUser = {
       name: '',
       email: '',
       avatar: 'https://i.pravatar.cc/150?img=12'
     };
-  
+
     this.router.navigate(['/home']);
   }
 }

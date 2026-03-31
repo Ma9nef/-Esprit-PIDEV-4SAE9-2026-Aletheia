@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AssessmentService } from '../../core/services/assessment.service';
 import { CourseApiService } from '../../core/services/course-api.service';
-import confetti from 'canvas-confetti'; 
+import confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-learner-assessment',
@@ -16,8 +16,8 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
   selectedAssessment: any = null;
   userAnswers: Record<number, number> = {};
   finalScore = 0;
-  loading = false; 
-  hasPassed = false; 
+  loading = false;
+  hasPassed = false;
 
   correctCount = 0;
   wrongCount = 0;
@@ -98,19 +98,19 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
 
     const payload = {
       assessmentId: this.selectedAssessment.id,
-      learnerId: 1, 
+      learnerId: 1,
       answers: this.userAnswers,
     };
 
     this.assessmentService.saveAssessmentResult(payload).subscribe({
       next: (res) => {
-        this.finalScore = res.score; 
-        
+        this.finalScore = res.score;
+
         // LOGIC FIX: If correctAnswers is 0 but score is high, we calculate it manually
         const qTotal = this.getQuestionsArray().length;
         this.correctCount = res.correctAnswers !== undefined ? res.correctAnswers : Math.round((res.score / this.selectedAssessment.totalScore) * qTotal);
         this.wrongCount = qTotal - this.correctCount;
-        
+
         this.hasPassed = this.finalScore >= (this.selectedAssessment.totalScore / 2);
         if (this.hasPassed) this.triggerCelebration();
         this.currentView = 'result';
@@ -160,7 +160,7 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
   selectOption(questionId: number, optionId: number) { this.userAnswers[questionId] = optionId; }
   nextQuestion() { if (this.currentQuestionIndex < this.getQuestionsArray().length - 1) this.currentQuestionIndex++; }
   prevQuestion() { if (this.currentQuestionIndex > 0) this.currentQuestionIndex--; }
-  
+
   goBack() {
     if (this.timerInterval) clearInterval(this.timerInterval);
     this.currentView = 'list';

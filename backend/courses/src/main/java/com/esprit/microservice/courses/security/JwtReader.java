@@ -16,13 +16,12 @@ public class JwtReader {
     private final Key key;
 
     public JwtReader(@Value("${app.jwt.secret}") String secret) {
-        // Initialize the key once in the constructor
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         System.out.println("COURSE jwt.secret SHA-256 = " + sha256Hex(secret));
     }
 
     /**
-     * Helper method to extract token and parse claims to avoid code duplication
+     * Helper method to extract token and parse claims to avoid code duplication.
      */
     private Claims getAllClaims(String bearerOrToken) {
         if (bearerOrToken == null) return null;
@@ -54,18 +53,21 @@ public class JwtReader {
         System.out.println("JWT raw id = " + raw + " | type = " + (raw == null ? "null" : raw.getClass().getName()));
 
         if (raw instanceof Number n) {
-            return n.longValue();
+            Long v = n.longValue();
+            System.out.println("JWT extracted userId = " + v);
+            return v;
         }
 
         if (raw instanceof String s && s.matches("\\d+")) {
-            return Long.parseLong(s);
+            Long v = Long.parseLong(s);
+            System.out.println("JWT extracted userId = " + v);
+            return v;
         }
 
         // Fallback to subject if numeric
         String sub = claims.getSubject();
-        if (sub != null && sub.matches("\\d+")) {
-            return Long.parseLong(sub);
-        }
+        System.out.println("JWT subject = " + sub);
+        if (sub != null && sub.matches("\\d+")) return Long.parseLong(sub);
 
         return null;
     }
@@ -99,7 +101,6 @@ public class JwtReader {
 
     public String extractRole(String bearerOrToken) {
         Claims claims = getAllClaims(bearerOrToken);
-        // Note: Adapts to your specific claim name (e.g., "role", "roles", "authorities")
         return (claims != null) ? claims.get("role", String.class) : null;
     }
 
@@ -118,9 +119,7 @@ public class JwtReader {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] hash = md.digest(s.getBytes(StandardCharsets.UTF_8));
             StringBuilder sb = new StringBuilder();
-            for (byte b : hash) {
-                sb.append(String.format("%02x", b));
-            }
+            for (byte b : hash) sb.append(String.format("%02x", b));
             return sb.toString();
         } catch (Exception e) {
             throw new RuntimeException(e);

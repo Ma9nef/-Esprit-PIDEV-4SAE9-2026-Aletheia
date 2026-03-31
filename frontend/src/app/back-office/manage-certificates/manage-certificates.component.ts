@@ -33,7 +33,7 @@ isSendingEmail: { [key: number]: boolean } = {};
   usersList: any[] = [];
   enrollments: any[] = [];
 
- 
+
 selectedEnrollmentIdForPredict: number | null = null; // Changed from UserID to EnrollmentID
 successResult: any = null;
 isPredicting: boolean = false;
@@ -84,7 +84,7 @@ async sendEmail(cert: any) {
     alert("User email not found!");
     return;
   }
- 
+
 
   this.isSendingEmail[cert.id] = true;
 
@@ -96,7 +96,7 @@ async sendEmail(cert: any) {
   this.certificateService.uploadCertificatePdf(cert.id, blob).subscribe({
     next: () => {
       console.log("PDF Saved. Now sending email...");
-      
+
       // STEP 3: Send the email only after the PDF is safely in the DB
       this.certificateService.sendEmail(cert.id, user.email).subscribe({
         next: () => {
@@ -133,7 +133,7 @@ loadUsers() {
     next: (data: any) => {
       // Handle different API structures (Paginated vs List)
       this.usersList = data.content ? data.content : (Array.isArray(data) ? data : []);
-      
+
       console.log("--- DEBUG USERS ---");
       console.log("Total users received:", this.usersList.length);
       if (this.usersList.length > 0) {
@@ -153,8 +153,8 @@ loadUsers() {
   }
 
   get learnersOnly() {
-    return this.usersList.filter(u => 
-      u.role === 'LEARNER' || 
+    return this.usersList.filter(u =>
+      u.role === 'LEARNER' ||
       u.roles?.some((r: any) => r.name === 'LEARNER')
     );
   }
@@ -335,7 +335,7 @@ private async generateCertificateContent(cert: any): Promise<jsPDF> {
 async savePDFToDatabase(cert: any) {
   // 1. Generate the PDF object
   const doc = await this.generateCertificateContent(cert);
-  
+
   // 2. Convert to Blob
   const blob = doc.output('blob');
 
@@ -365,7 +365,7 @@ async savePDFToDatabase(cert: any) {
       const course = c.enrollment?.course?.title || 'N/A';
       return `${c.certificateCode},${name},${course},${c.issuedAt}`;
     }).join("\n");
-    
+
     const blob = new Blob([headers + content], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -374,11 +374,11 @@ async savePDFToDatabase(cert: any) {
     a.click();
   }
 
-  openAddModal() { 
+  openAddModal() {
     this.selectedLearnerIdForAdd = null;
     this.newEnrollmentId = null;
     this.loadAllEnrollments();
-    new bootstrap.Modal(document.getElementById('addModal')).show(); 
+    new bootstrap.Modal(document.getElementById('addModal')).show();
   }
 
   closeModal(id: string) {

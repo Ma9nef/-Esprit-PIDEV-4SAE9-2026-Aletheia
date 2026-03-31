@@ -30,8 +30,10 @@ public class Product {
     @Column(nullable = false)
     private Double price = 0.0;
 
+    @Column(columnDefinition = "TEXT")
     private String fileUrl;
 
+    @Column(columnDefinition = "LONGTEXT")
     private String coverImageUrl;
 
     @Column(nullable = false)

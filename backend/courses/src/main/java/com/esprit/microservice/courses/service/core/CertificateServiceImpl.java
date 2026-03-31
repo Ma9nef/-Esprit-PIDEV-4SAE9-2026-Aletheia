@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
@@ -318,8 +319,6 @@ public class CertificateServiceImpl implements ICertificateService {
     public Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception {
         // 1. Define Attributes
         Attribute progressAttr = new Attribute("progress");
-
-        // Match these to your EnrollmentStatus enum values
         ArrayList<String> statusLabels = new ArrayList<>(Arrays.asList("OTHER", "COMPLETED"));
         Attribute targetAttr = new Attribute("target_status", statusLabels);
 
@@ -332,8 +331,6 @@ public class CertificateServiceImpl implements ICertificateService {
         trainingData.setClassIndex(1);
 
         List<Enrollment> allData = enrollmentRepository.findAll();
-
-        // Optimization: If you have less than 2 records, AI can't learn.
         if (allData.size() < 2) {
             throw new RuntimeException("Not enough historical data to run AI prediction.");
         }
@@ -341,15 +338,18 @@ public class CertificateServiceImpl implements ICertificateService {
         for (Enrollment e : allData) {
             Instance inst = new DenseInstance(2);
             inst.setValue(progressAttr, e.getProgress() != null ? e.getProgress() : 0);
-
-            // Map Enum to AI categories
             String aiStatus = (e.getStatus() == EnrollmentStatus.COMPLETED) ? "COMPLETED" : "OTHER";
             inst.setValue(targetAttr, aiStatus);
             trainingData.add(inst);
         }
 
-        // 3. Train Model
-        NaiveBayes model = new NaiveBayes();
+        // 3. Train Model (CHANGED TO RANDOM FOREST)
+        RandomForest model = new RandomForest();
+
+        // Optional: Set hyperparameters
+        model.setNumIterations(100); // Number of trees in the forest
+        model.setNumFeatures(0);     // 0 means it will use log2(number of attributes) + 1
+
         model.buildClassifier(trainingData);
 
         // 4. Predict
@@ -358,14 +358,14 @@ public class CertificateServiceImpl implements ICertificateService {
 
         Instance testInstance = new DenseInstance(2);
         testInstance.setDataset(trainingData);
-        testInstance.setValue(progressAttr, target.getProgress());
+        testInstance.setValue(progressAttr, target.getProgress() != null ? target.getProgress() : 0);
 
         double[] distribution = model.distributionForInstance(testInstance);
 
         // distribution[1] corresponds to the probability of "COMPLETED"
         int probabilityScore = (int) (distribution[1] * 100);
 
-        // Custom Recommendations based on score
+        // Custom Recommendations
         String recommendation;
         if (probabilityScore > 85) recommendation = "Success highly likely. Proceed to final exam.";
         else if (probabilityScore > 60) recommendation = "Good progress. Complete remaining labs to ensure pass.";

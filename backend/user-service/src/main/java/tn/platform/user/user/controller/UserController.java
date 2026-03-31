@@ -26,6 +26,7 @@ public class UserController {
     private final UserService userService;
     @Autowired
     UserRepository userRepository;
+
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getMe() {
         return ResponseEntity.ok(userService.getCurrentUser());

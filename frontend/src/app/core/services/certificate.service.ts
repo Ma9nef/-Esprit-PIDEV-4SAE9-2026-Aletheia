@@ -10,8 +10,8 @@ export class CertificateService {
 predictSuccess(userId: number): Observable<any> {
   return this.http.get(`${this.apiUrl}/ai/predict/${userId}`);
 }
- 
- 
+
+
 
   // ✅ Port 8081 + context-path /pidev
   private apiUrl = 'http://localhost:8081/pidev/certificate';
@@ -36,7 +36,7 @@ uploadCertificatePdf(id: number, blob: Blob): Observable<string> {
   });
 }
   // Get by code
-  
+
    updateCertificate(id: number, certificate: Certificate): Observable<Certificate> {
     return this.http.put<Certificate>(`${this.apiUrl}/update/${id}`, certificate);
   }

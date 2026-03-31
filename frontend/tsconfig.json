@@ -3,7 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-  "esModuleInterop": true,
+    "esModuleInterop": true,
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -18,18 +18,20 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ESNext",
-    "module": "ESNext",
+    "target": "ES2022",
+    "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": [
-      "ESNext", 
-      "ESNext.AsyncIterable", 
+      "ES2022",
+      "ESNext",
+      "ESNext.AsyncIterable",
       "dom"
     ],
     "skipLibCheck": true,
     "types": ["node"]
   },
   "angularCompilerOptions": {
+    "enableControlFlow": true,   // ✅ ADD THIS LINE
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

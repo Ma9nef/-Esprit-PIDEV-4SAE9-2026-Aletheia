@@ -21,11 +21,10 @@ import { CommonModule } from '@angular/common';
     AppRoutingModule,
     FrontOfficeModule,
     SharedModule,
-    FormsModule  ,
+    FormsModule,
     AuthModule,
     HttpClientModule,
-    CommonModule,
-
+    CommonModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

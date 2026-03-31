@@ -154,4 +154,3 @@ public class CertificateController {
                 .body(cert.getPdfContent());
     }}
 
-

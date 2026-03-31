@@ -2,11 +2,13 @@ package com.esprit.microservice.courses.service.core;
 
 import com.esprit.microservice.courses.entity.content.Course;
 import com.esprit.microservice.courses.entity.progress.Enrollment;
+import com.esprit.microservice.courses.entity.progress.EnrollmentStatus;
 import com.esprit.microservice.courses.repository.CourseRepository;
 import com.esprit.microservice.courses.repository.EnrollmentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,7 +32,10 @@ public class EnrollmentCoreService {
             throw new IllegalStateException("Already enrolled");
         }
 
-        return enrollmentRepository.save(new Enrollment(userId, course));
+        Enrollment e = new Enrollment(userId, course);
+        e.setStatus(EnrollmentStatus.ENROLLED);     // ✅ obligatoire
+        e.setEnrolledAt(LocalDateTime.now());       // ✅ recommandé si pas auto
+        return enrollmentRepository.save(e);
     }
 
     public List<Enrollment> myEnrollments(Long userId) {
