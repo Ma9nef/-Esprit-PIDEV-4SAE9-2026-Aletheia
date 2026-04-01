@@ -5,77 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="skander integration on course managment">
-      <change afterPath="$PROJECT_DIR$/backend/events/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/EventsApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/client/UserServiceClient.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/FeignClientConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/FeignConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/FeignErrorDecoder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/JwtHandshakeInterceptor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/config/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/controller/EventController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/controller/EventResourceAllocationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/controller/ResourceController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/controller/TestTokenController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/dto/EventResourceAllocationDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/dto/UserDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/entity/Event.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/entity/EventResourceAllocation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/entity/EventStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/entity/Resource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/entity/ResourceType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/exception/ResourceNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/exception/ResourceUnavailableException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/exception/UserNotFoundException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/exception/UserServiceException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/repository/EventRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/repository/EventResourceAllocationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/repository/ResourceRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/security/CustomUserDetailsService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/security/JwtService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/EventResourceAllocationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/EventService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/ResourceService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/RoomWebSocketHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/impl/EventResourceAllocationServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/impl/EventServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/java/com/esprit/microservice/events/service/impl/ResourceServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/events/src/test/java/com/esprit/microservice/events/EventsApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/InstructorDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/RestController/course/InstructorDashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/JwtAuthFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/course/InstructorDashboardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/course/InstructorDashboardController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/entity/progress/Enrollment.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/entity/progress/Enrollment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/security/JwtAuthFilter.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/security/JwtAuthFilter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/security/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/security/SecurityConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/copilotDiffState.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/config/DataInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/config/DataInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/controller/FileUploadController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/controller/FileUploadController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/service/StockMovementServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/service/StockMovementServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/certificateassesment/AssessmentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/certificateassesment/AssessmentController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/certificateassesment/CertificateController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/certificateassesment/CertificateController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/course/CatalogController.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/RestController/course/CatalogController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/dto/CourseMiniDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/dto/CourseMiniDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/dto/MenuCategoryDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/dto/MenuCategoryDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/dto/MenuSubCategoryDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/dto/MenuSubCategoryDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/AssessmentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/AssessmentServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/CertificateServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/CertificateServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/QuestionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/QuestionServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/SubmissionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/courses/target/classes/com/esprit/microservice/courses/service/core/SubmissionServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_C:/Users/BabaYaga/Desktop/aletheia-platform/-Esprit-PIDEV-4SAE9-2026-Aletheia" value="3Bm7OTMrvRcZHCmoQrfHgYQqJod" />
+    </persistenceIdMap>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -92,6 +48,10 @@
     &quot;accountId&quot;: &quot;86573533-fabb-4ee3-a5af-8f7cd030c816&quot;
   }
 }</component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
@@ -127,7 +87,7 @@
     "Spring Boot.LibraryApplication.executor": "Run",
     "Spring Boot.OfferApplication.executor": "Run",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "course-managment",
+    "git-widget-placeholder": "Library__managment",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/manef/Desktop/Aletheia-merged-offer/backend",
@@ -276,9 +236,28 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="last commit before integration" />
     <MESSAGE value="skander integration on course managment" />
     <option name="LAST_COMMIT_MESSAGE" value="skander integration on course managment" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>
