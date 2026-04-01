@@ -30,8 +30,8 @@ export class TrainerDashboardComponent implements OnInit {
   loadingCourses = true;
   coursesError: string | null = null;
 
-  private STATS_API = 'http://localhost:8081/instructor/dashboard/stats';
-  private COURSES_API = 'http://localhost:8081/instructor/dashboard/courses';
+  private STATS_API = '/api/instructor/dashboard/stats';
+  private COURSES_API = '/api/instructor/dashboard/courses';
 
   constructor(private http: HttpClient) {}
 
@@ -41,6 +41,7 @@ export class TrainerDashboardComponent implements OnInit {
   }
 
   private authHeaders(): HttpHeaders {
+    console.log('TOKEN =', localStorage.getItem('token'));
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : ''

@@ -1,0 +1,121 @@
+.offer-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fff;
+  transition: box-shadow 0.2s;
+}
+.offer-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.offer-card.status-active {
+  border-left: 4px solid #48bb78;
+}
+.offer-card.status-expired {
+  border-left: 4px solid #f56565;
+  opacity: 0.9;
+}
+.offer-card.status-scheduled {
+  border-left: 4px solid #ecc94b;
+}
+.offer-card.status-inactive {
+  border-left: 4px solid #a0aec0;
+}
+.offer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+.title-section h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+}
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+.badge-percentage { background: #c6f6d5; color: #22543d; }
+.badge-fixed { background: #bee3f8; color: #2a4365; }
+.status-badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+.description {
+  color: #4a5568;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+}
+.offer-details { margin-bottom: 1rem; }
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+.detail-item .label { display: block; font-size: 0.75rem; color: #718096; }
+.detail-item .value { font-size: 0.9rem; }
+.usage-info { margin-top: 0.25rem; }
+.progress-bar {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 0.25rem;
+}
+.progress {
+  height: 100%;
+  background: #48bb78;
+  transition: width 0.3s;
+}
+.targeting-info {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f7fafc;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+.price-section {
+  padding: 0.75rem;
+  background: #f0fff4;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+.original-price { text-decoration: line-through; color: #718096; }
+.arrow { margin: 0 0.5rem; color: #718096; }
+.final-price { font-weight: bold; color: #22543d; }
+.saved { font-size: 0.85rem; color: #2f855a; margin-left: 0.5rem; }
+.offer-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+button {
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+button:hover:not(:disabled) {
+  background: #f7fafc;
+}
+.btn-view { color: #3182ce; }
+.btn-apply {
+  background: #48bb78;
+  color: #fff;
+  border-color: #48bb78;
+}
+.btn-apply:hover:not(:disabled) { background: #38a169; }
+.btn-edit { color: #d69e2e; }
+.btn-delete { color: #e53e3e; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+.not-applicable-message { font-size: 0.8rem; color: #e53e3e; }

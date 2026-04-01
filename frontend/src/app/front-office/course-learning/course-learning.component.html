@@ -1,125 +1,143 @@
-<div class="container py-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="m-0">Start learning</h2>
-    <button class="btn btn-outline-secondary btn-sm" (click)="backToCatalog()">Back</button>
-  </div>
+<div class="learn-page">
+  <div class="learn-shell">
+    <div class="learn-topbar">
+      <div>
+        <h2 class="learn-title">Start learning</h2>
+        <p class="learn-subtitle">Follow the lessons, track your progress, and continue where you left off.</p>
+      </div>
 
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+      <button class="learn-back-btn" type="button" (click)="backToCatalog()">
+        ← Back to courses
+      </button>
+    </div>
 
-  <div class="row">
-    <!-- Left: lessons list -->
-    <div class="col-md-4">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="mb-3">Lessons</h5>
+    <div *ngIf="error" class="learn-alert learn-alert--error">
+      {{ error }}
+    </div>
 
-          <div *ngIf="loadingList">Loading lessons...</div>
+    <div class="learn-layout">
+      <!-- Sidebar -->
+      <aside class="learn-sidebar">
+        <div class="learn-card learn-sidebar-card">
+          <div class="learn-card__head">
+            <h5 class="learn-card__title">Lessons</h5>
+            <span class="learn-badge">{{ lessons.length }}</span>
+          </div>
 
-          <div *ngIf="!loadingList && lessons.length === 0" class="text-muted">
+          <div *ngIf="loadingList" class="learn-muted">Loading lessons...</div>
+
+          <div *ngIf="!loadingList && lessons.length === 0" class="learn-empty">
             No lessons available for this course.
           </div>
 
-          <div class="list-group" *ngIf="!loadingList && lessons.length">
+          <div class="lesson-list" *ngIf="!loadingList && lessons.length">
             <button
               type="button"
-              class="list-group-item list-group-item-action"
-              *ngFor="let l of lessons"
-              [class.active]="selectedLesson?.id === l.id"
-              (click)="openLesson(l.id)">
-              {{ l.title }}
+              class="lesson-item"
+              *ngFor="let l of lessons; let i = index"
+              [class.lesson-item--active]="selectedLesson?.id === l.id"
+              (click)="openLesson(l.id)"
+            >
+              <span class="lesson-item__index">{{ i + 1 }}</span>
+
+              <span class="lesson-item__content">
+                <span class="lesson-item__title">{{ l.title }}</span>
+              </span>
             </button>
           </div>
         </div>
-      </div>
-    </div>
+      </aside>
 
-    <!-- Right: progress + lesson content -->
-    <div class="col-md-8">
+      <!-- Main -->
+      <section class="learn-main">
+        <!-- Progress -->
+        <div class="learn-card learn-progress-card">
+          <div class="learn-progress-head">
+            <div>
+              <h6 class="learn-progress-title">Your progress</h6>
+              <p class="learn-progress-text">
+                {{ completedLessons }} / {{ totalLessons }} lessons completed
+              </p>
+            </div>
 
-      <!-- ✅ Progress block -->
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="m-0">Your progress</h6>
-
-            <span class="badge bg-primary">
+            <div class="learn-progress-percent">
               {{ percent }}%
-            </span>
+            </div>
           </div>
 
-          <div class="progress" style="height: 10px;">
+          <div class="learn-progress-bar">
             <div
-              class="progress-bar"
-              role="progressbar"
+              class="learn-progress-bar__fill"
               [style.width.%]="percent"
-              [attr.aria-valuenow]="percent"
-              aria-valuemin="0"
-              aria-valuemax="100">
-            </div>
+            ></div>
           </div>
 
-          <small class="text-muted d-block mt-2">
-            {{ completedLessons }} / {{ totalLessons }} lessons completed
-          </small>
-
-          <small class="text-muted" *ngIf="loadingProgress">
-            Loading progress...
-          </small>
-        </div>
-      </div>
-
-      <!-- Lesson card -->
-      <div class="card">
-        <div class="card-body">
-          <div *ngIf="loadingLesson">Opening lesson...</div>
-
-          <ng-container *ngIf="!loadingLesson && selectedLesson as s">
-            <h4 class="mb-3">{{ s.title }}</h4>
-
-            <!-- ✅ Safe embedded YouTube -->
-            <div *ngIf="s.youtubeVideoId && safeYoutubeEmbedUrl" class="mb-3 ratio ratio-16x9">
-              <iframe
-                [src]="safeYoutubeEmbedUrl"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-              </iframe>
-            </div>
-
-            <!-- Lesson content -->
-            <p *ngIf="s.contentText">{{ s.contentText }}</p>
-            <p *ngIf="!s.contentText" class="text-muted">No content for this lesson.</p>
-          </ng-container>
-
-          <div *ngIf="!loadingLesson && !selectedLesson" class="text-muted">
-            Select a lesson to start.
+          <div class="learn-progress-footer">
+            <span>Keep going</span>
+            <small *ngIf="loadingProgress" class="learn-muted">Loading progress...</small>
           </div>
         </div>
 
-        <!-- ✅ Bottom navigation -->
-        <div class="card-footer bg-white" *ngIf="selectedLesson">
-          <div class="d-flex justify-content-between align-items-center">
+        <!-- Lesson -->
+        <div class="learn-card learn-player-card">
+          <div class="learn-player-body">
+            <div *ngIf="loadingLesson" class="learn-muted">Opening lesson...</div>
+
+            <ng-container *ngIf="!loadingLesson && selectedLesson as s">
+              <div class="learn-lesson-header">
+                <div>
+                  <div class="learn-lesson-kicker">Current lesson</div>
+                  <h3 class="learn-lesson-title">{{ s.title }}</h3>
+                </div>
+
+                <div class="learn-lesson-counter" *ngIf="lessons.length">
+                  Lesson {{ currentIndex + 1 }} / {{ lessons.length }}
+                </div>
+              </div>
+
+              <div *ngIf="s.youtubeVideoId && safeYoutubeEmbedUrl" class="learn-video-wrap">
+                <iframe
+                  class="learn-video"
+                  [src]="safeYoutubeEmbedUrl"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                >
+                </iframe>
+              </div>
+
+              <div class="learn-content">
+                <p *ngIf="s.contentText">{{ s.contentText }}</p>
+                <p *ngIf="!s.contentText" class="learn-muted">No content for this lesson.</p>
+              </div>
+            </ng-container>
+
+            <div *ngIf="!loadingLesson && !selectedLesson" class="learn-empty">
+              Select a lesson to start.
+            </div>
+          </div>
+
+          <div class="learn-player-footer" *ngIf="selectedLesson">
             <button
-              class="btn btn-outline-secondary btn-sm"
+              class="learn-nav-btn learn-nav-btn--ghost"
+              type="button"
               (click)="prevLesson()"
-              [disabled]="!hasPrev">
+              [disabled]="!hasPrev"
+            >
               Previous
             </button>
 
-            <small class="text-muted" *ngIf="lessons.length">
-              Lesson {{ currentIndex + 1 }} / {{ lessons.length }}
-            </small>
-
             <button
-              class="btn btn-primary btn-sm"
+              class="learn-nav-btn learn-nav-btn--primary"
+              type="button"
               (click)="nextLesson()"
-              [disabled]="!hasNext">
-              Next
+              [disabled]="!hasNext"
+            >
+              Next lesson
             </button>
           </div>
         </div>
-
-      </div>
+      </section>
     </div>
   </div>
 </div>

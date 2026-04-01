@@ -18,6 +18,13 @@ import { CreateCourseComponent } from './create-course/create-course.component';
 import { CreateLessonComponent } from './create-lesson/create-lesson.component';
 import { CourseBuilderComponent } from './courses/course-builder/course-builder.component';
 import { EditCourseComponent } from './edit-course/edit-course.component';
+import { EventFormComponent } from './events/event-form/event-form.component';
+import { EventListComponent } from './events/event-list/event-list.component';
+import { EventService } from './events/event.service';
+
+import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
+import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
+import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
 
 @NgModule({
   declarations: [
@@ -33,14 +40,23 @@ import { EditCourseComponent } from './edit-course/edit-course.component';
     CreateCourseComponent,
     CreateLessonComponent,
     CourseBuilderComponent,
-    EditCourseComponent
-  ],
+    EditCourseComponent,
+    EventFormComponent,    // ← Une seule fois
+    EventListComponent, AllocationDetailComponent, AllocationFormComponent, AllocationListComponent,
+    ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     BackOfficeRoutingModule,
     RouterModule
+  ],
+  providers: [
+    EventService  // ← C'est ICI que va le service
+  ],
+  exports: [
+    EventFormComponent,
+    EventListComponent,AllocationDetailComponent, AllocationFormComponent, AllocationListComponent
   ]
 })
 export class BackOfficeModule { }

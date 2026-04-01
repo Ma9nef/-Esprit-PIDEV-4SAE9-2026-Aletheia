@@ -37,7 +37,7 @@ export class CourseBuilderComponent implements OnInit {
   course: CourseAdminDTO | null = null;
   lessons: LessonAdminDTO[] = [];
 
-  private readonly COURSE_API = '/api/instructor/courses'; // from your Course controller
+  private readonly COURSE_API = '/api/instructor/courses';
   private readonly LESSONS_BY_COURSE_API = '/api/lesson/instructor/by-course';
   constructor(
     private route: ActivatedRoute,

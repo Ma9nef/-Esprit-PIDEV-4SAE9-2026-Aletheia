@@ -31,6 +31,7 @@
     "types": ["node"]
   },
   "angularCompilerOptions": {
+    "enableControlFlow": true,   // ✅ ADD THIS LINE
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

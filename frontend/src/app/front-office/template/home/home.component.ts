@@ -40,4 +40,11 @@ export class HomeComponent {
     // ⚠️ Only keep this if you REALLY have this route in AppRoutingModule
     this.router.navigate(['/live-sessions']);
   }
+  navigateToOffers() {
+    this.router.navigate(['/offers']);
+  }
+
+  navigateToSubscriptionPlans() {
+    this.router.navigate(['/plans']);
+  }
 }

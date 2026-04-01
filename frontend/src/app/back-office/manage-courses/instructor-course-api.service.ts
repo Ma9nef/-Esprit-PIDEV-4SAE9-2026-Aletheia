@@ -26,8 +26,7 @@ export type CourseUpdateDTO = CourseCreateDTO;
 
 @Injectable({ providedIn: 'root' })
 export class InstructorCourseApiService {
-  private API = 'http://localhost:8081/instructor/courses';
-
+  private API = '/api/instructor/courses';
   constructor(private http: HttpClient) {}
 
   private authHeaders(): { headers: HttpHeaders } {
