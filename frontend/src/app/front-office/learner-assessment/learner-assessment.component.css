@@ -15,6 +15,7 @@
   padding: 5px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase;
 }
 
+
 /* Exam Cards */
 .assessment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .exam-card { background: white; border-radius: 20px; border: 1px solid #e2e8f0; transition: transform 0.2s; }
@@ -49,3 +50,116 @@
 .bg-danger-soft { background-color: #fef2f2; border: 1px solid #fecaca; }
 
 .fade-in { animation: fadeIn 0.4s ease-in; }
+/* Professional Quit Button Styling */
+.btn-quit-modern {
+  background-color: #ffffff;
+  color: #dc3545;            /* Professional Red */
+  border: 1px solid #333333; /* Dark thin border like your screenshot */
+  padding: 6px 22px;
+  border-radius: 4px;        /* Subtle rounding */
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  outline: none;
+}
+/* Container spacing */
+.assessment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 10px;
+}
+
+/* Card Styling */
+.exam-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #f0f0f5;
+  transition: all 0.3s ease;
+}
+
+.exam-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-inner { padding: 24px; }
+
+/* NEW Course Title Badge - Clean & Professional */
+.course-badge-new {
+  background-color: #f0f2ff;
+  color: #5850ec; /* Elegant Indigo */
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* NEW Points Badge - Distinct and Soft */
+.points-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #fff9eb;
+  color: #b45309; /* Warm Gold/Brown */
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.points-badge i {
+  font-size: 14px;
+  color: #f59e0b; /* Bright Gold */
+}
+
+/* Exam Title Styling */
+.exam-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+/* Modern Start Button */
+.btn-start-new {
+  background-color: #5850ec;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.2s ease;
+}
+
+.btn-start-new:hover {
+  background-color: #4338ca;
+}
+
+.btn-start-new:disabled {
+  background-color: #a5a6f6;
+  cursor: not-allowed;
+}
+
+.btn-quit-modern:hover {
+  background-color: #dc3545; /* Fills with red on hover */
+  border-color: #dc3545;
+  color: #ffffff;            /* Text turns white */
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+  transform: translateY(-1px);
+}
+
+.btn-quit-modern:active {
+  transform: translateY(0px);
+}

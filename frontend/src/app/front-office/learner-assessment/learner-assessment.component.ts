@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { AssessmentService } from '../../core/services/assessment.service';
 import { CourseApiService } from '../../core/services/course-api.service';
 import confetti from 'canvas-confetti';
@@ -18,6 +18,7 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
   finalScore = 0;
   loading = false;
   hasPassed = false;
+  isCheated = false; // New flag for cheating detection
 
   correctCount = 0;
   wrongCount = 0;
@@ -30,6 +31,33 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
     private assessmentService: AssessmentService,
     private courseApiService: CourseApiService
   ) {}
+
+  // --- SECURITY LOGIC: Tab Switching Protection ---
+  @HostListener('document:visibilitychange', ['$event'])
+  handleVisibilityChange(event: Event) {
+    if (this.currentView === 'taking' && document.hidden) {
+      this.handleCheatingDetected();
+    }
+  }
+
+  @HostListener('window:blur', ['$event'])
+  onBlur(event: Event) {
+    if (this.currentView === 'taking') {
+      this.handleCheatingDetected();
+    }
+  }
+
+  private handleCheatingDetected() {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+    
+    this.isCheated = true;
+    this.finalScore = 0;
+    this.correctCount = 0;
+    this.wrongCount = this.getQuestionsArray().length;
+    this.hasPassed = false;
+    this.currentView = 'result';
+  }
+  // --- END SECURITY LOGIC ---
 
   ngOnInit(): void {
     this.loadInitialData();
@@ -68,6 +96,7 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
 
   startAssessment(a: any) {
     this.loading = true;
+    this.isCheated = false; // Reset security flag
     this.assessmentService.getAssessmentById(a.id).subscribe({
       next: (fullAssessment) => {
         if (fullAssessment.questions) {
@@ -105,8 +134,6 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
     this.assessmentService.saveAssessmentResult(payload).subscribe({
       next: (res) => {
         this.finalScore = res.score;
-
-        // LOGIC FIX: If correctAnswers is 0 but score is high, we calculate it manually
         const qTotal = this.getQuestionsArray().length;
         this.correctCount = res.correctAnswers !== undefined ? res.correctAnswers : Math.round((res.score / this.selectedAssessment.totalScore) * qTotal);
         this.wrongCount = qTotal - this.correctCount;
