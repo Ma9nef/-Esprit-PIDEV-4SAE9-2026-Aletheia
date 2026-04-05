@@ -61,13 +61,15 @@
             <th>Submission Date</th>
             <th>Performance</th>
             <th>Outcome</th>
+            <th class="text-center">Actions</th>  <!-- ✅ NEW COLUMN -->
           </tr>
         </thead>
         <tbody>
           <!-- Loading State -->
           <tr *ngIf="loading">
-            <td colspan="5" class="text-center py-5">
+            <td colspan="6" class="text-center py-5">  <!-- ✅ updated colspan 5 → 6 -->
               <div class="spinner-border text-primary" role="status"></div>
+              <p class="mt-2 text-muted">Loading analytics data...</p>
             </td>
           </tr>
 
@@ -81,7 +83,7 @@
                 <div class="rounded-circle d-flex align-items-center justify-content-center text-white fw-bold me-3 shadow-sm" 
                      [style.background-color]="s.avatarColor"
                      style="width: 42px; height: 42px; min-width: 42px;">
-                  {{ s.userName[0].toUpperCase() }}
+                  {{ (s.userName[0] || 'U').toUpperCase() }}
                 </div>
                 <div>
                   <div class="fw-bold text-dark">{{ s.userName }}</div>
@@ -98,7 +100,7 @@
                 <span class="fw-bold me-2" [class.text-success]="s.score >= 50" [class.text-danger]="s.score < 50">
                   {{s.score}}%
                 </span>
-                <div class="progress flex-grow-1" style="height: 8px; background-color: #eee;">
+                <div class="progress flex-grow-1" style="height: 8px; background-color: #eee; border-radius: 10px;">
                   <div class="progress-bar rounded-pill shadow-none" 
                        [class.bg-success]="s.score >= 50" 
                        [class.bg-danger]="s.score < 50" 
@@ -108,24 +110,36 @@
             </td>
             <td>
               <span class="badge rounded-pill px-3 py-2 fw-semibold"
-                    [class.bg-success-soft]="s.score >= 50"
-                    [class.text-success]="s.score >= 50"
-                    [class.bg-danger-soft]="s.score < 50"
-                    [class.text-danger]="s.score < 50"
-                    style="font-size: 0.85rem; --bs-bg-opacity: .15;">
-                <i class="bi me-1" [class.bi-check-circle-fill]="s.score >= 50" [class.bi-x-circle-fill]="s.score < 50"></i>
+                    [class.bg-success-subtle]="s.displayStatus === 'Passed (Réussi)'"
+                    [class.text-success]="s.displayStatus === 'Réussi'"
+                    [class.bg-danger-subtle]="s.displayStatus === 'Échoué'"
+                    [class.text-danger]="s.displayStatus === 'Échoué'"
+                    style="font-size: 0.85rem;">
+                <i class="bi me-1" 
+                   [class.bi-check-circle-fill]="s.displayStatus === 'Réussi'" 
+                   [class.bi-x-circle-fill]="s.displayStatus === 'Échoué'"></i>
                 {{ s.displayStatus }}
               </span>
+            </td>
+
+            <!-- ✅ NEW: Actions cell with single delete button -->
+            <td class="text-center">
+              <button 
+                class="btn btn-sm btn-outline-danger rounded-pill px-3" 
+                (click)="deleteOne(s.id)"
+                title="Delete this record">
+                <i class="bi bi-trash"></i>
+              </button>
             </td>
           </tr>
 
           <!-- Empty State -->
           <tr *ngIf="!loading && filteredSubmissions.length === 0">
-            <td colspan="5" class="text-center py-5">
+            <td colspan="6" class="text-center py-5">  <!-- ✅ updated colspan 5 → 6 -->
               <div class="py-4">
                 <i class="bi bi-person-x text-muted display-1"></i>
                 <h4 class="text-muted mt-3">No matching learners found</h4>
-                <p class="text-muted small">Try adjusting your search or filters.</p>
+                <p class="text-muted small">Try adjusting your search or the minimum score filter.</p>
               </div>
             </td>
           </tr>
