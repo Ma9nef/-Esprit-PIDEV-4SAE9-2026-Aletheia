@@ -27,6 +27,7 @@ import {OffersListComponent} from "./front-office/offers-list/offers-list.compon
 import {CheckoutComponent} from "./front-office/checkout/checkout.component";
 import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
 import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
+import { ListSubmissionsComponent } from './list-submissions/list-submissions.component';
 
 const routes: Routes = [
   { path: '', component: TemplateComponent },
@@ -59,6 +60,7 @@ const routes: Routes = [
   { path: 'assessment', component: LearnerAssessmentComponent },
   { path: 'front/library', component: LibraryComponent },
   { path: 'explore', component: Explore3dComponent },
+    { path: 'submissions', component: ListSubmissionsComponent },
    { path: 'Explore3dcertificates', component: ExploreCertificatesComponent }, 
   { path: 'back-office/manage-courses', component: ManageCoursesComponent },
   {

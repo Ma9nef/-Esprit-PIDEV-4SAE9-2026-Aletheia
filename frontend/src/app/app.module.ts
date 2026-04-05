@@ -11,14 +11,16 @@ import { FormsModule,  } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from '@angular/common';
 import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
+import { ListSubmissionsComponent } from './list-submissions/list-submissions.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ExploreCertificatesComponent
+    ExploreCertificatesComponent,
+    ListSubmissionsComponent
   ],
-  imports: [
+    imports: [
     BrowserModule,
     AppRoutingModule,
     FrontOfficeModule,
@@ -26,7 +28,8 @@ import { ExploreCertificatesComponent } from './pages/explore-certificates/explo
     FormsModule,
     AuthModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

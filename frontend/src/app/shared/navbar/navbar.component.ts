@@ -110,6 +110,10 @@ export class NavbarComponent implements OnInit {
       this.router.navigate(['/assessment']);
     }
   }
+  goToSubmissions() {
+  this.router.navigate(['/submissions']);
+  this.isUserDropdownOpen = false; // Close menu after click
+}
 
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {

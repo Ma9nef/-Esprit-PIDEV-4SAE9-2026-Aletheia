@@ -9,10 +9,10 @@ import { Assessment } from '../models/assessment.model';
 export class AssessmentService {
  saveAssessmentResult(payload: any): Observable<any> {
   // Remplacez l'URL par votre endpoint API réel
-  return this.http.post(`http://localhost:8081/api/assessment-results`, payload);
+  return this.http.post(`http://localhost:8089/api/assessment-results`, payload);
 }
   // Corrected Base URL (Singular 'assessment')
-  private apiUrl = 'http://localhost:8081/pidev/assessment';
+  private apiUrl = 'http://localhost:8089/api/pidev/assessment';
 
   constructor(private http: HttpClient) {}
 
