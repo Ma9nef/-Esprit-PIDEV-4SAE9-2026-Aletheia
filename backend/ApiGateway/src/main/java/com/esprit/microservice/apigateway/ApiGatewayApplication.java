@@ -60,6 +60,8 @@ public class ApiGatewayApplication {
                         .uri("lb://OFFER"))
                 .route("subscription-plans", r -> r.path("/api/subscription-plans/**")
                         .uri("lb://OFFER"))
+                .route("subscriptions", r -> r.path("/api/subscriptions/**")
+                        .uri("lb://OFFER"))
 
                 // EVENT SERVICE
                 .route("event-service", r -> r.path("/api/events/**")

@@ -158,6 +158,9 @@ public class SubscriptionService {
     }
 
     private int calculateDaysRemaining(LocalDateTime endDate) {
+        if (endDate == null) {
+            return 0;
+        }
         return (int) java.time.Duration.between(LocalDateTime.now(), endDate).toDays();
     }
 
@@ -166,14 +169,24 @@ public class SubscriptionService {
         dto.setSubscriptionId(subscription.getId());
         dto.setSubscriptionNumber(subscription.getSubscriptionNumber());
         dto.setUserId(subscription.getUserId());
+        dto.setPlanId(subscription.getPlanId());
         dto.setStartDate(subscription.getStartDate());
         dto.setEndDate(subscription.getEndDate());
         dto.setStatus(subscription.getStatus());
+        dto.setCreatedAt(subscription.getCreatedAt());
+        dto.setUpdatedAt(subscription.getUpdatedAt());
+        dto.setDaysRemaining(calculateDaysRemaining(subscription.getEndDate()));
 
         // Ajouter le nom du plan
-        planRepository.findById(subscription.getPlanId()).ifPresent(plan ->
-                dto.setPlanName(plan.getName())
-        );
+        planRepository.findById(subscription.getPlanId()).ifPresent(plan -> {
+            dto.setPlanName(plan.getName());
+            dto.setPlanDescription(plan.getDescription());
+            dto.setPlanPrice(plan.getPrice());
+            dto.setDurationDays(plan.getDurationDays());
+            dto.setMaxCourses(plan.getMaxCourses());
+            dto.setCertificationIncluded(plan.getCertificationIncluded());
+            dto.setPlanActive(plan.getIsActive());
+        });
 
         return dto;
     }

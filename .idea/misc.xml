@@ -7,12 +7,12 @@
         <option value="$PROJECT_DIR$/backend/ApiGateway/pom.xml" />
         <option value="$PROJECT_DIR$/backend/courses/pom.xml" />
         <option value="$PROJECT_DIR$/backend/eureka/pom.xml" />
-        <option value="$PROJECT_DIR$/backend/Library/pom.xml" />
-        <option value="$PROJECT_DIR$/backend/user-service/pom.xml" />
-        <option value="$PROJECT_DIR$/backend/offer/pom.xml" />
         <option value="$PROJECT_DIR$/backend/events/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Library/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/offer/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/user-service/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" project-jdk-name="temurin-21" project-jdk-type="JavaSDK" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_25" project-jdk-name="23" project-jdk-type="JavaSDK" />
 </project>

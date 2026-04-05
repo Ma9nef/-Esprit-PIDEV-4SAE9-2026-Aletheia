@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { RouterLink } from '@angular/router';
 import { CouponService } from '../../core/services/coupon.service';
 import { AppliedOfferDTO } from '../../core/models/offer.model';
+import { SubscriptionPlanResponse } from '../../core/models/subscription-plan.model';
+import { SubscriptionPlanService } from '../../core/services/subscription-plan.service';
+import { SubscriptionService } from '../../core/services/subscription.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -12,11 +17,13 @@ import { AppliedOfferDTO } from '../../core/models/offer.model';
   template: `
     <div class="checkout-page">
       <header class="page-header">
-        <h1 class="form-title">Complete Your Purchase</h1>
-        <a routerLink="/offers" class="back-link">← Back to Offers</a>
+        <h1 class="form-title">{{ isSubscriptionMode ? 'Complete Your Subscription' : 'Complete Your Purchase' }}</h1>
+        <a [routerLink]="isSubscriptionMode ? '/plans' : '/offers'" class="back-link">
+          ← Back to {{ isSubscriptionMode ? 'Plans' : 'Offers' }}
+        </a>
       </header>
 
-      <div class="checkout-content form-card">
+      <div class="checkout-content form-card" *ngIf="!isSubscriptionMode">
         <section class="order-summary">
           <h2 class="section-title">Order Summary</h2>
           <div class="summary-row">
@@ -63,6 +70,55 @@ import { AppliedOfferDTO } from '../../core/models/offer.model';
           </button>
         </section>
       </div>
+
+      <div class="checkout-content form-card" *ngIf="isSubscriptionMode">
+        <p *ngIf="loadingPlan">Loading selected plan...</p>
+        <p *ngIf="paymentError" class="message-error" role="alert">{{ paymentError }}</p>
+        <p *ngIf="paymentSuccess" class="message-success" role="alert">{{ paymentSuccess }}</p>
+
+        <ng-container *ngIf="!loadingPlan && selectedPlan">
+          <section class="order-summary">
+            <h2 class="section-title">Subscription Summary</h2>
+            <div class="summary-row">
+              <span>Plan</span>
+              <span>{{ selectedPlan.name }}</span>
+            </div>
+            <div class="summary-row">
+              <span>Duration</span>
+              <span>{{ selectedPlan.durationDays }} days</span>
+            </div>
+            <div class="summary-row">
+              <span>Courses</span>
+              <span>{{ selectedPlan.maxCourses || 'Unlimited' }}</span>
+            </div>
+            <div class="summary-row">
+              <span>Certification</span>
+              <span>{{ selectedPlan.certificationIncluded ? 'Included' : 'Not included' }}</span>
+            </div>
+            <div class="summary-row total">
+              <span>Total</span>
+              <span class="final-price">{{ (selectedPlan.price || 0) | number:'1.2-2' }} €</span>
+            </div>
+          </section>
+
+          <section class="checkout-actions">
+            <p class="form-description">
+              Secure card payment powered by Stripe. Your subscription will be activated after Stripe confirms the payment.
+            </p>
+            <button
+              type="button"
+              class="btn-pay"
+              [disabled]="paymentLoading || !currentUserId"
+              (click)="paySubscription()"
+            >
+              {{ paymentLoading ? 'Redirecting to Stripe...' : 'Pay by card with Stripe' }}
+            </button>
+            <p *ngIf="!currentUserId" class="message-error">
+              Please log in before purchasing a subscription.
+            </p>
+          </section>
+        </ng-container>
+      </div>
     </div>
   `,
   styles: [`
@@ -103,18 +159,67 @@ import { AppliedOfferDTO } from '../../core/models/offer.model';
     }
     .btn-pay:hover:not(:disabled) { opacity: 0.95; }
     .btn-pay:disabled { background: #94a3b8; cursor: not-allowed; opacity: 0.8; }
+    .message-error { color: #dc2626; margin-top: 1rem; }
+    .message-success { color: #15803d; margin-top: 1rem; }
   `]
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
+  isSubscriptionMode = false;
+  selectedPlan: SubscriptionPlanResponse | null = null;
+  loadingPlan = false;
+  paymentLoading = false;
+  paymentError = '';
+  paymentSuccess = '';
+  planId: string | null = null;
+
   promoCode = '';
   originalPrice = 99.99;
   appliedResult: AppliedOfferDTO | null = null;
   promoError = '';
   applying = false;
 
-  private readonly testUserId = 'user1';
+  constructor(
+    private couponService: CouponService,
+    private route: ActivatedRoute,
+    private planService: SubscriptionPlanService,
+    private subscriptionService: SubscriptionService,
+    private authService: AuthService
+  ) {}
 
-  constructor(private couponService: CouponService) {}
+  ngOnInit(): void {
+    this.route.queryParamMap.subscribe((params) => {
+      const queryPlanId = params.get('planId');
+      const paymentState = params.get('payment');
+
+      this.planId = queryPlanId || this.route.snapshot.paramMap.get('planId');
+      this.isSubscriptionMode = !!this.planId;
+
+      if (this.planId) {
+        this.loadPlan(this.planId);
+      }
+
+      this.paymentSuccess = paymentState === 'success'
+        ? 'Payment confirmed. Your subscription will appear in your history after the Stripe webhook is processed.'
+        : '';
+      this.paymentError = paymentState === 'cancelled'
+        ? 'Payment was cancelled before confirmation.'
+        : this.paymentError;
+    });
+
+    this.route.paramMap.subscribe((params) => {
+      const routePlanId = params.get('planId');
+      if (!this.planId && routePlanId) {
+        this.planId = routePlanId;
+        this.isSubscriptionMode = true;
+        this.loadPlan(routePlanId);
+      }
+    });
+  }
+
+  get currentUserId(): string {
+    const user = this.authService.getUserFromToken();
+    return user?.id ? String(user.id) : '';
+  }
 
   get finalPrice(): number {
     return this.appliedResult?.success ? (this.appliedResult.finalPrice ?? this.originalPrice) : this.originalPrice;
@@ -130,7 +235,7 @@ export class CheckoutComponent {
     this.couponService.applyCoupon(
       code,
       this.originalPrice,
-      this.testUserId
+      this.currentUserId || 'anonymous-user'
     ).subscribe({
       next: (result) => {
         this.appliedResult = result;
@@ -149,5 +254,51 @@ export class CheckoutComponent {
   onPay(): void {
     if (!this.appliedResult?.success) return;
     alert('Payment simulated successfully. Thank you for your purchase!');
+  }
+
+  paySubscription(): void {
+    if (!this.selectedPlan?.planId || !this.currentUserId || this.paymentLoading) return;
+
+    this.paymentLoading = true;
+    this.paymentError = '';
+
+    const baseUrl = window.location.origin;
+
+    this.subscriptionService.createCheckoutSession({
+      userId: this.currentUserId,
+      planId: this.selectedPlan.planId,
+      successUrl: `${baseUrl}/checkout?planId=${this.selectedPlan.planId}&payment=success`,
+      cancelUrl: `${baseUrl}/checkout?planId=${this.selectedPlan.planId}&payment=cancelled`
+    }).subscribe({
+      next: (response) => {
+        if (response.checkoutUrl) {
+          window.location.href = response.checkoutUrl;
+          return;
+        }
+
+        this.paymentError = response.message || 'Unable to start Stripe payment.';
+        this.paymentLoading = false;
+      },
+      error: (err) => {
+        this.paymentError = err?.error?.message || 'Error while creating the Stripe checkout session.';
+        this.paymentLoading = false;
+      }
+    });
+  }
+
+  private loadPlan(planId: string): void {
+    this.loadingPlan = true;
+    this.paymentError = '';
+
+    this.planService.getPlanById(planId).subscribe({
+      next: (plan) => {
+        this.selectedPlan = plan;
+        this.loadingPlan = false;
+      },
+      error: (err) => {
+        this.paymentError = err?.error?.message || 'Unable to load the selected plan.';
+        this.loadingPlan = false;
+      }
+    });
   }
 }

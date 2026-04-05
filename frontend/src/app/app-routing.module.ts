@@ -38,6 +38,7 @@ const routes: Routes = [
   { path: 'dashboardInstructor', component: TrainerDashboardComponent },
   { path: 'offers', component: OffersListComponent },
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout/:planId', component: CheckoutComponent },
   { path: 'plans', component: SubscriptionPlansListComponent },
   { path: 'front/room/:id', component: VideoRoomComponent },
 

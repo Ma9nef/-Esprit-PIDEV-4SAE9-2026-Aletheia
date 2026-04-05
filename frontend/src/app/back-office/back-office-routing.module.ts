@@ -20,6 +20,7 @@ import {AdminFlashSalesComponent} from "./admin-flash-sales/admin-flash-sales.co
 import {FlashSaleFormComponent} from "./flash-sale-form/flash-sale-form.component";
 import {AdminAnalyticsComponent} from "./admin-analytics/admin-analytics.component";
 import {AdminSubscriptionPlansComponent} from "./admin-subscription-plans/admin-subscription-plans.component";
+import { AdminSubscriptionsComponent } from './admin-subscriptions/admin-subscriptions.component';
 import {
   SubscriptionPlanFormComponent
 } from "./admin-subscription-plans/subscription-plan-form/subscription-plan-form.component";
@@ -49,6 +50,7 @@ const routes: Routes = [
       { path: 'subscription-plans', component: AdminSubscriptionPlansComponent },
       { path: 'subscription-plans/new', component: SubscriptionPlanFormComponent },
       { path: 'subscription-plans/edit/:id', component: SubscriptionPlanFormComponent },
+      { path: 'subscriptions', component: AdminSubscriptionsComponent },
       { path: 'events', component: EventListComponent },
       { path: 'events/new', component: EventFormComponent },
       { path: 'events/edit/:id', component: EventFormComponent },

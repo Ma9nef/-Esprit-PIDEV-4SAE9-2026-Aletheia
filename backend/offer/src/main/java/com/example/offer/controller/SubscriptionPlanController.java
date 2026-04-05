@@ -1,7 +1,9 @@
 package com.example.offer.controller;
 
 import com.example.offer.dto.SubscriptionPlanRequestDTO;
+import com.example.offer.dto.SubscriptionPlanRecommendationDTO;
 import com.example.offer.dto.SubscriptionPlanResponseDTO;
+import com.example.offer.service.SubscriptionRecommendationService;
 import com.example.offer.service.SubscriptionPlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 public class SubscriptionPlanController {
 
     private final SubscriptionPlanService planService;
+    private final SubscriptionRecommendationService recommendationService;
 
     @GetMapping
     public ResponseEntity<List<SubscriptionPlanResponseDTO>> getAllPlans() {
@@ -30,6 +33,11 @@ public class SubscriptionPlanController {
     @GetMapping("/{id}")
     public ResponseEntity<SubscriptionPlanResponseDTO> getPlanById(@PathVariable String id) {
         return ResponseEntity.ok(planService.getPlanById(id));
+    }
+
+    @GetMapping("/recommendation/{userId}")
+    public ResponseEntity<SubscriptionPlanRecommendationDTO> recommendPlan(@PathVariable String userId) {
+        return ResponseEntity.ok(recommendationService.recommendPlanForUser(userId));
     }
 
     @PostMapping
