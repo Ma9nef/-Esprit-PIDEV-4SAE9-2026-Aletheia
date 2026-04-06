@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
     { label: 'Services', route: '/services', icon: '⚙️' },
     { label: 'Explore 3D', route: '/explore', icon: '🌌' },
     { label: 'Library', route: '/front/library', icon: '📖' },
+    { label: 'Resources', route: '/front/resources', icon: '🏗️' },
     { label: 'Contact', route: '/contact', icon: '📧' }
   ];
 

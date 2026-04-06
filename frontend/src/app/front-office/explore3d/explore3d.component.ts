@@ -5,6 +5,8 @@ import {
 import { Router } from '@angular/router';
 import * as THREE from 'three';
 import { LibraryService, Product } from '../../core/services/library.service';
+import { CartService, Cart } from '../../core/services/cart.service';
+import { AuthService } from '../../core/services/auth.service';
 
 interface BuildingInfo {
   label: string;
@@ -39,6 +41,15 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
   showLibraryBrowser = false;
   libraryProducts: Product[] = [];
   libraryLoading = false;
+  libraryView: 'browse' | 'cart' = 'browse';
+
+  /* ── Cart ── */
+  cart: Cart | null = null;
+  cartLoading = false;
+  checkoutLoading = false;
+  checkoutSuccess = false;
+  userId: number | null = null;
+  addingToCart = new Set<number>();
 
   /* ── Three.js core ── */
   private renderer!: THREE.WebGLRenderer;
@@ -76,6 +87,7 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
   private floatingOrbs: THREE.Mesh[] = [];
   private clouds: THREE.Group[] = [];
   private fountainParticles!: THREE.Group;
+  private glowRings: { mesh: THREE.Mesh; buildingIndex: number }[] = [];
 
   /* ── Buildings ── */
   buildings: BuildingInfo[] = [
@@ -126,17 +138,27 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private ngZone: NgZone,
     private router: Router,
-    private libraryService: LibraryService
+    private libraryService: LibraryService,
+    private cartService: CartService,
+    private authService: AuthService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const user = this.authService.getUserFromToken();
+    if (user) {
+      this.userId = user.id;
+      this.loadCart();
+    }
+  }
 
   ngAfterViewInit(): void {
     this.ngZone.runOutsideAngular(() => {
       this.initScene();
+      this.buildSkyDome();
       this.buildGround();
       this.buildRoads();
       this.buildAllBuildings();
+      this.buildGlowRings();
       this.buildTrees();
       this.buildLamps();
       this.buildFountain();
@@ -172,31 +194,36 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.toneMappingExposure = 1.2;
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x87CEEB);
-    this.scene.fog = new THREE.Fog(0xB0D8F0, 90, 200);
+    this.scene.background = null; // sky dome handles background
+    this.scene.fog = new THREE.FogExp2(0xB0D8F0, 0.004);
 
     this.camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 300);
 
     /* Ambient */
-    this.scene.add(new THREE.AmbientLight(0xfff8e7, 0.5));
+    this.scene.add(new THREE.AmbientLight(0xfff8e7, 0.6));
 
-    /* Hemisphere: sky blue top, ground green bottom */
-    this.scene.add(new THREE.HemisphereLight(0x87CEEB, 0x556B2F, 0.6));
+    /* Hemisphere: rich sky blue top, warm ground bottom */
+    this.scene.add(new THREE.HemisphereLight(0x5B9BD5, 0x7DAF5A, 0.8));
 
-    /* Sun */
-    const sun = new THREE.DirectionalLight(0xfffbe6, 1.2);
-    sun.position.set(30, 50, 20);
+    /* Sun — golden hour angle */
+    const sun = new THREE.DirectionalLight(0xFFF4CC, 1.4);
+    sun.position.set(40, 60, 25);
     sun.castShadow = true;
     sun.shadow.mapSize.set(2048, 2048);
     const sc = sun.shadow.camera;
-    sc.left = -65; sc.right = 65; sc.top = 65; sc.bottom = -65;
-    sc.near = 1; sc.far = 120;
+    sc.left = -70; sc.right = 70; sc.top = 70; sc.bottom = -70;
+    sc.near = 1; sc.far = 140;
     this.scene.add(sun);
 
-    /* Soft fill from opposite side */
-    const fill = new THREE.DirectionalLight(0xB0D4F1, 0.35);
-    fill.position.set(-30, 20, -20);
+    /* Soft cool fill from opposite side */
+    const fill = new THREE.DirectionalLight(0x90C8FF, 0.45);
+    fill.position.set(-40, 25, -25);
     this.scene.add(fill);
+
+    /* Warm accent from below */
+    const bounce = new THREE.DirectionalLight(0xFFE4B0, 0.2);
+    bounce.position.set(0, -10, 0);
+    this.scene.add(bounce);
   }
 
   /* ═══════════════════════════════════════════
@@ -628,8 +655,13 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
     orn.position.y = 3.6;
     this.scene.add(orn);
 
+    /* Fountain glow light */
+    const fountainLight = new THREE.PointLight(0x4FC3F7, 1.8, 14);
+    fountainLight.position.set(0, 3.5, 0);
+    this.scene.add(fountainLight);
+
     this.fountainParticles = new THREE.Group();
-    const pMat = new THREE.MeshBasicMaterial({ color: 0x81D4FA, transparent: true, opacity: 0.6 });
+    const pMat = new THREE.MeshBasicMaterial({ color: 0x81D4FA, transparent: true, opacity: 0.75 });
     for (let i = 0; i < 40; i++) {
       const p = new THREE.Mesh(new THREE.SphereGeometry(0.05, 6, 6), pMat);
       p.userData['vel'] = new THREE.Vector3((Math.random() - 0.5) * 0.8, 2 + Math.random() * 2, (Math.random() - 0.5) * 0.8);
@@ -676,20 +708,30 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
      FLOATING ORBS
      ═══════════════════════════════════════════ */
   private buildFloatingOrbs(): void {
-    const colors = [0xFFD700, 0xFF69B4, 0x87CEEB, 0x98FB98, 0xDDA0DD, 0xFFA07A];
-    for (let i = 0; i < 20; i++) {
+    const colors = [0xFFD700, 0xFF69B4, 0x7EB8FF, 0x98FB98, 0xDDA0DD, 0xFFA07A, 0xFF6B6B, 0x4ECDC4];
+    for (let i = 0; i < 35; i++) {
+      const size = 0.12 + Math.random() * 0.14;
+      const color = colors[i % colors.length];
       const orb = new THREE.Mesh(
-        new THREE.SphereGeometry(0.06 + Math.random() * 0.06, 8, 8),
-        new THREE.MeshBasicMaterial({ color: colors[i % colors.length], transparent: true, opacity: 0.6 + Math.random() * 0.3 })
+        new THREE.SphereGeometry(size, 10, 10),
+        new THREE.MeshStandardMaterial({
+          color,
+          emissive: color,
+          emissiveIntensity: 0.6 + Math.random() * 0.4,
+          transparent: true,
+          opacity: 0.75 + Math.random() * 0.2,
+          roughness: 0.1,
+          metalness: 0.3
+        })
       );
       orb.position.set(
-        (Math.random() - 0.5) * 60,
-        0.8 + Math.random() * 3,
-        (Math.random() - 0.5) * 60
+        (Math.random() - 0.5) * 70,
+        1.0 + Math.random() * 4,
+        (Math.random() - 0.5) * 70
       );
       orb.userData['baseY'] = orb.position.y;
       orb.userData['phase'] = Math.random() * Math.PI * 2;
-      orb.userData['speed'] = 0.5 + Math.random();
+      orb.userData['speed'] = 0.4 + Math.random() * 0.8;
       this.floatingOrbs.push(orb);
       this.scene.add(orb);
     }
@@ -866,6 +908,7 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
     this.animateFountain(delta);
     this.animateOrbs(t);
     this.animateClouds(delta);
+    this.animateGlowRings(t);
 
     this.renderer.render(this.scene, this.camera);
   };
@@ -1077,30 +1120,159 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /* ═══════════════════════════════════════════
+     SKY DOME
+     ═══════════════════════════════════════════ */
+  private buildSkyDome(): void {
+    const canvas = document.createElement('canvas');
+    canvas.width = 1; canvas.height = 512;
+    const ctx = canvas.getContext('2d')!;
+    const grad = ctx.createLinearGradient(0, 0, 0, 512);
+    grad.addColorStop(0,    '#0D2B6E'); // deep blue zenith
+    grad.addColorStop(0.25, '#1E5FAD'); // mid blue
+    grad.addColorStop(0.55, '#5B9BD5'); // sky blue
+    grad.addColorStop(0.75, '#87CEEB'); // horizon
+    grad.addColorStop(0.9,  '#C2E4F5'); // near horizon
+    grad.addColorStop(1,    '#E8F4FB'); // haze
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 1, 512);
+    const tex = new THREE.CanvasTexture(canvas);
+
+    const dome = new THREE.Mesh(
+      new THREE.SphereGeometry(240, 32, 16),
+      new THREE.MeshBasicMaterial({ map: tex, side: THREE.BackSide, depthWrite: false })
+    );
+    dome.rotation.y = Math.PI; // orient gradient correctly
+    this.scene.add(dome);
+  }
+
+  /* ═══════════════════════════════════════════
+     GLOW RINGS
+     ═══════════════════════════════════════════ */
+  private buildGlowRings(): void {
+    this.buildings.forEach((b, i) => {
+      const radius = Math.max(b.width, b.depth) * 0.72;
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(radius, 0.18, 8, 64),
+        new THREE.MeshStandardMaterial({
+          color: b.color,
+          emissive: b.color,
+          emissiveIntensity: 0.4,
+          transparent: true,
+          opacity: 0.35,
+          roughness: 0.2,
+          metalness: 0.6
+        })
+      );
+      ring.rotation.x = -Math.PI / 2;
+      ring.position.set(b.position[0], 0.08, b.position[1]);
+      this.glowRings.push({ mesh: ring, buildingIndex: i });
+      this.scene.add(ring);
+
+      /* Colored point light per building (soft ambiance) */
+      const pLight = new THREE.PointLight(b.color, 0.6, 18);
+      pLight.position.set(b.position[0], 4, b.position[1]);
+      this.scene.add(pLight);
+    });
+  }
+
+  /* ── Glow ring animation ── */
+  private animateGlowRings(t: number): void {
+    this.glowRings.forEach(({ mesh, buildingIndex }) => {
+      const b = this.buildings[buildingIndex];
+      const isNear = this.nearBuilding === b;
+      const mat = mesh.material as THREE.MeshStandardMaterial;
+      const pulse = Math.sin(t * 1.8 + buildingIndex * 1.1);
+      mat.emissiveIntensity = isNear ? 1.0 + pulse * 0.4 : 0.25 + pulse * 0.1;
+      mat.opacity = isNear ? 0.75 : 0.25 + pulse * 0.05;
+      const scale = 1 + (isNear ? 0.06 : 0.02) * Math.sin(t * 2 + buildingIndex);
+      mesh.scale.setScalar(scale);
+    });
+  }
+
+  /* ═══════════════════════════════════════════
      LIBRARY BROWSER
      ═══════════════════════════════════════════ */
   openLibraryBrowser(): void {
     this.showLibraryBrowser = true;
+    this.libraryView = 'browse';
+    this.checkoutSuccess = false;
     this.libraryLoading = true;
     this.libraryService.getAll().subscribe({
-      next: (products) => {
+      next: (products) => this.ngZone.run(() => {
         this.libraryProducts = products;
         this.libraryLoading = false;
-      },
-      error: () => {
+      }),
+      error: () => this.ngZone.run(() => {
         this.libraryProducts = [];
         this.libraryLoading = false;
-      }
+      })
     });
+    if (this.userId) this.loadCart();
   }
 
   closeLibraryBrowser(): void {
     this.showLibraryBrowser = false;
   }
 
-  viewProduct(_product: Product): void {
-    this.showLibraryBrowser = false;
-    this.router.navigate(['/front/library']);
+  /* ── Cart methods ── */
+  loadCart(): void {
+    if (!this.userId) return;
+    this.cartService.getCart(this.userId).subscribe({
+      next: cart => this.ngZone.run(() => { this.cart = cart; }),
+      error: () => {}
+    });
+  }
+
+  addToCart(product: Product, event: Event): void {
+    event.stopPropagation();
+    if (!this.userId) { alert('Please log in to add items to your cart.'); return; }
+    if (this.addingToCart.has(product.id!)) return;
+    this.addingToCart.add(product.id!);
+    this.cartService.addToCart(this.userId, product.id!).subscribe({
+      next: cart => this.ngZone.run(() => { this.cart = cart; this.addingToCart.delete(product.id!); }),
+      error: () => this.ngZone.run(() => { this.addingToCart.delete(product.id!); })
+    });
+  }
+
+  removeFromCart(cartItemId: number): void {
+    if (!this.userId) return;
+    this.cartService.removeItem(this.userId, cartItemId).subscribe({
+      next: cart => this.ngZone.run(() => { this.cart = cart; }),
+      error: () => {}
+    });
+  }
+
+  isInCart(productId: number | undefined): boolean {
+    if (!productId || !this.cart) return false;
+    return this.cart.items.some(i => i.product.id === productId);
+  }
+
+  getCartItemCount(): number {
+    return this.cart?.items.reduce((s, i) => s + i.quantity, 0) ?? 0;
+  }
+
+  getCartTotal(): number {
+    return this.cart?.items.reduce((s, i) => s + i.product.price * i.quantity, 0) ?? 0;
+  }
+
+  checkout(): void {
+    if (!this.userId || !this.cart?.items.length) return;
+    this.checkoutLoading = true;
+    this.cartService.checkout(this.userId).subscribe({
+      next: () => this.ngZone.run(() => {
+        this.checkoutLoading = false;
+        this.checkoutSuccess = true;
+        this.cart = null;
+        setTimeout(() => {
+          this.checkoutSuccess = false;
+          this.libraryView = 'browse';
+        }, 3500);
+      }),
+      error: () => this.ngZone.run(() => {
+        this.checkoutLoading = false;
+        alert('Checkout failed. Please try again.');
+      })
+    });
   }
 
   /* ═══════════════════════════════════════════

@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="offer" />
         <module name="courses" />
-        <module name="eureka" />
         <module name="event-microservice" />
+        <module name="eureka" />
         <module name="ApiGateway" />
       </profile>
       <profile name="Annotation profile for Library" enabled="true">
@@ -18,7 +18,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="Library" />

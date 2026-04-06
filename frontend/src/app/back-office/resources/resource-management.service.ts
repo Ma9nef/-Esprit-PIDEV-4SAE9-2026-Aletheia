@@ -14,7 +14,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class ResourceManagementService {
-  private readonly base = 'http://localhost:8086/api';
+  private readonly base = '/api';
 
   constructor(private http: HttpClient) {}
 

@@ -1,5 +1,6 @@
 package com.esprit.microservice.resourcemanagement.service;
 
+import com.esprit.microservice.resourcemanagement.client.EventServiceClient;
 import com.esprit.microservice.resourcemanagement.dto.request.CheckAvailabilityRequest;
 import com.esprit.microservice.resourcemanagement.dto.request.CreateReservationRequest;
 import com.esprit.microservice.resourcemanagement.dto.response.AvailabilityCheckResponse;
@@ -43,6 +44,9 @@ public class ReservationService {
     @Autowired(required = false)
     private ReservationEventPublisher eventPublisher;
 
+    @Autowired(required = false)
+    private EventServiceClient eventServiceClient;
+
     /**
      * Create a new reservation with full conflict detection and pessimistic locking.
      *
@@ -80,10 +84,13 @@ public class ReservationService {
             throw new InvalidTimeRangeException();
         }
 
-        // 2. Validate resource exists and is active
+        // 2. Validate event exists in the Event microservice (via Feign)
+        validateEventExists(request.getEventId());
+
+        // 3. Validate resource exists and is active
         Resource resource = resourceService.findResourceOrThrow(request.getResourceId());
 
-        // 3. CRITICAL: Check for conflicts using pessimistic lock
+        // 4. CRITICAL: Check for conflicts using pessimistic lock
         //    This SELECT ... FOR UPDATE locks overlapping rows so no other
         //    transaction can insert a conflicting reservation concurrently.
         List<Reservation> conflicts = reservationRepository.findConflictingReservationsWithLock(
@@ -100,12 +107,12 @@ public class ReservationService {
                             resource.getName(), conflicts.size()));
         }
 
-        // 4. Create and save reservation
+        // 5. Create and save reservation
         Reservation reservation = reservationMapper.toEntity(request);
         reservation.setCreatedBy(createdBy);
         Reservation saved = reservationRepository.save(reservation);
 
-        // 5. Audit log
+        // 6. Audit log
         auditLogRepository.save(ReservationAuditLog.builder()
                 .reservationId(saved.getId())
                 .action("CREATED")
@@ -118,7 +125,7 @@ public class ReservationService {
                         "endTime", saved.getEndTime().toString()))
                 .build());
 
-        // 6. Publish event (async, non-blocking)
+        // 7. Publish event (async, non-blocking)
         if (eventPublisher != null) {
             eventPublisher.publishReservationCreated(saved);
         }
@@ -252,6 +259,31 @@ public class ReservationService {
         }
 
         throw new IllegalArgumentException("Either resourceId or type must be provided");
+    }
+
+    /**
+     * Validates that the given eventId corresponds to an existing event
+     * in the Event microservice (called via OpenFeign).
+     *
+     * If the eventId is not a numeric Long, or the Event service is unavailable,
+     * validation is skipped with a warning to avoid blocking reservation creation
+     * due to a downstream service failure (resilient degradation).
+     */
+    private void validateEventExists(String eventId) {
+        if (eventServiceClient == null) {
+            log.warn("EventServiceClient not available — skipping event validation");
+            return;
+        }
+        try {
+            Long id = Long.parseLong(eventId);
+            eventServiceClient.getEventById(id);
+            log.info("Event validation passed for eventId={}", eventId);
+        } catch (NumberFormatException e) {
+            log.warn("eventId '{}' is not a numeric Long — skipping event validation", eventId);
+        } catch (Exception e) {
+            log.warn("Event service unreachable or event not found for eventId='{}': {} — skipping validation",
+                    eventId, e.getMessage());
+        }
     }
 
     private Reservation findReservationOrThrow(UUID id) {

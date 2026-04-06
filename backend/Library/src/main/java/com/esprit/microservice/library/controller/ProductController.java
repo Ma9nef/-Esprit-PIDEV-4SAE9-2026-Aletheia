@@ -2,7 +2,6 @@ package com.esprit.microservice.library.controller;
 
 import com.esprit.microservice.library.dto.ProductDTO;
 import com.esprit.microservice.library.enums.ProductType;
-
 import com.esprit.microservice.library.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:4200")
 public class ProductController {
 
     private final ProductService productService;

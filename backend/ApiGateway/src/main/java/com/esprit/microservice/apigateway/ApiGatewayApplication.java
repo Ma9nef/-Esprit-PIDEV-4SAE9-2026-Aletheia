@@ -67,6 +67,12 @@ public class ApiGatewayApplication {
                 .route("event-websocket", r -> r.path("/room/**")
                         .uri("lb://EVENT-MICROSERVICE"))
 
+                // RESOURCE MANAGEMENT SERVICE
+                .route("resources-service", r -> r.path("/api/resources/**")
+                        .uri("lb://RESOURCEMANAGEMENT"))
+                .route("reservations-service", r -> r.path("/api/reservations/**")
+                        .uri("lb://RESOURCEMANAGEMENT"))
+
                 .build();
     }
 }
