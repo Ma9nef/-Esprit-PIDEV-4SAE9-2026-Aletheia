@@ -28,6 +28,9 @@ import { EventListComponent } from './events/event-list/event-list.component';
 import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
 import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
 import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
+import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
+import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
+import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -57,6 +60,10 @@ const routes: Routes = [
    { path: 'allocations/new', component: AllocationFormComponent },
    { path: 'allocations/edit/:id', component: AllocationFormComponent },
    { path: 'allocations/:id', component: AllocationDetailComponent },
+   { path: 'resources', component: ManageResourcesComponent },
+   { path: 'resources/new', component: ResourceFormComponent },
+   { path: 'resources/edit/:id', component: ResourceFormComponent },
+   { path: 'resources/:id/reservations', component: ResourceReservationsComponent },
     ]
   },
 
