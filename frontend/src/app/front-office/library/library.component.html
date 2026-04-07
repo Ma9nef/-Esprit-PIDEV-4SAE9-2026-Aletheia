@@ -1,6 +1,16 @@
 <section class="library-section">
+
+  <!-- Borrow Toast Notification -->
+  <div *ngIf="borrowToast" class="borrow-toast" [class.borrow-toast--success]="borrowToast.type === 'success'" [class.borrow-toast--error]="borrowToast.type === 'error'">
+    <span>{{ borrowToast.type === 'success' ? '✓' : '✕' }}</span>
+    {{ borrowToast.message }}
+  </div>
+
   <!-- Hero Section -->
   <div class="library-hero">
+    <span class="hero-deco hero-deco-1"></span>
+    <span class="hero-deco hero-deco-2"></span>
+    <span class="hero-deco hero-deco-3"></span>
     <div class="hero-content">
       <h1 class="hero-title">Resource Library</h1>
       <p class="hero-subtitle">Access curated learning materials, tutorials, and documentation</p>
@@ -38,7 +48,8 @@
             [class.active]="selectedCategory === cat.id"
             (click)="onCategoryChange(cat.id)"
             class="filter-btn">
-            {{ cat.name }}
+            <span>{{ cat.name }}</span>
+            <span class="filter-count-badge">{{ countForCategory(cat.id) }}</span>
           </button>
         </div>
       </div>
@@ -84,7 +95,8 @@
         <!-- Resource Cards -->
         <div
           *ngFor="let resource of filteredResources"
-          class="resource-card">
+          class="resource-card"
+          [attr.data-category]="resource.category">
 
           <!-- Resource Image/Icon -->
           <div class="resource-image">
@@ -126,7 +138,7 @@
             </div>
 
             <div class="resource-actions">
-              <!-- Add to Cart button (for logged-in users) -->
+              <!-- ── Purchase buttons (all types) ───────────────────────────── -->
               <button
                 *ngIf="userId && !isInCart(resource.id) && (resource.stockQuantity ?? 0) > 0"
                 (click)="addToCart(resource)"
@@ -137,20 +149,40 @@
                 </svg>
                 Add to Cart
               </button>
-              <!-- Already in cart indicator -->
-              <button
-                *ngIf="userId && isInCart(resource.id)"
-                class="btn-in-cart"
-                disabled>
+              <button *ngIf="userId && isInCart(resource.id)" class="btn-in-cart" disabled>
                 ✓ In Cart
               </button>
-              <!-- Out of stock -->
-              <button
-                *ngIf="userId && (resource.stockQuantity ?? 0) === 0"
-                class="btn-out-stock"
-                disabled>
+              <button *ngIf="userId && (resource.stockQuantity ?? 0) === 0" class="btn-out-stock" disabled>
                 Out of Stock
               </button>
+
+              <!-- ── Borrow button (BOOK type only) ──────────────────────────── -->
+              <ng-container *ngIf="resource.category === 'book'">
+                <!-- Already borrowed -->
+                <button *ngIf="isAlreadyBorrowed(resource.id)" class="btn-borrowed" disabled>
+                  📖 Borrowed
+                </button>
+                <!-- Borrowing in progress -->
+                <button *ngIf="!isAlreadyBorrowed(resource.id) && borrowingProductId === resource.id"
+                        class="btn-borrowing" disabled>
+                  Borrowing…
+                </button>
+                <!-- Borrow available -->
+                <button
+                  *ngIf="userId && !isAlreadyBorrowed(resource.id) && borrowingProductId !== resource.id && (resource.stockQuantity ?? 0) > 0"
+                  (click)="borrowProduct(resource)"
+                  class="btn-borrow">
+                  📚 Borrow
+                </button>
+                <!-- Not logged in -->
+                <button
+                  *ngIf="!userId && (resource.stockQuantity ?? 0) > 0"
+                  class="btn-borrow btn-borrow--guest"
+                  (click)="showBorrowToast('Please log in to borrow books.', 'error')">
+                  📚 Borrow
+                </button>
+              </ng-container>
+
               <button class="btn-view">View Details</button>
             </div>
           </div>

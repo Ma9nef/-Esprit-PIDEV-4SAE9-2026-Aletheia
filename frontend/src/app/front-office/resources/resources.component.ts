@@ -94,6 +94,11 @@ export class ResourcesComponent implements OnInit {
     return map[type];
   }
 
+  tabIcon(type: ResourceType | 'ALL'): string {
+    const map: Record<string, string> = { ALL: '🌐', ROOM: '🏫', DEVICE: '💻', MATERIAL: '📦' };
+    return map[type] ?? '';
+  }
+
   // ── Availability check ────────────────────────────────────────────────────
 
   checkAvailability(): void {

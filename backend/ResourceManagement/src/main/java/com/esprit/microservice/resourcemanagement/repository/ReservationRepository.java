@@ -1,9 +1,7 @@
 package com.esprit.microservice.resourcemanagement.repository;
 
 import com.esprit.microservice.resourcemanagement.entity.Reservation;
-import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -29,18 +27,18 @@ public interface ReservationRepository extends JpaRepository<Reservation, UUID> 
      *   existing.startTime < new.endTime AND existing.endTime > new.startTime
      *
      * Only considers active (non-cancelled, non-deleted) reservations.
-     * Uses PESSIMISTIC_WRITE lock to prevent race conditions during concurrent
-     * reservation creation for the same resource and time range.
+     * Uses a native FOR UPDATE (without alias) for MariaDB/MySQL compatibility —
+     * Hibernate 7 generates "FOR UPDATE OF alias" in JPQL mode which MariaDB rejects.
      */
-    @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("""
-            SELECT r FROM Reservation r
-            WHERE r.resourceId = :resourceId
-              AND r.deleted = false
-              AND r.status <> com.esprit.microservice.resourcemanagement.entity.enums.ReservationStatus.CANCELLED
-              AND r.startTime < :endTime
-              AND r.endTime > :startTime
-            """)
+    @Query(value = """
+            SELECT * FROM reservations
+            WHERE resource_id = :resourceId
+              AND deleted = false
+              AND status <> 'CANCELLED'
+              AND start_time < :endTime
+              AND end_time > :startTime
+            FOR UPDATE
+            """, nativeQuery = true)
     List<Reservation> findConflictingReservationsWithLock(
             @Param("resourceId") UUID resourceId,
             @Param("startTime") LocalDateTime startTime,

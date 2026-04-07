@@ -36,7 +36,7 @@ export class ManageResourcesComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.error = 'Failed to load resources. Make sure the ResourceManagement service is running on port 8086.';
+        this.error = 'Failed to load resources. Make sure the ResourceManagement service is running on port 8094.';
         this.loading = false;
       }
     });

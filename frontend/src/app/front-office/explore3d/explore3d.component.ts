@@ -88,6 +88,7 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
   private clouds: THREE.Group[] = [];
   private fountainParticles!: THREE.Group;
   private glowRings: { mesh: THREE.Mesh; buildingIndex: number }[] = [];
+  private glowRingsOuter: { mesh: THREE.Mesh; buildingIndex: number }[] = [];
 
   /* ── Buildings ── */
   buildings: BuildingInfo[] = [
@@ -96,42 +97,42 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       description: 'Browse expert-led programming courses',
       route: '/front/courses',
       color: 0x4361ee, roofColor: 0x7B93FF, emissiveColor: 0x4361ee,
-      position: [-28, -24], width: 8, depth: 7, height: 6
+      position: [-28, -28], width: 8, depth: 7, height: 6
     },
     {
       label: 'Digital Library', icon: '📖',
       description: 'Explore the digital book collection',
       route: '/front/library',
       color: 0x7209b7, roofColor: 0xB47FDB, emissiveColor: 0x9B59B6,
-      position: [28, -24], width: 8, depth: 7, height: 7
+      position: [28, -28], width: 8, depth: 7, height: 7
     },
     {
       label: 'Learner Dashboard', icon: '📊',
       description: 'Track your learning progress',
       route: '/dashboardLearner',
       color: 0x0096c7, roofColor: 0x48CAE4, emissiveColor: 0x00B4D8,
-      position: [-28, 24], width: 7, depth: 6.5, height: 5
+      position: [-36, 0], width: 7, depth: 6.5, height: 5
     },
     {
       label: 'Services Center', icon: '⚙️',
       description: 'Discover platform services & tools',
       route: '/services',
       color: 0xe85d04, roofColor: 0xFAA307, emissiveColor: 0xF48C06,
-      position: [28, 24], width: 7, depth: 6.5, height: 5.5
+      position: [36, 0], width: 7, depth: 6.5, height: 5.5
     },
     {
       label: 'Info Tower', icon: 'ℹ️',
       description: 'Learn about the Aletheia platform',
       route: '/about',
       color: 0x2d6a4f, roofColor: 0x52B788, emissiveColor: 0x40916C,
-      position: [0, -38], width: 6, depth: 6, height: 9
+      position: [-28, 28], width: 6, depth: 6, height: 9
     },
     {
       label: 'Community Hub', icon: '👥',
       description: 'Connect with fellow learners',
       route: '/contact',
       color: 0xd62828, roofColor: 0xF77F7F, emissiveColor: 0xE63946,
-      position: [0, 38], width: 7, depth: 6, height: 5
+      position: [28, 28], width: 7, depth: 6, height: 5
     }
   ];
 
@@ -156,6 +157,7 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       this.initScene();
       this.buildSkyDome();
       this.buildGround();
+      this.buildBenches();
       this.buildRoads();
       this.buildAllBuildings();
       this.buildGlowRings();
@@ -283,6 +285,43 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
         );
         this.scene.add(flower);
       }
+    }
+  }
+
+  /* ═══════════════════════════════════════════
+     BENCHES – 6 stone benches around plaza
+     ═══════════════════════════════════════════ */
+  private buildBenches(): void {
+    const seatMat = new THREE.MeshStandardMaterial({ color: 0xCCBBA0, roughness: 0.7 });
+    const legMat  = new THREE.MeshStandardMaterial({ color: 0xA89070, roughness: 0.8 });
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2;
+      const bench = new THREE.Group();
+
+      /* Seat plank */
+      const seat = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.1, 0.45), seatMat);
+      seat.position.y = 0.45;
+      seat.castShadow = true;
+      bench.add(seat);
+
+      /* Back rest */
+      const back = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.35, 0.08), seatMat);
+      back.position.set(0, 0.72, -0.19);
+      back.castShadow = true;
+      bench.add(back);
+
+      /* 4 legs */
+      for (const lx of [-0.72, 0.72]) {
+        for (const lz of [-0.16, 0.16]) {
+          const leg = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.45, 0.08), legMat);
+          leg.position.set(lx, 0.22, lz);
+          bench.add(leg);
+        }
+      }
+
+      bench.position.set(Math.cos(a) * 13.5, 0.01, Math.sin(a) * 13.5);
+      bench.rotation.y = a + Math.PI / 2;
+      this.scene.add(bench);
     }
   }
 
@@ -424,8 +463,8 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
 
       /* Windows */
       const winMat = new THREE.MeshStandardMaterial({
-        color: 0xADD8E6, emissive: 0x88BBDD, emissiveIntensity: 0.15,
-        transparent: true, opacity: 0.8, metalness: 0.3, roughness: 0.1
+        color: 0xADD8E6, emissive: 0xAADDFF, emissiveIntensity: 0.55,
+        transparent: true, opacity: 0.88, metalness: 0.4, roughness: 0.05
       });
       const frameMat = new THREE.MeshStandardMaterial({ color: 0xEEEEEE, roughness: 0.5 });
       const wRows = Math.max(1, Math.floor(b.height / 1.8));
@@ -477,6 +516,19 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       awning.position.set(0, 2.8, b.depth / 2 + 0.5);
       awning.castShadow = true;
       group.add(awning);
+
+      /* Entrance steps — 3 descending steps in front of door */
+      const stepMat = new THREE.MeshStandardMaterial({ color: 0xB8A898, roughness: 0.65 });
+      for (let s = 0; s < 3; s++) {
+        const step = new THREE.Mesh(
+          new THREE.BoxGeometry(1.9 - s * 0.1, 0.12, 0.30),
+          stepMat
+        );
+        step.position.set(0, 0.36 - s * 0.12, b.depth / 2 + 0.20 + s * 0.30);
+        step.castShadow = true;
+        step.receiveShadow = true;
+        group.add(step);
+      }
 
       /* Floating label sign */
       const signCanvas = document.createElement('canvas');
@@ -630,7 +682,8 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
     const water = new THREE.Mesh(
       new THREE.CircleGeometry(2.8, 48),
       new THREE.MeshStandardMaterial({
-        color: 0x4FC3F7, roughness: 0.05, metalness: 0.4,
+        color: 0x00ACC1, roughness: 0.05, metalness: 0.4,
+        emissive: 0x007A99, emissiveIntensity: 0.08,
         transparent: true, opacity: 0.7
       })
     );
@@ -642,6 +695,12 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
     wall.rotation.x = -Math.PI / 2;
     wall.position.y = 0.55;
     this.scene.add(wall);
+
+    /* Outer decorative basin ring */
+    const outerBasin = new THREE.Mesh(new THREE.TorusGeometry(3.2, 0.15, 10, 48), stone);
+    outerBasin.rotation.x = -Math.PI / 2;
+    outerBasin.position.y = 0.55;
+    this.scene.add(outerBasin);
 
     const pillar = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.25, 3, 16), stone);
     pillar.position.y = 2;
@@ -662,12 +721,28 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.fountainParticles = new THREE.Group();
     const pMat = new THREE.MeshBasicMaterial({ color: 0x81D4FA, transparent: true, opacity: 0.75 });
+    /* Center jet — 40 particles */
     for (let i = 0; i < 40; i++) {
       const p = new THREE.Mesh(new THREE.SphereGeometry(0.05, 6, 6), pMat);
       p.userData['vel'] = new THREE.Vector3((Math.random() - 0.5) * 0.8, 2 + Math.random() * 2, (Math.random() - 0.5) * 0.8);
       p.userData['life'] = Math.random();
+      p.userData['origin'] = null; // center origin
       p.position.set(0, 3.6, 0);
       this.fountainParticles.add(p);
+    }
+    /* 4 arc jets radiating outward */
+    for (let j = 0; j < 4; j++) {
+      const ja = (j / 4) * Math.PI * 2;
+      const jx = Math.cos(ja) * 0.7;
+      const jz = Math.sin(ja) * 0.7;
+      for (let i = 0; i < 5; i++) {
+        const p = new THREE.Mesh(new THREE.SphereGeometry(0.04, 5, 5), pMat);
+        p.userData['vel'] = new THREE.Vector3(jx * 1.3, 1.9 + Math.random(), jz * 1.3);
+        p.userData['life'] = Math.random();
+        p.userData['origin'] = new THREE.Vector3(jx, 3.6, jz);
+        p.position.set(jx, 3.6, jz);
+        this.fountainParticles.add(p);
+      }
     }
     this.scene.add(this.fountainParticles);
   }
@@ -1028,7 +1103,7 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       const isNear = b === this.nearBuilding;
       const body = b.group.children[1] as THREE.Mesh;
       if (body?.material) {
-        (body.material as THREE.MeshStandardMaterial).emissiveIntensity = isNear ? 0.15 : 0.03;
+        (body.material as THREE.MeshStandardMaterial).emissiveIntensity = isNear ? 0.22 : 0.06;
       }
     });
   }
@@ -1051,10 +1126,20 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       m.userData['life'] += delta;
       if (m.userData['life'] > 1.3) {
         m.userData['life'] = 0;
-        m.position.set(0, 3.6, 0);
-        m.userData['vel'] = new THREE.Vector3(
-          (Math.random() - 0.5) * 0.8, 2 + Math.random() * 2, (Math.random() - 0.5) * 0.8
-        );
+        const origin = m.userData['origin'] as THREE.Vector3 | null;
+        if (origin) {
+          /* Arc jet — reset to offset origin with outward velocity */
+          m.position.copy(origin);
+          m.userData['vel'] = new THREE.Vector3(
+            origin.x * 1.3, 1.9 + Math.random(), origin.z * 1.3
+          );
+        } else {
+          /* Center jet */
+          m.position.set(0, 3.6, 0);
+          m.userData['vel'] = new THREE.Vector3(
+            (Math.random() - 0.5) * 0.8, 2 + Math.random() * 2, (Math.random() - 0.5) * 0.8
+          );
+        }
       }
       const v = m.userData['vel'] as THREE.Vector3;
       v.y -= 5.5 * delta;
@@ -1124,17 +1209,27 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
      ═══════════════════════════════════════════ */
   private buildSkyDome(): void {
     const canvas = document.createElement('canvas');
-    canvas.width = 1; canvas.height = 512;
+    canvas.width = 4; canvas.height = 512;
     const ctx = canvas.getContext('2d')!;
     const grad = ctx.createLinearGradient(0, 0, 0, 512);
-    grad.addColorStop(0,    '#0D2B6E'); // deep blue zenith
-    grad.addColorStop(0.25, '#1E5FAD'); // mid blue
-    grad.addColorStop(0.55, '#5B9BD5'); // sky blue
-    grad.addColorStop(0.75, '#87CEEB'); // horizon
-    grad.addColorStop(0.9,  '#C2E4F5'); // near horizon
+    grad.addColorStop(0,    '#0A1F5C'); // deep midnight zenith
+    grad.addColorStop(0.18, '#0E3380'); // cobalt blue
+    grad.addColorStop(0.40, '#1565C0'); // vibrant mid sky
+    grad.addColorStop(0.62, '#3A8CC7'); // bright sky blue
+    grad.addColorStop(0.80, '#73B8E0'); // light horizon
+    grad.addColorStop(0.92, '#B8DCF0'); // warm haze
     grad.addColorStop(1,    '#E8F4FB'); // haze
     ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 1, 512);
+    ctx.fillRect(0, 0, 4, 512);
+    /* Star dots in upper 34% of sky */
+    for (let i = 0; i < 90; i++) {
+      const sx = Math.random() * 4;
+      const sy = Math.random() * 0.34 * 512;
+      ctx.fillStyle = `rgba(255,255,255,${(0.3 + Math.random() * 0.65).toFixed(2)})`;
+      ctx.beginPath();
+      ctx.arc(sx, sy, 0.5 + Math.random() * 0.8, 0, Math.PI * 2);
+      ctx.fill();
+    }
     const tex = new THREE.CanvasTexture(canvas);
 
     const dome = new THREE.Mesh(
@@ -1168,10 +1263,28 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       this.glowRings.push({ mesh: ring, buildingIndex: i });
       this.scene.add(ring);
 
-      /* Colored point light per building (soft ambiance) */
-      const pLight = new THREE.PointLight(b.color, 0.6, 18);
-      pLight.position.set(b.position[0], 4, b.position[1]);
+      /* Outer echo ring — wider, subtler */
+      const outerRing = new THREE.Mesh(
+        new THREE.TorusGeometry(radius * 1.5, 0.06, 6, 64),
+        new THREE.MeshStandardMaterial({
+          color: b.color, emissive: b.color, emissiveIntensity: 0.15,
+          transparent: true, opacity: 0.12, roughness: 0.1, metalness: 0.5
+        })
+      );
+      outerRing.rotation.x = -Math.PI / 2;
+      outerRing.position.set(b.position[0], 0.05, b.position[1]);
+      this.glowRingsOuter.push({ mesh: outerRing, buildingIndex: i });
+      this.scene.add(outerRing);
+
+      /* Colored point light per building — stronger ambiance */
+      const pLight = new THREE.PointLight(b.color, 1.4, 28);
+      pLight.position.set(b.position[0], 5, b.position[1]);
       this.scene.add(pLight);
+
+      /* Ground-level accent spill */
+      const groundLight = new THREE.PointLight(b.color, 0.6, 13);
+      groundLight.position.set(b.position[0], 0.5, b.position[1]);
+      this.scene.add(groundLight);
     });
   }
 
@@ -1182,10 +1295,18 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
       const isNear = this.nearBuilding === b;
       const mat = mesh.material as THREE.MeshStandardMaterial;
       const pulse = Math.sin(t * 1.8 + buildingIndex * 1.1);
-      mat.emissiveIntensity = isNear ? 1.0 + pulse * 0.4 : 0.25 + pulse * 0.1;
-      mat.opacity = isNear ? 0.75 : 0.25 + pulse * 0.05;
-      const scale = 1 + (isNear ? 0.06 : 0.02) * Math.sin(t * 2 + buildingIndex);
+      mat.emissiveIntensity = isNear ? 1.3 + pulse * 0.7 : 0.3 + pulse * 0.12;
+      mat.opacity = isNear ? 0.85 : 0.28 + pulse * 0.07;
+      const scale = 1 + (isNear ? 0.12 : 0.035) * Math.sin(t * 2.5 + buildingIndex);
       mesh.scale.setScalar(scale);
+    });
+
+    /* Outer echo rings — counter-phase subtle pulse */
+    this.glowRingsOuter.forEach(({ mesh: om, buildingIndex: bi }) => {
+      const omMat = om.material as THREE.MeshStandardMaterial;
+      const outerPulse = Math.sin(t * 1.1 + bi * 1.1 + Math.PI);
+      omMat.opacity = 0.07 + outerPulse * 0.05;
+      om.scale.setScalar(1 + 0.07 * Math.sin(t * 1.3 + bi));
     });
   }
 

@@ -54,9 +54,6 @@ public class SecurityConfig {
                     // ── CORS preflight ──────────────────────────────────
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                    // ── Swagger / OpenAPI ───────────────────────────────
-                    .requestMatchers("/swagger-ui/**", "/swagger-ui.html",
-                                     "/v3/api-docs/**").permitAll()
 
                     // ── Public file downloads ───────────────────────────
                     .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()

@@ -5,13 +5,34 @@
     <h1 class="res-hero-title">Book a Resource</h1>
     <p class="res-hero-sub">Rooms, devices and materials — find what you need and reserve it in seconds.</p>
     <div class="res-stats" *ngIf="allResources.length > 0">
-      <span class="res-stat"><strong>{{ allResources.length }}</strong> resources</span>
-      <span class="res-stat-dot">·</span>
-      <span class="res-stat"><strong>{{ countByType('ROOM') }}</strong> rooms</span>
-      <span class="res-stat-dot">·</span>
-      <span class="res-stat"><strong>{{ countByType('DEVICE') }}</strong> devices</span>
-      <span class="res-stat-dot">·</span>
-      <span class="res-stat"><strong>{{ countByType('MATERIAL') }}</strong> materials</span>
+      <div class="res-stat-pill">
+        <span class="res-stat-icon">🏛️</span>
+        <div class="res-stat-body">
+          <span class="res-stat-number">{{ allResources.length }}</span>
+          <span class="res-stat-label">Total</span>
+        </div>
+      </div>
+      <div class="res-stat-pill">
+        <span class="res-stat-icon">🏫</span>
+        <div class="res-stat-body">
+          <span class="res-stat-number">{{ countByType('ROOM') }}</span>
+          <span class="res-stat-label">Rooms</span>
+        </div>
+      </div>
+      <div class="res-stat-pill">
+        <span class="res-stat-icon">💻</span>
+        <div class="res-stat-body">
+          <span class="res-stat-number">{{ countByType('DEVICE') }}</span>
+          <span class="res-stat-label">Devices</span>
+        </div>
+      </div>
+      <div class="res-stat-pill">
+        <span class="res-stat-icon">📦</span>
+        <div class="res-stat-body">
+          <span class="res-stat-number">{{ countByType('MATERIAL') }}</span>
+          <span class="res-stat-label">Materials</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -58,7 +79,7 @@
       <div *ngIf="checkResult.availableResources.length > 0" class="res-avail-list">
         <h3>Available resources</h3>
         <div class="res-card-grid">
-          <div class="res-card res-card-available" *ngFor="let r of checkResult.availableResources">
+          <div class="res-card res-card-available" [attr.data-type]="r.type" *ngFor="let r of checkResult.availableResources">
             <div class="res-card-icon">{{ typeIcon(r.type) }}</div>
             <div class="res-card-info">
               <span class="res-card-name">{{ r.name }}</span>
@@ -100,7 +121,8 @@
                 class="res-tab"
                 [class.res-tab-active]="selectedType === t"
                 (click)="selectedType = t; onTypeChange()">
-          {{ t === 'ALL' ? 'All' : typeLabel(t) }}
+          <span class="res-tab-icon">{{ tabIcon(t) }}</span>
+          <span>{{ t === 'ALL' ? 'All' : typeLabel(t) }}</span>
         </button>
       </div>
     </div>
@@ -123,7 +145,7 @@
         <span class="res-empty-icon">📭</span>
         <p>No resources match your filters.</p>
       </div>
-      <div class="res-card" *ngFor="let r of filtered">
+      <div class="res-card" [attr.data-type]="r.type" *ngFor="let r of filtered">
         <div class="res-card-icon">{{ typeIcon(r.type) }}</div>
         <div class="res-card-info">
           <span class="res-card-name">{{ r.name }}</span>
@@ -146,39 +168,41 @@
       <button class="res-modal-close" (click)="closeReservationForm()">✕</button>
     </div>
 
-    <div class="res-modal-resource" *ngIf="resourceById(reservationResourceId) as r">
-      <span class="res-modal-resource-icon">{{ typeIcon(r.type) }}</span>
-      <span class="res-modal-resource-name">{{ r.name }}</span>
-      <span class="res-modal-resource-type">{{ typeLabel(r.type) }}</span>
-    </div>
-
-    <div class="res-form-group">
-      <label>Event ID <span class="res-required">*</span></label>
-      <input type="text" class="res-input" placeholder="e.g. EVT-2026-001"
-             [(ngModel)]="reservationEventId" />
-      <small class="res-hint">The event or session this reservation is linked to.</small>
-    </div>
-
-    <div class="res-form-row">
-      <div class="res-form-group">
-        <label>From <span class="res-required">*</span></label>
-        <input type="datetime-local" class="res-input" [(ngModel)]="reservationStart" />
+    <div class="res-modal-body">
+      <div class="res-modal-resource" *ngIf="resourceById(reservationResourceId) as r">
+        <span class="res-modal-resource-icon">{{ typeIcon(r.type) }}</span>
+        <span class="res-modal-resource-name">{{ r.name }}</span>
+        <span class="res-modal-resource-type">{{ typeLabel(r.type) }}</span>
       </div>
+
       <div class="res-form-group">
-        <label>To <span class="res-required">*</span></label>
-        <input type="datetime-local" class="res-input" [(ngModel)]="reservationEnd" />
+        <label>Event ID <span class="res-required">*</span></label>
+        <input type="text" class="res-input" placeholder="e.g. EVT-2026-001"
+               [(ngModel)]="reservationEventId" />
+        <small class="res-hint">The event or session this reservation is linked to.</small>
       </div>
-    </div>
 
-    <div class="res-alert-success" *ngIf="reservationSuccess">{{ reservationSuccess }}</div>
-    <div class="res-alert-error" *ngIf="reservationError">{{ reservationError }}</div>
+      <div class="res-form-row">
+        <div class="res-form-group">
+          <label>From <span class="res-required">*</span></label>
+          <input type="datetime-local" class="res-input" [(ngModel)]="reservationStart" />
+        </div>
+        <div class="res-form-group">
+          <label>To <span class="res-required">*</span></label>
+          <input type="datetime-local" class="res-input" [(ngModel)]="reservationEnd" />
+        </div>
+      </div>
 
-    <div class="res-modal-actions">
-      <button class="res-btn-ghost" (click)="closeReservationForm()">Cancel</button>
-      <button class="res-btn-primary" (click)="submitReservation()" [disabled]="reservationLoading">
-        <span *ngIf="!reservationLoading">Confirm Reservation</span>
-        <span *ngIf="reservationLoading">Submitting…</span>
-      </button>
+      <div class="res-alert-success" *ngIf="reservationSuccess">{{ reservationSuccess }}</div>
+      <div class="res-alert-error" *ngIf="reservationError">{{ reservationError }}</div>
+
+      <div class="res-modal-actions">
+        <button class="res-btn-ghost" (click)="closeReservationForm()">Cancel</button>
+        <button class="res-btn-primary" (click)="submitReservation()" [disabled]="reservationLoading">
+          <span *ngIf="!reservationLoading">Confirm Reservation</span>
+          <span *ngIf="reservationLoading">Submitting…</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

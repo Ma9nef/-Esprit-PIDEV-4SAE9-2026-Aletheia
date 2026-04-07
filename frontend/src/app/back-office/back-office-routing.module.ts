@@ -31,6 +31,9 @@ import { AllocationDetailComponent } from './allocations/allocation-detail/alloc
 import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
 import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
 import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
+import { ManageLoansComponent } from './manage-loans/manage-loans.component';
+import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
+import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -64,6 +67,9 @@ const routes: Routes = [
    { path: 'resources/new', component: ResourceFormComponent },
    { path: 'resources/edit/:id', component: ResourceFormComponent },
    { path: 'resources/:id/reservations', component: ResourceReservationsComponent },
+   { path: 'loans', component: ManageLoansComponent },
+   { path: 'borrowing-policies', component: BorrowingPoliciesComponent },
+   { path: 'inventory-analytics', component: InventoryAnalyticsComponent },
     ]
   },
 

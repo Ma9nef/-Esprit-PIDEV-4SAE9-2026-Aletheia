@@ -48,6 +48,12 @@ public class ApiGatewayApplication {
                         .uri("lb://LIBRARY-SERVICE"))
                 .route("files-service", r -> r.path("/api/files/**")
                         .uri("lb://LIBRARY-SERVICE"))
+                .route("loans-service", r -> r.path("/api/loans/**")
+                        .uri("lb://LIBRARY-SERVICE"))
+                .route("borrowing-policies", r -> r.path("/api/policies/**")
+                        .uri("lb://LIBRARY-SERVICE"))
+                .route("inventory-analytics", r -> r.path("/api/inventory-analytics/**")
+                        .uri("lb://LIBRARY-SERVICE"))
 
                 // OFFER SERVICE
                 .route("offer-service", r -> r.path("/api/offers/**")

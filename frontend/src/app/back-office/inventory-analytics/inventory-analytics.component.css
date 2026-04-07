@@ -1,0 +1,85 @@
+.analytics-page { padding: 24px 32px; max-width: 1200px; }
+.page-header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.page-header h2 { font-size: 1.6rem; font-weight: 700; margin: 0; color: #1e293b; }
+.page-header .subtitle { color: #64748b; margin: 0; flex: 1; }
+.refresh-btn {
+  padding: 7px 16px; border-radius: 8px; border: 1.5px solid #e2e8f0;
+  background: #fff; cursor: pointer; font-size: .85rem; margin-left: auto;
+}
+
+/* KPIs */
+.kpi-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+.kpi-card {
+  flex: 1; min-width: 140px; border-radius: 12px; padding: 18px 20px;
+  color: #fff; text-align: center;
+}
+.kpi-card.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.kpi-card.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.kpi-card.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.kpi-card.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.kpi-value { font-size: 1.8rem; font-weight: 700; }
+.kpi-label { font-size: .78rem; opacity: .88; text-transform: uppercase; letter-spacing: .04em; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; border-bottom: 2px solid #e2e8f0; margin-bottom: 24px; }
+.tabs button {
+  padding: 10px 18px; border: none; background: none; cursor: pointer;
+  font-size: .88rem; font-weight: 500; color: #64748b; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: all .15s;
+}
+.tabs button.active { color: #6366f1; border-bottom-color: #6366f1; }
+
+/* Layout */
+.tab-panel { }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.panel {
+  background: #fff; border-radius: 14px; padding: 20px 22px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+.panel h4 { margin: 0 0 16px; font-size: .95rem; font-weight: 700; color: #1e293b; }
+
+/* Rank list */
+.rank-list { display: flex; flex-direction: column; gap: 10px; }
+.rank-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+.rank-num { font-size: .8rem; font-weight: 700; color: #94a3b8; width: 24px; }
+.rank-info { flex: 1; }
+.rank-title { font-size: .88rem; font-weight: 600; color: #1e293b; }
+.rank-meta { display: flex; align-items: center; gap: 6px; font-size: .78rem; color: #64748b; margin-top: 2px; }
+.type-dot { width: 8px; height: 8px; border-radius: 50%; }
+.rank-stock { font-size: .78rem; font-weight: 600; color: #22c55e; }
+.low-stock { color: #ef4444 !important; }
+
+/* Mini table */
+.mini-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+.mini-table th {
+  text-align: left; padding: 7px 10px; border-bottom: 2px solid #e2e8f0;
+  color: #475569; font-size: .74rem; text-transform: uppercase; letter-spacing: .04em;
+}
+.mini-table td { padding: 9px 10px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.type-pill { padding: 2px 7px; border-radius: 10px; color: #fff; font-size: .72rem; font-weight: 600; }
+
+/* Bar chart */
+.bar-chart {
+  display: flex; align-items: flex-end; gap: 8px; height: 160px;
+  padding: 0 8px; background: #f8fafc; border-radius: 10px; padding: 16px 16px 0;
+}
+.bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+.bar-value { font-size: .72rem; font-weight: 600; color: #475569; margin-bottom: 4px; }
+.bar { width: 100%; background: linear-gradient(180deg, #6366f1, #8b5cf6); border-radius: 4px 4px 0 0; min-height: 4px; transition: height .3s; }
+.bar-label { font-size: .7rem; color: #64748b; margin-top: 6px; padding-bottom: 8px; }
+
+/* Insights */
+.insight-list { display: flex; flex-direction: column; gap: 10px; }
+.insight-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border-radius: 8px; }
+.insight-increase { background: #eff6ff; border-left: 3px solid #3b82f6; }
+.insight-remove { background: #fefce8; border-left: 3px solid #f59e0b; }
+.insight-icon-sm { font-size: 1.2rem; margin-top: 2px; }
+.insight-title { font-size: .87rem; font-weight: 600; color: #1e293b; }
+.insight-reason { font-size: .78rem; color: #64748b; margin-top: 2px; }
+.insight-meta { font-size: .75rem; color: #94a3b8; margin-top: 3px; }
+
+.empty-hint { color: #94a3b8; font-size: .85rem; padding: 12px 0; }
+.state-msg { padding: 48px; text-align: center; color: #64748b; }
+.state-msg.error { color: #ef4444; }
+
+@media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }

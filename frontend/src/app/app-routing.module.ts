@@ -28,6 +28,7 @@ import {CheckoutComponent} from "./front-office/checkout/checkout.component";
 import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
 import { VideoRoomComponent } from './front-office/video-room/video-room.component';
 import { ResourcesComponent } from './front-office/resources/resources.component';
+import { MyBorrowsComponent } from './front-office/my-borrows/my-borrows.component';
 
 const routes: Routes = [
   { path: '', component: TemplateComponent },
@@ -62,6 +63,7 @@ const routes: Routes = [
   { path: 'assessment', component: LearnerAssessmentComponent },
   { path: 'front/library', component: LibraryComponent },
   { path: 'front/resources', component: ResourcesComponent },
+  { path: 'front/my-borrows', component: MyBorrowsComponent },
   { path: 'explore', component: Explore3dComponent },
   { path: 'back-office/manage-courses', component: ManageCoursesComponent },
   {

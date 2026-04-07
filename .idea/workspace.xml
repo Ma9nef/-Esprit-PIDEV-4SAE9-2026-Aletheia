@@ -4,30 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="Started working on the resources microservice">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="updated resources microservice">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/LibraryApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/LibraryApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/ProductController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/ResourceManagementApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/ResourceManagementApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/service/ReservationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/service/ReservationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/config/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/config/KafkaConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/repository/ReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/repository/ReservationRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/events/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/events/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/resources/resource-management.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/resources/resource-management.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/interceptors/auth.interceptor.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/interceptors/auth.interceptor.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/resources/manage-resources/manage-resources.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/resources/manage-resources/manage-resources.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,8 +44,17 @@
       <entry key="_C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia/backend/offer" value="3ByTSEqyDvDvKJ1nIlAuooGPLbD" />
     </persistenceIdMap>
   </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="Auto" />
+      <entry key="agent-panel" value="Auto" />
+    </selectedModels>
+  </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="367" />
+    <option name="cachedIndexableFilesCount" value="388" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -60,9 +71,9 @@
     &quot;accountId&quot;: &quot;22df1733-004a-486e-9996-afd4655fd479&quot;
   }
 }</component>
-  <component name="HttpClientOnboardingState"><![CDATA[{
-  "isOnboardingCommentShown": true
-}]]></component>
+  <component name="HttpClientOnboardingState">{
+  &quot;isOnboardingCommentShown&quot;: true
+}</component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
@@ -86,48 +97,50 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.EventsApplication.executor": "Run",
-    "HTTP Request.All in test.executor": "Run",
-    "HTTP Request.test | Checkout — triggers Feign call to user-service.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.AletheiaApplication.executor": "Run",
-    "Spring Boot.ApiGatewayApplication.executor": "Run",
-    "Spring Boot.CoursesApplication.executor": "Run",
-    "Spring Boot.EurekaApplication.executor": "Run",
-    "Spring Boot.EventsApplication.executor": "Run",
-    "Spring Boot.LibraryApplication.executor": "Run",
-    "Spring Boot.OfferApplication.executor": "Run",
-    "Spring Boot.ResourceManagementApplication.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Library__managment",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "rest.client.default.execution.environment": "dev",
-    "run.configurations.included.in.services": "true",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "C:\\Users\\manef\\Desktop\\Aletheia-merged-offer\\frontend\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.EventsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.All in test.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.test | Checkout — triggers Feign call to user-service.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.event-microservice [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.event-microservice [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AletheiaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CoursesApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EventsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.OfferApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ResourceManagementApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Library__managment&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;rest.client.default.execution.environment&quot;: &quot;dev&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\manef\\Desktop\\Aletheia-merged-offer\\frontend\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -145,16 +158,13 @@
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
+    <option name="excludedTypes">
+      <set>
+        <option value="HttpClient.HttpRequestRunConfigurationType" />
+      </set>
+    </option>
     <option name="configurationStatuses">
       <map>
-        <entry key="HttpClient.HttpRequestRunConfigurationType">
-          <value>
-            <map>
-              <entry key="All in test" value="STOPPED" />
-              <entry key="test | Checkout — triggers Feign call to user-service" value="STOPPED" />
-            </map>
-          </value>
-        </entry>
         <entry key="SpringBootApplicationConfigurationType">
           <value>
             <map>
@@ -162,15 +172,16 @@
               <entry key="ApiGatewayApplication" value="STOPPED" />
               <entry key="CoursesApplication" value="STOPPED" />
               <entry key="EurekaApplication" value="STOPPED" />
+              <entry key="EventsApplication" value="STOPPED" />
               <entry key="LibraryApplication" value="STOPPED" />
-              <entry key="ResourceManagementApplication" value="STOPPED" />
+              <entry key="OfferApplication" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.CoursesApplication">
+  <component name="RunManager" selected="Spring Boot.LibraryApplication">
     <configuration name="EventsApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.esprit.microservice.events.EventsApplication" />
       <module name="event-microservice" />
@@ -280,7 +291,8 @@
       <workItem from="1775415618003" duration="2247000" />
       <workItem from="1775431405359" duration="1673000" />
       <workItem from="1775460293711" duration="764000" />
-      <workItem from="1775513751488" duration="3442000" />
+      <workItem from="1775513751488" duration="3498000" />
+      <workItem from="1775548000672" duration="14215000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -314,7 +326,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775460802987</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="updated resources microservice">
+      <option name="closed" value="true" />
+      <created>1775517450511</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1775517450511</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -335,7 +355,8 @@
     <MESSAGE value="last commit before integration" />
     <MESSAGE value="skander integration on course managment" />
     <MESSAGE value="Started working on the resources microservice" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started working on the resources microservice" />
+    <MESSAGE value="updated resources microservice" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated resources microservice" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

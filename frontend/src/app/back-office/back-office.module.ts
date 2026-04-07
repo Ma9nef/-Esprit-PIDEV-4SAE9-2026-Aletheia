@@ -28,6 +28,9 @@ import { AllocationListComponent } from './allocations/allocation-list/allocatio
 import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
 import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
 import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
+import { ManageLoansComponent } from './manage-loans/manage-loans.component';
+import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
+import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +52,9 @@ import { ResourceReservationsComponent } from './resources/resource-reservations
     ManageResourcesComponent,
     ResourceFormComponent,
     ResourceReservationsComponent,
+    ManageLoansComponent,
+    BorrowingPoliciesComponent,
+    InventoryAnalyticsComponent,
     ],
   imports: [
     CommonModule,

@@ -57,7 +57,7 @@ export class AdminDashboardComponent implements OnInit {
     this.resourcesError = '';
     this.resourceSvc.getResources().subscribe({
       next: (data) => { this.resources = data; this.resourcesLoading = false; },
-      error: () => { this.resourcesError = 'Could not reach ResourceManagement service (port 8086).'; this.resourcesLoading = false; }
+      error: () => { this.resourcesError = 'Could not reach ResourceManagement service (port 8094).'; this.resourcesLoading = false; }
     });
   }
 
