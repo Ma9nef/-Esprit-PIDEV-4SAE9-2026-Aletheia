@@ -79,6 +79,10 @@ public class ApiGatewayApplication {
                 .route("reservations-service", r -> r.path("/api/reservations/**")
                         .uri("lb://RESOURCEMANAGEMENT"))
 
+                // NOTIFICATION SERVICE
+                .route("notification-service", r -> r.path("/api/notifications/**")
+                        .uri("lb://NOTIFICATION"))
+
                 .build();
     }
 }

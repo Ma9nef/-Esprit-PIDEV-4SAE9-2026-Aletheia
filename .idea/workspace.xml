@@ -4,69 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="added borrowing books from library logic">
-      <change afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/UpdateUserRoleRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/core/models/user.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="loan management is 90% done still working on some bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/FeignConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/FeignConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/BorrowingPolicyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/BorrowingPolicyController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/InventoryAnalyticsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/InventoryAnalyticsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/LoanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/LoanController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/LibraryApplicationTests.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/controller/ProductControllerIntegrationTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/service/OrderServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/service/ProductServiceTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/config/DataInitializer.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/controller/FileUploadController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/controller/StockMovementController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/dto/StockAdjustmentRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/dto/StockMovementDTO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/entity/StockMovement.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/enums/MovementType.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/mapper/StockMovementMapper.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/repository/StockMovementRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/service/StockMovementService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/service/StockMovementServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/main.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_canvg_lib_index_es_js.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_canvg_lib_index_es_js.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_dompurify_dist_purify_es_mjs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_dompurify_dist_purify_es_mjs.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_html2canvas_dist_html2canvas_js.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_html2canvas_dist_html2canvas_js.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/polyfills.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/polyfills.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/runtime.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/runtime.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/scripts.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/scripts.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/src_app_back-office_back-office_module_ts.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/src_app_back-office_back-office_module_ts.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/styles.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/styles.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/vendor.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/vendor.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/borrowing-policies/borrowing-policies.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/borrowing-policies/borrowing-policies.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/inventory-analytics/inventory-analytics.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/inventory-analytics/inventory-analytics.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-loans/manage-loans.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-loans/manage-loans.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/user.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/environments/environment.development.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.development.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/src/main/java/com/esprit/microservice/notification/NotificationApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/src/test/java/com/esprit/microservice/notification/NotificationApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -350,7 +297,7 @@
       <workItem from="1775460293711" duration="764000" />
       <workItem from="1775513751488" duration="3498000" />
       <workItem from="1775548000672" duration="16314000" />
-      <workItem from="1775639697886" duration="3942000" />
+      <workItem from="1775639697886" duration="10249000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -400,7 +347,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775578996439</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="loan management is 90% done still working on some bugs">
+      <option name="closed" value="true" />
+      <created>1775644409770</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1775644409770</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -423,7 +378,8 @@
     <MESSAGE value="Started working on the resources microservice" />
     <MESSAGE value="updated resources microservice" />
     <MESSAGE value="added borrowing books from library logic" />
-    <option name="LAST_COMMIT_MESSAGE" value="added borrowing books from library logic" />
+    <MESSAGE value="loan management is 90% done still working on some bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="loan management is 90% done still working on some bugs" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
