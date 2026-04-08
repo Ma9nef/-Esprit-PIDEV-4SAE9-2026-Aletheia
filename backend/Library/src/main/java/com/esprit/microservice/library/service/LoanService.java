@@ -28,4 +28,7 @@ public interface LoanService {
 
     /** Called by the daily scheduler to flip ACTIVE → OVERDUE for past-due loans. */
     void refreshOverdueStatus();
+
+    /** Called by the daily scheduler to notify users whose loan is due tomorrow. */
+    void sendDeadlineReminders();
 }

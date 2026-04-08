@@ -1,21 +1,30 @@
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { NotificationService, AppNotification } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @ViewChild('userDropdown') userDropdown!: ElementRef<HTMLDivElement>;
+  @ViewChild('notificationPanel') notificationPanel!: ElementRef<HTMLDivElement>;
 
   isMobileMenuOpen = false;
   isUserDropdownOpen = false;
+  isNotificationPanelOpen = false;
+
+  notifications: AppNotification[] = [];
+  unreadCount = 0;
+
+  private subs = new Subscription();
 
   searchControl = new FormControl('');
   searchQuery = '';
@@ -41,7 +50,8 @@ export class NavbarComponent implements OnInit {
     public router: Router,
     private elementRef: ElementRef,
     public themeService: ThemeService,
-    private auth: AuthService
+    private auth: AuthService,
+    public notificationService: NotificationService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -80,6 +90,22 @@ export class NavbarComponent implements OnInit {
       .subscribe(query => {
         this.searchQuery = query || '';
       });
+
+    if (this.isLoggedIn) {
+      this.notificationService.startPolling();
+    }
+
+    this.subs.add(
+      this.notificationService.unreadCount$.subscribe(c => (this.unreadCount = c))
+    );
+    this.subs.add(
+      this.notificationService.notifications$.subscribe(n => (this.notifications = n))
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+    this.notificationService.stopPolling();
   }
 
   private updateCurrentUser(): void {
@@ -114,10 +140,56 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  toggleNotificationPanel(): void {
+    this.isNotificationPanelOpen = !this.isNotificationPanelOpen;
+    if (this.isNotificationPanelOpen) {
+      this.isUserDropdownOpen = false;
+      this.notificationService.loadNotifications();
+    }
+  }
+
+  onMarkAsRead(id: number): void {
+    this.notificationService.markAsRead(id);
+  }
+
+  onMarkAllAsRead(): void {
+    this.notificationService.markAllAsRead();
+  }
+
+  onDeleteNotification(id: number, event: Event): void {
+    event.stopPropagation();
+    this.notificationService.deleteNotification(id);
+  }
+
+  getNotificationIcon(type: string): string {
+    switch (type) {
+      case 'SUCCESS': return '✓';
+      case 'WARNING': return '⚠';
+      case 'ERROR':   return '✕';
+      default:        return 'i';
+    }
+  }
+
+  formatNotificationTime(dateStr: string): string {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMin = Math.floor(diffMs / 60_000);
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return `${diffMin}m ago`;
+    const diffH = Math.floor(diffMin / 60);
+    if (diffH < 24) return `${diffH}h ago`;
+    const diffD = Math.floor(diffH / 24);
+    return `${diffD}d ago`;
+  }
+
   @HostListener('document:click', ['$event'])
   handleClickOutside(event: Event): void {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {
       this.isUserDropdownOpen = false;
+    }
+    if (this.notificationPanel && !this.notificationPanel.nativeElement.contains(event.target as Node)) {
+      this.isNotificationPanelOpen = false;
     }
   }
 
@@ -174,6 +246,8 @@ export class NavbarComponent implements OnInit {
     this.auth.logout();
     this.isUserDropdownOpen = false;
     this.isMobileMenuOpen = false;
+    this.isNotificationPanelOpen = false;
+    this.notificationService.stopPolling();
 
     this.currentUser = {
       name: '',

@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="switched Notification Microservice from spring boot to python &amp; Rust" />
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="switched Notification Microservice from spring boot to python &amp; Rust">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SchedulingConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SchedulingConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/LoanRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/repository/LoanRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/app/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Notification/app/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Notification/app/router.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Notification/app/router.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,53 +85,53 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.EventsApplication.executor": "Run",
-    "HTTP Request.All in test.executor": "Run",
-    "HTTP Request.test | Checkout — triggers Feign call to user-service.executor": "Run",
-    "JUnit.All in Library.executor": "Debug",
-    "Maven.Library [clean].executor": "Run",
-    "Maven.Library [install].executor": "Run",
-    "Maven.event-microservice [clean].executor": "Run",
-    "Maven.event-microservice [install].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.AletheiaApplication.executor": "Run",
-    "Spring Boot.ApiGatewayApplication.executor": "Run",
-    "Spring Boot.CoursesApplication.executor": "Run",
-    "Spring Boot.EurekaApplication.executor": "Run",
-    "Spring Boot.EventsApplication.executor": "Run",
-    "Spring Boot.LibraryApplication.executor": "Run",
-    "Spring Boot.OfferApplication.executor": "Run",
-    "Spring Boot.ResourceManagementApplication.executor": "Run",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Library__managment",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "rest.client.default.execution.environment": "dev",
-    "run.configurations.included.in.services": "true",
-    "to.speed.mode.migration.done": "true",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.EventsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.All in test.executor&quot;: &quot;Run&quot;,
+    &quot;HTTP Request.test | Checkout — triggers Feign call to user-service.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in Library.executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.Library [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Library [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.event-microservice [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.event-microservice [install].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.AletheiaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.CoursesApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EurekaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.EventsApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.OfferApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ResourceManagementApplication.executor&quot;: &quot;Run&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Library__managment&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;rest.client.default.execution.environment&quot;: &quot;dev&quot;,
+    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -288,6 +302,7 @@
       <workItem from="1775513751488" duration="3498000" />
       <workItem from="1775548000672" duration="16314000" />
       <workItem from="1775639697886" duration="10594000" />
+      <workItem from="1775673032625" duration="5449000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />

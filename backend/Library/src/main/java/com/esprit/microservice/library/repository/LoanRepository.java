@@ -31,6 +31,10 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
     @Query("SELECT l FROM Loan l WHERE l.status = 'ACTIVE' AND l.dueDate < :today")
     List<Loan> findLoansToMarkOverdue(@Param("today") LocalDate today);
 
+    /** Loans due on the given date — used to send 24-hour deadline reminders. */
+    @Query("SELECT l FROM Loan l WHERE l.status = 'ACTIVE' AND l.dueDate = :dueDate")
+    List<Loan> findActiveLoansDueOn(@Param("dueDate") LocalDate dueDate);
+
     // ── Status-based ──────────────────────────────────────────────────────────
 
     List<Loan> findByStatus(LoanStatus status);

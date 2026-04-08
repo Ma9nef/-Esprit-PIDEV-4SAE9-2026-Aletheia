@@ -1,8 +1,10 @@
 package com.esprit.microservice.library.service;
 
+import com.esprit.microservice.library.client.NotificationServiceClient;
 import com.esprit.microservice.library.client.UserServiceClient;
 import com.esprit.microservice.library.dto.BorrowRequestDTO;
 import com.esprit.microservice.library.dto.LoanDTO;
+import com.esprit.microservice.library.dto.NotificationRequest;
 import com.esprit.microservice.library.dto.UserDto;
 import com.esprit.microservice.library.entity.Loan;
 import com.esprit.microservice.library.entity.Product;
@@ -11,6 +13,8 @@ import com.esprit.microservice.library.exception.BorrowingException;
 import com.esprit.microservice.library.exception.ProductNotFoundException;
 import com.esprit.microservice.library.repository.LoanRepository;
 import com.esprit.microservice.library.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,22 +26,27 @@ import java.util.stream.Collectors;
 @Service
 public class LoanServiceImpl implements LoanService {
 
+    private static final Logger log = LoggerFactory.getLogger(LoanServiceImpl.class);
+
     private final LoanRepository loanRepo;
     private final ProductRepository productRepo;
     private final BorrowingPolicyService policyService;
     private final StockMovementService stockMovementService;
     private final UserServiceClient userClient;
+    private final NotificationServiceClient notificationClient;
 
     public LoanServiceImpl(LoanRepository loanRepo,
                            ProductRepository productRepo,
                            BorrowingPolicyService policyService,
                            StockMovementService stockMovementService,
-                           UserServiceClient userClient) {
+                           UserServiceClient userClient,
+                           NotificationServiceClient notificationClient) {
         this.loanRepo = loanRepo;
         this.productRepo = productRepo;
         this.policyService = policyService;
         this.stockMovementService = stockMovementService;
         this.userClient = userClient;
+        this.notificationClient = notificationClient;
     }
 
     // ── Borrow ────────────────────────────────────────────────────────────────
@@ -190,6 +199,25 @@ public class LoanServiceImpl implements LoanService {
         loanRepo.saveAll(pastDue);
     }
 
+    // ── Scheduled 24-hour deadline reminders ─────────────────────────────────
+
+    @Override
+    @Transactional(readOnly = true)
+    public void sendDeadlineReminders() {
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
+        List<Loan> dueSoon = loanRepo.findActiveLoansDueOn(tomorrow);
+        for (Loan loan : dueSoon) {
+            notificationClient.send(new NotificationRequest(
+                    loan.getUserId(),
+                    normalizeRole(loan.getUserRole()),
+                    "WARNING",
+                    "Return Reminder",
+                    "Your borrowed copy of \"" + loan.getProduct().getTitle() + "\" is due tomorrow ("
+                            + loan.getDueDate() + "). Please return it on time to avoid fines."
+            ));
+        }
+    }
+
     // ── Mapping ───────────────────────────────────────────────────────────────
 
     private LoanDTO toDTO(Loan loan, String userEmail) {
@@ -215,5 +243,16 @@ public class LoanServiceImpl implements LoanService {
             dto.setDaysOverdue(Math.max(0, overdue));
         }
         return dto;
+    }
+
+    /** Normalizes a raw role string to ADMIN / INSTRUCTOR / LEARNER (Notification service enum). */
+    private String normalizeRole(String role) {
+        if (role == null) return "LEARNER";
+        String upper = role.toUpperCase().replace("ROLE_", "");
+        return switch (upper) {
+            case "ADMIN" -> "ADMIN";
+            case "INSTRUCTOR" -> "INSTRUCTOR";
+            default -> "LEARNER";
+        };
     }
 }

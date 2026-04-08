@@ -26,4 +26,13 @@ public class SchedulingConfig {
     public void refreshOverdueLoans() {
         loanService.refreshOverdueStatus();
     }
+
+    /**
+     * Runs every day at 09:00 AM.
+     * Sends a notification to every user whose loan is due tomorrow.
+     */
+    @Scheduled(cron = "0 0 9 * * *")
+    public void sendLoanDeadlineReminders() {
+        loanService.sendDeadlineReminders();
+    }
 }

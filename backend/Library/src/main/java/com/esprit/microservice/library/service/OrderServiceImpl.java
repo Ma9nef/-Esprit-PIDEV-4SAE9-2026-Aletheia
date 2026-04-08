@@ -1,7 +1,9 @@
 package com.esprit.microservice.library.service;
 
 
+import com.esprit.microservice.library.client.NotificationServiceClient;
 import com.esprit.microservice.library.client.UserServiceClient;
+import com.esprit.microservice.library.dto.NotificationRequest;
 import com.esprit.microservice.library.dto.UserDto;
 import com.esprit.microservice.library.entity.Cart;
 import com.esprit.microservice.library.entity.Order;
@@ -23,21 +25,24 @@ public class OrderServiceImpl implements OrderService {
 
     private final CartService cartService;
     private final OrderRepository orderRepository;
+    private final NotificationServiceClient notificationServiceClient;
     public static final Long userId = 1L;
 
     @Autowired(required = false)
     private UserServiceClient userServiceClient;
 
     public OrderServiceImpl(CartService cartService,
-                            OrderRepository orderRepository) {
+                            OrderRepository orderRepository,
+                            NotificationServiceClient notificationServiceClient) {
         this.cartService = cartService;
         this.orderRepository = orderRepository;
+        this.notificationServiceClient = notificationServiceClient;
     }
 
     @Override
     public Order checkout(Long userId) {
         // Validate user exists via Feign call to User microservice
-        validateUserExists(userId);
+        validateUserExists(userId);  // result used inside sendPurchaseNotification
 
         Cart cart = cartService.getActiveCart(userId);
 
@@ -68,7 +73,11 @@ public class OrderServiceImpl implements OrderService {
 
         cart.setCheckedOut(true);
 
-        return orderRepository.save(order);
+        Order saved = orderRepository.save(order);
+
+        sendPurchaseNotification(saved, userId);
+
+        return saved;
     }
 
     @Override
@@ -86,20 +95,49 @@ public class OrderServiceImpl implements OrderService {
      * Validates that the given userId corresponds to an active user
      * in the User microservice (called via OpenFeign).
      *
-     * If the User service is unavailable, checkout proceeds with a warning
-     * to avoid blocking purchases due to a downstream service failure.
+     * Returns the UserDto when available, or null if the service is unreachable.
      */
-    private void validateUserExists(Long userId) {
+    private UserDto validateUserExists(Long userId) {
         if (userServiceClient == null) {
             log.warn("UserServiceClient not available — skipping user validation for userId={}", userId);
-            return;
+            return null;
         }
         try {
             UserDto user = userServiceClient.getUserById(userId);
             log.info("User validation passed: id={}, email={}", user.getId(), user.getEmail());
+            return user;
         } catch (Exception e) {
             log.warn("User service unreachable or user not found for userId={}: {} — proceeding with checkout",
                     userId, e.getMessage());
+            return null;
         }
+    }
+
+    /** Fires a purchase confirmation notification. */
+    private void sendPurchaseNotification(Order order, Long userId) {
+        UserDto user = null;
+        if (userServiceClient != null) {
+            try { user = userServiceClient.getUserById(userId); } catch (Exception ignored) {}
+        }
+        String role = (user != null && user.getRole() != null) ? normalizeRole(user.getRole()) : "LEARNER";
+
+        notificationServiceClient.send(new NotificationRequest(
+                userId,
+                role,
+                "SUCCESS",
+                "Purchase Confirmed",
+                "Thank you for your purchase! Your order #" + order.getId()
+                        + " has been confirmed. Total: " + order.getTotalAmount() + " TND."
+        ));
+    }
+
+    private String normalizeRole(String role) {
+        if (role == null) return "LEARNER";
+        String upper = role.toUpperCase().replace("ROLE_", "");
+        return switch (upper) {
+            case "ADMIN" -> "ADMIN";
+            case "INSTRUCTOR" -> "INSTRUCTOR";
+            default -> "LEARNER";
+        };
     }
 }
