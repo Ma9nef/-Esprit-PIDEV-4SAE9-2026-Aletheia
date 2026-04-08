@@ -4,17 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="loan management is 90% done still working on some bugs">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/mvnw.cmd" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/src/main/java/com/esprit/microservice/notification/NotificationApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Notification/src/test/java/com/esprit/microservice/notification/NotificationApplicationTests.java" beforeDir="false" />
-    </list>
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="switched Notification Microservice from spring boot to python &amp; Rust" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -297,7 +287,7 @@
       <workItem from="1775460293711" duration="764000" />
       <workItem from="1775513751488" duration="3498000" />
       <workItem from="1775548000672" duration="16314000" />
-      <workItem from="1775639697886" duration="10249000" />
+      <workItem from="1775639697886" duration="10594000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -355,7 +345,23 @@
       <option name="project" value="LOCAL" />
       <updated>1775644409770</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="started working on Notification microservice">
+      <option name="closed" value="true" />
+      <created>1775653879239</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1775653879239</updated>
+    </task>
+    <task id="LOCAL-00009" summary="switched Notification Microservice from spring boot to python &amp; Rust">
+      <option name="closed" value="true" />
+      <created>1775653921886</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1775653921886</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -379,7 +385,9 @@
     <MESSAGE value="updated resources microservice" />
     <MESSAGE value="added borrowing books from library logic" />
     <MESSAGE value="loan management is 90% done still working on some bugs" />
-    <option name="LAST_COMMIT_MESSAGE" value="loan management is 90% done still working on some bugs" />
+    <MESSAGE value="started working on Notification microservice" />
+    <MESSAGE value="switched Notification Microservice from spring boot to python &amp; Rust" />
+    <option name="LAST_COMMIT_MESSAGE" value="switched Notification Microservice from spring boot to python &amp; Rust" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
