@@ -19,6 +19,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="Library" />
       </profile>
@@ -33,7 +34,7 @@
         </processorPath>
         <module name="user-service" />
       </profile>
-      <profile name="Annotation profile for ResourceManagement" enabled="true">
+      <profile name="Annotation profile for Notification" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -41,6 +42,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.44/lombok-1.18.44.jar" />
         </processorPath>
         <module name="ResourceManagement" />
+        <module name="Notification" />
       </profile>
     </annotationProcessing>
   </component>
@@ -48,6 +50,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ApiGateway" options="-parameters" />
       <module name="Library" options="-parameters" />
+      <module name="Notification" options="-parameters" />
       <module name="ResourceManagement" options="-parameters" />
       <module name="courses" options="-parameters" />
       <module name="eureka" options="-parameters" />

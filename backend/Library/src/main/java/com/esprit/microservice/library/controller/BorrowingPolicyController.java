@@ -18,7 +18,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/policies")
-@CrossOrigin(origins = "*")
 public class BorrowingPolicyController {
 
     private final BorrowingPolicyService policyService;

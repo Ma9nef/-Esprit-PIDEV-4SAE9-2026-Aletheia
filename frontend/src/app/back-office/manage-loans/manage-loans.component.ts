@@ -30,8 +30,15 @@ export class ManageLoansComponent implements OnInit {
         this.applyFilters();
         this.loading = false;
       },
-      error: () => {
-        this.error = 'Failed to load loans. Make sure the Library service is running.';
+      error: (err) => {
+        const status = err?.status;
+        if (status === 401 || status === 403) {
+          this.error = 'Access denied (HTTP ' + status + '). Please log in as an admin.';
+        } else if (status === 0) {
+          this.error = 'Cannot reach the Library service. Make sure it is running.';
+        } else {
+          this.error = 'Failed to load loans (HTTP ' + (status || 'unknown') + '). Check the Library service logs.';
+        }
         this.loading = false;
       }
     });

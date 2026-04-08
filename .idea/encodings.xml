@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/backend/ApiGateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/Library/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/Notification/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/ResourceManagement/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/courses/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/backend/eureka/src/main/java" charset="UTF-8" />

@@ -4,32 +4,69 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="updated resources microservice">
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="added borrowing books from library logic">
+      <change afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/dto/UpdateUserRoleRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/app/core/models/user.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/config/KafkaConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/config/KafkaConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/repository/ReservationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/repository/ReservationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ResourceManagement/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ResourceManagement/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/events/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/events/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/FeignConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/config/FeignConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/BorrowingPolicyController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/BorrowingPolicyController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/InventoryAnalyticsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/InventoryAnalyticsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/LoanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/controller/LoanController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/Library/src/main/java/com/esprit/microservice/library/service/LoanServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/LibraryApplicationTests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/controller/ProductControllerIntegrationTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/service/OrderServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/java/com/esprit/microservice/library/service/ProductServiceTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/src/test/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/config/DataInitializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/controller/FileUploadController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/controller/StockMovementController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/dto/StockAdjustmentRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/dto/StockMovementDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/entity/StockMovement.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/enums/MovementType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/mapper/StockMovementMapper.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/repository/StockMovementRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/service/StockMovementService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/Library/target/classes/com/esprit/microservice/library/service/StockMovementServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/user-service/src/main/java/tn/platform/user/user/service/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/main.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_canvg_lib_index_es_js.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_canvg_lib_index_es_js.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_dompurify_dist_purify_es_mjs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_dompurify_dist_purify_es_mjs.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_html2canvas_dist_html2canvas_js.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/node_modules_html2canvas_dist_html2canvas_js.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/polyfills.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/polyfills.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/runtime.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/runtime.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/scripts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/scripts.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/src_app_back-office_back-office_module_ts.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/src_app_back-office_back-office_module_ts.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/styles.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/styles.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/vendor.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/dist/aletheia-front-end/vendor.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/resources/manage-resources/manage-resources.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/resources/manage-resources/manage-resources.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/dashboard/dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/resources/resources.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/borrowing-policies/borrowing-policies.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/borrowing-policies/borrowing-policies.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/inventory-analytics/inventory-analytics.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/inventory-analytics/inventory-analytics.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-loans/manage-loans.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-loans/manage-loans.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/manage-users/manage-users.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/user.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/environments/environment.development.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.development.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +91,7 @@
     </selectedModels>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="388" />
+    <option name="cachedIndexableFilesCount" value="414" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -97,50 +134,53 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.EventsApplication.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.All in test.executor&quot;: &quot;Run&quot;,
-    &quot;HTTP Request.test | Checkout — triggers Feign call to user-service.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.event-microservice [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.event-microservice [install].executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;Spring Boot.AletheiaApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.CoursesApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EurekaApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.EventsApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.LibraryApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.OfferApplication.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ResourceManagementApplication.executor&quot;: &quot;Run&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Library__managment&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;rest.client.default.execution.environment&quot;: &quot;dev&quot;,
-    &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\manef\\Desktop\\Aletheia-merged-offer\\frontend\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.EventsApplication.executor": "Run",
+    "HTTP Request.All in test.executor": "Run",
+    "HTTP Request.test | Checkout — triggers Feign call to user-service.executor": "Run",
+    "JUnit.All in Library.executor": "Debug",
+    "Maven.Library [clean].executor": "Run",
+    "Maven.Library [install].executor": "Run",
+    "Maven.event-microservice [clean].executor": "Run",
+    "Maven.event-microservice [install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.AletheiaApplication.executor": "Run",
+    "Spring Boot.ApiGatewayApplication.executor": "Run",
+    "Spring Boot.CoursesApplication.executor": "Run",
+    "Spring Boot.EurekaApplication.executor": "Run",
+    "Spring Boot.EventsApplication.executor": "Run",
+    "Spring Boot.LibraryApplication.executor": "Run",
+    "Spring Boot.OfferApplication.executor": "Run",
+    "Spring Boot.ResourceManagementApplication.executor": "Run",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "Library__managment",
+    "junie.onboarding.icon.badge.shown": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "rest.client.default.execution.environment": "dev",
+    "run.configurations.included.in.services": "true",
+    "to.speed.mode.migration.done": "true",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -175,6 +215,7 @@
               <entry key="EventsApplication" value="STOPPED" />
               <entry key="LibraryApplication" value="STOPPED" />
               <entry key="OfferApplication" value="STOPPED" />
+              <entry key="ResourceManagementApplication" value="STOPPED" />
             </map>
           </value>
         </entry>
@@ -200,6 +241,14 @@
     </configuration>
     <configuration name="test | Checkout — triggers Feign call to user-service" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" nameIsGenerated="true" path="$PROJECT_DIR$/backend/test.http" executionIdentifier="Checkout — triggers Feign call to user-service" runType="Run single request">
       <method v="2" />
+    </configuration>
+    <configuration name="All in Library" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Library" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
     </configuration>
     <configuration name="AletheiaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
@@ -237,9 +286,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="LibraryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <configuration name="LibraryApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Library" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.library.LibraryApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="NotificationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="Notification" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.notification.NotificationApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -260,6 +316,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in Library" />
         <item itemvalue="HTTP Request.test | Checkout — triggers Feign call to user-service" />
         <item itemvalue="HTTP Request.All in test" />
         <item itemvalue="Application.EventsApplication" />
@@ -292,7 +349,8 @@
       <workItem from="1775431405359" duration="1673000" />
       <workItem from="1775460293711" duration="764000" />
       <workItem from="1775513751488" duration="3498000" />
-      <workItem from="1775548000672" duration="14215000" />
+      <workItem from="1775548000672" duration="16314000" />
+      <workItem from="1775639697886" duration="3942000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -334,7 +392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775517450511</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added borrowing books from library logic">
+      <option name="closed" value="true" />
+      <created>1775578996438</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1775578996439</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -356,7 +422,8 @@
     <MESSAGE value="skander integration on course managment" />
     <MESSAGE value="Started working on the resources microservice" />
     <MESSAGE value="updated resources microservice" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated resources microservice" />
+    <MESSAGE value="added borrowing books from library logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="added borrowing books from library logic" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>

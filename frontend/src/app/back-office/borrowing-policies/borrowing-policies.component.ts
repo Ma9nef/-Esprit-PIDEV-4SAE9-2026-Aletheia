@@ -37,7 +37,17 @@ export class BorrowingPoliciesComponent implements OnInit {
     this.loading = true;
     this.loanService.getAllPolicies().subscribe({
       next: (data) => { this.policies = data; this.loading = false; },
-      error: () => { this.error = 'Failed to load policies.'; this.loading = false; }
+      error: (err) => {
+        const status = err?.status;
+        if (status === 401 || status === 403) {
+          this.error = 'Access denied (HTTP ' + status + '). Please log in as an admin.';
+        } else if (status === 0) {
+          this.error = 'Cannot reach the Library service. Make sure it is running.';
+        } else {
+          this.error = 'Failed to load policies (HTTP ' + (status || 'unknown') + ').';
+        }
+        this.loading = false;
+      }
     });
   }
 

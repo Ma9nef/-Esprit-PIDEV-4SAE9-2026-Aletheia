@@ -122,6 +122,9 @@
           <a class="dropdown-item" *ngIf="isInstructor" (click)="navigateTo('/instructor/dashboard')">
             <span>Dashboard</span>
           </a>
+          <a class="dropdown-item" *ngIf="isLearner" (click)="navigateTo('/dashboardLearner')">
+            <span>Dashboard</span>
+          </a>
 
           <a class="dropdown-item" (click)="onProfileClick()">
             <svg class="dropdown-item-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -147,29 +147,34 @@ public class LoanServiceImpl implements LoanService {
     // ── Read ──────────────────────────────────────────────────────────────────
 
     @Override
+    @Transactional(readOnly = true)
     public LoanDTO getLoanById(Long loanId) {
         return toDTO(loanRepo.findById(loanId)
                 .orElseThrow(() -> new BorrowingException("Loan not found: " + loanId)), null);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LoanDTO> getLoansByUserId(Long userId) {
         return loanRepo.findByUserIdOrderByCreatedAtDesc(userId)
                 .stream().map(l -> toDTO(l, null)).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LoanDTO> getActiveLoansByUserId(Long userId) {
         return loanRepo.findActiveLoansByUserId(userId)
                 .stream().map(l -> toDTO(l, null)).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LoanDTO> getAllLoans() {
         return loanRepo.findAll().stream().map(l -> toDTO(l, null)).collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<LoanDTO> getOverdueLoans() {
         return loanRepo.findByStatus(LoanStatus.OVERDUE)
                 .stream().map(l -> toDTO(l, null)).collect(Collectors.toList());

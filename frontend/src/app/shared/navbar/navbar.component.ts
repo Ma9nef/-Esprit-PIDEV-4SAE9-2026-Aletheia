@@ -44,21 +44,23 @@ export class NavbarComponent implements OnInit {
     private auth: AuthService
   ) {}
 
-  // ✅ Always reads current token from localStorage
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
 
   get isAdmin(): boolean {
     const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
     return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
   }
 
   get isInstructor(): boolean {
     const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
     return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
+  }
+
+  get isLearner(): boolean {
+    const u = this.auth.getUserFromToken();
+    return !!u && (u.role === 'LEARNER' || u.role === 'ROLE_LEARNER');
   }
 
   ngOnInit(): void {
@@ -70,7 +72,7 @@ export class NavbarComponent implements OnInit {
       .pipe(filter(e => e instanceof NavigationEnd))
       .subscribe(() => {
         this.currentRoute = this.router.url;
-        this.updateCurrentUser(); // ✅ refresh user after login redirect
+        this.updateCurrentUser();
       });
 
     this.searchControl.valueChanges
@@ -93,7 +95,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onMyCertificatesClick(): void {
-    const role = localStorage.getItem('role'); // or from your auth service
+    const role = localStorage.getItem('role');
 
     if (role === 'ADMIN') {
       this.router.navigate(['/manage-certificates']);
@@ -103,7 +105,7 @@ export class NavbarComponent implements OnInit {
   }
 
   goToAssessments(): void {
-    const role = localStorage.getItem('role'); // or from your auth service
+    const role = localStorage.getItem('role');
 
     if (role === 'ADMIN') {
       this.router.navigate(['/manage-assessments']);
@@ -138,7 +140,6 @@ export class NavbarComponent implements OnInit {
 
   onSearchSubmit(): void {
     if (this.searchQuery.trim()) {
-      // ⚠️ use your real route:
       this.router.navigate(['/front/courses'], { queryParams: { search: this.searchQuery } });
       this.isMobileMenuOpen = false;
     }
@@ -170,7 +171,7 @@ export class NavbarComponent implements OnInit {
   }
 
   onLogout(): void {
-    this.auth.logout();                  // remove token
+    this.auth.logout();
     this.isUserDropdownOpen = false;
     this.isMobileMenuOpen = false;
 

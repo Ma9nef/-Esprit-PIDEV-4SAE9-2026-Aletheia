@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import tn.platform.user.media.service.CloudinaryService;
 import tn.platform.user.user.dto.ChangePasswordRequest;
 import tn.platform.user.user.dto.UpdateUserRequest;
+import tn.platform.user.user.dto.UpdateUserRoleRequest;
 import tn.platform.user.user.dto.UserResponse;
 import tn.platform.user.user.entity.User;
 import tn.platform.user.user.exception.UserNotFoundException;
@@ -164,10 +165,11 @@ public class UserServiceImpl implements  UserService {
         return userMapper.toResponse(user);
     }
 
-
-
-
-
-
-
+    @Override
+    public UserResponse updateUserRole(UpdateUserRoleRequest request) {
+        User user = getById(request.getUserId());
+        user.setRole(request.getRole());
+        userRepository.save(user);
+        return userMapper.toResponse(user);
+    }
 }

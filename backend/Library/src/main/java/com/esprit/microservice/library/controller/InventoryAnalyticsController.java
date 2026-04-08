@@ -20,7 +20,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/inventory-analytics")
-@CrossOrigin(origins = "*")
 public class InventoryAnalyticsController {
 
     private final InventoryAnalyticsService analyticsService;

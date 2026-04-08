@@ -40,7 +40,7 @@ const routes: Routes = [
     component: AdminDashboardComponent,
     children: [
       { path: 'manage-library', component: ManageLibraryComponent },
-      { path: 'manage-users', component: ManageUsersComponent },
+      { path: 'users', component: ManageUsersComponent },
       { path: 'courses', component: ManageCoursesComponent },
       { path: 'offers', component: AdminOffersComponent },
       { path: 'offers/new', component: OfferFormComponent },
@@ -58,7 +58,7 @@ const routes: Routes = [
       { path: 'events', component: EventListComponent },
       { path: 'events/new', component: EventFormComponent },
       { path: 'events/edit/:id', component: EventFormComponent },
-        
+
    { path: 'allocations', component: AllocationListComponent },
    { path: 'allocations/new', component: AllocationFormComponent },
    { path: 'allocations/edit/:id', component: AllocationFormComponent },
