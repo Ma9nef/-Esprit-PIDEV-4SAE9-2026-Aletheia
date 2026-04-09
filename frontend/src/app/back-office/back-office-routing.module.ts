@@ -41,6 +41,7 @@ const routes: Routes = [
     children: [
       { path: 'manage-library', component: ManageLibraryComponent },
       { path: 'users', component: ManageUsersComponent },
+      { path: 'manage-users', component: ManageUsersComponent },
       { path: 'courses', component: ManageCoursesComponent },
       { path: 'offers', component: AdminOffersComponent },
       { path: 'offers/new', component: OfferFormComponent },

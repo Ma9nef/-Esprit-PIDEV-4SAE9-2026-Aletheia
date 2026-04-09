@@ -39,7 +39,9 @@ export class AdminDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Listen for child route changes
     this.activatedRoute.firstChild?.url.subscribe(() => {
+      // If there's a child route active (like manage-library or manage-users), hide dashboard content
       this.showDashboardContent = !this.activatedRoute.firstChild;
     });
     this.router.events

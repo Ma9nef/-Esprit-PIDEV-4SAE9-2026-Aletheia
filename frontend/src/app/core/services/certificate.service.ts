@@ -13,8 +13,7 @@ predictSuccess(userId: number): Observable<any> {
 
 
 
-  // ✅ Port 8081 + context-path /pidev
-  private apiUrl = 'http://localhost:8081/pidev/certificate';
+  private apiUrl = 'http://localhost:8089/api/pidev/certificate';
 
   constructor(private http: HttpClient) {}
 

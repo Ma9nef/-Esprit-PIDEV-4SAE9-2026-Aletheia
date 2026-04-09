@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -54,17 +54,20 @@ export class NavbarComponent implements OnInit, OnDestroy {
     public notificationService: NotificationService
   ) {}
 
+  // ✅ Always reads current token from localStorage
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
 
   get isAdmin(): boolean {
     const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
     return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
   }
 
   get isInstructor(): boolean {
     const u = this.auth.getUserFromToken();
+    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
     return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
   }
 
@@ -212,6 +215,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onSearchSubmit(): void {
     if (this.searchQuery.trim()) {
+      // ⚠️ use your real route:
       this.router.navigate(['/front/courses'], { queryParams: { search: this.searchQuery } });
       this.isMobileMenuOpen = false;
     }

@@ -18,6 +18,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pidev/certificate")
+@RequestMapping("/api/pidev/certificate")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CertificateController {
 

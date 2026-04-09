@@ -26,6 +26,8 @@ public class ApiGatewayApplication {
                 // COURSES SERVICE
                 .route("courses-api", r -> r.path("/api/courses/**")
                         .uri("http://localhost:8081"))
+                .route("formations-api", r -> r.path("/api/formations/**")
+                        .uri("http://localhost:8081"))
                 .route("courses-legacy", r -> r.path("/course/**")
                         .uri("http://localhost:8081"))
                 .route("courses-instructor", r -> r.path("/api/instructor/**")
@@ -35,6 +37,10 @@ public class ApiGatewayApplication {
                 .route("pidev-features", r -> r.path("/pidev/**")
                         .uri("http://localhost:8081"))
                 .route("assessment-results", r -> r.path("/api/assessment-results/**")
+                        .uri("http://localhost:8081"))
+                .route("formations-instructor", r -> r.path("/api/instructor/formations/**")
+                        .uri("http://localhost:8081"))
+                .route("formations-admin", r -> r.path("/api/admin/formations/**")
                         .uri("http://localhost:8081"))
 
                 // LIBRARY SERVICE
