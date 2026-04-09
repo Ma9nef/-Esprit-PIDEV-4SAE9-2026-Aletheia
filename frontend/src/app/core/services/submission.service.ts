@@ -5,19 +5,18 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SubmissionService {
-  private baseUrl = 'http://localhost:8089/api/assessment-results'; // ✅ base without /all
-  private apiUrl  = `${this.baseUrl}/all`;                          // ✅ used only for GET
+  private submissionUrl = 'http://localhost:8089/api/assessment-results';
 
   constructor(private http: HttpClient) {}
 
   getAllSubmissions(): Observable<Submission[]> {
-    return this.http.get<Submission[]>(this.apiUrl, {
+    return this.http.get<Submission[]>(`${this.submissionUrl}/all`, {
       headers: this.getHeaders()
     });
   }
 
   deleteSubmission(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete/${id}`, { // ✅ now resolves correctly
+    return this.http.delete(`${this.submissionUrl}/delete/${id}`, {
       headers: this.getHeaders()
     });
   }

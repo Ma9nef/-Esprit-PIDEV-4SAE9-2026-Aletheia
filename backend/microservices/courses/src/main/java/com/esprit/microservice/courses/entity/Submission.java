@@ -29,7 +29,7 @@ public class Submission {
     @Column(name = "user_id", nullable = true)
     private Long userId;
 
-
+    private String learnerName;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "assessment_id")
