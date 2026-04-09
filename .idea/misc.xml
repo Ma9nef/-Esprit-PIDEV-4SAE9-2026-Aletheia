@@ -13,6 +13,12 @@
         <option value="$PROJECT_DIR$/backend/events/pom.xml" />
         <option value="$PROJECT_DIR$/backend/ResourceManagement/pom.xml" />
         <option value="$PROJECT_DIR$/backend/Notification/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/courses/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/events/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/Library/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/offer/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/ResourceManagement/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/user-service/pom.xml" />
       </list>
     </option>
   </component>
