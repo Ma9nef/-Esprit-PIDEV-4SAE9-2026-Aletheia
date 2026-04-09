@@ -4,15 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="changed the folders architecture to be conform to the other microservices">
-      <change afterPath="$PROJECT_DIR$/backend/microservices/courses/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/events/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/events/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/events/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignConfig.java" afterDir="false" />
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="notification microservice bugs  and it works properly">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Notification/app/security.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Notification/app/security.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/library/library.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -299,7 +292,7 @@
       <workItem from="1775673032625" duration="5449000" />
       <workItem from="1775737061040" duration="1171000" />
       <workItem from="1775738256558" duration="116000" />
-      <workItem from="1775739518788" duration="2508000" />
+      <workItem from="1775739518788" duration="3707000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -381,7 +374,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775741008413</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="notification microservice bugs  and it works properly">
+      <option name="closed" value="true" />
+      <created>1775743447303</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1775743447303</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -408,7 +409,8 @@
     <MESSAGE value="started working on Notification microservice" />
     <MESSAGE value="switched Notification Microservice from spring boot to python &amp; Rust" />
     <MESSAGE value="changed the folders architecture to be conform to the other microservices" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed the folders architecture to be conform to the other microservices" />
+    <MESSAGE value="notification microservice bugs  and it works properly" />
+    <option name="LAST_COMMIT_MESSAGE" value="notification microservice bugs  and it works properly" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
