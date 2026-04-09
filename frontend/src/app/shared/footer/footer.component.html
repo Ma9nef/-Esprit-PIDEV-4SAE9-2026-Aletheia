@@ -1,0 +1,181 @@
+<!-- ============================================
+     ALETHEIA CONTACT US PAGE
+     ============================================ -->
+
+<section class="contact-page">
+  <!-- Hero Header Section -->
+  <div class="hero-section">
+    <div class="container">
+      <h1 class="hero-title">Contact ALETHEIA</h1>
+      <p class="hero-subtitle">
+        We're here to help you with courses, certifications, and technical support.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <div class="container main-content">
+    <div class="content-grid">
+      
+      <!-- Left Column: Contact Form -->
+      <div class="form-section">
+        <div class="form-card">
+          <h2 class="form-title">Send us a Message</h2>
+          <p class="form-description">Fill out the form below and we'll get back to you as soon as possible.</p>
+          
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+            <!-- Full Name Field -->
+            <div class="form-group">
+              <label for="fullName" class="form-label">
+                Full Name <span class="required">*</span>
+              </label>
+              <input
+                type="text"
+                id="fullName"
+                formControlName="fullName"
+                class="form-input"
+                [class.error]="submitted && f['fullName'].invalid"
+                placeholder="Enter your full name"
+              />
+              <div class="error-message" *ngIf="submitted && f['fullName'].invalid">
+                <span *ngIf="f['fullName'].errors?.['required']">Full name is required</span>
+                <span *ngIf="f['fullName'].errors?.['minlength']">Name must be at least 2 characters</span>
+              </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="form-group">
+              <label for="email" class="form-label">
+                Email Address <span class="required">*</span>
+              </label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-input"
+                [class.error]="submitted && f['email'].invalid"
+                placeholder="your.email@example.com"
+              />
+              <div class="error-message" *ngIf="submitted && f['email'].invalid">
+                <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+                <span *ngIf="f['email'].errors?.['email']">Please enter a valid email address</span>
+              </div>
+            </div>
+
+            <!-- Subject Dropdown -->
+            <div class="form-group">
+              <label for="subject" class="form-label">
+                Subject <span class="required">*</span>
+              </label>
+              <select
+                id="subject"
+                formControlName="subject"
+                class="form-select"
+                [class.error]="submitted && f['subject'].invalid"
+              >
+                <option value="" disabled>Select a subject</option>
+                <option value="course-issue">Course Issue</option>
+                <option value="payment-issue">Payment Issue</option>
+                <option value="technical-problem">Technical Problem</option>
+                <option value="other">Other</option>
+              </select>
+              <div class="error-message" *ngIf="submitted && f['subject'].invalid">
+                Please select a subject
+              </div>
+            </div>
+
+            <!-- Message Textarea -->
+            <div class="form-group">
+              <label for="message" class="form-label">
+                Message <span class="required">*</span>
+              </label>
+              <textarea
+                id="message"
+                formControlName="message"
+                class="form-textarea"
+                [class.error]="submitted && f['message'].invalid"
+                rows="6"
+                placeholder="Tell us how we can help you..."
+              ></textarea>
+              <div class="error-message" *ngIf="submitted && f['message'].invalid">
+                <span *ngIf="f['message'].errors?.['required']">Message is required</span>
+                <span *ngIf="f['message'].errors?.['minlength']">Message must be at least 10 characters</span>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="submit-btn" [disabled]="submitted && contactForm.invalid">
+              <span>Send Message</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.5 10L17.5 10M17.5 10L12.5 5M17.5 10L12.5 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Contact Information -->
+      <div class="info-section">
+        <!-- Contact Information Panel -->
+        <div class="info-card">
+          <h3 class="info-card-title">Get in Touch</h3>
+          
+          <div class="contact-item">
+            <div class="contact-icon email-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="L22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <span class="contact-label">Email</span>
+              <a href="mailto:support@aletheia.com" class="contact-value">support@aletheia.com</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon phone-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 16.92V19.92C22.0011 20.1985 21.9441 20.4742 21.8325 20.7292C21.7209 20.9842 21.5573 21.2132 21.3522 21.4012C21.1472 21.5892 20.9053 21.7319 20.6441 21.8197C20.3829 21.9075 20.1086 21.9384 19.8372 21.9109C16.7432 21.4941 13.787 20.3366 11.19 18.5199C8.77382 16.8934 6.72533 14.8449 5.09882 12.4287C3.28191 9.83105 2.12459 6.87406 1.70782 3.77992C1.68029 3.50858 1.71123 3.23426 1.79904 2.97308C1.88685 2.7119 2.02957 2.47002 2.21757 2.26498C2.40557 2.05994 2.63463 1.89634 2.88964 1.78474C3.14465 1.67314 3.42036 1.61615 3.69882 1.61719H6.69882C7.32985 1.61558 7.9449 1.80819 8.45841 2.16851C8.97192 2.52883 9.35774 3.03912 9.55882 3.62719C9.93882 4.90719 10.3988 6.15719 10.9288 7.36719C11.1788 7.93719 11.3088 8.54719 11.3088 9.15719C11.3088 9.76719 11.1788 10.3772 10.9288 10.9472L9.08882 12.7872C11.3603 17.4007 15.5993 20.6397 20.2128 22.9112L22.0528 21.0712C22.6228 20.8212 23.2328 20.6912 23.8428 20.6912C24.4528 20.6912 25.0628 20.8212 25.6328 21.0712C26.2209 21.2723 26.7312 21.6581 27.0915 22.1716C27.4518 22.6851 27.6444 23.3002 27.6428 23.9312L27.6428 23.9272H27.6428Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <span class="contact-label">Phone</span>
+              <a href="tel:+21600000000" class="contact-value">+216 00 000 000</a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon location-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 7.61305 3.94821 5.32387 5.63604 3.63604C7.32387 1.94821 9.61305 1 12 1C14.3869 1 16.6761 1.94821 18.364 3.63604C20.0518 5.32387 21 7.61305 21 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <span class="contact-label">Location</span>
+              <span class="contact-value">Tunis, Tunisia</span>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <div class="contact-icon hours-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="contact-details">
+              <span class="contact-label">Working Hours</span>
+              <span class="contact-value">Mon - Fri: 9:00 AM - 6:00 PM<br/>Sat: 10:00 AM - 4:00 PM</span>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div>
+</section>
