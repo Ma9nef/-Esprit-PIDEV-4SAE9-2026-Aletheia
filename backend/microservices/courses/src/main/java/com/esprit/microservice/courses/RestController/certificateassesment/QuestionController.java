@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pidev/questions")
-@CrossOrigin("*")
+
 public class QuestionController {
 
     @Autowired

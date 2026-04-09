@@ -17,9 +17,9 @@
     import java.util.List;
     import java.util.Map;
 
-    @CrossOrigin(origins = "http://localhost:4200")
+
     @RestController
-    @RequestMapping("/pidev/certificate")
+    @RequestMapping("/api/pidev/certificate")
     public class CertificateController {
     //bearer token : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiQURNSU4iLCJpZCI6MSwibmFtZSI6IkFkbWluIFN5c3RlbSIsImlhdCI6MTc3NTE1NzQ0MSwiZXhwIjoxNzc1MjQzODQxfQ.41kUI2TmaovnBqgGJ20X8Pcey5GXkdDMki4IYq09JQk
         private final ICertificateService certificateService;

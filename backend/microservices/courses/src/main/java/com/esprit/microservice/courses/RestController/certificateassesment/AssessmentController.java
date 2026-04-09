@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/pidev/assessment")
-@CrossOrigin(origins = "http://localhost:4200")
+@RequestMapping("/api/pidev/assessment")
+
 public class AssessmentController {
 
     private final IAssessmentService assessmentService;

@@ -12,7 +12,7 @@ public interface ISubmissionService {
     List<Submission> getAllSubmissions();
 
     Submission getSubmissionById(Long id);
-
+    void deleteById(Long id);
     Submission updateSubmission(Long id, Submission submission);
     Submission submitAndGradeQuiz(Long userId, Long assessmentId, List<Long> selectedOptionIds);
 }

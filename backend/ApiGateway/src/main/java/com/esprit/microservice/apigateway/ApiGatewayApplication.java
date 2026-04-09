@@ -36,10 +36,9 @@ public class ApiGatewayApplication {
                 // --- NEW ROUTES FOR THE 4 CONTROLLERS ---
 
                 // Routes for Assessment, Certificate, and Questions (all start with /pidev)
-                .route("pidev-features", r -> r.path("/pidev/**")
+                .route("pidev-features", r -> r.path("/api/pidev/**")
                         .uri("lb://COURSES-SERVICE"))
 
-                // Route for Submissions (starts with /api/assessment-results)
                 .route("assessment-results", r -> r.path("/api/assessment-results/**")
                         .uri("lb://COURSES-SERVICE"))
 
