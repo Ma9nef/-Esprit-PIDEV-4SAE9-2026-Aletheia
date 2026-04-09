@@ -1,8 +1,11 @@
+import logging
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from app.config import settings
 from app.schemas import TokenData
+
+logger = logging.getLogger(__name__)
 
 bearer_scheme = HTTPBearer(auto_error=False)
 
@@ -19,6 +22,7 @@ def get_current_user(
         )
     try:
         payload = jwt.decode(credentials.credentials, settings.jwt_secret, algorithms=[ALGORITHM])
+        logger.info("JWT decoded: sub=%s id=%s role=%s", payload.get("sub"), payload.get("id"), payload.get("role"))
         return TokenData(
             sub=payload.get("sub"),
             id=payload.get("id"),

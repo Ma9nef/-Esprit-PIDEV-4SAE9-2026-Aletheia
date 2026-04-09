@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import { CartService, Cart } from '../../core/services/cart.service';
 import { LoanService } from '../../core/services/loan.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 interface Product {
   id: number;
@@ -82,7 +83,8 @@ export class LibraryComponent implements OnInit {
     private http: HttpClient,
     private authService: AuthService,
     private cartService: CartService,
-    private loanService: LoanService
+    private loanService: LoanService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -290,6 +292,8 @@ export class LibraryComponent implements OnInit {
         this.checkoutSuccess = true;
         this.cart = null;
         this.loadCart();
+        this.notificationService.refreshUnreadCount();
+        this.notificationService.loadNotifications();
       },
       error: (err) => {
         console.error('Error during checkout:', err);
