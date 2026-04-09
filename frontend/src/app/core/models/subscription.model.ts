@@ -73,6 +73,24 @@ export interface SubscriptionPaymentHistory {
   paidAt?: Date;
 }
 
+export interface SubscriptionNotification {
+  notificationId: string;
+  recipientType?: string;
+  recipientId?: string;
+  type?: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt?: Date;
+  readAt?: Date;
+  relatedSubscriptionId?: string;
+  relatedPlanId?: string;
+}
+
+export interface UnreadNotificationCount {
+  unreadCount: number;
+}
+
 /**
  * Informations sur l'abonnement actif d'un utilisateur.
  * Correspond à `UserSubscriptionDTO` côté backend.

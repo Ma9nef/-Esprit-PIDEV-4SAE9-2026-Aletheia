@@ -4,12 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cd09851e-7178-4ebb-b551-8f59307fd0fc" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="cd09851e-7178-4ebb-b551-8f59307fd0fc" name="Changes" comment="corrige">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/eureka/target/classes/com/esprit/microservice/eureka/EurekaApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/eureka/${project.build.directory}/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/OfferApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/OfferApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/repository/SubscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/repository/SubscriptionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/service/SubscriptionPaymentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/service/SubscriptionPaymentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/service/SubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/offer/src/main/java/com/example/offer/service/SubscriptionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/offer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/offer/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/models/subscription.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/models/subscription.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +37,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Ma9nef/-Esprit-PIDEV-4SAE9-2026-Aletheia.git&quot;,
-    &quot;accountId&quot;: &quot;09529dba-0b92-4863-b2d1-cbc23e5a70c3&quot;
+    &quot;accountId&quot;: &quot;86573533-fabb-4ee3-a5af-8f7cd030c816&quot;
   }
 }</component>
   <component name="MavenImportPreferences">
@@ -92,6 +101,23 @@
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
+    <option name="configurationStatuses">
+      <map>
+        <entry key="SpringBootApplicationConfigurationType">
+          <value>
+            <map>
+              <entry key="AletheiaApplication" value="STOPPED" />
+              <entry key="ApiGatewayApplication" value="STOPPED" />
+              <entry key="CoursesApplication" value="STOPPED" />
+              <entry key="EurekaApplication" value="STOPPED" />
+              <entry key="EventsApplication" value="STOPPED" />
+              <entry key="LibraryApplication" value="STOPPED" />
+              <entry key="OfferApplication" value="STOPPED" />
+            </map>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="RunManager" selected="Spring Boot.AletheiaApplication">
     <configuration name="AletheiaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -148,8 +174,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.30387.90" />
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.30387.90" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.30387.83" />
       </set>
     </attachedChunks>
   </component>
@@ -166,10 +191,25 @@
       <workItem from="1775416029960" duration="406000" />
       <workItem from="1775502361551" duration="1177000" />
       <workItem from="1775503568318" duration="3563000" />
+      <workItem from="1775507697847" duration="94000" />
+      <workItem from="1775743039371" duration="1334000" />
     </task>
+    <task id="LOCAL-00001" summary="corrige">
+      <option name="closed" value="true" />
+      <created>1775507749741</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1775507749741</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="corrige" />
+    <option name="LAST_COMMIT_MESSAGE" value="corrige" />
   </component>
 </project>

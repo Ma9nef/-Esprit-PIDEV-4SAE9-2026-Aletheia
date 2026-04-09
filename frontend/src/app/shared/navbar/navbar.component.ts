@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { SubscriptionNotificationService } from '../../core/services/subscription-notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +17,7 @@ export class NavbarComponent implements OnInit {
 
   isMobileMenuOpen = false;
   isUserDropdownOpen = false;
+  unreadNotificationCount = 0;
 
   searchControl = new FormControl('');
   searchQuery = '';
@@ -40,7 +42,8 @@ export class NavbarComponent implements OnInit {
     public router: Router,
     private elementRef: ElementRef,
     public themeService: ThemeService,
-    private auth: AuthService
+    private auth: AuthService,
+    private notificationService: SubscriptionNotificationService
   ) {}
 
   // ✅ Always reads current token from localStorage
@@ -70,6 +73,7 @@ export class NavbarComponent implements OnInit {
       .subscribe(() => {
         this.currentRoute = this.router.url;
         this.updateCurrentUser(); // ✅ refresh user after login redirect
+        this.loadUnreadNotificationCount();
       });
 
     this.searchControl.valueChanges
@@ -77,6 +81,8 @@ export class NavbarComponent implements OnInit {
       .subscribe(query => {
         this.searchQuery = query || '';
       });
+
+    this.loadUnreadNotificationCount();
   }
 
   private updateCurrentUser(): void {
@@ -153,6 +159,11 @@ export class NavbarComponent implements OnInit {
     this.isUserDropdownOpen = false;
   }
 
+  goToSubscriptionNotifications(): void {
+    this.router.navigate(['/subscription-notifications']);
+    this.isUserDropdownOpen = false;
+  }
+
   onDashboardClick(): void {
     const user = this.auth.getUserFromToken();
     if (user) {
@@ -178,7 +189,25 @@ export class NavbarComponent implements OnInit {
       email: '',
       avatar: 'https://i.pravatar.cc/150?img=12'
     };
+    this.unreadNotificationCount = 0;
 
     this.router.navigate(['/home']);
+  }
+
+  private loadUnreadNotificationCount(): void {
+    const user = this.auth.getUserFromToken();
+    if (!user) {
+      this.unreadNotificationCount = 0;
+      return;
+    }
+
+    this.notificationService.getUserUnreadCount(String(user.id)).subscribe({
+      next: (response) => {
+        this.unreadNotificationCount = response.unreadCount ?? 0;
+      },
+      error: () => {
+        this.unreadNotificationCount = 0;
+      }
+    });
   }
 }

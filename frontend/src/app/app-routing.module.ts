@@ -27,6 +27,7 @@ import {OffersListComponent} from "./front-office/offers-list/offers-list.compon
 import {CheckoutComponent} from "./front-office/checkout/checkout.component";
 import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
 import { VideoRoomComponent } from './front-office/video-room/video-room.component';
+import { SubscriptionNotificationsComponent } from './front-office/subscription-notifications/subscription-notifications.component';
 
 const routes: Routes = [
   { path: '', component: TemplateComponent },
@@ -40,6 +41,7 @@ const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'checkout/:planId', component: CheckoutComponent },
   { path: 'plans', component: SubscriptionPlansListComponent },
+  { path: 'subscription-notifications', component: SubscriptionNotificationsComponent },
   { path: 'front/room/:id', component: VideoRoomComponent },
 
   {

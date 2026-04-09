@@ -8,6 +8,7 @@ import com.example.offer.model.SubscriptionPlan;
 import com.example.offer.repository.SubscriptionRepository;
 import com.example.offer.repository.SubscriptionPlanRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionPlanRepository planRepository;
+    private final SubscriptionNotificationService notificationService;
 
     // Récupérer tous les abonnements
     public List<SubscriptionResponseDTO> getAllSubscriptions() {
@@ -147,7 +149,14 @@ public class SubscriptionService {
             sub.setStatus("EXPIRED");
             sub.setUpdatedAt(LocalDateTime.now());
             subscriptionRepository.save(sub);
+            notificationService.notifySubscriptionExpired(sub, planRepository.findById(sub.getPlanId()).orElse(null));
         }
+    }
+
+    @Scheduled(cron = "${subscription.notifications.maintenance-cron:0 0 */6 * * *}")
+    public void runNotificationMaintenance() {
+        checkExpiredSubscriptions();
+        notificationService.createExpirationReminders();
     }
 
     // Méthodes privées

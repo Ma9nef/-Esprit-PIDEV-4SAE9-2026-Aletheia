@@ -19,6 +19,7 @@ import { LearnerAssessmentComponent } from './learner-assessment/learner-assessm
 import { FormsModule } from '@angular/forms';
 import { Explore3dComponent } from './explore3d/explore3d.component';
 import { VideoRoomComponent } from './video-room/video-room.component';
+import { SubscriptionNotificationsComponent } from './subscription-notifications/subscription-notifications.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { VideoRoomComponent } from './video-room/video-room.component';
     VerifyCertificateComponent,
     LearnerCertificatesComponent,
     LearnerAssessmentComponent,
-    VideoRoomComponent
+    VideoRoomComponent,
+    SubscriptionNotificationsComponent
 
   ],
   imports: [

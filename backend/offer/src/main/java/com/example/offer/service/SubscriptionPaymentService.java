@@ -37,6 +37,7 @@ public class SubscriptionPaymentService {
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionPlanRepository subscriptionPlanRepository;
     private final SubscriptionPaymentRepository subscriptionPaymentRepository;
+    private final SubscriptionNotificationService notificationService;
 
     @Value("${stripe.secret-key:}")
     private String stripeSecretKey;
@@ -95,6 +96,14 @@ public class SubscriptionPaymentService {
             subscription.setStatus("CANCELED");
             subscription.setUpdatedAt(LocalDateTime.now());
             subscriptionRepository.save(subscription);
+
+            notificationService.notifyPaymentFailed(
+                    request.getUserId(),
+                    plan.getId(),
+                    plan.getName(),
+                    subscription.getId(),
+                    "Unable to create Stripe checkout session."
+            );
 
             throw new ResponseStatusException(
                     HttpStatus.BAD_GATEWAY,
@@ -164,6 +173,10 @@ public class SubscriptionPaymentService {
                 .orElseThrow(() -> new RuntimeException("Abonnement lie au paiement introuvable"));
         SubscriptionPlan plan = subscriptionPlanRepository.findById(subscription.getPlanId())
                 .orElseThrow(() -> new RuntimeException("Plan lie au paiement introuvable"));
+        Subscription previousSubscription = findPreviousSubscription(subscription);
+        SubscriptionPlan previousPlan = previousSubscription != null && previousSubscription.getPlanId() != null
+                ? subscriptionPlanRepository.findById(previousSubscription.getPlanId()).orElse(null)
+                : null;
 
         LocalDateTime startDate = LocalDateTime.now();
         subscription.setStatus("ACTIVE");
@@ -171,6 +184,25 @@ public class SubscriptionPaymentService {
         subscription.setEndDate(startDate.plusDays(plan.getDurationDays()));
         subscription.setUpdatedAt(LocalDateTime.now());
         subscriptionRepository.save(subscription);
+
+        if (previousSubscription != null) {
+            notificationService.notifySubscriptionRenewed(
+                    subscription.getUserId(),
+                    plan.getId(),
+                    plan.getName(),
+                    subscription.getId()
+            );
+
+            if (previousPlan != null && previousPlan.getId() != null && !previousPlan.getId().equals(plan.getId())) {
+                notificationService.notifyPlanChanged(
+                        subscription.getUserId(),
+                        previousPlan.getName(),
+                        plan.getName(),
+                        subscription.getId(),
+                        plan.getId()
+                );
+            }
+        }
     }
 
     private void markPaymentCanceled(Session session) {
@@ -183,6 +215,14 @@ public class SubscriptionPaymentService {
         payment.setFailureReason("La session Stripe a expire");
         payment.setUpdatedAt(LocalDateTime.now());
         subscriptionPaymentRepository.save(payment);
+
+        notificationService.notifyPaymentFailed(
+                payment.getUserId(),
+                payment.getPlanId(),
+                payment.getPlanName(),
+                payment.getSubscriptionId(),
+                "The Stripe checkout session expired before payment was completed."
+        );
 
         subscriptionRepository.findById(payment.getSubscriptionId()).ifPresent(subscription -> {
             if (!"ACTIVE".equals(subscription.getStatus())) {
@@ -198,6 +238,13 @@ public class SubscriptionPaymentService {
             return subscriptionPaymentRepository.findByStripeSessionId(session.getId()).orElseGet(() -> findPaymentByMetadata(session));
         }
         return findPaymentByMetadata(session);
+    }
+
+    private Subscription findPreviousSubscription(Subscription currentSubscription) {
+        return subscriptionRepository.findByUserIdOrderByCreatedAtDesc(currentSubscription.getUserId()).stream()
+                .filter(subscription -> subscription.getId() != null && !subscription.getId().equals(currentSubscription.getId()))
+                .findFirst()
+                .orElse(null);
     }
 
     private SubscriptionPayment findPaymentByMetadata(Session session) {

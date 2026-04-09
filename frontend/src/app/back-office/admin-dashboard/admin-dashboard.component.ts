@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { SubscriptionNotificationService } from '../../core/services/subscription-notification.service';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -11,10 +12,12 @@ export class AdminDashboardComponent implements OnInit {
 
   showDashboardContent = true;
   showDashboardWidgets = true;   // ✅ ADD THIS LINE
+  adminUnreadNotificationCount = 0;
 
   constructor(
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private notificationService: SubscriptionNotificationService
   ) {}
 
   ngOnInit(): void {
@@ -27,6 +30,28 @@ export class AdminDashboardComponent implements OnInit {
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
         this.showDashboardContent = !this.activatedRoute.firstChild;
+        this.loadAdminUnreadCount();
       });
+
+    this.loadAdminUnreadCount();
+  }
+
+  markAdminNotificationsAsRead(): void {
+    this.notificationService.markAllAdminNotificationsAsRead().subscribe({
+      next: () => {
+        this.adminUnreadNotificationCount = 0;
+      }
+    });
+  }
+
+  private loadAdminUnreadCount(): void {
+    this.notificationService.getAdminUnreadCount().subscribe({
+      next: (response) => {
+        this.adminUnreadNotificationCount = response.unreadCount ?? 0;
+      },
+      error: () => {
+        this.adminUnreadNotificationCount = 0;
+      }
+    });
   }
 }
