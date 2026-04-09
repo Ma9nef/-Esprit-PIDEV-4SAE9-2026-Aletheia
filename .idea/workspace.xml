@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="Merged with the help of god" />
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="GlobalExceptionHandler bugs fix">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Library/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/ResourceManagement/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -290,7 +297,7 @@
       <workItem from="1775673032625" duration="5449000" />
       <workItem from="1775737061040" duration="1171000" />
       <workItem from="1775738256558" duration="116000" />
-      <workItem from="1775739518788" duration="6580000" />
+      <workItem from="1775739518788" duration="7495000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -396,7 +403,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775747485758</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="GlobalExceptionHandler bugs fix">
+      <option name="closed" value="true" />
+      <created>1775747737440</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1775747737440</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -425,7 +440,8 @@
     <MESSAGE value="changed the folders architecture to be conform to the other microservices" />
     <MESSAGE value="notification microservice bugs  and it works properly" />
     <MESSAGE value="Merged with the help of god" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merged with the help of god" />
+    <MESSAGE value="GlobalExceptionHandler bugs fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="GlobalExceptionHandler bugs fix" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
