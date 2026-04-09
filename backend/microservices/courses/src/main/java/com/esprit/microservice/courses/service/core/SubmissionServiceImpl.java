@@ -44,7 +44,7 @@ public class SubmissionServiceImpl implements ISubmissionService {
 
         // CORRECTION : Utiliser l'Enum que vous avez défini
         submission.setStatus(SubmissionStatus.GRADED);
-
+        submission.setUserId(userId);
         submission.setFeedback(calculatedScore >= (assessment.getTotalScore() / 2.0) ? "Réussi" : "Échoué");
 
         return submissionRepository.save(submission);
@@ -53,5 +53,14 @@ public class SubmissionServiceImpl implements ISubmissionService {
     @Override public List<Submission> getAllSubmissions() { return submissionRepository.findAll(); }
     @Override public Submission addSubmission(Submission s) { return submissionRepository.save(s); }
     @Override public Submission getSubmissionById(Long id) { return submissionRepository.findById(id).orElse(null); }
+
+    @Override
+    public void deleteById(Long id) {
+        if (!submissionRepository.existsById(id)) {
+            throw new RuntimeException("Submission not found with id: " + id);
+        }
+        submissionRepository.deleteById(id);  // ✅ actually deletes from DB
+    }
+
     @Override public Submission updateSubmission(Long id, Submission s) { s.setId(id); return submissionRepository.save(s); }
 }

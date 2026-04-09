@@ -16,7 +16,7 @@ public class ApiGatewayApplication {
     }
 
     @Bean
-    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
+    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
         return builder.routes()
 
                 // USER SERVICE
@@ -35,11 +35,23 @@ public class ApiGatewayApplication {
                 .route("courses-lesson", r -> r.path("/api/lesson/**")
                         .uri("http://localhost:8081"))
                 .route("pidev-features", r -> r.path("/pidev/**")
-                        .uri("http://localhost:8081"))
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("lb://COURSES-SERVICE"))
+
+                // Route for Submissions (starts with /api/assessment-results)
+                .route("assessments", r -> r.path("/api/assessments/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("lb://COURSES-SERVICE"))
+
                 .route("assessment-results", r -> r.path("/api/assessment-results/**")
-                        .uri("http://localhost:8081"))
-                .route("formations-instructor", r -> r.path("/api/instructor/formations/**")
-                        .uri("http://localhost:8081"))
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("lb://COURSES-SERVICE"))
                 .route("formations-admin", r -> r.path("/api/admin/formations/**")
                         .uri("http://localhost:8081"))
 

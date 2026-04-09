@@ -142,6 +142,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this.router.navigate(['/assessment']);
     }
   }
+  goToSubmissions() {
+  this.router.navigate(['/submissions']);
+  this.isUserDropdownOpen = false; // Close menu after click
+}
 
   toggleNotificationPanel(): void {
     this.isNotificationPanelOpen = !this.isNotificationPanelOpen;

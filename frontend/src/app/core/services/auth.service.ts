@@ -10,6 +10,9 @@ export type JwtUser = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  getUserById(userId: number) {
+    throw new Error('Method not implemented.');
+  }
   private API = 'http://localhost:8080/api/auth';
 
   constructor(private http: HttpClient) {}
