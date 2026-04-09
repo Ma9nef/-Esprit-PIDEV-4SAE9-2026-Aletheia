@@ -52,7 +52,7 @@ const routes: Routes = [
       { path: 'events', component: EventListComponent },
       { path: 'events/new', component: EventFormComponent },
       { path: 'events/edit/:id', component: EventFormComponent },
-        
+
    { path: 'allocations', component: AllocationListComponent },
    { path: 'allocations/new', component: AllocationFormComponent },
    { path: 'allocations/edit/:id', component: AllocationFormComponent },

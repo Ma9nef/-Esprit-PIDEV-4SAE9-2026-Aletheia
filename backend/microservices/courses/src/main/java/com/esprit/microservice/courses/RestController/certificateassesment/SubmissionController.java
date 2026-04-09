@@ -15,7 +15,6 @@ import java.util.Map;
 
 @RestController // Indispensable
 @RequestMapping("/api/assessment-results") // Doit correspondre exactement à Angular
-@CrossOrigin(origins = "*") // Autorise les requêtes depuis Angular
 public class SubmissionController {
 
     @Autowired

@@ -3,9 +3,8 @@ package com.esprit.microservice.courses.RestController.certificateassesment;
 import com.esprit.microservice.courses.entity.Assessment;
 import com.esprit.microservice.courses.entity.QuestionCertif;
 import com.esprit.microservice.courses.entity.QuestionOption;
-
+import com.esprit.microservice.courses.security.JwtReader; // Import JwtReader
 import com.esprit.microservice.courses.service.core.IAssessmentService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,44 +14,75 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pidev/assessment")
-@CrossOrigin(origins = "http://localhost:4200")
 public class AssessmentController {
 
-    @Autowired
-    IAssessmentService assessmentService;
+    private final IAssessmentService assessmentService;
+    private final JwtReader jwtReader;
 
-    // Create a whole Assessment (including its Questions and Options)
+    // Use Constructor Injection (Best Practice)
+    public AssessmentController(IAssessmentService assessmentService, JwtReader jwtReader) {
+        this.assessmentService = assessmentService;
+        this.jwtReader = jwtReader;
+    }
+
+    // Create a whole Assessment
     @PostMapping(value="/add", consumes="application/json", produces="application/json")
-    public Assessment addAssessment(@RequestBody Assessment assessment){
+    public Assessment addAssessment(
+            @RequestBody Assessment assessment,
+            @RequestHeader("Authorization") String authorization) {
+
+        jwtReader.extractUserId(authorization); // Validate token
         return assessmentService.addAssessment(assessment);
     }
 
-    // Update the whole Assessment (this replaces/updates Questions/Options via Cascade)
+    // Update Assessment
     @PutMapping("/update/{id}")
-    public ResponseEntity<Assessment> updateAssessment(@PathVariable Long id, @RequestBody Assessment assessment) {
+    public ResponseEntity<Assessment> updateAssessment(
+            @PathVariable Long id,
+            @RequestBody Assessment assessment,
+            @RequestHeader("Authorization") String authorization) {
+
+        jwtReader.extractUserId(authorization);
         return ResponseEntity.ok(assessmentService.updateAssessment(id, assessment));
     }
 
     @GetMapping("/all")
-    public List<Assessment> getAllAssessments() {
+    public List<Assessment> getAllAssessments(
+            @RequestHeader("Authorization") String authorization) {
+
+        jwtReader.extractUserId(authorization);
         return assessmentService.getAllAssessments();
     }
 
     @GetMapping("/get/{id}")
-    public Assessment getAssessment(@PathVariable Long id) {
+    public Assessment getAssessment(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authorization) {
+
+        jwtReader.extractUserId(authorization);
         return assessmentService.getAssessmentById(id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteAssessment(@PathVariable Long id) {
+    public void deleteAssessment(
+            @PathVariable Long id,
+            @RequestHeader("Authorization") String authorization) {
+
+        jwtReader.extractUserId(authorization);
         assessmentService.deleteAssessment(id);
     }
 
     // Submission logic: Calculates the score based on provided answers
     @PostMapping("/{id}/submit")
-    public ResponseEntity<?> submitQuiz(@PathVariable Long id, @RequestBody Map<Long, Long> answers) {
+    public ResponseEntity<?> submitQuiz(
+            @PathVariable Long id,
+            @RequestBody Map<Long, Long> answers,
+            @RequestHeader("Authorization") String authorization) {
+
+        // Extract userId from token (useful if you want to save the result for this specific user)
+        Long userId = jwtReader.extractUserId(authorization);
+
         try {
-            // Retrieve assessment (ensure your service/repo fetches questions/options)
             Assessment assessment = assessmentService.getAssessmentById(id);
 
             if (assessment == null) {
@@ -84,6 +114,7 @@ public class AssessmentController {
             double percentage = totalScore > 0 ? (earnedScore / totalScore) * 100 : 0;
 
             Map<String, Object> result = new HashMap<>();
+            result.put("userId", userId); // Include who took the test
             result.put("score", earnedScore);
             result.put("totalScore", totalScore);
             result.put("percentage", Math.round(percentage * 100.0) / 100.0);
