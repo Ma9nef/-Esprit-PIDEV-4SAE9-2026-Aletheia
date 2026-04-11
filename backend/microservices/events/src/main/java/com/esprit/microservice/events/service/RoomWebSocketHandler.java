@@ -1,5 +1,7 @@
 package com.esprit.microservice.events.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.*;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +12,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomWebSocketHandler extends TextWebSocketHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(RoomWebSocketHandler.class);
 
     private static final Map<Long, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
@@ -25,18 +29,18 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        System.out.println("🔌 Nouvelle connexion WebSocket: " + session.getId());
+        log.info("New WebSocket connection: {}", session.getId());
 
         // Vérifier si l'utilisateur est déjà authentifié via JwtHandshakeInterceptor
         Object userAttr = session.getAttributes().get("user");
 
         if (userAttr != null) {
             // Déjà authentifié via le handshake (Postman)
-            System.out.println("✅ Session pré-authentifiée via handshake");
+            log.debug("Session pre-authenticated via handshake: {}", session.getId());
             addToRoom(session);
         } else {
             // Mettre en attente d'authentification (Angular)
-            System.out.println("⏳ Session en attente d'authentification: " + session.getId());
+            log.debug("Session awaiting authentication: {}", session.getId());
             pendingAuthSessions.put(session.getId(), session);
 
             // Démarrer un timer pour fermer si pas d'auth dans les 10 secondes
@@ -45,7 +49,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                 public void run() {
                     if (pendingAuthSessions.containsKey(session.getId())) {
                         try {
-                            System.out.println("⏱️ Timeout d'authentification pour: " + session.getId());
+                            log.warn("Authentication timeout for session: {}", session.getId());
                             session.close(CloseStatus.POLICY_VIOLATION.withReason("Authentification timeout"));
                             pendingAuthSessions.remove(session.getId());
                         } catch (Exception e) {}
@@ -58,7 +62,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        System.out.println("📨 Message reçu: " + payload);
+        log.debug("Message received: {}", payload);
 
         Map<String, Object> data = mapper.readValue(payload, Map.class);
         String type = (String) data.get("type");
@@ -72,7 +76,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         // Vérifier si la session est authentifiée
         if (session.getAttributes().get("authenticated") == null &&
                 session.getAttributes().get("user") == null) {
-            System.out.println("❌ Message reçu de session non authentifiée: " + session.getId());
+            log.warn("Message from unauthenticated session: {}", session.getId());
             session.close(CloseStatus.POLICY_VIOLATION.withReason("Non authentifié"));
             return;
         }
@@ -84,11 +88,11 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
     private void handleAuthMessage(WebSocketSession session, Map<String, Object> data) {
         String token = (String) data.get("token");
 
-        System.out.println("🔐 Tentative d'authentification avec token");
+        log.debug("Authentication attempt with token");
 
         if (token == null || token.isEmpty()) {
             try {
-                System.out.println("❌ Auth failed: token manquant");
+                log.warn("Auth failed: missing token for session: {}", session.getId());
                 session.close(CloseStatus.POLICY_VIOLATION.withReason("Token manquant"));
             } catch (Exception e) {}
             return;
@@ -100,7 +104,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                 String email = jwtService.getEmailFromToken(token);
                 Long userId = jwtService.getUserIdFromToken(token);
 
-                System.out.println("✅ Authentification réussie pour: " + email);
+                log.info("Authentication successful for: {}", email);
 
                 // Marquer la session comme authentifiée
                 session.getAttributes().put("authenticated", true);
@@ -122,11 +126,11 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                 addToRoom(session);
 
             } else {
-                System.out.println("❌ Auth failed: token invalide");
+                log.warn("Auth failed: invalid token");
                 session.close(CloseStatus.POLICY_VIOLATION.withReason("Token invalide"));
             }
         } catch (Exception e) {
-            System.err.println("❌ Erreur validation token: " + e.getMessage());
+            log.error("Token validation error", e);
             try {
                 session.close(CloseStatus.SERVER_ERROR.withReason("Erreur validation"));
             } catch (Exception ex) {}
@@ -149,7 +153,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             }
             if (username == null) username = "Inconnu";
 
-            System.out.println("🏠 Ajout à la room " + coursId + ": " + username);
+            log.debug("Adding to room {}: {}", coursId, username);
 
             // Envoyer son propre ID
             Map<String, Object> idMessage = new HashMap<>();
@@ -186,10 +190,10 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             }
 
             sessions.add(session);
-            System.out.println("✅ Session ajoutée à la room: " + session.getId());
+            log.debug("Session added to room: {}", session.getId());
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur addToRoom: " + e.getMessage());
+            log.error("Error in addToRoom", e);
         }
     }
 
@@ -218,7 +222,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             // Message privé
             for (WebSocketSession s : sessions) {
                 if (s.getId().equals(target) && s.isOpen()) {
-                    System.out.println("📤 Envoi privé à " + target + ": " + type);
+                    log.debug("Sending private message to {}: {}", target, type);
                     s.sendMessage(new TextMessage(mapper.writeValueAsString(data)));
                     break;
                 }
@@ -266,7 +270,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                         }
                     }
                 } catch (Exception e) {
-                    System.err.println("❌ Erreur notification départ: " + e.getMessage());
+                    log.error("Error notifying user departure", e);
                 }
             }
 
@@ -274,7 +278,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                 rooms.remove(coursId);
             }
         }
-        System.out.println("🔌 Session fermée: " + session.getId() + " - " + status);
+        log.info("WebSocket session closed: {} - {}", session.getId(), status);
     }
 
     private Long getCoursId(WebSocketSession session) {
