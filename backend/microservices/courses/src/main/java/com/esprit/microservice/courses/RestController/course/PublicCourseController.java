@@ -3,10 +3,11 @@ package com.esprit.microservice.courses.RestController.course;
 import com.esprit.microservice.courses.dto.course.publicDto.CoursePublicDTO;
 import com.esprit.microservice.courses.service.publicApi.PublicCourseService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
-@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/course/public")
 public class PublicCourseController {

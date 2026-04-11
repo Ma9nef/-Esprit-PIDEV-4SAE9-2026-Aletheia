@@ -7,9 +7,9 @@ import com.esprit.microservice.courses.service.instructor.InstructorDashboardSer
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
-@RequestMapping("/instructor/dashboard")
+@RequestMapping("/api/instructor/dashboard")
 public class InstructorDashboardController {
 
     private final InstructorDashboardService dashboardService;

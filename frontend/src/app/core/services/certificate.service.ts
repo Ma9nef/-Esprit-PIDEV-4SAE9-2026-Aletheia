@@ -10,8 +10,7 @@ export class CertificateService {
 
   // ✅ Now pointing to API Gateway Port 8089
   // Assuming the Gateway routes 'pidev/certificate' to your microservice
- private apiUrl = 'http://localhost:8089/api/pidev/certificate';
-
+private apiUrl = 'http://localhost:8089/pidev/certificate';
   constructor(private http: HttpClient) {}
 
   predictSuccess(userId: number): Observable<any> {
@@ -32,7 +31,7 @@ export class CertificateService {
 
     // UPDATED: Removed hardcoded 8081, using this.apiUrl
     return this.http.post(`${this.apiUrl}/${id}/upload`, formData, {
-      responseType: 'text' 
+      responseType: 'text'
     });
   }
 

@@ -41,6 +41,7 @@ export class TrainerDashboardComponent implements OnInit {
   }
 
   private authHeaders(): HttpHeaders {
+    console.log('TOKEN =', localStorage.getItem('token'));
     const token = localStorage.getItem('token');
     return new HttpHeaders({
       Authorization: token ? `Bearer ${token}` : ''

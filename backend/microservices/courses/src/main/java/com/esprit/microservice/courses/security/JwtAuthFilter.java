@@ -37,7 +37,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Si déjà authentifié, on ne refait pas le travail
         if (SecurityContextHolder.getContext().getAuthentication() != null) {
             filterChain.doFilter(request, response);
             return;
@@ -45,7 +44,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         try {
             Long userId = jwtReader.extractUserId(authHeader);
-            String role = jwtReader.extractRole(authHeader); // ex: "INSTRUCTOR"
+            String role = jwtReader.extractRole(authHeader);
 
             if (userId == null || role == null || role.isBlank()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -53,7 +52,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             String authority = role.startsWith("ROLE_") ? role : "ROLE_" + role;
-
             var authorities = List.of(new SimpleGrantedAuthority(authority));
 
             var auth = new UsernamePasswordAuthenticationToken(userId, null, authorities);

@@ -49,7 +49,7 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
 
   private handleCheatingDetected() {
     if (this.timerInterval) clearInterval(this.timerInterval);
-    
+
     this.isCheated = true;
     this.finalScore = 0;
     this.correctCount = 0;

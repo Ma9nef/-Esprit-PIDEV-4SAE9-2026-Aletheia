@@ -17,9 +17,8 @@
     import java.util.List;
     import java.util.Map;
 
-
     @RestController
-    @RequestMapping("/api/pidev/certificate")
+    @RequestMapping("/pidev/certificate")
     public class CertificateController {
     //bearer token : eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiQURNSU4iLCJpZCI6MSwibmFtZSI6IkFkbWluIFN5c3RlbSIsImlhdCI6MTc3NTE1NzQ0MSwiZXhwIjoxNzc1MjQzODQxfQ.41kUI2TmaovnBqgGJ20X8Pcey5GXkdDMki4IYq09JQk
         private final ICertificateService certificateService;

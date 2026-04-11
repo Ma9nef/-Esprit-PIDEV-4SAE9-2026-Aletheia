@@ -27,7 +27,7 @@ public class SubmissionController {
     public ResponseEntity<List<Submission>> getAllSubmissions(
             @RequestHeader("Authorization") String authorization) {
 
-        jwtReader.extractUserId(authorization); // Security check
+        jwtReader.extractUserId(authorization);
         return ResponseEntity.ok(submissionService.getAllSubmissions());
     }
 

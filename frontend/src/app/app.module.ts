@@ -28,8 +28,7 @@ import { ListSubmissionsComponent } from './list-submissions/list-submissions.co
     FormsModule,
     AuthModule,
     HttpClientModule,
-    CommonModule,
-    
+    CommonModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

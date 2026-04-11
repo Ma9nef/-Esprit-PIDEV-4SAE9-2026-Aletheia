@@ -1,1 +1,40 @@
-<p>manage-users works!</p>
+<div class="manage-users-container">
+  <h2>Manage Users</h2>
+
+  <div *ngIf="error" class="error-message">{{ error }}</div>
+
+  <div *ngIf="loading" class="loading">Loading users...</div>
+
+  <div *ngIf="!loading && users.length > 0" class="users-table">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.nom }} {{ user.prenom }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <select [value]="user.role" (change)="updateRole(user, $event)">
+              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+          </td>
+          <td>
+            <!-- Additional actions can be added here -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && users.length === 0" class="no-users">
+    No users found.
+  </div>
+</div>

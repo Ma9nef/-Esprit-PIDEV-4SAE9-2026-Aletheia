@@ -18,6 +18,10 @@ import { LearnerCertificatesComponent } from './learner-certificates/learner-cer
 import { LearnerAssessmentComponent } from './learner-assessment/learner-assessment.component';
 import { FormsModule } from '@angular/forms';
 import { Explore3dComponent } from './explore3d/explore3d.component';
+import { VideoRoomComponent } from './video-room/video-room.component';
+import { ResourcesComponent } from './resources/resources.component';
+import { MyBorrowsComponent } from './my-borrows/my-borrows.component';
+
 @NgModule({
   declarations: [
     HomeComponent,
@@ -33,7 +37,10 @@ import { Explore3dComponent } from './explore3d/explore3d.component';
     Explore3dComponent,
     VerifyCertificateComponent,
     LearnerCertificatesComponent,
-    LearnerAssessmentComponent
+    LearnerAssessmentComponent,
+    VideoRoomComponent,
+    ResourcesComponent,
+    MyBorrowsComponent
   ],
   imports: [
     CommonModule,

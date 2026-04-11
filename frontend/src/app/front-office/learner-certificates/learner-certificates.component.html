@@ -1,16 +1,16 @@
 <div class="page-wrapper theme-bg min-vh-100 position-relative">
-  
+
 
 
   <div class="content-container py-5">
-    
+
     <!-- HEADER -->
     <header class="dashboard-header mb-5 d-flex justify-content-between align-items-end">
       <div class="header-info">
         <h1 class="title-text fw-bold">My Achievements</h1>
         <p class="subtitle-text">Verified credentials for <strong>{{ currentUser?.prenom }} {{ currentUser?.nom }}</strong></p>
       </div>
-      
+
       <div class="header-stats-group d-flex gap-3 align-items-center">
         <!-- ADVANCED METHOD 2: BATCH DOWNLOAD -->
         <button *ngIf="myCertificates.length > 1" (click)="downloadAllCertificates()" class="btn btn-dark rounded-pill px-4 shadow-sm">
@@ -30,7 +30,7 @@
     <div class="search-bar-container mb-4" *ngIf="myCertificates.length > 0">
       <div class="input-group shadow-sm rounded-pill overflow-hidden border">
         <span class="input-group-text bg-white border-0 ps-4"><i class="bi bi-search"></i></span>
-        <input type="text" class="form-control border-0 py-3" placeholder="Search certificates by title or ID..." 
+        <input type="text" class="form-control border-0 py-3" placeholder="Search certificates by title or ID..."
                [(ngModel)]="searchTerm" (input)="applyFilter()">
       </div>
     </div>
@@ -54,12 +54,12 @@
     <!-- CERTIFICATES GRID (Filtered) -->
     <div class="cert-grid" *ngIf="!loading && filteredCertificates.length > 0">
       <div class="credential-card shadow-lg animate-fade-in" *ngFor="let cert of filteredCertificates">
-        
+
         <div class="card-accent-header">
           <span class="verification-badge">VERIFIED</span>
           <small class="cert-id">#{{ cert.certificateCode }}</small>
         </div>
-        
+
         <div class="card-body">
           <h5 class="course-title fw-bold">{{ cert.enrollment?.course?.title || 'Course Certificate' }}</h5>
           <p class="issue-date">Issued on {{ cert.issuedAt | date:'longDate' }}</p>

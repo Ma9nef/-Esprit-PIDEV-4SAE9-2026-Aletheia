@@ -23,13 +23,24 @@ import {AdminSubscriptionPlansComponent} from "./admin-subscription-plans/admin-
 import {
   SubscriptionPlanFormComponent
 } from "./admin-subscription-plans/subscription-plan-form/subscription-plan-form.component";
-
+import { EventFormComponent } from './events/event-form/event-form.component';
+import { EventListComponent } from './events/event-list/event-list.component';
+import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
+import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
+import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
+import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
+import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
+import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
+import { ManageLoansComponent } from './manage-loans/manage-loans.component';
+import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
+import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminDashboardComponent,
     children: [
       { path: 'manage-library', component: ManageLibraryComponent },
+      { path: 'users', component: ManageUsersComponent },
       { path: 'manage-users', component: ManageUsersComponent },
       { path: 'courses', component: ManageCoursesComponent },
       { path: 'offers', component: AdminOffersComponent },
@@ -45,7 +56,21 @@ const routes: Routes = [
       { path: 'subscription-plans', component: AdminSubscriptionPlansComponent },
       { path: 'subscription-plans/new', component: SubscriptionPlanFormComponent },
       { path: 'subscription-plans/edit/:id', component: SubscriptionPlanFormComponent },
+      { path: 'events', component: EventListComponent },
+      { path: 'events/new', component: EventFormComponent },
+      { path: 'events/edit/:id', component: EventFormComponent },
 
+   { path: 'allocations', component: AllocationListComponent },
+   { path: 'allocations/new', component: AllocationFormComponent },
+   { path: 'allocations/edit/:id', component: AllocationFormComponent },
+   { path: 'allocations/:id', component: AllocationDetailComponent },
+   { path: 'resources', component: ManageResourcesComponent },
+   { path: 'resources/new', component: ResourceFormComponent },
+   { path: 'resources/edit/:id', component: ResourceFormComponent },
+   { path: 'resources/:id/reservations', component: ResourceReservationsComponent },
+   { path: 'loans', component: ManageLoansComponent },
+   { path: 'borrowing-policies', component: BorrowingPoliciesComponent },
+   { path: 'inventory-analytics', component: InventoryAnalyticsComponent },
     ]
   },
 

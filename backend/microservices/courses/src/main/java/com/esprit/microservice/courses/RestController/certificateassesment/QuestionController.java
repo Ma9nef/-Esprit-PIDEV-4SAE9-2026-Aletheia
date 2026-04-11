@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pidev/questions")
-
 public class QuestionController {
 
     @Autowired

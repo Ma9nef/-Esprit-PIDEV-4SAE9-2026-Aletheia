@@ -1,5 +1,5 @@
 <!-- ═══════════════════════════════════════════════
-     ALETHEIA  ·  3D City Map Explorer
+     ALETHEIA  ·  3D Campus Explorer
      ═══════════════════════════════════════════════ -->
 <div class="explore3d-wrapper">
 
@@ -9,7 +9,7 @@
       <div class="loader-ring"></div>
       <div class="loader-ring loader-ring-2"></div>
     </div>
-    <p class="loader-text">Building Aletheia City…</p>
+    <p class="loader-text">Building Aletheia Campus…</p>
     <p class="loader-sub">Preparing your adventure</p>
   </div>
 
@@ -24,15 +24,21 @@
     </button>
     <div class="title-group">
       <h1 class="page-title">
-        <span class="title-icon">🏙️</span>
-        <span class="title-text">Aletheia City</span>
+        <span class="title-icon">🏫</span>
+        <span class="title-text">Aletheia Campus</span>
       </h1>
       <span class="title-sub">Interactive 3D Campus</span>
     </div>
-    <div class="title-spacer"></div>
+    <div class="top-bar-right">
+      <button class="glass-btn cart-top-btn" (click)="showLibraryBrowser = true; libraryView = 'cart'" *ngIf="userId">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
+      </button>
+    </div>
   </div>
 
-  <!-- ── Minimap / Building list (right side) ── -->
+  <!-- ── Building list (right side) ── -->
   <div class="side-panel glass-panel">
     <div class="panel-header">
       <span class="panel-logo">🗺️</span>
@@ -65,8 +71,154 @@
       </div>
       <button class="prompt-btn" (click)="interact()">
         <span class="key-badge">E</span>
-        Enter
+        {{ nearBuilding.label === 'Digital Library' ? 'Browse & Buy' : 'Enter' }}
       </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       LIBRARY BROWSER OVERLAY
+       ══════════════════════════════════════════ -->
+  <div class="library-overlay" *ngIf="showLibraryBrowser" (click)="closeLibraryBrowser()">
+    <div class="library-browser glass-panel" (click)="$event.stopPropagation()">
+
+      <!-- Header -->
+      <div class="library-header">
+        <div class="library-title">
+          <span>📖</span>
+          <h2>Digital Library</h2>
+        </div>
+
+        <!-- Tabs -->
+        <div class="lib-tabs">
+          <button class="lib-tab" [class.lib-tab-active]="libraryView === 'browse'" (click)="libraryView = 'browse'">
+            Browse
+          </button>
+          <button class="lib-tab" [class.lib-tab-active]="libraryView === 'cart'" (click)="libraryView = 'cart'">
+            Cart
+            <span class="tab-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
+          </button>
+        </div>
+
+        <div class="library-actions">
+          <button class="library-visit-btn" (click)="navigateTo('/front/library')">
+            Full Library →
+          </button>
+          <button class="library-close-btn" (click)="closeLibraryBrowser()">✕</button>
+        </div>
+      </div>
+
+      <!-- ── BROWSE VIEW ── -->
+      <ng-container *ngIf="libraryView === 'browse'">
+        <div class="library-loading" *ngIf="libraryLoading">
+          <div class="loader-ring"></div>
+          <p>Loading collection...</p>
+        </div>
+
+        <div class="library-grid" *ngIf="!libraryLoading">
+          <div class="library-card" *ngFor="let product of libraryProducts">
+            <div class="card-cover">
+              <img *ngIf="product.coverImageUrl" [src]="product.coverImageUrl" [alt]="product.title" />
+              <div *ngIf="!product.coverImageUrl" class="card-cover-placeholder">📖</div>
+              <span class="card-type-badge">{{ product.type }}</span>
+            </div>
+            <div class="card-info">
+              <h3 class="card-title">{{ product.title }}</h3>
+              <p class="card-author" *ngIf="product.author">by {{ product.author }}</p>
+              <p class="card-desc">{{ product.description }}</p>
+              <div class="card-footer">
+                <div class="card-meta">
+                  <span class="card-price" *ngIf="product.price">{{ product.price | number:'1.2-2' }} TND</span>
+                  <span class="card-free" *ngIf="!product.price">Free</span>
+                  <span class="card-stock" *ngIf="product.available" [class.low-stock]="product.lowStock">
+                    {{ product.lowStock ? '⚠ Low Stock' : '✓ Available' }}
+                  </span>
+                </div>
+                <button
+                  class="add-cart-btn"
+                  [class.in-cart]="isInCart(product.id)"
+                  [class.adding]="addingToCart.has(product.id!)"
+                  [disabled]="isInCart(product.id) || addingToCart.has(product.id!)"
+                  (click)="addToCart(product, $event)">
+                  <ng-container *ngIf="addingToCart.has(product.id!)">⏳</ng-container>
+                  <ng-container *ngIf="isInCart(product.id) && !addingToCart.has(product.id!)">✓ In Cart</ng-container>
+                  <ng-container *ngIf="!isInCart(product.id) && !addingToCart.has(product.id!)">
+                    <svg viewBox="0 0 24 24" fill="none" width="14" height="14"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    Add
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="library-empty" *ngIf="libraryProducts.length === 0">
+            <p>📚 No products available at the moment.</p>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ── CART VIEW ── -->
+      <ng-container *ngIf="libraryView === 'cart'">
+
+        <!-- Checkout success -->
+        <div class="checkout-success" *ngIf="checkoutSuccess">
+          <div class="success-icon">🎉</div>
+          <h3>Order Placed!</h3>
+          <p>Thank you for your purchase. Your items are ready.</p>
+        </div>
+
+        <!-- Empty cart -->
+        <div class="cart-empty" *ngIf="!checkoutSuccess && (!cart || cart.items.length === 0)">
+          <div class="cart-empty-icon">🛒</div>
+          <p>Your cart is empty</p>
+          <button class="lib-tab lib-tab-active" style="margin-top:1rem" (click)="libraryView = 'browse'">Browse Products</button>
+        </div>
+
+        <!-- Not logged in -->
+        <div class="cart-empty" *ngIf="!userId">
+          <div class="cart-empty-icon">🔐</div>
+          <p>Please log in to use your cart</p>
+        </div>
+
+        <!-- Cart items -->
+        <div class="cart-panel" *ngIf="!checkoutSuccess && cart && cart.items.length > 0">
+          <div class="cart-items">
+            <div class="cart-item" *ngFor="let item of cart.items">
+              <div class="cart-item-cover">
+                <img *ngIf="item.product.coverImageUrl" [src]="item.product.coverImageUrl" [alt]="item.product.title" />
+                <div *ngIf="!item.product.coverImageUrl" class="cart-cover-placeholder">📖</div>
+              </div>
+              <div class="cart-item-info">
+                <span class="cart-item-title">{{ item.product.title }}</span>
+                <span class="cart-item-type">{{ item.product.type }}</span>
+                <span class="cart-item-price">{{ item.product.price | number:'1.2-2' }} TND × {{ item.quantity }}</span>
+              </div>
+              <div class="cart-item-right">
+                <span class="cart-item-subtotal">{{ (item.product.price * item.quantity) | number:'1.2-2' }} TND</span>
+                <button class="cart-remove-btn" (click)="removeFromCart(item.id)" title="Remove">✕</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-summary">
+            <div class="cart-total">
+              <span>Total</span>
+              <span class="cart-total-amount">{{ getCartTotal() | number:'1.2-2' }} TND</span>
+            </div>
+            <button
+              class="checkout-btn"
+              [disabled]="checkoutLoading"
+              (click)="checkout()">
+              <ng-container *ngIf="checkoutLoading">Processing…</ng-container>
+              <ng-container *ngIf="!checkoutLoading">
+                <svg viewBox="0 0 24 24" fill="none" width="16" height="16"><path d="M5 12l5 5L20 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Checkout · {{ getCartTotal() | number:'1.2-2' }} TND
+              </ng-container>
+            </button>
+          </div>
+        </div>
+
+      </ng-container>
     </div>
   </div>
 
@@ -91,12 +243,15 @@
       <span class="key-badge">E</span>
       <span class="inst-text">Enter Building</span>
     </div>
+    <div class="instruction-divider"></div>
+    <div class="instruction-item">
+      <span class="inst-text">🖱️ Drag to orbit</span>
+    </div>
   </div>
 
   <!-- ── Bottom HUD ── -->
   <div class="bottom-hud glass-panel">
     <span class="hud-icon">🧭</span>
-    <span class="hud-label">Walk to a building and press <strong>E</strong> to enter</span>
+    <span class="hud-label">Walk to a building and press <strong>E</strong> to interact · Drag mouse to orbit camera</span>
   </div>
 </div>
-

@@ -37,7 +37,7 @@ export class LearnerCertificatesComponent implements OnInit {
   async loadLearnerData() {
     try {
       this.loading = true;
-      
+
       // 1. Identify current user (Checking multiple possible token keys)
       const loggedInId = Number(this.currentUser?.id || this.currentUser?.userId || this.currentUser?.sub);
       console.log("Loading certificates for student ID:", loggedInId);
@@ -66,12 +66,12 @@ export class LearnerCertificatesComponent implements OnInit {
       try {
         const allAssessments: any = await this.assessmentService.getAllAssessments().toPromise();
         this.myCertificates.forEach(cert => {
-          const related = allAssessments.filter((a: any) => 
+          const related = allAssessments.filter((a: any) =>
             (a.course?.id || a.course_id) === (cert.enrollment?.course?.id || cert.enrollment?.course_id)
           );
-          cert.score = related.length 
-            ? Math.round(related.reduce((acc: number, curr: any) => acc + (curr.totalScore || 0), 0) / related.length) 
-            : 85; 
+          cert.score = related.length
+            ? Math.round(related.reduce((acc: number, curr: any) => acc + (curr.totalScore || 0), 0) / related.length)
+            : 85;
         });
       } catch (e) {
         console.warn("Could not load assessments, using default scores.");
@@ -132,10 +132,10 @@ export class LearnerCertificatesComponent implements OnInit {
     return Object.entries(categories);
   }
 
- 
+
  async predictNextCourse() {
   // On utilise exactement le nom du 'path' défini dans votre app-routing.module.ts
-  this.router.navigate(['/Explore3dcertificates']); 
+  this.router.navigate(['/Explore3dcertificates']);
 }
 
   // ORIGINAL DOWNLOAD PDF LOGIC (Preserved)

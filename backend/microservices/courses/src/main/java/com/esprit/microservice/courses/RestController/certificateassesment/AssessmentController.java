@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/pidev/assessment")
-
+@RequestMapping("/api/assessments")
 public class AssessmentController {
 
     private final IAssessmentService assessmentService;

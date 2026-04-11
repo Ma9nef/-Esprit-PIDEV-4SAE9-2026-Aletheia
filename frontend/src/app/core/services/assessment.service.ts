@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Assessment } from '../models/assessment.model';
 
@@ -7,39 +7,55 @@ import { Assessment } from '../models/assessment.model';
   providedIn: 'root'
 })
 export class AssessmentService {
- saveAssessmentResult(payload: any): Observable<any> {
-  // Remplacez l'URL par votre endpoint API réel
-  return this.http.post(`http://localhost:8089/api/assessment-results`, payload);
-}
-  // Corrected Base URL (Singular 'assessment')
-  private apiUrl = 'http://localhost:8089/api/pidev/assessment';
+  private assessmentUrl = 'http://localhost:8089/pidev/assessment';
+  private submissionUrl = 'http://localhost:8089/api/assessment-results';
 
   constructor(private http: HttpClient) {}
 
-  // Added /all
+  saveAssessmentResult(payload: any): Observable<any> {
+    return this.http.post(this.submissionUrl, payload, {
+      headers: this.getHeaders()
+    });
+  }
+
   getAllAssessments(): Observable<Assessment[]> {
-    return this.http.get<Assessment[]>(`${this.apiUrl}/all`);
+    return this.http.get<Assessment[]>(`${this.assessmentUrl}/all`, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Added /get/
   getAssessmentById(id: number): Observable<Assessment> {
-    return this.http.get<Assessment>(`${this.apiUrl}/get/${id}`);
+    return this.http.get<Assessment>(`${this.assessmentUrl}/get/${id}`, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Added /add
   createAssessment(assessment: any): Observable<Assessment> {
-    return this.http.post<Assessment>(`${this.apiUrl}/add`, assessment);
+    return this.http.post<Assessment>(`${this.assessmentUrl}/add`, assessment, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Added /update/
   updateAssessment(id: number, assessment: any): Observable<Assessment> {
-    return this.http.put<Assessment>(`${this.apiUrl}/update/${id}`, assessment);
+    return this.http.put<Assessment>(`${this.assessmentUrl}/update/${id}`, assessment, {
+      headers: this.getHeaders()
+    });
   }
 
-  // Added /delete/
   deleteAssessment(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/delete/${id}`);
+    return this.http.delete<void>(`${this.assessmentUrl}/delete/${id}`, {
+      headers: this.getHeaders()
+    });
   }
 
-  
+  submitQuiz(id: number, answers: any): Observable<any> {
+    return this.http.post(`${this.assessmentUrl}/${id}/submit`, answers, {
+      headers: this.getHeaders()
+    });
+  }
+
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
 }
