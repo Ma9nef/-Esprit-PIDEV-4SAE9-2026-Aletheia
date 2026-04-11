@@ -104,10 +104,10 @@ public class JwtReader {
     public void debugClaims(String bearerOrToken) {
         Claims claims = getAllClaims(bearerOrToken);
         if (claims != null) {
-            System.out.println("JWT CLAIMS = " + claims);
-            System.out.println("JWT SUBJECT = " + claims.getSubject());
+            log.debug("JWT CLAIMS = {}", claims);
+            log.debug("JWT SUBJECT = {}", claims.getSubject());
         } else {
-            System.out.println("JWT CLAIMS = NULL (Invalid Token)");
+            log.debug("JWT CLAIMS = NULL (Invalid Token)");
         }
     }
 
