@@ -1,0 +1,113 @@
+<div class="borrows-page">
+
+  <!-- Hero -->
+  <div class="borrows-hero">
+    <div class="hero-content">
+      <h1>My Borrowed Books</h1>
+      <p>Track your active loans, due dates, and overdue fines</p>
+    </div>
+  </div>
+
+  <div class="borrows-body">
+
+    <!-- Messages -->
+    <div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+    <!-- Tabs -->
+    <div class="tab-bar">
+      <button [class.active]="activeTab === 'active'" (click)="activeTab = 'active'">
+        Active / Overdue
+        <span class="tab-count">{{ activeCount }}</span>
+      </button>
+      <button [class.active]="activeTab === 'all'" (click)="activeTab = 'all'">
+        All History
+        <span class="tab-count">{{ loans.length }}</span>
+      </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="center-msg">Loading your loans…</div>
+
+    <!-- Loan cards -->
+    <div class="loans-grid" *ngIf="!loading && displayedLoans.length">
+      <div class="loan-card" *ngFor="let loan of displayedLoans"
+           [class.card-overdue]="loan.status === 'OVERDUE'">
+
+        <div class="card-cover">
+          <img *ngIf="loan.productCoverImageUrl" [src]="loan.productCoverImageUrl" alt="cover" />
+          <div *ngIf="!loan.productCoverImageUrl" class="cover-placeholder">
+            {{ loan.productTitle[0] }}
+          </div>
+        </div>
+
+        <div class="card-info">
+          <div class="card-title">{{ loan.productTitle }}</div>
+          <div class="card-author" *ngIf="loan.productAuthor">{{ loan.productAuthor }}</div>
+
+          <div class="card-dates">
+            <span>Borrowed: {{ loan.borrowDate }}</span>
+            <span [class.date-overdue]="loan.daysOverdue > 0 && loan.status !== 'RETURNED'">
+              Due: {{ loan.dueDate }}
+              <span *ngIf="loan.daysOverdue > 0 && loan.status !== 'RETURNED'" class="overdue-tag">
+                {{ loan.daysOverdue }}d overdue
+              </span>
+            </span>
+            <span *ngIf="loan.returnDate">Returned: {{ loan.returnDate }}</span>
+          </div>
+
+          <div class="card-footer">
+            <span class="status-badge" [ngClass]="statusClass(loan.status)">{{ loan.status }}</span>
+
+            <!-- Active loan: show return button -->
+            <button class="btn-return" *ngIf="loan.status === 'ACTIVE' || loan.status === 'OVERDUE'"
+                    (click)="confirmReturn(loan)">
+              Return Book
+            </button>
+
+            <!-- Returned with unpaid fine -->
+            <button class="btn-pay-fine" *ngIf="loan.status === 'RETURNED' && !loan.finePaid && loan.fineAmount > 0"
+                    (click)="payFine(loan)">
+              Pay Fine ${{ loan.fineAmount.toFixed(2) }}
+            </button>
+
+            <!-- Fine info -->
+            <span class="fine-badge" *ngIf="loan.fineAmount > 0 && loan.finePaid">
+              Fine paid ✓
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!loading && !displayedLoans.length && !error">
+      <div class="empty-icon">📚</div>
+      <p *ngIf="activeTab === 'active'">You have no active loans. Visit the library to borrow a book.</p>
+      <p *ngIf="activeTab === 'all'">You haven't borrowed any books yet.</p>
+    </div>
+
+  </div>
+
+  <!-- Return confirmation modal -->
+  <div class="modal-overlay" *ngIf="pendingReturnLoan" (click)="cancelReturn()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <h3>Confirm Return</h3>
+      <p>
+        You are returning <strong>{{ pendingReturnLoan.productTitle }}</strong>.
+        <ng-container *ngIf="pendingReturnLoan.daysOverdue > 0">
+          <br /><span class="fine-warning">
+            ⚠️ This item is {{ pendingReturnLoan.daysOverdue }} day(s) overdue.
+            A fine will be calculated based on your account policy.
+          </span>
+        </ng-container>
+      </p>
+      <div class="modal-actions">
+        <button class="btn-cancel" (click)="cancelReturn()">Cancel</button>
+        <button class="btn-confirm" (click)="executeReturn()" [disabled]="returning">
+          {{ returning ? 'Processing…' : 'Confirm Return' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,105 @@
+<div class="courses-page">
+  <div class="courses-shell">
+    <div class="courses-header">
+      <div>
+        <h2 class="courses-title">Explore Courses</h2>
+        <p class="courses-subtitle">
+          Discover high-quality courses and continue your learning journey.
+        </p>
+      </div>
+
+      <div class="courses-stats">
+        <span class="courses-count">{{ courses.length }} courses</span>
+      </div>
+    </div>
+
+    <div *ngIf="loading" class="courses-state">Loading...</div>
+    <div *ngIf="error" class="courses-alert courses-alert--error">{{ error }}</div>
+
+    <div class="courses-grid" *ngIf="!loading && courses.length">
+      <article class="course-card" *ngFor="let c of courses">
+        <div class="course-card__media">
+          <img
+            class="course-card__img"
+            [src]="c.imageUrl || 'assets/images/course-placeholder.jpg'"
+            [alt]="c.title"
+            loading="lazy"
+            (error)="onImageError($event)"
+          />
+
+          <div class="course-card__badges">
+            <span class="badge-chip badge-chip--soft">Course</span>
+
+            <span
+              class="badge-chip badge-chip--success"
+              *ngIf="enrolledCourseIds.has(c.id)"
+            >
+              Enrolled
+            </span>
+          </div>
+        </div>
+
+        <div class="course-card__body">
+          <h3 class="course-card__title">{{ c.title }}</h3>
+
+          <p class="course-card__desc">{{ c.description }}</p>
+
+          <div class="course-card__meta">
+            <div class="meta-item">
+              <span class="meta-label">Instructor</span>
+              <span class="meta-value">{{ c.instructorName }}</span>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">Duration</span>
+              <span class="meta-value">{{ c.durationHours }}h</span>
+            </div>
+          </div>
+
+          <div class="course-card__progress" *ngIf="enrolledCourseIds.has(c.id)">
+            <div class="course-card__progress-top">
+              <span>Learning in progress</span>
+              <span>Continue</span>
+            </div>
+            <div class="progress-bar-ui">
+              <div class="progress-bar-ui__fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card__footer">
+          <div class="course-card__price">{{ c.price }} $</div>
+
+          <div class="course-card__actions">
+            <button class="btn-ui btn-ui--ghost" type="button" (click)="open(c.id)">
+              View
+            </button>
+
+            <button
+              *ngIf="enrolledCourseIds.has(c.id)"
+              class="btn-ui btn-ui--success"
+              type="button"
+              (click)="continueLearning(c.id)"
+            >
+              Continue
+            </button>
+
+            <button
+              *ngIf="!enrolledCourseIds.has(c.id)"
+              class="btn-ui btn-ui--primary"
+              type="button"
+              [disabled]="enrollingId === c.id"
+              (click)="enroll(c.id)"
+            >
+              {{ enrollingId === c.id ? 'Enrolling...' : 'Enroll' }}
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div *ngIf="!loading && !courses.length" class="courses-alert courses-alert--info">
+      No courses found.
+    </div>
+  </div>
+</div>
