@@ -10,6 +10,7 @@
         <module name="offer" />
         <module name="courses" />
         <module name="event-microservice" />
+        <module name="config-server" />
         <module name="eureka" />
         <module name="ApiGateway" />
       </profile>
@@ -54,6 +55,7 @@
       <module name="Library" options="-parameters" />
       <module name="Notification" options="-parameters" />
       <module name="ResourceManagement" options="-parameters" />
+      <module name="config-server" options="-parameters" />
       <module name="courses" options="-parameters" />
       <module name="eureka" options="-parameters" />
       <module name="event-microservice" options="-parameters" />
