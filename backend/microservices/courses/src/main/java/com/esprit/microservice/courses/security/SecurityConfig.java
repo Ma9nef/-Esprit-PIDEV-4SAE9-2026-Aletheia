@@ -37,6 +37,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/course/public/**").permitAll()
                         .requestMatchers("/api/formations/**").permitAll()
+                        .requestMatchers("/pidev/assessments/**").permitAll()
+                        .requestMatchers("/pidev/certificate/**").permitAll()
                         .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
