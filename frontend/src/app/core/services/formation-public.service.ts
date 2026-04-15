@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Formation } from '../models/formation.model';
 import { FormationEnrollment } from '../models/formation-enrollment.model';
-
+import { MyEnrolledFormation } from '../models/my-enrolled-formation.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -41,6 +41,11 @@ export class FormationPublicService {
           userId: userId.toString()
         }
       }
+    );
+  }
+  getMyEnrolledFormations(userId: number) {
+    return this.http.get<MyEnrolledFormation[]>(
+      `${this.apiUrl}/formations/my-enrollments/${userId}`
     );
   }
 }

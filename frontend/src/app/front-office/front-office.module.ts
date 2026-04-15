@@ -24,6 +24,7 @@ import { ResourcesComponent } from './resources/resources.component';
 import { MyBorrowsComponent } from './my-borrows/my-borrows.component';
 import { FormationListComponent } from './formation-list/formation-list.component';
 import { FormationDetailComponent } from './formation-detail/formation-detail.component';
+import { MyEnrolledFormationsComponent } from './my-enrolled-formations/my-enrolled-formations.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { FormationDetailComponent } from './formation-detail/formation-detail.co
     ResourcesComponent,
     MyBorrowsComponent,
     FormationListComponent,
-    FormationDetailComponent
+    FormationDetailComponent,
+    MyEnrolledFormationsComponent
   ],
   imports: [
     CommonModule,
