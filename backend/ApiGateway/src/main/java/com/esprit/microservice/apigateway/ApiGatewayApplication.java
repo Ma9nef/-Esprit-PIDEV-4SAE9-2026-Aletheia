@@ -32,7 +32,8 @@ public class ApiGatewayApplication {
                         .uri("http://localhost:8081"))
                 .route("courses-instructor", r -> r.path("/api/instructor/**")
                         .uri("http://localhost:8081"))
-                .route("courses-lesson", r -> r.path("/api/lesson/**")
+                .route("courses-lesson", r -> r.path("/api/lesson/learn/**")
+                        .filters(f -> f.rewritePath("/api/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8081"))
                 .route("pidev-features", r -> r.path("/pidev/**")
                         .filters(f -> f
@@ -66,6 +67,12 @@ public class ApiGatewayApplication {
                         .uri("lb://LIBRARY-SERVICE"))
                 .route("files-service", r -> r.path("/api/files/**")
                         .uri("lb://LIBRARY-SERVICE"))
+                .route("loans-service", r -> r.path("/api/loans/**")
+                        .uri("lb://LIBRARY-SERVICE"))
+                .route("borrowing-policies", r -> r.path("/api/policies/**")
+                        .uri("lb://LIBRARY-SERVICE"))
+                .route("inventory-analytics", r -> r.path("/api/inventory-analytics/**")
+                        .uri("lb://LIBRARY-SERVICE"))
 
                 // OFFER SERVICE
                 .route("offer-service", r -> r.path("/api/offers/**")
@@ -84,6 +91,16 @@ public class ApiGatewayApplication {
                         .uri("lb://EVENT-MICROSERVICE"))
                 .route("event-websocket", r -> r.path("/room/**")
                         .uri("lb://EVENT-MICROSERVICE"))
+
+                // RESOURCE MANAGEMENT SERVICE
+                .route("resources-service", r -> r.path("/api/resources/**")
+                        .uri("lb://RESOURCEMANAGEMENT"))
+                .route("reservations-service", r -> r.path("/api/reservations/**")
+                        .uri("lb://RESOURCEMANAGEMENT"))
+
+                // NOTIFICATION SERVICE
+                .route("notification-service", r -> r.path("/api/notifications/**")
+                        .uri("lb://NOTIFICATION"))
 
                 .build();
     }

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 import tn.platform.user.user.dto.ChangePasswordRequest;
 import tn.platform.user.user.dto.UpdateUserRequest;
+import tn.platform.user.user.dto.UpdateUserRoleRequest;
 import tn.platform.user.user.dto.UserResponse;
 import tn.platform.user.user.entity.User;
 import org.springframework.data.domain.Pageable;
@@ -24,8 +25,5 @@ public interface UserService {
     void deleteCurrentUser();
     Page<UserResponse> getAllUsers(Pageable pageable);
     UserResponse uploadPhoto(MultipartFile file) throws IOException;
-
-
-
-
+    UserResponse updateUserRole(UpdateUserRoleRequest request);
 }

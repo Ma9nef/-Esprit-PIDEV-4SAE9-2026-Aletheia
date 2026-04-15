@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tn.platform.user.user.dto.ChangePasswordRequest;
 import tn.platform.user.user.dto.UpdateUserRequest;
+import tn.platform.user.user.dto.UpdateUserRoleRequest;
 import tn.platform.user.user.dto.UserResponse;
 import tn.platform.user.user.entity.User;
 import tn.platform.user.user.repository.UserRepository;
@@ -62,12 +63,33 @@ public class UserController {
         return ResponseEntity.ok(userService.getAllUsers(pageable));
     }
 
+    @PutMapping("/admin/users/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserResponse> updateUserRole(
+            @RequestBody UpdateUserRoleRequest request) {
+
+        return ResponseEntity.ok(userService.updateUserRole(request));
+    }
+
     @PostMapping("/me/photo")
     public ResponseEntity<UserResponse> uploadPhoto(
             @RequestParam("file") MultipartFile file) throws IOException {
 
         return ResponseEntity.ok(userService.uploadPhoto(file));
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getUserById(@PathVariable Long id) {
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+        return ResponseEntity.ok(Map.of(
+                "id",        user.getId(),
+                "email",     user.getEmail(),
+                "firstName", user.getPrenom() != null ? user.getPrenom() : "",
+                "lastName",  user.getNom()    != null ? user.getNom()    : "",
+                "role",      user.getRole()   != null ? user.getRole().name() : "LEARNER"
+        ));
+    }
+
     @PostMapping("/{id}/signature")
     public ResponseEntity<?> updateSignature(@PathVariable Long id, @RequestBody Map<String, String> body) {
         User user = userRepository.findById(id).orElseThrow();

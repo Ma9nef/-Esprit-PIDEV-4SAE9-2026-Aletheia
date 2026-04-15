@@ -27,9 +27,12 @@ import {OffersListComponent} from "./front-office/offers-list/offers-list.compon
 import {CheckoutComponent} from "./front-office/checkout/checkout.component";
 import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
 import { VideoRoomComponent } from './front-office/video-room/video-room.component';
+import { ResourcesComponent } from './front-office/resources/resources.component';
+import { MyBorrowsComponent } from './front-office/my-borrows/my-borrows.component';
 import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
 import { ListSubmissionsComponent } from './list-submissions/list-submissions.component';
-
+import { FormationListComponent } from './front-office/formation-list/formation-list.component';
+import { FormationDetailComponent } from './front-office/formation-detail/formation-detail.component';
 const routes: Routes = [
   { path: '', component: TemplateComponent },
   { path: 'home', component: HomeComponent },
@@ -62,9 +65,11 @@ const routes: Routes = [
   { path: 'my-certificates', component: LearnerCertificatesComponent },
   { path: 'assessment', component: LearnerAssessmentComponent },
   { path: 'front/library', component: LibraryComponent },
+  { path: 'front/resources', component: ResourcesComponent },
+  { path: 'front/my-borrows', component: MyBorrowsComponent },
   { path: 'explore', component: Explore3dComponent },
-    { path: 'submissions', component: ListSubmissionsComponent },
-   { path: 'Explore3dcertificates', component: ExploreCertificatesComponent },
+  { path: 'submissions', component: ListSubmissionsComponent },
+  { path: 'Explore3dcertificates', component: ExploreCertificatesComponent },
   { path: 'back-office/manage-courses', component: ManageCoursesComponent },
   {
     path: 'back-office',
@@ -73,7 +78,9 @@ const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  }
+  },
+  {path: 'formations',component: FormationListComponent},
+  { path: 'formations/:id', component: FormationDetailComponent },
 ];
 
 @NgModule({

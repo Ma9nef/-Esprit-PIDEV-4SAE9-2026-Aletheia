@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { CommonModule } from '@angular/common';
 import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
 import { ListSubmissionsComponent } from './list-submissions/list-submissions.component';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -28,7 +29,8 @@ import { ListSubmissionsComponent } from './list-submissions/list-submissions.co
     FormsModule,
     AuthModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    RouterModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

@@ -25,6 +25,12 @@ import { EventService } from './events/event.service';
 import { AllocationDetailComponent } from './allocations/allocation-detail/allocation-detail.component';
 import { AllocationFormComponent } from './allocations/allocation-form/allocation-form.component';
 import { AllocationListComponent } from './allocations/allocation-list/allocation-list.component';
+import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
+import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
+import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
+import { ManageLoansComponent } from './manage-loans/manage-loans.component';
+import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
+import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +49,12 @@ import { AllocationListComponent } from './allocations/allocation-list/allocatio
     EditCourseComponent,
     EventFormComponent,    // ← Une seule fois
     EventListComponent, AllocationDetailComponent, AllocationFormComponent, AllocationListComponent,
+    ManageResourcesComponent,
+    ResourceFormComponent,
+    ResourceReservationsComponent,
+    ManageLoansComponent,
+    BorrowingPoliciesComponent,
+    InventoryAnalyticsComponent,
     ],
   imports: [
     CommonModule,

@@ -1,0 +1,130 @@
+<div class="rr-container">
+
+  <!-- Header -->
+  <div class="rr-header">
+    <button class="rr-back-btn" (click)="goBack()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to resources
+    </button>
+    <div class="rr-header-info" *ngIf="resource">
+      <h1 class="rr-title">Reservations — {{ resource.name }}</h1>
+      <span class="rr-resource-badge rr-badge-{{ resource.type.toLowerCase() }}">
+        {{ resource.type === 'ROOM' ? '🏫' : resource.type === 'DEVICE' ? '💻' : '📦' }}
+        {{ resource.type }}
+      </span>
+    </div>
+    <h1 class="rr-title" *ngIf="!resource && !loading">Reservations</h1>
+  </div>
+
+  <!-- Error -->
+  <div class="rr-alert-error" *ngIf="error">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    {{ error }}
+  </div>
+
+  <!-- Stats -->
+  <div class="rr-stats" *ngIf="!loading && reservations.length > 0">
+    <div class="rr-stat">
+      <span class="rr-stat-value">{{ reservations.length }}</span>
+      <span class="rr-stat-label">Total</span>
+    </div>
+    <div class="rr-stat rr-stat--pending">
+      <span class="rr-stat-value">{{ countByStatus('PENDING') }}</span>
+      <span class="rr-stat-label">Pending</span>
+    </div>
+    <div class="rr-stat rr-stat--confirmed">
+      <span class="rr-stat-value">{{ countByStatus('CONFIRMED') }}</span>
+      <span class="rr-stat-label">Confirmed</span>
+    </div>
+    <div class="rr-stat rr-stat--cancelled">
+      <span class="rr-stat-value">{{ countByStatus('CANCELLED') }}</span>
+      <span class="rr-stat-label">Cancelled</span>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="rr-filters" *ngIf="!loading && reservations.length > 0">
+    <label class="rr-filter-label">Filter by status:</label>
+    <div class="rr-filter-pills">
+      <button
+        *ngFor="let s of statusOptions"
+        class="rr-pill"
+        [class.rr-pill--active]="selectedStatus === s"
+        (click)="selectedStatus = s; onStatusChange()">
+        {{ s === 'ALL' ? 'All' : statusLabel(s) }}
+        <span class="rr-pill-count" *ngIf="s !== 'ALL'">{{ countByStatus(s) }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loader -->
+  <div class="rr-loader" *ngIf="loading">
+    <div class="rr-spinner"></div>
+    <p>Loading reservations…</p>
+  </div>
+
+  <!-- Empty state -->
+  <div class="rr-empty" *ngIf="!loading && !error && reservations.length === 0">
+    <span class="rr-empty-icon">📅</span>
+    <h3>No reservations yet</h3>
+    <p>This resource has no active reservations in the next 6 months.</p>
+  </div>
+
+  <div class="rr-empty" *ngIf="!loading && !error && reservations.length > 0 && filtered.length === 0">
+    <span class="rr-empty-icon">🔍</span>
+    <h3>No reservations with this status</h3>
+    <button class="rr-btn-ghost" (click)="selectedStatus = 'ALL'; onStatusChange()">Show all</button>
+  </div>
+
+  <!-- Reservations list -->
+  <div class="rr-list" *ngIf="!loading && filtered.length > 0">
+    <div class="rr-card" *ngFor="let r of filtered">
+      <div class="rr-card-top">
+        <div class="rr-card-info">
+          <span class="rr-event-id">Event: <strong>{{ r.eventId }}</strong></span>
+          <span class="rr-created-by" *ngIf="r.createdBy">by {{ r.createdBy }}</span>
+        </div>
+        <span class="rr-status-badge" [ngClass]="statusClass(r.status)">
+          {{ statusLabel(r.status) }}
+        </span>
+      </div>
+
+      <div class="rr-time-row">
+        <div class="rr-time-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <span class="rr-time-label">Start</span>
+            <span class="rr-time-val">{{ formatDate(r.startTime) }}</span>
+          </div>
+        </div>
+        <div class="rr-time-divider">→</div>
+        <div class="rr-time-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div>
+            <span class="rr-time-label">End</span>
+            <span class="rr-time-val">{{ formatDate(r.endTime) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rr-card-actions" *ngIf="r.status !== 'CANCELLED'">
+        <button
+          class="rr-btn-confirm"
+          *ngIf="r.status === 'PENDING'"
+          [disabled]="actionInProgress === r.id"
+          (click)="confirm(r.id)">
+          <span class="rr-btn-spinner" *ngIf="actionInProgress === r.id"></span>
+          Confirm
+        </button>
+        <button
+          class="rr-btn-cancel"
+          [disabled]="actionInProgress === r.id"
+          (click)="cancel(r.id)">
+          <span class="rr-btn-spinner" *ngIf="actionInProgress === r.id"></span>
+          Cancel reservation
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
