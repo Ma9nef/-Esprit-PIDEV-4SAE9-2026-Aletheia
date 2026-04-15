@@ -35,7 +35,13 @@
         <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
       </button>
     </div>
-    <div class="title-spacer"></div>
+    <div class="top-bar-right">
+      <button class="glass-btn cart-top-btn" (click)="showLibraryBrowser = true; libraryView = 'cart'" *ngIf="userId">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Cart</span>
+        <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
+      </button>
+    </div>
   </div>
 
   <!-- ── Building list (right side) ── -->
@@ -255,4 +261,3 @@
     <span class="hud-label">Walk to a building and press <strong>E</strong> to interact · Drag mouse to orbit camera</span>
   </div>
 </div>
-

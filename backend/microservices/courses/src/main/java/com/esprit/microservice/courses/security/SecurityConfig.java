@@ -39,6 +39,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/formations/**").permitAll()
                         .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/pidev/assessments/**").permitAll()
+                        .requestMatchers("/pidev/certificate/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
