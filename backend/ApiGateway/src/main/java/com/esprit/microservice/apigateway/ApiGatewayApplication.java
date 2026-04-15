@@ -19,6 +19,7 @@ public class ApiGatewayApplication {
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
         return builder.routes()
 
+                // USER SERVICE
                 .route("user-service", r -> r.path("/api/users/**")
                         .filters(f -> f
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
@@ -34,7 +35,8 @@ public class ApiGatewayApplication {
                         .uri("http://localhost:8081"))
                 .route("courses-instructor", r -> r.path("/api/instructor/**")
                         .uri("http://localhost:8081"))
-                .route("courses-lesson", r -> r.path("/api/lesson/**")
+                .route("courses-lesson", r -> r.path("/api/lesson/learn/**")
+                        .filters(f -> f.rewritePath("/api/(?<segment>.*)", "/${segment}"))
                         .uri("http://localhost:8081"))
                 .route("pidev-features", r -> r.path("/pidev/**")
                         .filters(f -> f
