@@ -10,9 +10,6 @@ export type JwtUser = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  getUserById(userId: number) {
-    throw new Error('Method not implemented.');
-  }
   private API = 'http://localhost:8080/api/auth';
 
   constructor(private http: HttpClient) {}
@@ -39,8 +36,18 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  isLoggedIn() {
-    return !!this.getToken();
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    if (!token) return false;
+    try {
+      const payloadPart = token.split('.')[1];
+      const base64 = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = base64 + '==='.slice((base64.length + 3) % 4);
+      const payload = JSON.parse(atob(padded));
+      return typeof payload.exp === 'number' && payload.exp * 1000 > Date.now();
+    } catch {
+      return false;
+    }
   }
 
   // ✅ decode token payload (no library needed)

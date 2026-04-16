@@ -3,16 +3,22 @@ package com.esprit.microservice.library.config;
 import com.esprit.microservice.library.entity.Product;
 import com.esprit.microservice.library.enums.ProductType;
 import com.esprit.microservice.library.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Statement;
 
+@Profile("dev")
 @Configuration
 public class DataInitializer {
+
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     @Bean
     public CommandLineRunner initializeData(ProductRepository productRepository, DataSource dataSource) {
@@ -23,17 +29,15 @@ public class DataInitializer {
                 stmt.executeUpdate("ALTER TABLE products MODIFY COLUMN file_url TEXT");
                 stmt.executeUpdate("ALTER TABLE order_items MODIFY COLUMN cover_image_url LONGTEXT");
                 stmt.executeUpdate("ALTER TABLE order_items MODIFY COLUMN file_url TEXT");
-                System.out.println("✅ Column types updated for products & order_items tables");
+                log.info("Column types updated for products and order_items tables");
             } catch (Exception e) {
                 // Table may not exist yet on first run — Hibernate will create it with correct types
-                System.out.println("ℹ️ Column migration skipped (table may not exist yet): " + e.getMessage());
+                log.debug("Column migration skipped: {}", e.getMessage());
             }
 
             // Only insert sample data if database is empty
             if (productRepository.count() == 0) {
-                System.out.println("===============================================");
-                System.out.println("Database is empty. Initializing sample products...");
-                System.out.println("===============================================");
+                log.info("Database is empty, initializing sample products...");
 
                 // Create sample products
                 Product product1 = new Product(
@@ -110,17 +114,10 @@ public class DataInitializer {
                 productRepository.save(product5);
                 productRepository.save(product6);
 
-                System.out.println("===============================================");
-                System.out.println("Sample products created successfully!");
-                System.out.println("Total products in database: " + productRepository.count());
-                System.out.println("===============================================");
+                log.info("Sample products created. Total: {}", productRepository.count());
             } else {
-                System.out.println("===============================================");
-                System.out.println("Database already has " + productRepository.count() + " products.");
-                System.out.println("Skipping initialization.");
-                System.out.println("===============================================");
+                log.info("Database already has {} products, skipping initialization.", productRepository.count());
             }
         };
     }
 }
-
