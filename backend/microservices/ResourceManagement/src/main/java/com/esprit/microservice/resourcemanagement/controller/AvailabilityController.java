@@ -1,58 +1,57 @@
 package com.esprit.microservice.resourcemanagement.controller;
 
 import com.esprit.microservice.resourcemanagement.dto.request.CheckAvailabilityRequest;
-import com.esprit.microservice.resourcemanagement.dto.request.CreateAvailabilityRequest;
-import com.esprit.microservice.resourcemanagement.dto.response.AvailabilityCheckResponse;
 import com.esprit.microservice.resourcemanagement.dto.response.AvailabilityResponse;
-import com.esprit.microservice.resourcemanagement.service.ReservationService;
-import com.esprit.microservice.resourcemanagement.service.ResourceAvailabilityService;
+import com.esprit.microservice.resourcemanagement.dto.response.ResourceResponse;
+import com.esprit.microservice.resourcemanagement.entity.enums.ResourceType;
+import com.esprit.microservice.resourcemanagement.service.AvailabilityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/availability")
 @RequiredArgsConstructor
 public class AvailabilityController {
 
-    private final ResourceAvailabilityService availabilityService;
-    private final ReservationService reservationService;
+    private final AvailabilityService availabilityService;
 
-    /**
-     * POST /api/resources/{id}/availability
-     * Define a new availability window for a resource.
-     * Requires ADMIN or INSTRUCTOR role.
-     */
-    @PostMapping("/resources/{id}/availability")
-    public ResponseEntity<AvailabilityResponse> createAvailability(
-            @PathVariable UUID id,
-            @Valid @RequestBody CreateAvailabilityRequest request) {
-        AvailabilityResponse response = availabilityService.createAvailability(id, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    /** POST /api/availability/check */
+    @PostMapping("/check")
+    public ResponseEntity<AvailabilityResponse> check(
+            @Valid @RequestBody CheckAvailabilityRequest req) {
+        return ResponseEntity.ok(availabilityService.check(req));
     }
 
     /**
-     * GET /api/resources/{id}/availability
-     * List all availability windows for a given resource.
+     * POST /api/availability/suggest
+     * Body: { resourceId, startTime, endTime, expectedAttendees }
      */
-    @GetMapping("/resources/{id}/availability")
-    public ResponseEntity<List<AvailabilityResponse>> getAvailability(@PathVariable UUID id) {
-        return ResponseEntity.ok(availabilityService.getAvailability(id));
+    @PostMapping("/suggest")
+    public ResponseEntity<AvailabilityResponse> suggest(
+            @RequestParam UUID resourceId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
+            @RequestParam(required = false) Integer expectedAttendees) {
+        return ResponseEntity.ok(
+                availabilityService.suggest(resourceId, startTime, endTime, expectedAttendees));
     }
 
     /**
-     * POST /api/resources/check-availability
-     * Check if a resource (or a type of resource) is available for a time range.
-     * Returns available resources and any conflicting reservations.
+     * GET /api/availability/browse?type=COMPUTER_LAB&date=2026-04-20&minCapacity=30
      */
-    @PostMapping("/resources/check-availability")
-    public ResponseEntity<AvailabilityCheckResponse> checkAvailability(
-            @Valid @RequestBody CheckAvailabilityRequest request) {
-        return ResponseEntity.ok(reservationService.checkAvailability(request));
+    @GetMapping("/browse")
+    public ResponseEntity<List<ResourceResponse>> browse(
+            @RequestParam(required = false) ResourceType type,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+            @RequestParam(required = false) Integer minCapacity) {
+        return ResponseEntity.ok(availabilityService.browse(type, date, minCapacity));
     }
 }

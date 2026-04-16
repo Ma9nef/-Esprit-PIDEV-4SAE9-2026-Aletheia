@@ -23,14 +23,20 @@ import java.util.List;
  *
  * Role matrix:
  *  - Public (no auth):   GET /api/resources, GET /api/resources/{id},
+ *                        GET /api/resources/search, GET /api/resources/by-location,
  *                        POST /api/resources/check-availability, Swagger
- *  - Any authenticated:  GET /api/reservations/**, GET /api/resources/{id}/availability
+ *  - Any authenticated:  GET /api/reservations/**, GET /api/resources/{id}/availability,
+ *                        GET /api/waitlist/**, GET /api/maintenance/resources/**,
+ *                        GET /api/maintenance/upcoming
  *  - ADMIN or INSTRUCTOR: POST /api/reservations,
  *                         PUT  /api/reservations/{id}/cancel,
- *                         POST /api/resources/{id}/availability
+ *                         POST /api/resources/{id}/availability,
+ *                         POST /api/waitlist, PUT /api/waitlist/{id}/cancel
  *  - ADMIN only:         POST /api/resources, PUT /api/resources/{id},
  *                        DELETE /api/resources/{id},
- *                        PUT  /api/reservations/{id}/confirm
+ *                        PUT  /api/reservations/{id}/confirm,
+ *                        POST/PUT /api/maintenance/**,
+ *                        GET /api/statistics/**
  */
 @Configuration
 @EnableWebSecurity
@@ -58,8 +64,13 @@ public class SecurityConfig {
                     .requestMatchers("/swagger-ui/**", "/swagger-ui.html",
                                      "/v3/api-docs/**", "/api-docs/**").permitAll()
 
+                    // ── Actuator (health checks) ───────────────────────
+                    .requestMatchers("/actuator/**").permitAll()
+
                     // ── Public resource reads ───────────────────────────
                     .requestMatchers(HttpMethod.GET,  "/api/resources").permitAll()
+                    .requestMatchers(HttpMethod.GET,  "/api/resources/search").permitAll()
+                    .requestMatchers(HttpMethod.GET,  "/api/resources/by-location").permitAll()
                     .requestMatchers(HttpMethod.GET,  "/api/resources/{id}").permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/resources/check-availability").permitAll()
 
@@ -82,6 +93,49 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.PUT,  "/api/reservations/{id}/cancel")
                             .hasAnyRole("ADMIN", "INSTRUCTOR")
                     .requestMatchers(HttpMethod.GET,  "/api/reservations/**").authenticated()
+
+                    // ── Maintenance ─────────────────────────────────────
+                    .requestMatchers(HttpMethod.POST, "/api/maintenance/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PUT,  "/api/maintenance/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,  "/api/maintenance/**").authenticated()
+
+                    // ── Waitlist ────────────────────────────────────────
+                    .requestMatchers(HttpMethod.POST, "/api/waitlist")
+                            .hasAnyRole("ADMIN", "INSTRUCTOR")
+                    .requestMatchers(HttpMethod.PUT,  "/api/waitlist/{id}/cancel")
+                            .hasAnyRole("ADMIN", "INSTRUCTOR")
+                    .requestMatchers(HttpMethod.GET,  "/api/waitlist/**").authenticated()
+
+                    // ── Teaching Sessions ────────────────────────────────
+                    .requestMatchers("/api/sessions/**")
+                            .hasAnyRole("INSTRUCTOR", "ADMIN")
+
+                    // ── Availability ─────────────────────────────────────
+                    .requestMatchers("/api/availability/**").permitAll()
+
+                    // ── Check-in ─────────────────────────────────────────
+                    .requestMatchers("/api/checkin/**")
+                            .hasAnyRole("INSTRUCTOR", "ADMIN")
+
+                    // ── Swap requests ─────────────────────────────────────
+                    .requestMatchers("/api/swaps/**")
+                            .hasAnyRole("INSTRUCTOR", "ADMIN")
+
+                    // ── Instructor profile ────────────────────────────────
+                    .requestMatchers(HttpMethod.GET,   "/api/profile/me")
+                            .hasAnyRole("INSTRUCTOR", "ADMIN")
+                    .requestMatchers(HttpMethod.GET,   "/api/profile/leaderboard").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.PATCH, "/api/profile/**").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,   "/api/profile/**").hasRole("ADMIN")
+
+                    // ── Statistics ──────────────────────────────────────
+                    .requestMatchers("/api/stats/**").hasRole("ADMIN")
+                    .requestMatchers("/api/statistics/**").hasRole("ADMIN")
+
+                    // ── Schedule export ──────────────────────────────────
+                    .requestMatchers(HttpMethod.GET, "/api/export/ical/**").permitAll()
+                    .requestMatchers("/api/export/**")
+                            .hasAnyRole("INSTRUCTOR", "ADMIN")
 
                     // ── Everything else requires authentication ──────────
                     .anyRequest().authenticated()
