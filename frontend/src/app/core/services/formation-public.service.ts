@@ -4,6 +4,9 @@ import { Observable } from 'rxjs';
 import { Formation } from '../models/formation.model';
 import { FormationEnrollment } from '../models/formation-enrollment.model';
 import { MyEnrolledFormation } from '../models/my-enrolled-formation.model';
+import { FormationSession } from '../models/formation-session.model';
+import { FormationAttendanceSummary } from '../models/formation-attendance.model';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -21,31 +24,28 @@ export class FormationPublicService {
     return this.http.get<Formation>(`${this.apiUrl}/${id}`);
   }
 
-  enrollInFormation(formationId: number, userId: number): Observable<FormationEnrollment> {
+  enrollInFormation(formationId: number): Observable<FormationEnrollment> {
     return this.http.post<FormationEnrollment>(
       `${this.apiUrl}/${formationId}/enroll`,
-      null,
-      {
-        params: {
-          userId: userId.toString()
-        }
-      }
+      null
     );
   }
 
-  getMyEnrollments(userId: number): Observable<FormationEnrollment[]> {
-    return this.http.get<FormationEnrollment[]>(
-      `${this.apiUrl}/my-enrollments`,
-      {
-        params: {
-          userId: userId.toString()
-        }
-      }
+  getMyEnrolledFormations(): Observable<MyEnrolledFormation[]> {
+    return this.http.get<MyEnrolledFormation[]>(
+      `${this.apiUrl}/my-enrollments`
     );
   }
-  getMyEnrolledFormations(userId: number) {
-    return this.http.get<MyEnrolledFormation[]>(
-      `${this.apiUrl}/formations/my-enrollments/${userId}`
+
+  getFormationSessions(formationId: number): Observable<FormationSession[]> {
+    return this.http.get<FormationSession[]>(
+      `${this.apiUrl}/${formationId}/sessions`
+    );
+  }
+
+  getMyAttendance(formationId: number): Observable<FormationAttendanceSummary> {
+    return this.http.get<FormationAttendanceSummary>(
+      `${this.apiUrl}/${formationId}/attendance/me`
     );
   }
 }

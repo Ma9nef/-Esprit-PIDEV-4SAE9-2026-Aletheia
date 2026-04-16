@@ -1,70 +1,37 @@
-package com.esprit.microservice.courses.entity.formations;
+package com.esprit.microservice.courses.dto.training;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "formations")
-public class Formation {
+public class FormationRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "instructor_id", nullable = false)
+    @NotNull
     private Long instructorId;
 
-    @NotBlank(message = "Title is required")
-    @Column(nullable = false, length = 150)
+    @NotBlank
     private String title;
 
-    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull(message = "Duration is required")
-    @Min(value = 1, message = "Duration must be at least 1")
-    @Column(nullable = false)
+    @NotNull
+    @Min(1)
     private Integer duration;
 
-    @NotNull(message = "Capacity is required")
-    @Min(value = 1, message = "Capacity must be at least 1")
-    @Column(nullable = false)
+    @NotNull
+    @Min(1)
     private Integer capacity;
 
-    @Column(nullable = false)
-    private Boolean archived = true;
-
-    @Column(length = 150)
     private String location;
-
     private LocalDate startDate;
-
     private LocalDate endDate;
-
-    @Column(length = 50)
     private String level;
-
-    @Column(columnDefinition = "TEXT")
     private String objective;
-
-    @Column(columnDefinition = "TEXT")
     private String prerequisites;
 
-    @Column(name = "product_id")
-    private Long productId;
-    public Formation() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public FormationRequestDTO() {
     }
 
     public Long getInstructorId() {
@@ -105,14 +72,6 @@ public class Formation {
 
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
-    }
-
-    public Boolean getArchived() {
-        return archived;
-    }
-
-    public void setArchived(Boolean archived) {
-        this.archived = archived;
     }
 
     public String getLocation() {
@@ -161,13 +120,5 @@ public class Formation {
 
     public void setPrerequisites(String prerequisites) {
         this.prerequisites = prerequisites;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
     }
 }

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { TrainerDashboardComponent } from './trainer-dashboard/trainer-dashboard.component';
@@ -31,7 +30,9 @@ import { ResourceReservationsComponent } from './resources/resource-reservations
 import { ManageLoansComponent } from './manage-loans/manage-loans.component';
 import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
 import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
-
+import { TrainingProgramComponent } from './training-program/training-program.component';
+import { TrainingProgramSessionsComponent } from './training-program-sessions/training-program-sessions.component';
+import { AdminTrainingProgramComponent } from './admin-training-program/admin-training-program.component';
 @NgModule({
   declarations: [
     AdminDashboardComponent,
@@ -55,6 +56,9 @@ import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-ana
     ManageLoansComponent,
     BorrowingPoliciesComponent,
     InventoryAnalyticsComponent,
+    TrainingProgramComponent,
+    TrainingProgramSessionsComponent,
+    AdminTrainingProgramComponent
     ],
   imports: [
     CommonModule,

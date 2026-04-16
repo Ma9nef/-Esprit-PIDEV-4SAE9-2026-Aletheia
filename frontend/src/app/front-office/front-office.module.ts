@@ -25,6 +25,9 @@ import { MyBorrowsComponent } from './my-borrows/my-borrows.component';
 import { FormationListComponent } from './formation-list/formation-list.component';
 import { FormationDetailComponent } from './formation-detail/formation-detail.component';
 import { MyEnrolledFormationsComponent } from './my-enrolled-formations/my-enrolled-formations.component';
+import { FormationProgramSpaceComponent } from './formation-program-space/formation-program-space.component';
+import { FormationProgramSessionsComponent } from './formation-program-sessions/formation-program-sessions.component';
+import { FormationProgramAttendanceComponent } from './formation-program-attendance/formation-program-attendance.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { MyEnrolledFormationsComponent } from './my-enrolled-formations/my-enrol
     MyBorrowsComponent,
     FormationListComponent,
     FormationDetailComponent,
-    MyEnrolledFormationsComponent
+    MyEnrolledFormationsComponent,
+    FormationProgramSpaceComponent,
+    FormationProgramSessionsComponent,
+    FormationProgramAttendanceComponent
   ],
   imports: [
     CommonModule,

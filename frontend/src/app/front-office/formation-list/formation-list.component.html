@@ -1,100 +1,115 @@
 <div class="formation-list-container">
-    <div class="formation-list-header">
+  <div class="formation-list-header">
+    <div class="header-text">
       <span class="section-tag">
         {{ showingEnrolledOnly ? 'My Space' : 'Explore' }}
       </span>
-  
+
       <h2>
-        {{ showingEnrolledOnly ? 'My Enrolled Formations' : 'Available Formations' }}
+        {{ showingEnrolledOnly ? 'My Enrolled Programs' : 'Available Training Programs' }}
       </h2>
-  
+
       <p>
         {{
           showingEnrolledOnly
-            ? 'Here are the formations you have already joined.'
-            : 'Discover formations designed to help you grow with a structured learning experience.'
+            ? 'Find the training programs you already joined and continue tracking them easily.'
+            : 'Browse our available training programs and choose the one that matches your goals.'
         }}
       </p>
-  
-      <div class="formation-header-actions">
-        <button
-          class="filter-btn"
-          [class.active]="!showingEnrolledOnly"
-          (click)="loadAllFormations()">
-          All Formations
-        </button>
-  
-        <button
-          class="filter-btn"
-          [class.active]="showingEnrolledOnly"
-          (click)="loadMyEnrolledFormations()">
-          My Enrolled Formations
-        </button>
+    </div>
+
+    <div class="formation-header-actions">
+      <button
+        class="filter-btn"
+        [class.active]="!showingEnrolledOnly"
+        (click)="loadAllFormations()">
+        All Programs
+      </button>
+
+      <button
+        class="filter-btn"
+        [class.active]="showingEnrolledOnly"
+        (click)="loadMyEnrolledFormations()">
+        My Enrolled Programs
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="state-message">
+    Loading training programs...
+  </div>
+
+  <div *ngIf="errorMessage" class="state-message error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!loading && !errorMessage && formations.length === 0" class="state-message empty">
+    {{
+      showingEnrolledOnly
+        ? 'You are not enrolled in any training program yet.'
+        : 'No training programs are available right now.'
+    }}
+  </div>
+
+  <div class="formations-grid" *ngIf="!loading && !errorMessage && formations.length > 0">
+    <div class="formation-card" *ngFor="let formation of formations">
+      <div class="formation-card-head">
+        <span class="formation-badge">
+          {{ showingEnrolledOnly ? 'Enrolled' : 'Formation' }}
+        </span>
+        <span class="formation-mini-id">#{{ formation.id }}</span>
       </div>
-    </div>
-  
-    <div *ngIf="loading" class="state-message">
-      Loading formations...
-    </div>
-  
-    <div *ngIf="errorMessage" class="state-message error">
-      {{ errorMessage }}
-    </div>
-  
-    <div *ngIf="!loading && !errorMessage && formations.length === 0" class="state-message empty">
-      No formations available right now.
-    </div>
-  
-    <div class="formations-grid" *ngIf="!loading && formations.length > 0">
-      <div class="formation-card" *ngFor="let formation of formations">
-        <div class="formation-card-head">
-          <span class="formation-badge">Formation</span>
-          <span class="formation-mini-id">#{{ formation.id }}</span>
-        </div>
-  
-        <div class="formation-card-body">
-          <h3>{{ formation.title }}</h3>
-  
-          <p class="formation-description">
-            {{ formation.description }}
-          </p>
-        </div>
-  
-        <div class="formation-meta">
-          <div class="meta-item">
-            <div class="meta-icon">
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                <path d="M12 7V12L15 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="meta-text">
-              <span class="meta-label">Duration</span>
-              <span class="meta-value">{{ formation.duration }} h</span>
-            </div>
+
+      <div class="formation-card-body">
+        <h3>{{ formation.title }}</h3>
+
+        <p class="formation-description">
+          {{ formation.description || 'No description available for this training program.' }}
+        </p>
+      </div>
+
+      <div class="formation-meta">
+        <div class="meta-item">
+          <div class="meta-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 7V12L15 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
-  
-          <div class="meta-item">
-            <div class="meta-icon">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M17 21V19A4 4 0 0 0 13 15H5A4 4 0 0 0 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                <path d="M23 21V19A4 4 0 0 0 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M16 3.13A4 4 0 0 1 16 10.87" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="meta-text">
-              <span class="meta-label">Capacity</span>
-              <span class="meta-value">{{ formation.capacity }}</span>
-            </div>
+          <div class="meta-text">
+            <span class="meta-label">Duration</span>
+            <span class="meta-value">{{ formation.duration }} h</span>
           </div>
         </div>
-  
-        <div class="formation-card-footer">
-          <a class="formation-btn" [routerLink]="['/formations', formation.id]">
-            View Details
-          </a>
+
+        <div class="meta-item">
+          <div class="meta-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M17 21V19A4 4 0 0 0 13 15H5A4 4 0 0 0 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M23 21V19A4 4 0 0 0 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 3.13A4 4 0 0 1 16 10.87" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="meta-text">
+            <span class="meta-label">Capacity</span>
+            <span class="meta-value">{{ formation.capacity }}</span>
+          </div>
         </div>
+      </div>
+
+      <div class="formation-card-footer">
+        <a class="formation-btn secondary-btn" [routerLink]="['/formations', formation.id]">
+          View Details
+        </a>
+
+        <a
+          *ngIf="showingEnrolledOnly"
+          class="formation-btn primary-btn"
+          routerLink="/my-enrolled-formations">
+          Open My Programs
+        </a>
       </div>
     </div>
   </div>
+</div>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Formation } from 'src/app/core/models/formation.model';
+import { MyEnrolledFormation } from 'src/app/core/models/my-enrolled-formation.model';
 import { FormationPublicService } from 'src/app/core/services/formation-public.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { FormationPublicService } from 'src/app/core/services/formation-public.s
 export class FormationDetailComponent implements OnInit {
 
   formation: Formation | null = null;
+
   loading = false;
   errorMessage = '';
 
@@ -18,11 +20,12 @@ export class FormationDetailComponent implements OnInit {
   enrollSuccessMessage = '';
   enrollErrorMessage = '';
 
-  // Temporary hardcoded learner id for testing
   userId = 1;
+  alreadyEnrolled = false;
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private formationPublicService: FormationPublicService
   ) {}
 
@@ -35,6 +38,7 @@ export class FormationDetailComponent implements OnInit {
     }
 
     this.loadFormation(id);
+    this.checkEnrollmentStatus(id);
   }
 
   loadFormation(id: number): void {
@@ -46,7 +50,7 @@ export class FormationDetailComponent implements OnInit {
         this.formation = data;
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error while loading formation details:', error);
         this.errorMessage = 'Failed to load formation details.';
         this.loading = false;
@@ -54,31 +58,69 @@ export class FormationDetailComponent implements OnInit {
     });
   }
 
+  checkEnrollmentStatus(formationId: number): void {
+    this.formationPublicService.getMyEnrolledFormations().subscribe({
+      next: (data: MyEnrolledFormation[]) => {
+        this.alreadyEnrolled = data.some(
+          (enrollment: MyEnrolledFormation) => enrollment.formationId === formationId
+        );
+      },
+      error: (error: unknown) => {
+        console.error('Error while checking enrollment status:', error);
+      }
+    });
+  }
+
   enrollNow(): void {
-    if (!this.formation) {
+    if (!this.formation || this.alreadyEnrolled) {
       return;
     }
-
+  
     this.enrollLoading = true;
     this.enrollSuccessMessage = '';
     this.enrollErrorMessage = '';
-
-    this.formationPublicService.enrollInFormation(this.formation.id, this.userId).subscribe({
+  
+    this.formationPublicService.enrollInFormation(this.formation.id).subscribe({
       next: () => {
         this.enrollSuccessMessage = 'You have successfully enrolled in this formation.';
         this.enrollLoading = false;
+        this.alreadyEnrolled = true;
+  
+        this.router.navigate(['/my-enrolled-formations']);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Enrollment error:', error);
-
+  
         if (error?.error?.message) {
           this.enrollErrorMessage = error.error.message;
+        } else if (typeof error?.error === 'string') {
+          this.enrollErrorMessage = error.error;
         } else {
           this.enrollErrorMessage = 'Enrollment failed. Please try again.';
         }
-
+  
         this.enrollLoading = false;
       }
     });
+  }
+
+  goToMyEnrollments(): void {
+    this.router.navigate(['/my-enrolled-formations']);
+  }
+
+  hasPracticalInfo(): boolean {
+    return !!(
+      this.formation?.location ||
+      this.formation?.startDate ||
+      this.formation?.endDate ||
+      this.formation?.level
+    );
+  }
+
+  hasProgramInfo(): boolean {
+    return !!(
+      this.formation?.objective ||
+      this.formation?.prerequisites
+    );
   }
 }

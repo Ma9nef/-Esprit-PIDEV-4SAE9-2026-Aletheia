@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Formation } from 'src/app/core/models/formation.model';
-import { FormationEnrollment } from 'src/app/core/models/formation-enrollment.model';
+import { MyEnrolledFormation } from 'src/app/core/models/my-enrolled-formation.model';
 import { FormationPublicService } from 'src/app/core/services/formation-public.service';
 
 @Component({
@@ -15,7 +15,6 @@ export class FormationListComponent implements OnInit {
   errorMessage = '';
   showingEnrolledOnly = false;
 
-  // temporary hardcoded user id for testing
   userId = 1;
 
   constructor(private formationPublicService: FormationPublicService) {}
@@ -34,7 +33,7 @@ export class FormationListComponent implements OnInit {
         this.formations = data;
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error while loading formations:', error);
         this.errorMessage = 'Failed to load formations.';
         this.loading = false;
@@ -47,12 +46,20 @@ export class FormationListComponent implements OnInit {
     this.errorMessage = '';
     this.showingEnrolledOnly = true;
 
-    this.formationPublicService.getMyEnrollments(this.userId).subscribe({
-      next: (data: FormationEnrollment[]) => {
-        this.formations = data.map(enrollment => enrollment.formation);
+    this.formationPublicService.getMyEnrolledFormations().subscribe({
+      next: (data: MyEnrolledFormation[]) => {
+        this.formations = data.map((enrollment) => ({
+          id: enrollment.formationId,
+          instructorId: enrollment.instructorId,
+          title: enrollment.title,
+          description: enrollment.description,
+          duration: enrollment.duration,
+          capacity: enrollment.capacity,
+          archived: enrollment.archived
+        }));
         this.loading = false;
       },
-      error: (error) => {
+      error: (error: unknown) => {
         console.error('Error while loading enrolled formations:', error);
         this.errorMessage = 'Failed to load your enrolled formations.';
         this.loading = false;

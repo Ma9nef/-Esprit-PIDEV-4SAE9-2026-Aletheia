@@ -34,6 +34,9 @@ import { ResourceReservationsComponent } from './resources/resource-reservations
 import { ManageLoansComponent } from './manage-loans/manage-loans.component';
 import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
 import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
+import { TrainingProgramComponent } from './training-program/training-program.component';
+import { TrainingProgramSessionsComponent } from './training-program-sessions/training-program-sessions.component';
+import { AdminTrainingProgramComponent } from './admin-training-program/admin-training-program.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -43,6 +46,7 @@ const routes: Routes = [
       { path: 'users', component: ManageUsersComponent },
       { path: 'manage-users', component: ManageUsersComponent },
       { path: 'courses', component: ManageCoursesComponent },
+      { path: 'training-programs', component: AdminTrainingProgramComponent },
       { path: 'offers', component: AdminOffersComponent },
       { path: 'offers/new', component: OfferFormComponent },
       { path: 'offers/:id', component: OfferFormComponent },
@@ -83,7 +87,9 @@ const routes: Routes = [
       { path: 'create-course', component: CreateCourseComponent },
       { path: 'courses/:courseId/lessons/create', component: CreateLessonComponent },
       { path: 'courses/:courseId/builder', component: CourseBuilderComponent },
-      { path: 'courses/:id/edit', component: EditCourseComponent }
+      { path: 'courses/:id/edit', component: EditCourseComponent },
+      { path: 'training-programs', component: TrainingProgramComponent },
+      { path: 'training-programs/:formationId/sessions', component: TrainingProgramSessionsComponent }
     ]
   },
   { path: 'manage-users', component: ManageUsersComponent },

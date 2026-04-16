@@ -16,6 +16,12 @@ public class MyEnrolledFormationDTO {
     private Integer capacity;
     private Boolean archived;
 
+    private Long productId;
+    private String productTitle;
+    private String productDescription;
+    private String productAuthor;
+    private String productFileUrl;
+
     public MyEnrolledFormationDTO() {
     }
 
@@ -98,4 +104,45 @@ public class MyEnrolledFormationDTO {
     public void setArchived(Boolean archived) {
         this.archived = archived;
     }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public String getProductTitle() {
+        return productTitle;
+    }
+
+    public void setProductTitle(String productTitle) {
+        this.productTitle = productTitle;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public String getProductAuthor() {
+        return productAuthor;
+    }
+
+    public void setProductAuthor(String productAuthor) {
+        this.productAuthor = productAuthor;
+    }
+    public String getProductFileUrl() {
+        return productFileUrl;
+    }
+
+    public void setProductFileUrl(String productFileUrl) {
+        this.productFileUrl = productFileUrl;
+    }
+
+
 }

@@ -33,7 +33,10 @@ import { ExploreCertificatesComponent } from './pages/explore-certificates/explo
 import { ListSubmissionsComponent } from './list-submissions/list-submissions.component';
 import { FormationListComponent } from './front-office/formation-list/formation-list.component';
 import { FormationDetailComponent } from './front-office/formation-detail/formation-detail.component';
-const routes: Routes = [
+import { MyEnrolledFormationsComponent } from './front-office/my-enrolled-formations/my-enrolled-formations.component';
+import { FormationProgramSpaceComponent } from './front-office/formation-program-space/formation-program-space.component';
+import { FormationProgramSessionsComponent } from './front-office/formation-program-sessions/formation-program-sessions.component';
+import { FormationProgramAttendanceComponent } from './front-office/formation-program-attendance/formation-program-attendance.component';const routes: Routes = [
   { path: '', component: TemplateComponent },
   { path: 'home', component: HomeComponent },
   { path: 'about', component: AboutComponent },
@@ -79,8 +82,12 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
-  {path: 'formations',component: FormationListComponent},
+  { path: 'formations', component: FormationListComponent },
   { path: 'formations/:id', component: FormationDetailComponent },
+  { path: 'formations/:id/program-space', component: FormationProgramSpaceComponent },
+  { path: 'formations/:id/program-space/sessions', component: FormationProgramSessionsComponent },
+  { path: 'my-enrolled-formations', component: MyEnrolledFormationsComponent },
+  { path: 'formations/:id/program-space/attendance', component: FormationProgramAttendanceComponent }
 ];
 
 @NgModule({

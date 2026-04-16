@@ -1,62 +1,33 @@
-package com.esprit.microservice.courses.entity.formations;
-
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+package com.esprit.microservice.courses.dto.training;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "formations")
-public class Formation {
+public class FormationDetailsDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "instructor_id", nullable = false)
     private Long instructorId;
-
-    @NotBlank(message = "Title is required")
-    @Column(nullable = false, length = 150)
     private String title;
-
-    @Column(columnDefinition = "TEXT")
     private String description;
-
-    @NotNull(message = "Duration is required")
-    @Min(value = 1, message = "Duration must be at least 1")
-    @Column(nullable = false)
     private Integer duration;
-
-    @NotNull(message = "Capacity is required")
-    @Min(value = 1, message = "Capacity must be at least 1")
-    @Column(nullable = false)
     private Integer capacity;
-
-    @Column(nullable = false)
-    private Boolean archived = true;
-
-    @Column(length = 150)
+    private Boolean archived;
     private String location;
-
     private LocalDate startDate;
-
     private LocalDate endDate;
-
-    @Column(length = 50)
     private String level;
-
-    @Column(columnDefinition = "TEXT")
     private String objective;
-
-    @Column(columnDefinition = "TEXT")
     private String prerequisites;
 
-    @Column(name = "product_id")
     private Long productId;
-    public Formation() {
+    private String productTitle;
+    private String productDescription;
+    private String productAuthor;
+    private String productType;
+    private Double productPrice;
+    private String productFileUrl;
+    private String productCoverImageUrl;
+
+    public FormationDetailsDTO() {
     }
 
     public Long getId() {
@@ -169,5 +140,61 @@ public class Formation {
 
     public void setProductId(Long productId) {
         this.productId = productId;
+    }
+
+    public String getProductTitle() {
+        return productTitle;
+    }
+
+    public void setProductTitle(String productTitle) {
+        this.productTitle = productTitle;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    public String getProductAuthor() {
+        return productAuthor;
+    }
+
+    public void setProductAuthor(String productAuthor) {
+        this.productAuthor = productAuthor;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public Double getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(Double productPrice) {
+        this.productPrice = productPrice;
+    }
+
+    public String getProductFileUrl() {
+        return productFileUrl;
+    }
+
+    public void setProductFileUrl(String productFileUrl) {
+        this.productFileUrl = productFileUrl;
+    }
+
+    public String getProductCoverImageUrl() {
+        return productCoverImageUrl;
+    }
+
+    public void setProductCoverImageUrl(String productCoverImageUrl) {
+        this.productCoverImageUrl = productCoverImageUrl;
     }
 }
