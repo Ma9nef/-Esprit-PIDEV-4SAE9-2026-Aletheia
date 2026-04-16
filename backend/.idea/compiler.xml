@@ -8,6 +8,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="courses" />
+        <module name="config-server" />
+        <module name="user-service" />
         <module name="ApiGateway" />
         <module name="eureka" />
       </profile>
@@ -48,6 +50,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ApiGateway" options="-parameters" />
+      <module name="config-server" options="-parameters" />
       <module name="Library" options="-parameters" />
       <module name="courses" options="-parameters" />
       <module name="eureka" options="-parameters" />

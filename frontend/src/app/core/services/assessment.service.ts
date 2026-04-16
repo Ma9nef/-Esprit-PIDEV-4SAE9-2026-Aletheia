@@ -7,7 +7,7 @@ import { Assessment } from '../models/assessment.model';
   providedIn: 'root'
 })
 export class AssessmentService {
-  private assessmentUrl = 'http://localhost:8089/pidev/assessment';
+private assessmentUrl = 'http://localhost:8089/pidev/assessments';
   private submissionUrl = 'http://localhost:8089/api/assessment-results';
 
   constructor(private http: HttpClient) {}

@@ -10,7 +10,6 @@ import tn.platform.user.auth.service.AuthService;
 @RestController
 @RequestMapping("/api/admin/users")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200")
 public class AdminUserController {
 
     private final AuthService authService;

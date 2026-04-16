@@ -1,0 +1,128 @@
+<div class="admin-training-program-page">
+    <div class="page-header">
+      <div>
+        <h1>Training Programs</h1>
+        <p>Review, approve, archive, and monitor all instructor training programs.</p>
+      </div>
+    </div>
+  
+    <div *ngIf="successMessage" class="alert success">
+      {{ successMessage }}
+    </div>
+  
+    <div *ngIf="errorMessage" class="alert error">
+      {{ errorMessage }}
+    </div>
+  
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Total Programs</span>
+        <span class="stat-value">{{ totalPrograms }}</span>
+      </div>
+  
+      <div class="stat-card">
+        <span class="stat-label">Published</span>
+        <span class="stat-value">{{ activePrograms }}</span>
+      </div>
+  
+      <div class="stat-card">
+        <span class="stat-label">Archived / Pending</span>
+        <span class="stat-value">{{ archivedPrograms }}</span>
+      </div>
+  
+      <div class="stat-card">
+        <span class="stat-label">Total Capacity</span>
+        <span class="stat-value">{{ totalCapacity }}</span>
+      </div>
+    </div>
+  
+    <div class="filters-bar">
+      <div class="filter-group search-box">
+        <input
+          type="text"
+          placeholder="Search by title, level, location..."
+          [(ngModel)]="searchTerm"
+          (input)="applyFilters()"
+        />
+      </div>
+  
+      <div class="filter-group">
+        <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+          <option value="ALL">All Statuses</option>
+          <option value="ACTIVE">Published</option>
+          <option value="ARCHIVED">Archived / Pending</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <select [(ngModel)]="levelFilter" (change)="applyFilters()">
+          <option value="ALL">All Levels</option>
+          <option *ngFor="let level of getLevels()" [value]="level">{{ level }}</option>
+        </select>
+      </div>
+  
+      <button class="secondary-btn" (click)="clearFilters()">Reset</button>
+    </div>
+  
+    <div *ngIf="loading" class="state-box">
+      Loading training programs...
+    </div>
+  
+    <div *ngIf="!loading && filteredFormations.length === 0" class="state-box empty">
+      No training programs found.
+    </div>
+  
+    <div *ngIf="!loading && filteredFormations.length > 0" class="table-wrapper">
+      <table class="program-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Level</th>
+            <th>Duration</th>
+            <th>Capacity</th>
+            <th>Location</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            <th class="actions-col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let formation of filteredFormations">
+            <td class="title-cell">
+              <strong>{{ formation.title }}</strong>
+              <span *ngIf="formation.description">{{ formation.description }}</span>
+            </td>
+            <td>{{ formation.level || '—' }}</td>
+            <td>{{ formation.duration }} days</td>
+            <td>{{ formation.capacity }}</td>
+            <td>{{ formation.location || '—' }}</td>
+            <td>{{ formation.startDate || '—' }}</td>
+            <td>{{ formation.endDate || '—' }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="formation.archived ? 'archived' : 'published'">
+                {{ getStatusLabel(formation) }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <button
+                *ngIf="formation.archived"
+                class="table-btn approve"
+                [disabled]="actionLoadingId === formation.id"
+                (click)="unarchiveFormation(formation)">
+                {{ actionLoadingId === formation.id ? 'Processing...' : 'Approve' }}
+              </button>
+  
+              <button
+                *ngIf="!formation.archived"
+                class="table-btn archive"
+                [disabled]="actionLoadingId === formation.id"
+                (click)="archiveFormation(formation)">
+                {{ actionLoadingId === formation.id ? 'Processing...' : 'Archive' }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
