@@ -15,6 +15,7 @@ declare var bootstrap: any;
   styleUrls: ['./manage-certificates.component.css']
 })
 export class ManageCertificatesComponent implements OnInit, AfterViewInit {
+    @ViewChild('signatureCanvas') signatureCanvas!: ElementRef<HTMLCanvasElement>;
 getProbabilityColor(score: number): string {
   if (score >= 80) {
     return 'success'; // Green: High probability of passing

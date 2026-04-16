@@ -75,22 +75,22 @@ export class FormationDetailComponent implements OnInit {
     if (!this.formation || this.alreadyEnrolled) {
       return;
     }
-  
+
     this.enrollLoading = true;
     this.enrollSuccessMessage = '';
     this.enrollErrorMessage = '';
-  
+
     this.formationPublicService.enrollInFormation(this.formation.id).subscribe({
       next: () => {
         this.enrollSuccessMessage = 'You have successfully enrolled in this formation.';
         this.enrollLoading = false;
         this.alreadyEnrolled = true;
-  
+
         this.router.navigate(['/my-enrolled-formations']);
       },
       error: (error: any) => {
         console.error('Enrollment error:', error);
-  
+
         if (error?.error?.message) {
           this.enrollErrorMessage = error.error.message;
         } else if (typeof error?.error === 'string') {
@@ -98,7 +98,7 @@ export class FormationDetailComponent implements OnInit {
         } else {
           this.enrollErrorMessage = 'Enrollment failed. Please try again.';
         }
-  
+
         this.enrollLoading = false;
       }
     });

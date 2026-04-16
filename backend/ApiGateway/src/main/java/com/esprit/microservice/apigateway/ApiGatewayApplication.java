@@ -20,7 +20,8 @@ public class ApiGatewayApplication {
         return builder.routes()
 
                 // USER SERVICE
-                .route("user-service", r -> r.path("/api/users/**").filters(f -> f
+                .route("user-service", r -> r.path("/api/users/**")
+                        .filters(f -> f
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("lb://ALETHEIA-PLATFORM"))
