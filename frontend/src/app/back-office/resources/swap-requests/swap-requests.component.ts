@@ -125,7 +125,8 @@ export class SwapRequestsComponent implements OnInit {
     }
     this.submitting = true;
     this.error = '';
-    this.svc.requestSwap(this.selectedMyReservationId, {
+    this.svc.requestSwap({
+      requesterReservationId: this.selectedMyReservationId,
       targetReservationId: this.selectedTargetReservationId,
       note: this.newNote.trim() || undefined
     }).subscribe({

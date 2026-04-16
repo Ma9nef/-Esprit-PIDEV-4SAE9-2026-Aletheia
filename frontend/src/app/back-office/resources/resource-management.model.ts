@@ -238,6 +238,7 @@ export interface SwapRequest {
 }
 
 export interface CreateSwapRequest {
+  requesterReservationId: string;
   targetReservationId: string;
   note?: string;
 }

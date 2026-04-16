@@ -9,6 +9,9 @@ import java.util.UUID;
 public class CreateSwapRequest {
 
     @NotNull
+    private UUID requesterReservationId;
+
+    @NotNull
     private UUID targetReservationId;
 
     private String note;

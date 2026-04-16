@@ -41,6 +41,19 @@ public class SwapRequestService {
      * Instructor A initiates a swap: A offers their reservation, wants B's.
      */
     public SwapRequestResponse requestSwap(CreateSwapRequest req, String requesterId) {
+        Reservation requesterReservation = reservationRepository
+                .findByIdAndDeletedFalse(req.getRequesterReservationId())
+                .orElseThrow(() -> new ReservationNotFoundException(
+                        "Requester reservation not found: " + req.getRequesterReservationId()));
+
+        if (!requesterReservation.getInstructorId().equals(requesterId)) {
+            throw new IllegalArgumentException("Requester reservation does not belong to the requesting instructor");
+        }
+
+        if (requesterReservation.getStatus() != ReservationStatus.CONFIRMED) {
+            throw new IllegalArgumentException("Requester reservation is not CONFIRMED");
+        }
+
         Reservation targetReservation = reservationRepository
                 .findByIdAndDeletedFalse(req.getTargetReservationId())
                 .orElseThrow(() -> new ReservationNotFoundException(
@@ -53,7 +66,7 @@ public class SwapRequestService {
         SwapRequest swap = SwapRequest.builder()
                 .requesterId(requesterId)
                 .targetId(targetReservation.getInstructorId())
-                .requesterReservationId(null) // requester must specify their own reservation via a separate lookup
+                .requesterReservationId(req.getRequesterReservationId())
                 .targetReservationId(req.getTargetReservationId())
                 .status(SwapRequestStatus.PENDING)
                 .requesterNote(req.getNote())

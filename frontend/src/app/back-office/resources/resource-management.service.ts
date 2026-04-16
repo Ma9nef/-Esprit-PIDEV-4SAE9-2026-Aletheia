@@ -222,8 +222,8 @@ export class ResourceManagementService {
     return this.http.get<SwapRequest[]>(`${this.base}/swaps`);
   }
 
-  requestSwap(reservationId: string, body: CreateSwapRequest): Observable<SwapRequest> {
-    return this.http.post<SwapRequest>(`${this.base}/swaps`, { ...body, reservationId });
+  requestSwap(body: CreateSwapRequest): Observable<SwapRequest> {
+    return this.http.post<SwapRequest>(`${this.base}/swaps`, body);
   }
 
   acceptSwap(id: string): Observable<SwapRequest> {
