@@ -1,0 +1,101 @@
+<div class="ir-container">
+
+  <!-- Header -->
+  <div class="ir-header">
+    <h2>My Reservations</h2>
+    <div class="d-flex gap-2">
+      <button class="ir-secondary-btn" (click)="downloadSchedule()" title="Download PDF timetable">
+        Download Schedule
+      </button>
+      <button class="ir-secondary-btn" (click)="copyIcalLink()" title="Copy iCal subscription URL">
+        iCal Link
+      </button>
+      <button class="ir-primary-btn" (click)="goToResources()">+ Book a Resource</button>
+    </div>
+  </div>
+
+  <div *ngIf="icalCopied" class="ir-info">iCal URL copied to clipboard!</div>
+  <div *ngIf="error" class="ir-error">{{ error }}</div>
+
+  <!-- Filters -->
+  <div class="ir-filters">
+    <label>Status</label>
+    <select [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+      <option *ngFor="let s of statusOptions" [value]="s">
+        {{ s === 'ALL' ? 'All' : statusLabel(s) }}
+      </option>
+    </select>
+    <span class="ir-count">{{ filteredReservations.length }} reservation(s)</span>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && filteredReservations.length === 0" class="ir-empty">
+    No reservations found. Book a resource to get started.
+  </div>
+
+  <!-- Reservation cards -->
+  <div class="ir-list" *ngIf="!loading && filteredReservations.length > 0">
+    <div class="ir-card" *ngFor="let r of filteredReservations">
+
+      <div class="ir-top">
+        <div>
+          <div class="ir-resource-name">{{ r.resourceName || r.resourceId }}</div>
+          <div class="ir-resource-location" *ngIf="r.resourceLocation">{{ r.resourceLocation }}</div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <span *ngIf="r.recurrenceGroupId" class="ir-recurrence-badge" title="Part of a recurring series">
+            Recurring
+          </span>
+          <span class="ir-status" [ngClass]="statusClass(r.status)">
+            {{ statusLabel(r.status) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="ir-grid">
+        <div *ngIf="r.sessionTitle || r.courseCode">
+          <strong>Session:</strong>
+          {{ r.sessionTitle || '—' }}
+          <span *ngIf="r.courseCode" class="ir-course-code">{{ r.courseCode }}</span>
+        </div>
+        <div><strong>Start:</strong> {{ formatDate(r.startTime) }}</div>
+        <div><strong>End:</strong> {{ formatDate(r.endTime) }}</div>
+        <div *ngIf="r.rejectionReason" class="ir-reason">
+          <strong>Rejection reason:</strong> {{ r.rejectionReason }}
+        </div>
+        <div *ngIf="r.cancellationReason" class="ir-reason">
+          <strong>Cancellation reason:</strong> {{ r.cancellationReason }}
+        </div>
+        <div *ngIf="r.checkedInAt">
+          <strong>Checked in:</strong> {{ formatDate(r.checkedInAt) }}
+        </div>
+        <div *ngIf="r.noShow" class="ir-noshow">No-show recorded for this session.</div>
+        <div *ngIf="r.expiresAt && r.status === 'PENDING'" class="ir-expiry">
+          <strong>Approval expires:</strong> {{ formatDate(r.expiresAt) }}
+        </div>
+      </div>
+
+      <div class="ir-actions" *ngIf="canViewQr(r.status) || canCancel(r.status)">
+        <button *ngIf="canViewQr(r.status)"
+                class="ir-secondary-btn"
+                (click)="viewQr(r.id)">
+          View QR Code
+        </button>
+        <button *ngIf="canCancel(r.status)"
+                class="ir-danger-btn"
+                [disabled]="actionInProgressId === r.id"
+                (click)="cancelReservation(r)">
+          <span *ngIf="actionInProgressId === r.id">Cancelling…</span>
+          <span *ngIf="actionInProgressId !== r.id">Cancel</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

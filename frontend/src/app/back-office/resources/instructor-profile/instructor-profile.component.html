@@ -1,0 +1,76 @@
+<div class="profile-container">
+  <h2 class="mb-4">My Reputation Profile</h2>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div *ngIf="!loading && profile">
+
+    <!-- Score card -->
+    <div class="score-card">
+      <div class="score-ring-wrap">
+        <svg class="score-ring" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" stroke-width="10"/>
+          <circle cx="60" cy="60" r="50" fill="none"
+                  [attr.stroke]="scoreColor"
+                  stroke-width="10"
+                  stroke-linecap="round"
+                  stroke-dasharray="314"
+                  [attr.stroke-dashoffset]="314 - (314 * scorePercent / 100)"
+                  transform="rotate(-90 60 60)"/>
+        </svg>
+        <div class="score-label">
+          <span class="score-value">{{ profile.reputationScore }}</span>
+          <span class="score-max">/100</span>
+        </div>
+      </div>
+
+      <div class="score-meta">
+        <span class="score-tier-badge {{ scoreTier.class }}">{{ scoreTier.label }}</span>
+        <p class="score-perks" *ngIf="profile.isTrusted">
+          Trusted instructor: bypass advance booking limits &amp; priority waitlist position.
+        </p>
+        <p class="score-perks text-muted" *ngIf="!profile.isTrusted">
+          Reach score 80 to unlock trusted perks.
+        </p>
+        <p class="score-updated">Last updated: {{ formatDate(profile.lastUpdated) }}</p>
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div class="stats-grid mt-4">
+      <div class="stat-card">
+        <span class="stat-number">{{ profile.totalReservations }}</span>
+        <span class="stat-label">Total Reservations</span>
+      </div>
+      <div class="stat-card stat-card-warn">
+        <span class="stat-number">{{ profile.noShowCount }}</span>
+        <span class="stat-label">No-Shows (−20 each)</span>
+      </div>
+      <div class="stat-card stat-card-warn">
+        <span class="stat-number">{{ profile.lateCancellationCount }}</span>
+        <span class="stat-label">Late Cancellations (−5/−10)</span>
+      </div>
+    </div>
+
+    <!-- Score guide -->
+    <div class="score-guide mt-4">
+      <h5>How your score changes</h5>
+      <table class="table table-sm">
+        <thead class="table-light">
+          <tr><th>Event</th><th>Delta</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Check-in on time</td><td class="text-success fw-bold">+5</td></tr>
+          <tr><td>Cancellation &lt; 24h before start</td><td class="text-warning fw-bold">−5</td></tr>
+          <tr><td>Cancellation &lt; 2h before start</td><td class="text-danger fw-bold">−10</td></tr>
+          <tr><td>No-show (auto-detected after 30 min)</td><td class="text-danger fw-bold">−20</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

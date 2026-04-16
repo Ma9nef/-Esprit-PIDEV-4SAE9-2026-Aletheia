@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="ya manef salla7">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/node_modules/.package-lock.json" afterDir="false" />
-    </list>
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="ya manef salla7" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,8 +24,8 @@
   </component>
   <component name="CopilotUserSelectedModel">
     <selectedModels>
-      <entry key="chat-panel" value="Auto" />
-      <entry key="agent-panel" value="Auto" />
+      <entry key="chat-panel" value="Claude Haiku 4.5" />
+      <entry key="agent-panel" value="Claude Haiku 4.5" />
     </selectedModels>
   </component>
   <component name="EmbeddingIndexingInfo">
@@ -40,6 +33,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -60,13 +54,6 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
-  </component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -85,10 +72,26 @@
     &quot;HTTP Request.All in test.executor&quot;: &quot;Run&quot;,
     &quot;HTTP Request.test | Checkout — triggers Feign call to user-service.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.All in Library.executor&quot;: &quot;Debug&quot;,
+    &quot;Maven.ApiGateway [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ApiGateway [install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.Library [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.Library [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.Library [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ResourceManagement [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ResourceManagement [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ResourceManagement [org.apache.maven.plugins:maven-clean-plugin:3.5.0:clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ResourceManagement [site].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.ResourceManagement [test].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.config-server [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.config-server [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.courses [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.courses [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.eureka [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.eureka [install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.event-microservice [clean].executor&quot;: &quot;Run&quot;,
     &quot;Maven.event-microservice [install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.user-service [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.user-service [install].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
@@ -101,6 +104,7 @@
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
     &quot;Spring Boot.AletheiaApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ConfigServerApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.CoursesApplication.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.CoursesService.executor&quot;: &quot;Run&quot;,
     &quot;Spring Boot.EurekaApplication.executor&quot;: &quot;Run&quot;,
@@ -128,6 +132,7 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;rest.client.default.execution.environment&quot;: &quot;dev&quot;,
     &quot;run.configurations.included.in.services&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\IntelliJ IDEA 2025.2.1\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -164,21 +169,19 @@
           <value>
             <map>
               <entry key="ApiGatewayApplication" value="STOPPED" />
-              <entry key="CoursesService" value="STOPPED" />
+              <entry key="ConfigServerApplication" value="STOPPED" />
+              <entry key="CoursesService" value="FAILED" />
               <entry key="EurekaApplication" value="STOPPED" />
-              <entry key="EventsService" value="STOPPED" />
               <entry key="LibraryService" value="STOPPED" />
-              <entry key="OffersService" value="FAILED" />
               <entry key="ResourcesService" value="STOPPED" />
               <entry key="UserService" value="STOPPED" />
-              <entry key="configServer" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.All in test">
+  <component name="RunManager" selected="Spring Boot.ConfigServerApplication">
     <configuration name="All in test" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/backend/test.http">
       <method v="2" />
     </configuration>
@@ -211,6 +214,19 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ConfigServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <module name="config-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.configserver.ConfigServerApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.esprit.microservice.configserver.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CoursesService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="courses" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.courses.CoursesApplication" />
@@ -225,13 +241,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EventsService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="event-microservice" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.events.EventsApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="LibraryService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Library" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.library.LibraryApplication" />
@@ -239,7 +248,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="OffersService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <configuration name="OfferApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="offer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.offer.OfferApplication" />
       <method v="2">
@@ -260,15 +269,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="configServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="config-server" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="tn.esprit.spring.aletheia.configserver.ConfigServerApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.ConfigServerApplication" />
         <item itemvalue="JUnit.All in Library" />
         <item itemvalue="HTTP Request.test | Checkout — triggers Feign call to user-service" />
         <item itemvalue="HTTP Request.All in test" />
@@ -308,6 +311,18 @@
       <workItem from="1775738256558" duration="116000" />
       <workItem from="1775739518788" duration="8925000" />
       <workItem from="1775945468588" duration="1081000" />
+      <workItem from="1775948875606" duration="691000" />
+      <workItem from="1775988986152" duration="5463000" />
+      <workItem from="1776070841663" duration="1945000" />
+      <workItem from="1776073110551" duration="1886000" />
+      <workItem from="1776123694806" duration="2558000" />
+      <workItem from="1776208277025" duration="3284000" />
+      <workItem from="1776235424444" duration="422000" />
+      <workItem from="1776243360891" duration="8981000" />
+      <workItem from="1776269314018" duration="2787000" />
+      <workItem from="1776288234229" duration="2550000" />
+      <workItem from="1776296084653" duration="8629000" />
+      <workItem from="1776338851980" duration="523000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
@@ -442,6 +457,12 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/frontend/node_modules/piscina/test/fixtures/notify-then-sleep-or.js" />
+        <option value="$PROJECT_DIR$/frontend/node_modules/piscina/test/fixtures/wait-for-notify.js" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
