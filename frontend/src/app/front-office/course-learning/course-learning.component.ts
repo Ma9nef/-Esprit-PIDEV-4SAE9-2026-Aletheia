@@ -4,6 +4,7 @@ import { CourseApiService, LessonLearningDTO, CourseProgressDTO } from '../../co
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-course-learning',
   templateUrl: './course-learning.component.html',
   styleUrls: ['./course-learning.component.css']

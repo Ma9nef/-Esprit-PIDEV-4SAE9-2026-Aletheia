@@ -10,6 +10,7 @@ import tn.platform.user.auth.service.AuthService;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class AuthController {
 

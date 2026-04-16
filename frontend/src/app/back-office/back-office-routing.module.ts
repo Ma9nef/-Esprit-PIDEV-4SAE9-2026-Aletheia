@@ -31,12 +31,22 @@ import { AllocationDetailComponent } from './allocations/allocation-detail/alloc
 import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
 import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
 import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
+import { MaintenanceListComponent } from './resources/maintenance-list/maintenance-list.component';
+import { MaintenanceFormComponent } from './resources/maintenance-form/maintenance-form.component';
+import { WaitlistComponent } from './resources/waitlist/waitlist.component';
+import { ResourceStatisticsComponent } from './resources/resource-statistics/resource-statistics.component';
+import { InstructorReservationsComponent } from './resources/instructor-reservations/instructor-reservations.component';
+import { TeachingSessionsComponent } from './resources/teaching-sessions/teaching-sessions.component';
+import { ReservationApprovalComponent } from './resources/reservation-approval/reservation-approval.component';
+import { CheckinComponent } from './resources/checkin/checkin.component';
+import { SwapRequestsComponent } from './resources/swap-requests/swap-requests.component';
+import { InstructorProfileComponent } from './resources/instructor-profile/instructor-profile.component';
+import { PlatformStatsComponent } from './resources/platform-stats/platform-stats.component';
+import { LeaderboardComponent } from './resources/leaderboard/leaderboard.component';
+import { UnderutilizedComponent } from './resources/underutilized/underutilized.component';
 import { ManageLoansComponent } from './manage-loans/manage-loans.component';
 import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
 import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
-import { TrainingProgramComponent } from './training-program/training-program.component';
-import { TrainingProgramSessionsComponent } from './training-program-sessions/training-program-sessions.component';
-import { AdminTrainingProgramComponent } from './admin-training-program/admin-training-program.component';
 const routes: Routes = [
   {
     path: 'admin',
@@ -46,7 +56,6 @@ const routes: Routes = [
       { path: 'users', component: ManageUsersComponent },
       { path: 'manage-users', component: ManageUsersComponent },
       { path: 'courses', component: ManageCoursesComponent },
-      { path: 'training-programs', component: AdminTrainingProgramComponent },
       { path: 'offers', component: AdminOffersComponent },
       { path: 'offers/new', component: OfferFormComponent },
       { path: 'offers/:id', component: OfferFormComponent },
@@ -71,7 +80,18 @@ const routes: Routes = [
    { path: 'resources', component: ManageResourcesComponent },
    { path: 'resources/new', component: ResourceFormComponent },
    { path: 'resources/edit/:id', component: ResourceFormComponent },
+   { path: 'resources/reservations/pending', component: ReservationApprovalComponent },
+   { path: 'resources/checkin/:id', component: CheckinComponent },
+   { path: 'resources/checkin', component: CheckinComponent },
+   { path: 'resources/swaps', component: SwapRequestsComponent },
+   { path: 'resources/stats/platform', component: PlatformStatsComponent },
+   { path: 'resources/stats/leaderboard', component: LeaderboardComponent },
+   { path: 'resources/stats/underutilized', component: UnderutilizedComponent },
    { path: 'resources/:id/reservations', component: ResourceReservationsComponent },
+   { path: 'resources/:id/maintenance', component: MaintenanceListComponent },
+   { path: 'resources/:id/maintenance/new', component: MaintenanceFormComponent },
+   { path: 'resources/:id/waitlist', component: WaitlistComponent },
+   { path: 'resources/:id/statistics', component: ResourceStatisticsComponent },
    { path: 'loans', component: ManageLoansComponent },
    { path: 'borrowing-policies', component: BorrowingPoliciesComponent },
    { path: 'inventory-analytics', component: InventoryAnalyticsComponent },
@@ -84,12 +104,16 @@ const routes: Routes = [
     children: [
       { path: '', component: TrainerHomeComponent },
       { path: 'manage-courses', component: ManageCoursesComponent },
+      { path: 'reservations', component: InstructorReservationsComponent },
+      { path: 'sessions', component: TeachingSessionsComponent },
+      { path: 'swaps', component: SwapRequestsComponent },
+      { path: 'profile', component: InstructorProfileComponent },
+      { path: 'checkin/:id', component: CheckinComponent },
+      { path: 'checkin', component: CheckinComponent },
       { path: 'create-course', component: CreateCourseComponent },
       { path: 'courses/:courseId/lessons/create', component: CreateLessonComponent },
       { path: 'courses/:courseId/builder', component: CourseBuilderComponent },
-      { path: 'courses/:id/edit', component: EditCourseComponent },
-      { path: 'training-programs', component: TrainingProgramComponent },
-      { path: 'training-programs/:formationId/sessions', component: TrainingProgramSessionsComponent }
+      { path: 'courses/:id/edit', component: EditCourseComponent }
     ]
   },
   { path: 'manage-users', component: ManageUsersComponent },

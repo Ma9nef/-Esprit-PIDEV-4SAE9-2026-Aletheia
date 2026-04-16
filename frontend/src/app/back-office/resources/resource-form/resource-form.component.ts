@@ -5,6 +5,7 @@ import { ResourceManagementService } from '../resource-management.service';
 import { ResourceType } from '../resource-management.model';
 
 @Component({
+  standalone: false,
   selector: 'app-resource-form',
   templateUrl: './resource-form.component.html',
   styleUrls: ['./resource-form.component.css']
@@ -16,9 +17,12 @@ export class ResourceFormComponent implements OnInit {
   loading = false;
   saving = false;
   error = '';
+  attributesError = '';
   metadataError = '';
 
-  readonly types: ResourceType[] = ['ROOM', 'DEVICE', 'MATERIAL'];
+  readonly types: ResourceType[] = [
+    'CLASSROOM', 'COMPUTER_LAB', 'AMPHITHEATER', 'PROJECTOR', 'LAPTOP', 'SMARTBOARD', 'CUSTOM_EQUIPMENT'
+  ];
 
   constructor(
     private fb: FormBuilder,
@@ -30,8 +34,18 @@ export class ResourceFormComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      type: ['ROOM', Validators.required],
+      type: ['CLASSROOM', Validators.required],
       capacity: [null],
+      description: [''],
+      location: [''],
+      requiresApproval: [false],
+      conditionScore: [5, [Validators.min(1), Validators.max(5)]],
+      maxReservationHours: [null],
+      minAdvanceBookingHours: [null],
+      maxAdvanceBookingDays: [null],
+      concurrentCapacity: [null],
+      tagsRaw: [''],
+      attributesRaw: [''],
       metadataRaw: ['']
     });
 
@@ -46,15 +60,21 @@ export class ResourceFormComponent implements OnInit {
     this.loading = true;
     this.svc.getResource(this.resourceId).subscribe({
       next: (r) => {
-        let metaRaw = '';
-        if (r.metadataJson) {
-          try { metaRaw = JSON.stringify(JSON.parse(r.metadataJson), null, 2); } catch { metaRaw = r.metadataJson; }
+        let attrsRaw = '';
+        if (r.attributes) {
+          try { attrsRaw = JSON.stringify(r.attributes, null, 2); } catch { attrsRaw = ''; }
         }
         this.form.patchValue({
           name: r.name,
           type: r.type,
           capacity: r.capacity,
-          metadataRaw: metaRaw
+          description: r.description || '',
+          location: r.location || '',
+          requiresApproval: r.requiresApproval,
+          conditionScore: r.conditionScore,
+          maxReservationHours: r.maxReservationHours || null,
+          minAdvanceBookingHours: r.minAdvanceBookingHours || null,
+          attributesRaw: attrsRaw
         });
         this.loading = false;
       },
@@ -65,29 +85,37 @@ export class ResourceFormComponent implements OnInit {
     });
   }
 
-  validateMetadata(): Record<string, any> | null {
-    const raw = this.form.value.metadataRaw?.trim();
+  validateAttributes(): Record<string, any> | null {
+    const raw = this.form.value.attributesRaw?.trim();
     if (!raw) return null;
     try {
       return JSON.parse(raw);
     } catch {
-      this.metadataError = 'Invalid JSON in metadata field.';
+      this.attributesError = 'Invalid JSON in attributes field.';
       return undefined as any;
     }
   }
 
   submit(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
-    this.metadataError = '';
+    this.attributesError = '';
 
-    const metadata = this.validateMetadata();
-    if (this.metadataError) return;
+    const attributes = this.validateAttributes();
+    if (this.attributesError) return;
 
-    const payload = {
+    const payload: any = {
       name: this.form.value.name.trim(),
       type: this.form.value.type as ResourceType,
       capacity: this.form.value.capacity ? Number(this.form.value.capacity) : null,
-      ...(metadata ? { metadata } : {})
+      requiresApproval: this.form.value.requiresApproval,
+      conditionScore: Number(this.form.value.conditionScore),
+      ...(this.form.value.description?.trim() ? { description: this.form.value.description.trim() } : {}),
+      ...(this.form.value.location?.trim() ? { location: this.form.value.location.trim() } : {}),
+      ...(this.form.value.maxReservationHours !== null && this.form.value.maxReservationHours !== ''
+        ? { maxReservationHours: Number(this.form.value.maxReservationHours) } : {}),
+      ...(this.form.value.minAdvanceBookingHours !== null && this.form.value.minAdvanceBookingHours !== ''
+        ? { minAdvanceBookingHours: Number(this.form.value.minAdvanceBookingHours) } : {}),
+      ...(attributes ? { attributes } : {})
     };
 
     this.saving = true;
@@ -106,9 +134,25 @@ export class ResourceFormComponent implements OnInit {
 
   cancel(): void { this.router.navigate(['/back-office/admin/resources']); }
 
+  typeIcon(type: ResourceType): string {
+    const map: Record<ResourceType, string> = {
+      CLASSROOM: '🏫', COMPUTER_LAB: '🖥️', AMPHITHEATER: '🎭',
+      PROJECTOR: '📽️', LAPTOP: '💻', SMARTBOARD: '📋', CUSTOM_EQUIPMENT: '🔧'
+    };
+    return map[type] ?? '📦';
+  }
+
   typeLabel(type: ResourceType): string {
-    const map: Record<ResourceType, string> = { ROOM: 'Room', DEVICE: 'Device', MATERIAL: 'Material' };
-    return map[type];
+    const map: Record<ResourceType, string> = {
+      CLASSROOM: 'Classroom',
+      COMPUTER_LAB: 'Computer Lab',
+      AMPHITHEATER: 'Amphitheater',
+      PROJECTOR: 'Projector',
+      LAPTOP: 'Laptop',
+      SMARTBOARD: 'Smartboard',
+      CUSTOM_EQUIPMENT: 'Custom Equipment'
+    };
+    return map[type] ?? type;
   }
 
   get f() { return this.form.controls; }

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EventService } from '../event.service';
 
 @Component({
+  standalone: false,
   selector: 'app-event-form',
   templateUrl: './event-form.component.html',
   styleUrls: ['./event-form.component.css']

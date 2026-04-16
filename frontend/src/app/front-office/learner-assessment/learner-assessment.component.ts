@@ -4,6 +4,7 @@ import { CourseApiService } from '../../core/services/course-api.service';
 import confetti from 'canvas-confetti';
 
 @Component({
+  standalone: false,
   selector: 'app-learner-assessment',
   templateUrl: './learner-assessment.component.html',
   styleUrls: ['./learner-assessment.component.css'],

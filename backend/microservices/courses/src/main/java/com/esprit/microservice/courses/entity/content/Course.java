@@ -47,7 +47,37 @@ public class Course {
     @Column(name = "image_url")
     private String imageUrl;
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getSubCategory() {
+        return subCategory;
+    }
+
+    public void setSubCategory(String subCategory) {
+        this.subCategory = subCategory;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
 
     @Column(length = 120)
     private String topic; // optionnel
@@ -93,150 +123,40 @@ public class Course {
 
     // ======= GETTERS / SETTERS =======
 
+    public Long getId() { return id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getTitle() {
-        return title;
-    }
+    public String getInstructorName() { return instructorName; }
+    public void setInstructorName(String instructorName) { this.instructorName = instructorName; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public Long getInstructorId() { return instructorId; }
+    public void setInstructorId(Long instructorId) { this.instructorId = instructorId; }
 
-    public String getDescription() {
-        return description;
-    }
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public Integer getDurationHours() { return durationHours; }
+    public void setDurationHours(Integer durationHours) { this.durationHours = durationHours; }
 
-    public String getInstructorName() {
-        return instructorName;
-    }
+    public boolean isArchived() { return archived; }
+    public void setArchived(boolean archived) { this.archived = archived; }
 
-    public void setInstructorName(String instructorName) {
-        this.instructorName = instructorName;
-    }
+    public LocalDateTime getArchivedAt() { return archivedAt; }
+    public void setArchivedAt(LocalDateTime archivedAt) { this.archivedAt = archivedAt; }
 
-    public Long getInstructorId() {
-        return instructorId;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    public void setInstructorId(Long instructorId) {
-        this.instructorId = instructorId;
-    }
+    public List<CourseModule> getModules() { return modules; }
+    public void setModules(List<CourseModule> modules) { this.modules = modules; }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getDurationHours() {
-        return durationHours;
-    }
-
-    public void setDurationHours(Integer durationHours) {
-        this.durationHours = durationHours;
-    }
-
-    public boolean isArchived() {
-        return archived;
-    }
-
-    public void setArchived(boolean archived) {
-        this.archived = archived;
-    }
-
-    public LocalDateTime getArchivedAt() {
-        return archivedAt;
-    }
-
-    public void setArchivedAt(LocalDateTime archivedAt) {
-        this.archivedAt = archivedAt;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getSubCategory() {
-        return subCategory;
-    }
-
-    public void setSubCategory(String subCategory) {
-        this.subCategory = subCategory;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<Assessment> getAssessments() {
-        return assessments;
-    }
-
-    public void setAssessments(List<Assessment> assessments) {
-        this.assessments = assessments;
-    }
-
-    public List<CourseModule> getModules() {
-        return modules;
-    }
-
-    public void setModules(List<CourseModule> modules) {
-        this.modules = modules;
-    }
-
-    public List<Lesson> getLessons() {
-        return lessons;
-    }
-
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
-    }
+    public List<Lesson> getLessons() { return lessons; }
+    public void setLessons(List<Lesson> lessons) { this.lessons = lessons; }
 }
 
 

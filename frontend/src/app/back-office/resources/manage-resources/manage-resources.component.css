@@ -298,6 +298,11 @@
 .badge-device  { background: #d1fae5; color: #065f46; }
 .badge-material{ background: #fef3c7; color: #92400e; }
 
+.badge-operational { background: #d1fae5; color: #065f46; }
+.badge-under-maintenance { background: #fef3c7; color: #92400e; }
+.badge-out-of-service { background: #fef2f2; color: #991b1b; }
+.badge-scheduled-maintenance { background: #dbeafe; color: #1d4ed8; }
+
 /* ─── Action buttons ─────────────────────────────────────────────────────── */
 .rm-actions {
   text-align: right;
@@ -320,6 +325,12 @@
 }
 
 .rm-action-btn svg { width: .85rem; height: .85rem; }
+
+.rm-action-stats { background: #f5f3ff; color: #7c3aed; }
+.rm-action-stats:hover { background: #7c3aed; color: #fff; }
+
+.rm-action-maintenance { background: #fffbeb; color: #d97706; }
+.rm-action-maintenance:hover { background: #d97706; color: #fff; }
 
 .rm-action-reservations { background: var(--rm-accent-soft); color: var(--rm-accent); }
 .rm-action-reservations:hover { background: var(--rm-accent); color: #fff; }
