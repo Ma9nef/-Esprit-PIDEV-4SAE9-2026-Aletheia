@@ -89,7 +89,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.AletheiaApplication">
+  <component name="RunManager">
     <configuration name="AletheiaApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="user-service" />
