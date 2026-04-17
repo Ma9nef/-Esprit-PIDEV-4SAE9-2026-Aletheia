@@ -1,78 +1,130 @@
 package com.esprit.microservice.resourcemanagement.repository;
 
 import com.esprit.microservice.resourcemanagement.entity.Reservation;
+import com.esprit.microservice.resourcemanagement.entity.enums.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Repository
 public interface ReservationRepository extends JpaRepository<Reservation, UUID> {
 
     Optional<Reservation> findByIdAndDeletedFalse(UUID id);
 
-    List<Reservation> findByEventIdAndDeletedFalse(String eventId);
+    List<Reservation> findByInstructorIdAndDeletedFalse(String instructorId);
 
-    List<Reservation> findByResourceIdAndDeletedFalseOrderByStartTimeAsc(UUID resourceId);
+    List<Reservation> findByRecurrenceGroupIdAndDeletedFalse(UUID recurrenceGroupId);
 
-    /**
-     * CRITICAL CONFLICT DETECTION QUERY
-     *
-     * Detects overlapping reservations using the interval overlap formula:
-     *   existing.startTime < new.endTime AND existing.endTime > new.startTime
-     *
-     * Only considers active (non-cancelled, non-deleted) reservations.
-     * Uses a native FOR UPDATE (without alias) for MariaDB/MySQL compatibility —
-     * Hibernate 7 generates "FOR UPDATE OF alias" in JPQL mode which MariaDB rejects.
-     */
-    @Query(value = """
-            SELECT * FROM reservations
-            WHERE resource_id = :resourceId
-              AND deleted = false
-              AND status <> 'CANCELLED'
-              AND start_time < :endTime
-              AND end_time > :startTime
-            FOR UPDATE
-            """, nativeQuery = true)
-    List<Reservation> findConflictingReservationsWithLock(
-            @Param("resourceId") UUID resourceId,
-            @Param("startTime") LocalDateTime startTime,
-            @Param("endTime") LocalDateTime endTime);
+    Optional<Reservation> findByQrCodeTokenAndDeletedFalse(String qrCodeToken);
 
-    /**
-     * Non-locking version for read-only conflict checks (e.g., availability queries).
-     */
     @Query("""
             SELECT r FROM Reservation r
-            WHERE r.resourceId = :resourceId
+            WHERE r.resource.id = :resourceId
               AND r.deleted = false
-              AND r.status <> com.esprit.microservice.resourcemanagement.entity.enums.ReservationStatus.CANCELLED
+              AND r.status NOT IN ('CANCELLED', 'REJECTED')
               AND r.startTime < :endTime
               AND r.endTime > :startTime
             """)
     List<Reservation> findConflictingReservations(
             @Param("resourceId") UUID resourceId,
             @Param("startTime") LocalDateTime startTime,
-            @Param("endTime") LocalDateTime endTime);
+            @Param("endTime") LocalDateTime endTime
+    );
 
-    /**
-     * Count conflicting reservations — useful for quick boolean availability checks.
-     */
-    @Query("""
-            SELECT COUNT(r) FROM Reservation r
-            WHERE r.resourceId = :resourceId
+    // Native query avoids Hibernate 7's "FOR UPDATE OF alias" syntax which MariaDB rejects.
+    @Query(value = """
+            SELECT r.* FROM reservations r
+            WHERE r.resource_id = :resourceId
               AND r.deleted = false
-              AND r.status <> com.esprit.microservice.resourcemanagement.entity.enums.ReservationStatus.CANCELLED
+              AND r.status NOT IN ('CANCELLED', 'REJECTED')
+              AND r.start_time < :endTime
+              AND r.end_time > :startTime
+            FOR UPDATE
+            """, nativeQuery = true)
+    List<Reservation> findConflictingReservationsWithLock(
+            @Param("resourceId") UUID resourceId,
+            @Param("startTime") LocalDateTime startTime,
+            @Param("endTime") LocalDateTime endTime
+    );
+
+    @Query("""
+            SELECT r FROM Reservation r
+            WHERE r.status = 'CONFIRMED'
+              AND r.deleted = false
+              AND r.noShow = false
+              AND r.checkedInAt IS NULL
+              AND r.startTime <= :cutoff
+            """)
+    List<Reservation> findConfirmedWithoutCheckIn(@Param("cutoff") LocalDateTime cutoff);
+
+    @Query("""
+            SELECT r FROM Reservation r
+            WHERE r.status = 'PENDING'
+              AND r.deleted = false
+              AND r.expiresAt < :now
+            """)
+    List<Reservation> findExpiredPendingReservations(@Param("now") LocalDateTime now);
+
+    @Query("""
+            SELECT r FROM Reservation r
+            WHERE r.instructorId = :instructorId
+              AND r.deleted = false
+              AND r.status NOT IN ('CANCELLED', 'REJECTED')
               AND r.startTime < :endTime
               AND r.endTime > :startTime
             """)
-    long countConflictingReservations(
-            @Param("resourceId") UUID resourceId,
+    List<Reservation> findActiveByInstructorAndTimeRange(
+            @Param("instructorId") String instructorId,
             @Param("startTime") LocalDateTime startTime,
-            @Param("endTime") LocalDateTime endTime);
+            @Param("endTime") LocalDateTime endTime
+    );
+
+    // Statistics queries
+    @Query("""
+            SELECT r.status, COUNT(r) FROM Reservation r
+            WHERE r.resource.id = :resourceId
+              AND r.deleted = false
+              AND r.startTime >= :from
+              AND r.endTime <= :to
+            GROUP BY r.status
+            """)
+    List<Object[]> countByStatusForResource(
+            @Param("resourceId") UUID resourceId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
+    );
+
+    @Query("""
+            SELECT SUM(FUNCTION('TIMESTAMPDIFF', HOUR, r.startTime, r.endTime))
+            FROM Reservation r
+            WHERE r.resource.id = :resourceId
+              AND r.status = 'CONFIRMED'
+              AND r.deleted = false
+              AND r.startTime >= :from
+              AND r.endTime <= :to
+            """)
+    Long totalConfirmedHours(
+            @Param("resourceId") UUID resourceId,
+            @Param("from") LocalDateTime from,
+            @Param("to") LocalDateTime to
+    );
+
+    List<Reservation> findByStatusAndDeletedFalse(ReservationStatus status);
+
+    @Query("""
+            SELECT r FROM Reservation r
+            WHERE r.instructorId <> :excludeInstructorId
+              AND r.deleted = false
+              AND r.status = 'CONFIRMED'
+              AND r.endTime > :now
+            ORDER BY r.startTime ASC
+            """)
+    List<Reservation> findSwappableReservations(
+            @Param("excludeInstructorId") String excludeInstructorId,
+            @Param("now") LocalDateTime now
+    );
 }

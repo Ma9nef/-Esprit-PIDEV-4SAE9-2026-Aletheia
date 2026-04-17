@@ -8,6 +8,7 @@ import {
 } from '../../core/services/inventory-analytics.service';
 
 @Component({
+  standalone: false,
   selector: 'app-inventory-analytics',
   templateUrl: './inventory-analytics.component.html',
   styleUrls: ['./inventory-analytics.component.css']

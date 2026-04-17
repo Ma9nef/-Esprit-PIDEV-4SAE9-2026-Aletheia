@@ -9,9 +9,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -21,63 +23,54 @@ public class ResourceController {
 
     private final ResourceService resourceService;
 
-    /**
-     * POST /api/resources
-     * Create a new resource (room, device, or material).
-     * Requires ADMIN role.
-     */
-    @PostMapping
-    public ResponseEntity<ResourceResponse> createResource(
-            @Valid @RequestBody CreateResourceRequest request) {
-        ResourceResponse response = resourceService.createResource(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
-    }
-
-    /**
-     * GET /api/resources
-     * Retrieve all active resources, optionally filtered by type.
-     */
     @GetMapping
-    public ResponseEntity<List<ResourceResponse>> getAllResources(
-            @RequestParam(required = false) ResourceType type) {
-        List<ResourceResponse> resources;
-        if (type != null) {
-            resources = resourceService.getResourcesByType(type);
-        } else {
-            resources = resourceService.getAllResources();
-        }
-        return ResponseEntity.ok(resources);
+    public ResponseEntity<List<ResourceResponse>> list() {
+        return ResponseEntity.ok(resourceService.listAll());
     }
 
-    /**
-     * GET /api/resources/{id}
-     * Retrieve a single resource by its UUID.
-     */
+    @GetMapping("/search")
+    public ResponseEntity<List<ResourceResponse>> search(
+            @RequestParam(required = false) ResourceType type,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) Integer minCapacity) {
+        return ResponseEntity.ok(resourceService.search(type, location, minCapacity));
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<ResourceResponse> getResourceById(@PathVariable UUID id) {
-        return ResponseEntity.ok(resourceService.getResourceById(id));
+    public ResponseEntity<ResourceResponse> getById(@PathVariable UUID id) {
+        return ResponseEntity.ok(resourceService.getById(id));
     }
 
-    /**
-     * PUT /api/resources/{id}
-     * Update an existing resource. Partial updates supported.
-     * Requires ADMIN role.
-     */
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResourceResponse> create(@Valid @RequestBody CreateResourceRequest req) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(resourceService.create(req));
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity<ResourceResponse> updateResource(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResourceResponse> update(
             @PathVariable UUID id,
-            @Valid @RequestBody UpdateResourceRequest request) {
-        return ResponseEntity.ok(resourceService.updateResource(id, request));
+            @Valid @RequestBody UpdateResourceRequest req) {
+        return ResponseEntity.ok(resourceService.update(id, req));
     }
 
-    /**
-     * DELETE /api/resources/{id}
-     * Soft-delete a resource.
-     * Requires ADMIN role.
-     */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteResource(@PathVariable UUID id) {
-        resourceService.deleteResource(id);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        resourceService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/condition")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ResourceResponse> updateCondition(
+            @PathVariable UUID id,
+            @RequestBody Map<String, Integer> body) {
+        Integer score = body.get("score");
+        if (score == null) {
+            throw new IllegalArgumentException("Field 'score' is required");
+        }
+        return ResponseEntity.ok(resourceService.updateConditionScore(id, score));
     }
 }

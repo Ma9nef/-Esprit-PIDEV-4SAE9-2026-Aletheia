@@ -4,6 +4,7 @@ import { AssessmentService } from '../../core/services/assessment.service';
 import { CourseApiService, CoursePublicDTO } from '../../core/services/course-api.service';
 
 @Component({
+  standalone: false,
   selector: 'app-assessment-form',
   templateUrl: './assessment-form.component.html',
   styleUrls: ['./assessment-form.component.css']

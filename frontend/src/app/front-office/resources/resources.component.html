@@ -3,7 +3,7 @@
   <!-- ── Hero ───────────────────────────────────────────────────────────────── -->
   <div class="res-hero">
     <h1 class="res-hero-title">Book a Resource</h1>
-    <p class="res-hero-sub">Rooms, devices and materials — find what you need and reserve it in seconds.</p>
+    <p class="res-hero-sub">Rooms, labs and equipment — find what you need and reserve it in seconds.</p>
     <div class="res-stats" *ngIf="allResources.length > 0">
       <div class="res-stat-pill">
         <span class="res-stat-icon">🏛️</span>
@@ -15,22 +15,22 @@
       <div class="res-stat-pill">
         <span class="res-stat-icon">🏫</span>
         <div class="res-stat-body">
-          <span class="res-stat-number">{{ countByType('ROOM') }}</span>
+          <span class="res-stat-number">{{ countByType('CLASSROOM', 'AMPHITHEATER') }}</span>
           <span class="res-stat-label">Rooms</span>
+        </div>
+      </div>
+      <div class="res-stat-pill">
+        <span class="res-stat-icon">🖥️</span>
+        <div class="res-stat-body">
+          <span class="res-stat-number">{{ countByType('COMPUTER_LAB') }}</span>
+          <span class="res-stat-label">Computer Labs</span>
         </div>
       </div>
       <div class="res-stat-pill">
         <span class="res-stat-icon">💻</span>
         <div class="res-stat-body">
-          <span class="res-stat-number">{{ countByType('DEVICE') }}</span>
-          <span class="res-stat-label">Devices</span>
-        </div>
-      </div>
-      <div class="res-stat-pill">
-        <span class="res-stat-icon">📦</span>
-        <div class="res-stat-body">
-          <span class="res-stat-number">{{ countByType('MATERIAL') }}</span>
-          <span class="res-stat-label">Materials</span>
+          <span class="res-stat-number">{{ countByType('PROJECTOR', 'LAPTOP', 'SMARTBOARD', 'CUSTOM_EQUIPMENT') }}</span>
+          <span class="res-stat-label">Equipment</span>
         </div>
       </div>
     </div>
@@ -55,9 +55,9 @@
           <label>Resource type (optional)</label>
           <select class="res-select" [(ngModel)]="checkType">
             <option value="">Any type</option>
-            <option value="ROOM">🏫 Room</option>
-            <option value="DEVICE">💻 Device</option>
-            <option value="MATERIAL">📦 Material</option>
+            <option *ngFor="let t of types" [value]="t" [hidden]="t === 'ALL'">
+              {{ typeIcon($any(t)) }} {{ typeLabel($any(t)) }}
+            </option>
           </select>
         </div>
         <button class="res-btn-primary res-check-btn" (click)="checkAvailability()" [disabled]="checkLoading">
@@ -70,34 +70,57 @@
 
     <!-- Availability result -->
     <div class="res-avail-result" *ngIf="checkResult">
-      <div class="res-avail-badge" [class.res-avail-yes]="checkResult.available" [class.res-avail-no]="!checkResult.available">
+      <div class="res-avail-badge"
+           [class.res-avail-yes]="checkResult.available"
+           [class.res-avail-no]="!checkResult.available">
         <span *ngIf="checkResult.available">✅ Resources available for this time slot</span>
-        <span *ngIf="!checkResult.available">❌ No resources available — conflicts found</span>
+        <span *ngIf="!checkResult.available">
+          ❌ Conflicts found
+          <span *ngIf="checkResult.nextFreeWindow" class="res-next-free">
+            — next free window: {{ checkResult.nextFreeWindow }}
+          </span>
+        </span>
       </div>
 
       <!-- Available resources -->
       <div *ngIf="checkResult.availableResources.length > 0" class="res-avail-list">
         <h3>Available resources</h3>
         <div class="res-card-grid">
-          <div class="res-card res-card-available" [attr.data-type]="r.type" *ngFor="let r of checkResult.availableResources">
+          <div class="res-card res-card-available" [attr.data-type]="r.type"
+               *ngFor="let r of checkResult.availableResources">
             <div class="res-card-icon">{{ typeIcon(r.type) }}</div>
             <div class="res-card-info">
               <span class="res-card-name">{{ r.name }}</span>
               <span class="res-card-type">{{ typeLabel(r.type) }}</span>
               <span class="res-card-cap" *ngIf="r.capacity">Capacity: {{ r.capacity }}</span>
+              <span class="res-card-cap" *ngIf="r.location">📍 {{ r.location }}</span>
             </div>
-            <button class="res-btn-reserve" (click)="openReservationForm(r.id)">Reserve</button>
+            <div class="res-card-btns">
+              <button class="res-btn-reserve" (click)="openReservationModal(r.id)">Reserve</button>
+              <button class="res-btn-recur" (click)="openRecurrenceModal(r.id)">Recurring</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Conflicts -->
-      <div *ngIf="checkResult.conflictingReservations.length > 0" class="res-conflicts">
-        <h3>Conflicting reservations</h3>
-        <div class="res-conflict-item" *ngFor="let c of checkResult.conflictingReservations">
-          <span class="res-conflict-event">Event: {{ c.eventId }}</span>
-          <span class="res-conflict-time">{{ c.startTime | date:'short' }} → {{ c.endTime | date:'short' }}</span>
-          <span class="res-conflict-status res-status" [ngClass]="'res-status-' + c.status.toLowerCase()">{{ c.status }}</span>
+      <!-- Smart suggestions -->
+      <div *ngIf="!checkResult.available && checkResult.suggestions.length > 0" class="res-suggestions">
+        <h3>Smart suggestions</h3>
+        <div class="res-card-grid">
+          <div class="res-card" [attr.data-type]="s.resource.type"
+               *ngFor="let s of checkResult.suggestions">
+            <div class="res-card-icon">{{ typeIcon(s.resource.type) }}</div>
+            <div class="res-card-info">
+              <span class="res-card-name">{{ s.resource.name }}</span>
+              <span class="res-card-type">{{ typeLabel(s.resource.type) }}</span>
+              <span class="res-card-cap" *ngIf="s.resource.capacity">Capacity: {{ s.resource.capacity }}</span>
+              <span class="res-suggest-reason">{{ s.reason }}</span>
+            </div>
+            <div class="res-card-btns">
+              <button class="res-btn-reserve" (click)="openReservationModal(s.resource.id)">Reserve</button>
+              <button class="res-btn-recur" (click)="openRecurrenceModal(s.resource.id)">Recurring</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -151,23 +174,26 @@
           <span class="res-card-name">{{ r.name }}</span>
           <span class="res-card-type">{{ typeLabel(r.type) }}</span>
           <span class="res-card-cap" *ngIf="r.capacity">Capacity: {{ r.capacity }}</span>
-          <span class="res-card-cap" *ngIf="!r.capacity">No capacity limit</span>
+          <span class="res-card-cap" *ngIf="r.location">📍 {{ r.location }}</span>
+          <span class="res-card-approval" *ngIf="r.requiresApproval">Requires approval</span>
         </div>
-        <button class="res-btn-reserve" (click)="openReservationForm(r.id)">Reserve</button>
+        <div class="res-card-btns">
+          <button class="res-btn-reserve" (click)="openReservationModal(r.id)">Reserve</button>
+          <button class="res-btn-recur" (click)="openRecurrenceModal(r.id)">Recurring</button>
+        </div>
       </div>
     </div>
   </section>
 
 </div>
 
-<!-- ── Reservation modal ──────────────────────────────────────────────────── -->
-<div class="res-modal-overlay" *ngIf="showReservationForm" (click)="closeReservationForm()">
+<!-- ── Single reservation modal ──────────────────────────────────────────── -->
+<div class="res-modal-overlay" *ngIf="showReservationModal" (click)="closeReservationModal()">
   <div class="res-modal" (click)="$event.stopPropagation()">
     <div class="res-modal-header">
       <h3>Reserve Resource</h3>
-      <button class="res-modal-close" (click)="closeReservationForm()">✕</button>
+      <button class="res-modal-close" (click)="closeReservationModal()">✕</button>
     </div>
-
     <div class="res-modal-body">
       <div class="res-modal-resource" *ngIf="resourceById(reservationResourceId) as r">
         <span class="res-modal-resource-icon">{{ typeIcon(r.type) }}</span>
@@ -176,10 +202,17 @@
       </div>
 
       <div class="res-form-group">
-        <label>Event ID <span class="res-required">*</span></label>
-        <input type="text" class="res-input" placeholder="e.g. EVT-2026-001"
-               [(ngModel)]="reservationEventId" />
-        <small class="res-hint">The event or session this reservation is linked to.</small>
+        <label>Teaching Session <span class="res-required">*</span></label>
+        <div *ngIf="sessionsLoading" class="res-hint">Loading your sessions…</div>
+        <select *ngIf="!sessionsLoading" class="res-select" [(ngModel)]="reservationSessionId">
+          <option value="">— Select a session —</option>
+          <option *ngFor="let s of mySessions" [value]="s.id">
+            {{ s.title }}{{ s.courseCode ? ' (' + s.courseCode + ')' : '' }} — {{ s.sessionType }}
+          </option>
+        </select>
+        <small *ngIf="!sessionsLoading && mySessions.length === 0" class="res-hint">
+          No sessions found. Go to <strong>My Sessions</strong> in the trainer dashboard to create one first.
+        </small>
       </div>
 
       <div class="res-form-row">
@@ -197,11 +230,114 @@
       <div class="res-alert-error" *ngIf="reservationError">{{ reservationError }}</div>
 
       <div class="res-modal-actions">
-        <button class="res-btn-ghost" (click)="closeReservationForm()">Cancel</button>
+        <button class="res-btn-ghost" (click)="closeReservationModal()">Cancel</button>
         <button class="res-btn-primary" (click)="submitReservation()" [disabled]="reservationLoading">
           <span *ngIf="!reservationLoading">Confirm Reservation</span>
           <span *ngIf="reservationLoading">Submitting…</span>
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Recurring reservation modal ────────────────────────────────────────── -->
+<div class="res-modal-overlay" *ngIf="showRecurrenceModal" (click)="closeRecurrenceModal()">
+  <div class="res-modal res-modal-wide" (click)="$event.stopPropagation()">
+    <div class="res-modal-header res-modal-header-recur">
+      <h3>Recurring Booking</h3>
+      <button class="res-modal-close" (click)="closeRecurrenceModal()">✕</button>
+    </div>
+    <div class="res-modal-body">
+      <div class="res-modal-resource" *ngIf="resourceById(recurrenceResourceId) as r">
+        <span class="res-modal-resource-icon">{{ typeIcon(r.type) }}</span>
+        <span class="res-modal-resource-name">{{ r.name }}</span>
+        <span class="res-modal-resource-type">{{ typeLabel(r.type) }}</span>
+      </div>
+
+      <div *ngIf="!recurrenceResult">
+        <div class="res-form-group">
+          <label>Teaching Session <span class="res-required">*</span></label>
+          <div *ngIf="sessionsLoading" class="res-hint">Loading your sessions…</div>
+          <select *ngIf="!sessionsLoading" class="res-select" [(ngModel)]="recurrenceSessionId">
+            <option value="">— Select a session —</option>
+            <option *ngFor="let s of mySessions" [value]="s.id">
+              {{ s.title }}{{ s.courseCode ? ' (' + s.courseCode + ')' : '' }} — {{ s.sessionType }}
+            </option>
+          </select>
+          <small *ngIf="!sessionsLoading && mySessions.length === 0" class="res-hint">
+            No sessions found. Create one in the trainer dashboard first.
+          </small>
+        </div>
+
+        <div class="res-form-row">
+          <div class="res-form-group">
+            <label>Pattern <span class="res-required">*</span></label>
+            <select class="res-select" [(ngModel)]="recurrencePattern">
+              <option *ngFor="let p of recurrencePatterns" [value]="p">{{ patternLabel(p) }}</option>
+            </select>
+          </div>
+          <div class="res-form-group">
+            <label>Day of week <span class="res-required">*</span></label>
+            <select class="res-select" [(ngModel)]="recurrenceDayOfWeek">
+              <option *ngFor="let d of daysOfWeek" [value]="d">{{ dayLabel(d) }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="res-form-row">
+          <div class="res-form-group">
+            <label>Slot start time <span class="res-required">*</span></label>
+            <input type="time" class="res-input" [(ngModel)]="recurrenceSlotStart" />
+          </div>
+          <div class="res-form-group">
+            <label>Slot end time <span class="res-required">*</span></label>
+            <input type="time" class="res-input" [(ngModel)]="recurrenceSlotEnd" />
+          </div>
+          <div class="res-form-group">
+            <label>Series end date <span class="res-required">*</span></label>
+            <input type="date" class="res-input" [(ngModel)]="recurrenceEndDate" />
+          </div>
+        </div>
+
+        <div class="res-alert-error" *ngIf="recurrenceError">{{ recurrenceError }}</div>
+
+        <div class="res-modal-actions">
+          <button class="res-btn-ghost" (click)="closeRecurrenceModal()">Cancel</button>
+          <button class="res-btn-primary res-btn-recur-submit"
+                  (click)="submitRecurringReservation()"
+                  [disabled]="recurrenceLoading">
+            <span *ngIf="!recurrenceLoading">Book Series</span>
+            <span *ngIf="recurrenceLoading">Booking…</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Result after booking -->
+      <div *ngIf="recurrenceResult" class="res-recur-result">
+        <div class="res-recur-summary">
+          <div class="res-recur-stat res-recur-stat-ok">
+            <span class="res-recur-num">{{ recurrenceResult.totalBooked }}</span>
+            <span>slots booked</span>
+          </div>
+          <div class="res-recur-stat res-recur-stat-skip">
+            <span class="res-recur-num">{{ recurrenceResult.totalAttempted - recurrenceResult.totalBooked }}</span>
+            <span>skipped</span>
+          </div>
+        </div>
+
+        <div *ngIf="recurrenceResult.skippedSlots.length > 0" class="res-recur-skipped">
+          <p class="res-recur-skipped-title">Skipped slots:</p>
+          <div *ngFor="let s of recurrenceResult.skippedSlots" class="res-recur-skip-row">
+            <span class="res-recur-skip-date">{{ s.date }}</span>
+            <span class="res-recur-skip-reason">{{ s.reason }}</span>
+          </div>
+        </div>
+
+        <p class="res-hint mt-2">Series ID: <code>{{ recurrenceResult.groupId }}</code></p>
+
+        <div class="res-modal-actions">
+          <button class="res-btn-primary" (click)="closeRecurrenceModal()">Done</button>
+        </div>
       </div>
     </div>
   </div>

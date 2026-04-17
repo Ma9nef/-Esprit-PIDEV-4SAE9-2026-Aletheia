@@ -92,6 +92,9 @@ public class ApiGatewayApplication {
                         .uri("lb://EVENT-MICROSERVICE"))
 
                 // RESOURCE MANAGEMENT SERVICE
+                .route("resource-management-rm", r -> r.path("/api/rm/**")
+                        .filters(f -> f.rewritePath("/api/rm/(?<segment>.*)", "/api/${segment}"))
+                        .uri("lb://RESOURCEMANAGEMENT"))
                 .route("resources-service", r -> r.path("/api/resources/**")
                         .uri("lb://RESOURCEMANAGEMENT"))
                 .route("reservations-service", r -> r.path("/api/reservations/**")

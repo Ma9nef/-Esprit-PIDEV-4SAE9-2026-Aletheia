@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { FrontOfficeModule } from './front-office/front-office.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule,  } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
 import { CommonModule } from '@angular/common';
@@ -27,10 +27,10 @@ import { ListSubmissionsComponent } from './list-submissions/list-submissions.co
     SharedModule,
     FormsModule,
     AuthModule,
-    HttpClientModule,
     CommonModule
   ],
   providers: [
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

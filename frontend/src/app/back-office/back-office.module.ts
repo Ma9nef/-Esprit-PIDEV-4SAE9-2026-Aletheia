@@ -28,6 +28,19 @@ import { AllocationListComponent } from './allocations/allocation-list/allocatio
 import { ManageResourcesComponent } from './resources/manage-resources/manage-resources.component';
 import { ResourceFormComponent } from './resources/resource-form/resource-form.component';
 import { ResourceReservationsComponent } from './resources/resource-reservations/resource-reservations.component';
+import { MaintenanceListComponent } from './resources/maintenance-list/maintenance-list.component';
+import { MaintenanceFormComponent } from './resources/maintenance-form/maintenance-form.component';
+import { WaitlistComponent } from './resources/waitlist/waitlist.component';
+import { ResourceStatisticsComponent } from './resources/resource-statistics/resource-statistics.component';
+import { InstructorReservationsComponent } from './resources/instructor-reservations/instructor-reservations.component';
+import { TeachingSessionsComponent } from './resources/teaching-sessions/teaching-sessions.component';
+import { ReservationApprovalComponent } from './resources/reservation-approval/reservation-approval.component';
+import { CheckinComponent } from './resources/checkin/checkin.component';
+import { SwapRequestsComponent } from './resources/swap-requests/swap-requests.component';
+import { InstructorProfileComponent } from './resources/instructor-profile/instructor-profile.component';
+import { PlatformStatsComponent } from './resources/platform-stats/platform-stats.component';
+import { LeaderboardComponent } from './resources/leaderboard/leaderboard.component';
+import { UnderutilizedComponent } from './resources/underutilized/underutilized.component';
 import { ManageLoansComponent } from './manage-loans/manage-loans.component';
 import { BorrowingPoliciesComponent } from './borrowing-policies/borrowing-policies.component';
 import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-analytics.component';
@@ -52,6 +65,19 @@ import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-ana
     ManageResourcesComponent,
     ResourceFormComponent,
     ResourceReservationsComponent,
+    MaintenanceListComponent,
+    MaintenanceFormComponent,
+    WaitlistComponent,
+    ResourceStatisticsComponent,
+    InstructorReservationsComponent,
+    TeachingSessionsComponent,
+    ReservationApprovalComponent,
+    CheckinComponent,
+    SwapRequestsComponent,
+    InstructorProfileComponent,
+    PlatformStatsComponent,
+    LeaderboardComponent,
+    UnderutilizedComponent,
     ManageLoansComponent,
     BorrowingPoliciesComponent,
     InventoryAnalyticsComponent,

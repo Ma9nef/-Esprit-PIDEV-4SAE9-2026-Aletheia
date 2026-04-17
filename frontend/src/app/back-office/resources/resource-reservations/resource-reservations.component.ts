@@ -4,6 +4,7 @@ import { ResourceManagementService } from '../resource-management.service';
 import { Resource, Reservation, ReservationStatus } from '../resource-management.model';
 
 @Component({
+  standalone: false,
   selector: 'app-resource-reservations',
   templateUrl: './resource-reservations.component.html',
   styleUrls: ['./resource-reservations.component.css']
@@ -16,8 +17,16 @@ export class ResourceReservationsComponent implements OnInit {
   error = '';
   selectedStatus: ReservationStatus | 'ALL' = 'ALL';
   actionInProgress: string | null = null;
+  showRejectModal = false;
+  rejectReason = '';
+  pendingRejectId = '';
+  showCancelModal = false;
+  cancelReason = '';
+  pendingCancelId = '';
 
-  readonly statusOptions: Array<ReservationStatus | 'ALL'> = ['ALL', 'PENDING', 'CONFIRMED', 'CANCELLED'];
+  readonly statusOptions: Array<ReservationStatus | 'ALL'> = [
+    'ALL', 'PENDING', 'CONFIRMED', 'CHECKED_IN', 'COMPLETED', 'REJECTED', 'CANCELLED'
+  ];
 
   constructor(
     private svc: ResourceManagementService,
@@ -31,7 +40,7 @@ export class ResourceReservationsComponent implements OnInit {
     this.svc.getResource(id).subscribe({
       next: (r) => {
         this.resource = r;
-        this.loadReservations(id);
+        this.loadReservations();
       },
       error: () => {
         this.error = 'Resource not found.';
@@ -40,43 +49,17 @@ export class ResourceReservationsComponent implements OnInit {
     });
   }
 
-  loadReservations(resourceId: string): void {
-    // Load all reservations; the API returns them by eventId,
-    // so we fetch the raw reservations list from the resource detail approach.
-    // The check-availability endpoint is read-only; to list all reservations for
-    // a specific resource we use a general GET /reservations and filter client-side.
-    // For a full integration the backend could expose GET /resources/{id}/reservations.
-    // Using eventId '' returns empty; instead we leverage the resource's existing data.
-    this.svc.getReservationsByEventId('').subscribe({
-      next: () => {},
-      error: () => {}
-    });
-    // Workaround: fetch reservations using check-availability to surface conflicts,
-    // and supplement with createReservation flow. For now we call the service and
-    // filter by resourceId on whatever comes back.
-    // Best approach: direct call with resourceId filter using existing endpoint pattern.
-    this.fetchReservationsForResource(resourceId);
-  }
-
-  fetchReservationsForResource(resourceId: string): void {
-    // Use check-availability with a broad window to discover active reservations
-    const start = new Date();
-    start.setMonth(start.getMonth() - 6);
-    const end = new Date();
-    end.setMonth(end.getMonth() + 6);
-
-    this.svc.checkAvailability({
-      resourceId,
-      startTime: start.toISOString().slice(0, 16),
-      endTime: end.toISOString().slice(0, 16)
-    }).subscribe({
-      next: (resp) => {
-        this.reservations = resp.conflictingReservations || [];
+  loadReservations(): void {
+    // Admin loads all reservations; filter by resource client-side
+    this.svc.getReservations().subscribe({
+      next: (all) => {
+        this.reservations = this.resource
+          ? all.filter(r => r.resourceId === this.resource!.id)
+          : all;
         this.applyFilter();
         this.loading = false;
       },
       error: () => {
-        // If check-availability fails, show empty state gracefully
         this.reservations = [];
         this.applyFilter();
         this.loading = false;
@@ -85,35 +68,63 @@ export class ResourceReservationsComponent implements OnInit {
   }
 
   applyFilter(): void {
-    if (this.selectedStatus === 'ALL') {
-      this.filtered = [...this.reservations];
-    } else {
-      this.filtered = this.reservations.filter(r => r.status === this.selectedStatus);
-    }
+    this.filtered = this.selectedStatus === 'ALL'
+      ? [...this.reservations]
+      : this.reservations.filter(r => r.status === this.selectedStatus);
   }
 
   onStatusChange(): void { this.applyFilter(); }
 
-  confirm(id: string): void {
+  approve(id: string): void {
     this.actionInProgress = id;
-    this.svc.confirmReservation(id).subscribe({
-      next: (updated) => {
-        this.updateLocal(updated);
-        this.actionInProgress = null;
-      },
+    this.svc.approveReservation(id).subscribe({
+      next: (updated) => { this.updateLocal(updated); this.actionInProgress = null; },
       error: () => { this.actionInProgress = null; }
     });
   }
 
-  cancel(id: string): void {
-    this.actionInProgress = id;
-    this.svc.cancelReservation(id).subscribe({
-      next: (updated) => {
-        this.updateLocal(updated);
-        this.actionInProgress = null;
-      },
+  openRejectModal(id: string): void {
+    this.pendingRejectId = id;
+    this.rejectReason = '';
+    this.showRejectModal = true;
+  }
+
+  closeRejectModal(): void {
+    this.showRejectModal = false;
+    this.pendingRejectId = '';
+    this.rejectReason = '';
+  }
+
+  confirmReject(): void {
+    if (!this.pendingRejectId) return;
+    this.actionInProgress = this.pendingRejectId;
+    this.svc.rejectReservation(this.pendingRejectId, this.rejectReason).subscribe({
+      next: (updated) => { this.updateLocal(updated); this.actionInProgress = null; },
       error: () => { this.actionInProgress = null; }
     });
+    this.closeRejectModal();
+  }
+
+  openCancelModal(id: string): void {
+    this.pendingCancelId = id;
+    this.cancelReason = '';
+    this.showCancelModal = true;
+  }
+
+  closeCancelModal(): void {
+    this.showCancelModal = false;
+    this.pendingCancelId = '';
+    this.cancelReason = '';
+  }
+
+  confirmCancel(): void {
+    if (!this.pendingCancelId) return;
+    this.actionInProgress = this.pendingCancelId;
+    this.svc.cancelReservation(this.pendingCancelId, this.cancelReason || undefined).subscribe({
+      next: (updated) => { this.updateLocal(updated); this.actionInProgress = null; },
+      error: () => { this.actionInProgress = null; }
+    });
+    this.closeCancelModal();
   }
 
   private updateLocal(updated: Reservation): void {
@@ -126,7 +137,12 @@ export class ResourceReservationsComponent implements OnInit {
 
   statusLabel(status: ReservationStatus): string {
     const map: Record<ReservationStatus, string> = {
-      PENDING: 'Pending', CONFIRMED: 'Confirmed', CANCELLED: 'Cancelled'
+      PENDING: 'Pending',
+      CONFIRMED: 'Confirmed',
+      CHECKED_IN: 'Checked In',
+      COMPLETED: 'Completed',
+      REJECTED: 'Rejected',
+      CANCELLED: 'Cancelled'
     };
     return map[status];
   }
@@ -135,6 +151,9 @@ export class ResourceReservationsComponent implements OnInit {
     const map: Record<ReservationStatus, string> = {
       PENDING: 'status-pending',
       CONFIRMED: 'status-confirmed',
+      CHECKED_IN: 'status-checked-in',
+      COMPLETED: 'status-completed',
+      REJECTED: 'status-rejected',
       CANCELLED: 'status-cancelled'
     };
     return map[status];

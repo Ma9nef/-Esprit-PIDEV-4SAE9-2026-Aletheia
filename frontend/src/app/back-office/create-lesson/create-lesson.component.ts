@@ -13,6 +13,7 @@ type LessonUpsertPayload = {
 };
 
 @Component({
+  standalone: false,
   selector: 'app-create-lesson',
   templateUrl: './create-lesson.component.html',
   styleUrls: ['./create-lesson.component.css']

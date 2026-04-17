@@ -3,11 +3,16 @@ import { ResourceManagementService } from '../../back-office/resources/resource-
 import {
   Resource,
   ResourceType,
-  AvailabilityCheckResponse,
-  CreateReservationRequest
+  TeachingSession,
+  AvailabilityResponse,
+  CreateReservationRequest,
+  CreateRecurrenceReservationRequest,
+  RecurrenceBookingResult,
+  RecurrencePattern
 } from '../../back-office/resources/resource-management.model';
 
 @Component({
+  standalone: false,
   selector: 'app-resources',
   templateUrl: './resources.component.html',
   styleUrls: ['./resources.component.css']
@@ -21,30 +26,63 @@ export class ResourcesComponent implements OnInit {
   resourcesError = '';
   searchTerm = '';
   selectedType: ResourceType | 'ALL' = 'ALL';
-  readonly types: Array<ResourceType | 'ALL'> = ['ALL', 'ROOM', 'DEVICE', 'MATERIAL'];
+
+  readonly types: Array<ResourceType | 'ALL'> = [
+    'ALL', 'CLASSROOM', 'COMPUTER_LAB', 'AMPHITHEATER',
+    'PROJECTOR', 'LAPTOP', 'SMARTBOARD', 'CUSTOM_EQUIPMENT'
+  ];
 
   // ── Availability check state ──────────────────────────────────────────────
   checkStartTime = '';
   checkEndTime = '';
   checkType: ResourceType | '' = '';
-  checkResult: AvailabilityCheckResponse | null = null;
+  checkResult: AvailabilityResponse | null = null;
   checkLoading = false;
   checkError = '';
 
-  // ── Reservation state ─────────────────────────────────────────────────────
+  // ── My sessions (for reservation dropdowns) ───────────────────────────────
+  mySessions: TeachingSession[] = [];
+  sessionsLoading = false;
+
+  // ── Single reservation modal ──────────────────────────────────────────────
+  showReservationModal = false;
   reservationResourceId = '';
-  reservationEventId = '';
+  reservationSessionId = '';
   reservationStart = '';
   reservationEnd = '';
   reservationLoading = false;
   reservationSuccess = '';
   reservationError = '';
-  showReservationForm = false;
+
+  // ── Recurring booking modal ───────────────────────────────────────────────
+  showRecurrenceModal = false;
+  recurrenceResourceId = '';
+  recurrenceSessionId = '';
+  recurrencePattern: RecurrencePattern = 'WEEKLY';
+  recurrenceDayOfWeek = 'MONDAY';
+  recurrenceSlotStart = '';
+  recurrenceSlotEnd = '';
+  recurrenceEndDate = '';
+  recurrenceLoading = false;
+  recurrenceResult: RecurrenceBookingResult | null = null;
+  recurrenceError = '';
+
+  readonly recurrencePatterns: RecurrencePattern[] = ['WEEKLY', 'BIWEEKLY'];
+  readonly daysOfWeek = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'];
 
   constructor(private svc: ResourceManagementService) {}
 
   ngOnInit(): void {
     this.loadResources();
+    this.loadMySessions();
+  }
+
+  loadMySessions(): void {
+    this.sessionsLoading = true;
+    this.svc.getMySessions().subscribe({
+      next: (data) => { this.mySessions = data; this.sessionsLoading = false; },
+      error: () => { this.sessionsLoading = false; }
+    });
   }
 
   // ── Resources ──────────────────────────────────────────────────────────────
@@ -80,23 +118,8 @@ export class ResourcesComponent implements OnInit {
   onSearch(): void { this.applyFilters(); }
   onTypeChange(): void { this.applyFilters(); }
 
-  countByType(type: ResourceType): number {
-    return this.allResources.filter(r => r.type === type).length;
-  }
-
-  typeIcon(type: ResourceType): string {
-    const map: Record<ResourceType, string> = { ROOM: '🏫', DEVICE: '💻', MATERIAL: '📦' };
-    return map[type];
-  }
-
-  typeLabel(type: ResourceType): string {
-    const map: Record<ResourceType, string> = { ROOM: 'Room', DEVICE: 'Device', MATERIAL: 'Material' };
-    return map[type];
-  }
-
-  tabIcon(type: ResourceType | 'ALL'): string {
-    const map: Record<string, string> = { ALL: '🌐', ROOM: '🏫', DEVICE: '💻', MATERIAL: '📦' };
-    return map[type] ?? '';
+  countByType(...types: ResourceType[]): number {
+    return this.allResources.filter(r => types.includes(r.type)).length;
   }
 
   // ── Availability check ────────────────────────────────────────────────────
@@ -114,19 +137,11 @@ export class ResourcesComponent implements OnInit {
     this.checkError = '';
     this.checkResult = null;
 
-    const payload: any = {
-      startTime: this.checkStartTime,
-      endTime: this.checkEndTime
-    };
-    if (this.checkType) {
-      payload.type = this.checkType;
-    }
+    const payload: any = { startTime: this.checkStartTime, endTime: this.checkEndTime };
+    if (this.checkType) payload.type = this.checkType;
 
     this.svc.checkAvailability(payload).subscribe({
-      next: (res) => {
-        this.checkResult = res;
-        this.checkLoading = false;
-      },
+      next: (res) => { this.checkResult = res; this.checkLoading = false; },
       error: () => {
         this.checkError = 'Availability check failed. Please try again.';
         this.checkLoading = false;
@@ -134,22 +149,24 @@ export class ResourcesComponent implements OnInit {
     });
   }
 
-  openReservationForm(resourceId: string): void {
+  // ── Single reservation ────────────────────────────────────────────────────
+
+  openReservationModal(resourceId: string): void {
     this.reservationResourceId = resourceId;
-    this.reservationEventId = '';
+    this.reservationSessionId = '';
     this.reservationStart = this.checkStartTime;
     this.reservationEnd = this.checkEndTime;
     this.reservationSuccess = '';
     this.reservationError = '';
-    this.showReservationForm = true;
+    this.showReservationModal = true;
   }
 
-  closeReservationForm(): void {
-    this.showReservationForm = false;
+  closeReservationModal(): void {
+    this.showReservationModal = false;
   }
 
   submitReservation(): void {
-    if (!this.reservationEventId.trim() || !this.reservationStart || !this.reservationEnd) {
+    if (!this.reservationSessionId.trim() || !this.reservationStart || !this.reservationEnd) {
       this.reservationError = 'Please fill in all fields.';
       return;
     }
@@ -160,7 +177,7 @@ export class ResourcesComponent implements OnInit {
 
     const req: CreateReservationRequest = {
       resourceId: this.reservationResourceId,
-      eventId: this.reservationEventId.trim(),
+      teachingSessionId: this.reservationSessionId.trim(),
       startTime: this.reservationStart,
       endTime: this.reservationEnd
     };
@@ -171,12 +188,9 @@ export class ResourcesComponent implements OnInit {
 
     this.svc.createReservation(req).subscribe({
       next: (res) => {
-        this.reservationSuccess = `Reservation created successfully! ID: ${res.id}. Status: ${res.status}.`;
+        this.reservationSuccess = `Reservation created! Status: ${res.status}.${res.status === 'PENDING' ? ' Awaiting admin approval.' : ''}`;
         this.reservationLoading = false;
-        // Refresh availability result if open
-        if (this.checkResult) {
-          this.checkAvailability();
-        }
+        if (this.checkResult) this.checkAvailability();
       },
       error: (err) => {
         this.reservationError = err?.error?.message || 'Failed to create reservation. The resource may already be booked.';
@@ -185,7 +199,93 @@ export class ResourcesComponent implements OnInit {
     });
   }
 
+  // ── Recurring reservation ─────────────────────────────────────────────────
+
+  openRecurrenceModal(resourceId: string): void {
+    this.recurrenceResourceId = resourceId;
+    this.recurrenceSessionId = '';
+    this.recurrencePattern = 'WEEKLY';
+    this.recurrenceDayOfWeek = 'MONDAY';
+    this.recurrenceSlotStart = '';
+    this.recurrenceSlotEnd = '';
+    this.recurrenceEndDate = '';
+    this.recurrenceResult = null;
+    this.recurrenceError = '';
+    this.showRecurrenceModal = true;
+  }
+
+  closeRecurrenceModal(): void {
+    this.showRecurrenceModal = false;
+  }
+
+  submitRecurringReservation(): void {
+    if (!this.recurrenceSessionId.trim() || !this.recurrenceSlotStart || !this.recurrenceSlotEnd || !this.recurrenceEndDate) {
+      this.recurrenceError = 'Please fill in all required fields.';
+      return;
+    }
+
+    const req: CreateRecurrenceReservationRequest = {
+      resourceId: this.recurrenceResourceId,
+      teachingSessionId: this.recurrenceSessionId.trim(),
+      pattern: this.recurrencePattern,
+      dayOfWeek: this.recurrenceDayOfWeek,
+      slotStartTime: this.recurrenceSlotStart + ':00',
+      slotEndTime: this.recurrenceSlotEnd + ':00',
+      endDate: this.recurrenceEndDate
+    };
+
+    this.recurrenceLoading = true;
+    this.recurrenceError = '';
+    this.recurrenceResult = null;
+
+    this.svc.createRecurringReservation(req).subscribe({
+      next: (result) => {
+        this.recurrenceResult = result;
+        this.recurrenceLoading = false;
+      },
+      error: (err) => {
+        this.recurrenceError = err?.error?.message || 'Failed to create recurring reservation.';
+        this.recurrenceLoading = false;
+      }
+    });
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+
   resourceById(id: string): Resource | undefined {
     return this.allResources.find(r => r.id === id);
+  }
+
+  typeIcon(type: ResourceType): string {
+    const map: Record<ResourceType, string> = {
+      CLASSROOM: '🏫', COMPUTER_LAB: '🖥️', AMPHITHEATER: '🎭',
+      PROJECTOR: '📽️', LAPTOP: '💻', SMARTBOARD: '📋', CUSTOM_EQUIPMENT: '🔧'
+    };
+    return map[type] ?? '📦';
+  }
+
+  typeLabel(type: ResourceType): string {
+    const map: Record<ResourceType, string> = {
+      CLASSROOM: 'Classroom', COMPUTER_LAB: 'Computer Lab', AMPHITHEATER: 'Amphitheater',
+      PROJECTOR: 'Projector', LAPTOP: 'Laptop', SMARTBOARD: 'Smartboard', CUSTOM_EQUIPMENT: 'Custom Equipment'
+    };
+    return map[type] ?? type;
+  }
+
+  tabIcon(type: ResourceType | 'ALL'): string {
+    if (type === 'ALL') return '🌐';
+    return this.typeIcon(type as ResourceType);
+  }
+
+  dayLabel(day: string): string {
+    const map: Record<string, string> = {
+      MONDAY: 'Monday', TUESDAY: 'Tuesday', WEDNESDAY: 'Wednesday',
+      THURSDAY: 'Thursday', FRIDAY: 'Friday', SATURDAY: 'Saturday', SUNDAY: 'Sunday'
+    };
+    return map[day] ?? day;
+  }
+
+  patternLabel(p: RecurrencePattern): string {
+    return p === 'WEEKLY' ? 'Weekly' : 'Bi-weekly';
   }
 }

@@ -1,3 +1,18 @@
+<section class="trainer-hero" aria-label="Trainer overview">
+  <div class="trainer-hero__content">
+    <h1 class="trainer-hero__title">Instructor Workspace</h1>
+    <p class="trainer-hero__subtitle">Manage courses, follow learner activity, and track reservations in one place.</p>
+  </div>
+  <div class="trainer-hero__actions">
+    <a routerLink="/back-office/trainer/manage-courses" class="trainer-hero__btn trainer-hero__btn--primary">
+      Manage courses
+    </a>
+    <a routerLink="/back-office/trainer/reservations" class="trainer-hero__btn trainer-hero__btn--secondary">
+      View reservations
+    </a>
+  </div>
+</section>
+
 <section class="stats-row" aria-label="Overview statistics">
 
     <!-- Total Students -->
@@ -79,10 +94,15 @@
         <h2 id="courses-table-heading" class="section-title">
           Course Management
         </h2>
-  
-        <a routerLink="/back-office/trainer/manage-courses" class="link-more">
+
+        <div>
+          <a routerLink="/back-office/trainer/reservations" class="link-more" style="margin-right:12px;">
+            My reservations
+          </a>
+          <a routerLink="/back-office/trainer/manage-courses" class="link-more">
           Manage all
-        </a>
+          </a>
+        </div>
       </div>
   
       <div class="table-wrap">

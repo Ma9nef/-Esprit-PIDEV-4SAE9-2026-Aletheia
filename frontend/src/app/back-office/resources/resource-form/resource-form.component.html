@@ -48,9 +48,7 @@
             class="rf-type-option"
             [class.rf-type-option--active]="form.value.type === t">
             <input type="radio" formControlName="type" [value]="t" hidden>
-            <span class="rf-type-icon">
-              {{ t === 'ROOM' ? '🏫' : t === 'DEVICE' ? '💻' : '📦' }}
-            </span>
+            <span class="rf-type-icon">{{ typeIcon(t) }}</span>
             <span class="rf-type-label">{{ typeLabel(t) }}</span>
           </label>
         </div>
@@ -67,6 +65,94 @@
           placeholder="e.g. 30"
           min="1">
         <p class="rf-field-hint">Maximum number of people or units. Leave blank if not applicable.</p>
+      </div>
+
+      <!-- Description -->
+      <div class="rf-field">
+        <label class="rf-label" for="description">Description <span class="rf-hint">(optional)</span></label>
+        <textarea
+          id="description"
+          class="rf-textarea rf-textarea--short"
+          formControlName="description"
+          rows="3"
+          placeholder="Brief description of the resource"></textarea>
+      </div>
+
+      <!-- Location -->
+      <div class="rf-field">
+        <label class="rf-label" for="location">Location <span class="rf-hint">(optional)</span></label>
+        <input
+          id="location"
+          type="text"
+          class="rf-input"
+          formControlName="location"
+          placeholder="e.g. Building A, Floor 2">
+      </div>
+
+      <!-- Tags -->
+      <div class="rf-field">
+        <label class="rf-label" for="tags">Tags <span class="rf-hint">(optional)</span></label>
+        <input
+          id="tags"
+          type="text"
+          class="rf-input"
+          formControlName="tagsRaw"
+          placeholder="e.g. wifi, projector, whiteboard">
+        <p class="rf-field-hint">Comma-separated tags for filtering</p>
+      </div>
+
+      <!-- Booking Policies Section -->
+      <div class="rf-section-divider">
+        <h3 class="rf-section-title">Booking Policies</h3>
+      </div>
+
+      <div class="rf-field-row">
+        <div class="rf-field rf-field-half">
+          <label class="rf-label" for="maxReservationHours">Max Reservation Hours <span class="rf-hint">(optional)</span></label>
+          <input
+            id="maxReservationHours"
+            type="number"
+            class="rf-input rf-input--short"
+            formControlName="maxReservationHours"
+            placeholder="e.g. 8">
+          <p class="rf-field-hint">Maximum booking duration in hours</p>
+        </div>
+
+        <div class="rf-field rf-field-half">
+          <label class="rf-label" for="minAdvanceBookingHours">Min Advance Booking Hours <span class="rf-hint">(optional)</span></label>
+          <input
+            id="minAdvanceBookingHours"
+            type="number"
+            class="rf-input rf-input--short"
+            formControlName="minAdvanceBookingHours"
+            placeholder="e.g. 1">
+          <p class="rf-field-hint">Minimum hours in advance to book</p>
+        </div>
+      </div>
+
+      <div class="rf-field-row">
+        <div class="rf-field rf-field-half">
+          <label class="rf-label" for="maxAdvanceBookingDays">Max Advance Booking Days <span class="rf-hint">(optional)</span></label>
+          <input
+            id="maxAdvanceBookingDays"
+            type="number"
+            class="rf-input rf-input--short"
+            formControlName="maxAdvanceBookingDays"
+            placeholder="e.g. 30">
+          <p class="rf-field-hint">How far in advance bookings are allowed (days)</p>
+        </div>
+
+        <div class="rf-field rf-field-half">
+          <label class="rf-label" for="concurrentCapacity">Concurrent Capacity <span class="rf-hint">(optional)</span></label>
+          <input
+            id="concurrentCapacity"
+            type="number"
+            class="rf-input rf-input--short"
+            formControlName="concurrentCapacity"
+            placeholder="e.g. 1"
+            min="1">
+          <p class="rf-field-hint">How many simultaneous bookings are allowed</p>
+        </div>
       </div>
 
       <!-- Metadata (JSON) -->

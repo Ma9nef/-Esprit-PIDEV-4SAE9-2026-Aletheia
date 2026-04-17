@@ -1,0 +1,124 @@
+<div class="mf-container">
+
+  <!-- Page header -->
+  <div class="mf-header">
+    <button class="mf-back-btn" (click)="cancel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to maintenance
+    </button>
+    <h1 class="mf-title">Schedule Maintenance</h1>
+  </div>
+
+  <!-- Loader while fetching -->
+  <div class="mf-loader" *ngIf="loading">
+    <div class="mf-spinner"></div>
+    <p>Loading resource…</p>
+  </div>
+
+  <!-- Error banner -->
+  <div class="mf-alert-error" *ngIf="error">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    {{ error }}
+  </div>
+
+  <!-- Form card -->
+  <div class="mf-card" *ngIf="!loading">
+    <div class="mf-card-header" *ngIf="resource">
+      <p class="mf-card-subtitle">Resource: <strong>{{ resource.name }}</strong></p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+
+      <!-- Title -->
+      <div class="mf-field">
+        <label class="mf-label" for="title">Title <span class="mf-required">*</span></label>
+        <input
+          id="title"
+          type="text"
+          class="mf-input"
+          [class.mf-input--error]="f['title'].invalid && f['title'].touched"
+          formControlName="title"
+          placeholder="e.g. HVAC system inspection">
+        <span class="mf-field-error" *ngIf="f['title'].touched && f['title'].hasError('required')">Title is required.</span>
+        <span class="mf-field-error" *ngIf="f['title'].touched && f['title'].hasError('minlength')">Minimum 3 characters.</span>
+      </div>
+
+      <!-- Description -->
+      <div class="mf-field">
+        <label class="mf-label" for="description">Description <span class="mf-hint">(optional)</span></label>
+        <textarea
+          id="description"
+          class="mf-textarea mf-textarea--short"
+          formControlName="description"
+          rows="3"
+          placeholder="Details about the maintenance work to be performed"></textarea>
+      </div>
+
+      <!-- Start Time -->
+      <div class="mf-field">
+        <label class="mf-label" for="startTime">Start Time <span class="mf-required">*</span></label>
+        <input
+          id="startTime"
+          type="datetime-local"
+          class="mf-input"
+          [class.mf-input--error]="f['startTime'].invalid && f['startTime'].touched"
+          formControlName="startTime">
+        <span class="mf-field-error" *ngIf="f['startTime'].touched && f['startTime'].hasError('required')">Start time is required.</span>
+      </div>
+
+      <!-- End Time -->
+      <div class="mf-field">
+        <label class="mf-label" for="endTime">End Time <span class="mf-required">*</span></label>
+        <input
+          id="endTime"
+          type="datetime-local"
+          class="mf-input"
+          [class.mf-input--error]="f['endTime'].invalid && f['endTime'].touched"
+          formControlName="endTime">
+        <span class="mf-field-error" *ngIf="f['endTime'].touched && f['endTime'].hasError('required')">End time is required.</span>
+      </div>
+
+      <!-- Performed By -->
+      <div class="mf-field">
+        <label class="mf-label" for="performedBy">Performed By <span class="mf-hint">(optional)</span></label>
+        <input
+          id="performedBy"
+          type="text"
+          class="mf-input"
+          formControlName="performedBy"
+          placeholder="Name of technician or team">
+      </div>
+
+      <!-- Notes -->
+      <div class="mf-field">
+        <label class="mf-label" for="notes">Notes <span class="mf-hint">(optional)</span></label>
+        <textarea
+          id="notes"
+          class="mf-textarea"
+          formControlName="notes"
+          rows="4"
+          placeholder="Additional information about the maintenance work"></textarea>
+      </div>
+
+      <!-- Auto Cancel Reservations -->
+      <div class="mf-field mf-field-checkbox">
+        <label class="mf-checkbox-label">
+          <input type="checkbox" formControlName="autoCancelReservations" class="mf-checkbox">
+          <span class="mf-checkbox-text">Automatically cancel conflicting reservations</span>
+        </label>
+        <p class="mf-field-hint">If checked, any reservations during this maintenance window will be cancelled and users notified.</p>
+      </div>
+
+      <!-- Actions -->
+      <div class="mf-form-actions">
+        <button type="button" class="mf-btn-ghost" (click)="cancel()">Cancel</button>
+        <button type="submit" class="mf-btn-primary" [disabled]="saving">
+          <span class="mf-spinner mf-spinner--sm" *ngIf="saving"></span>
+          {{ saving ? 'Scheduling…' : 'Schedule Maintenance' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

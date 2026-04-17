@@ -1,0 +1,131 @@
+:host {
+  display: block;
+}
+
+.landing-page {
+  width: 100%;
+}
+
+.landing-section {
+  width: 100%;
+}
+
+.landing-section--hero {
+  border-bottom: 1px solid rgba(99, 102, 241, 0.14);
+}
+
+.landing-section--content {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  padding: 3rem 0 3.5rem;
+}
+
+.content-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section-head {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.section-head h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.section-head p {
+  margin: 0.6rem 0 0;
+  color: #475569;
+  font-size: 1rem;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.feature-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 1.2rem;
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.feature-card h3 {
+  margin: 0;
+  color: #1e293b;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.feature-card p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.93rem;
+  line-height: 1.55;
+}
+
+.feature-link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  color: #4338ca;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.55rem 0.8rem;
+}
+
+.feature-link:hover {
+  background: #e0e7ff;
+}
+
+@media (max-width: 960px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+body.dark-theme .landing-section--content {
+  background: linear-gradient(180deg, #0f172a 0%, #111827 100%);
+}
+
+body.dark-theme .section-head h2 {
+  color: #f8fafc;
+}
+
+body.dark-theme .section-head p {
+  color: #cbd5e1;
+}
+
+body.dark-theme .feature-card {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+body.dark-theme .feature-card h3 {
+  color: #f8fafc;
+}
+
+body.dark-theme .feature-card p {
+  color: #cbd5e1;
+}
+
+body.dark-theme .feature-link {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(129, 140, 248, 0.4);
+  color: #c7d2fe;
+}
