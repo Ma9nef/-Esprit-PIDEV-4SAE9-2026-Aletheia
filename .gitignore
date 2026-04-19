@@ -21,3 +21,10 @@ npm-cache/
 **/.env.local.*
 *.key
 *.pem
+
+# Angular cache
+frontend/.angular/
+
+# Optional but recommended
+node_modules/
+dist/

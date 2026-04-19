@@ -47,4 +47,14 @@ export class HomeComponent {
   navigateToSubscriptionPlans() {
     this.router.navigate(['/plans']);
   }
+  navigateToFormations(): void {
+    this.router.navigate(['/formations']);
+  }
+  navigateToOffers() {
+    this.router.navigate(['/offers']);
+  }
+
+  navigateToSubscriptionPlans() {
+    this.router.navigate(['/plans']);
+  }
 }

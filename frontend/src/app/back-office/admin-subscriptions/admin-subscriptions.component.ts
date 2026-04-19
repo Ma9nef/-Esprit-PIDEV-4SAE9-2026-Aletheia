@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
+// Gardez UNE SEULE version de ces imports selon le bon chemin dans votre projet
 import { SubscriptionService } from '../../core/services/subscription.service';
-import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/models/subscription.model';
+import {
+  SubscriptionPaymentHistory,
+  SubscriptionResponse
+} from '../../core/models/subscription.model';
 
 @Component({
   selector: 'app-admin-subscriptions',
@@ -13,9 +18,16 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
       <div class="page-header">
         <div>
           <h1>Subscription Plan History</h1>
-          <p class="page-subtitle">Complete backoffice tracking for subscription lifecycle, plan details, and Stripe payment activity.</p>
+          <p class="page-subtitle">
+            Complete backoffice tracking for subscription lifecycle, plan details, and Stripe payment activity.
+          </p>
         </div>
-        <button type="button" class="btn-refresh" (click)="refreshAll()" [disabled]="loading || paymentsLoading">
+        <button
+          type="button"
+          class="btn-refresh"
+          (click)="refreshAll()"
+          [disabled]="loading || paymentsLoading"
+        >
           Refresh
         </button>
       </div>
@@ -51,7 +63,9 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
         <div class="section-header">
           <div>
             <h2>Subscription History</h2>
-            <p class="section-description">Track each subscription from creation to expiration or cancellation.</p>
+            <p class="section-description">
+              Track each subscription from creation to expiration or cancellation.
+            </p>
           </div>
         </div>
 
@@ -103,7 +117,9 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
                 <td>
                   <div>{{ sub.durationDays || 0 }} days</div>
                   <div class="cell-subtitle">Courses: {{ sub.maxCourses ?? 'Unlimited' }}</div>
-                  <div class="cell-subtitle">Certification: {{ sub.certificationIncluded ? 'Yes' : 'No' }}</div>
+                  <div class="cell-subtitle">
+                    Certification: {{ sub.certificationIncluded ? 'Yes' : 'No' }}
+                  </div>
                 </td>
                 <td>{{ (sub.planPrice || 0) | number:'1.2-2' }} EUR</td>
                 <td>{{ formatDaysRemaining(sub.daysRemaining, sub.status) }}</td>
@@ -116,10 +132,12 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
                   <div class="cell-subtitle">Updated: {{ formatDateTime(sub.updatedAt) }}</div>
                 </td>
                 <td>
-                  <button *ngIf="sub.status === 'ACTIVE' && sub.subscriptionId"
-                          (click)="onCancel(sub.subscriptionId)"
-                          class="btn-cancel"
-                          [disabled]="cancelInProgress[sub.subscriptionId]">
+                  <button
+                    *ngIf="sub.status === 'ACTIVE' && sub.subscriptionId"
+                    (click)="onCancel(sub.subscriptionId)"
+                    class="btn-cancel"
+                    [disabled]="cancelInProgress[sub.subscriptionId]"
+                  >
                     {{ cancelInProgress[sub.subscriptionId] ? 'Canceling...' : 'Cancel' }}
                   </button>
                   <span *ngIf="sub.status !== 'ACTIVE'" class="text-muted">—</span>
@@ -129,7 +147,9 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
           </table>
         </div>
 
-        <p *ngIf="!loading && filteredSubscriptions.length === 0" class="empty">No subscriptions found for the selected filters.</p>
+        <p *ngIf="!loading && filteredSubscriptions.length === 0" class="empty">
+          No subscriptions found for the selected filters.
+        </p>
         <p *ngIf="error" class="error">{{ error }}</p>
       </section>
 
@@ -137,7 +157,9 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
         <div class="section-header">
           <div>
             <h2>Payment History</h2>
-            <p class="section-description">Full payment trail for subscription plans, including pending and failed attempts.</p>
+            <p class="section-description">
+              Full payment trail for subscription plans, including pending and failed attempts.
+            </p>
           </div>
         </div>
 
@@ -180,11 +202,13 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
                 <td>{{ payment.userId }}</td>
                 <td>
                   <div class="cell-title">{{ payment.planName || 'Unknown plan' }}</div>
-                  <div class="cell-subtitle">Plan ID: <code>{{ payment.planId }}</code></div>
+                  <div class="cell-subtitle">Plan ID: <code>{{ payment.planId || '-' }}</code></div>
                 </td>
                 <td>
                   <div>{{ payment.subscriptionNumber || '-' }}</div>
-                  <div class="cell-subtitle">Subscription ID: <code>{{ payment.subscriptionId || '-' }}</code></div>
+                  <div class="cell-subtitle">
+                    Subscription ID: <code>{{ payment.subscriptionId || '-' }}</code>
+                  </div>
                 </td>
                 <td>{{ (payment.amount || 0) | number:'1.2-2' }} {{ payment.currency || 'EUR' }}</td>
                 <td>{{ payment.provider }}</td>
@@ -199,7 +223,9 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
                     <code>{{ payment.transactionReference }}</code>
                   </span>
                   <ng-template #fallbackReference>
-                    <span class="text-muted">{{ payment.failureReason || 'Pending Stripe confirmation' }}</span>
+                    <span class="text-muted">
+                      {{ payment.failureReason || 'Pending Stripe confirmation' }}
+                    </span>
                   </ng-template>
                 </td>
                 <td>{{ formatDateTime(payment.paidAt) }}</td>
@@ -208,26 +234,62 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
           </table>
         </div>
 
-        <p *ngIf="!paymentsLoading && filteredPayments.length === 0" class="empty">No payments found for the selected filters.</p>
+        <p *ngIf="!paymentsLoading && filteredPayments.length === 0" class="empty">
+          No payments found for the selected filters.
+        </p>
         <p *ngIf="paymentsError" class="error">{{ paymentsError }}</p>
       </section>
     </div>
   `,
   styles: [`
     .admin-subscriptions { max-width: 100%; }
-    .page-header { margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .page-header {
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
     .page-header h1 { margin: 0 0 0.35rem; }
     .page-subtitle { margin: 0; color: #64748b; }
-    .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
-    .metric-card { background: linear-gradient(180deg, #ffffff, #f8fafc); border: 1px solid #e2e8f0; border-radius: 12px; padding: 1rem; }
-    .metric-label { display: block; color: #64748b; font-size: 0.9rem; margin-bottom: 0.35rem; }
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .metric-card {
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    .metric-label {
+      display: block;
+      color: #64748b;
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
     .metric-value { font-size: 1.45rem; color: #0f172a; }
-    .panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
-    .section-header { margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .panel {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .section-header {
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
     .section-header h2 { margin: 0; }
     .section-description { margin: 0.35rem 0 0; color: #64748b; }
     .toolbar { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
-    .toolbar-input, .toolbar-select {
+    .toolbar-input,
+    .toolbar-select {
       border: 1px solid #cbd5e1;
       border-radius: 8px;
       padding: 0.65rem 0.8rem;
@@ -245,9 +307,20 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
     }
     .table-container { overflow-x: auto; }
     .data-table { width: 100%; border-collapse: collapse; }
-    .data-table th, .data-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+    .data-table th,
+    .data-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
     .data-table th { background: #edf2f7; }
-    code { background: #edf2f7; padding: 0.2rem 0.4rem; border-radius: 4px; font-size: 0.9em; }
+    code {
+      background: #edf2f7;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
     .cell-title { font-weight: 600; color: #0f172a; }
     .cell-subtitle { color: #64748b; font-size: 0.85rem; margin-top: 0.2rem; }
     .badge {
@@ -272,7 +345,8 @@ import { SubscriptionPaymentHistory, SubscriptionResponse } from '../../core/mod
     .btn-cancel:hover:not(:disabled) { background: #fff5f5; }
     .btn-cancel:disabled { opacity: 0.5; cursor: not-allowed; }
     .text-muted { color: #a0aec0; }
-    .empty, .error { padding: 1rem; }
+    .empty,
+    .error { padding: 1rem; }
     .error { color: #e53e3e; }
   `]
 })
@@ -298,43 +372,60 @@ export class AdminSubscriptionsComponent implements OnInit {
 
   get filteredSubscriptions(): SubscriptionResponse[] {
     const search = this.subscriptionSearch.trim().toLowerCase();
+
     return this.subscriptions.filter((subscription) => {
-      const matchesStatus = this.subscriptionStatusFilter === 'ALL' || subscription.status === this.subscriptionStatusFilter;
-      const matchesSearch = !search || [
-        subscription.userId,
-        subscription.subscriptionNumber,
-        subscription.planName,
-        subscription.planId
-      ].some((value) => (value || '').toLowerCase().includes(search));
+      const matchesStatus =
+        this.subscriptionStatusFilter === 'ALL' ||
+        subscription.status === this.subscriptionStatusFilter;
+
+      const matchesSearch =
+        !search ||
+        [
+          subscription.userId,
+          subscription.subscriptionNumber,
+          subscription.planName,
+          subscription.planId
+        ].some((value) => (value || '').toLowerCase().includes(search));
+
       return matchesStatus && matchesSearch;
     });
   }
 
   get filteredPayments(): SubscriptionPaymentHistory[] {
     const search = this.paymentSearch.trim().toLowerCase();
+
     return this.payments.filter((payment) => {
-      const matchesStatus = this.paymentStatusFilter === 'ALL' || payment.status === this.paymentStatusFilter;
-      const matchesSearch = !search || [
-        payment.userId,
-        payment.planName,
-        payment.planId,
-        payment.subscriptionNumber,
-        payment.transactionReference
-      ].some((value) => (value || '').toLowerCase().includes(search));
+      const matchesStatus =
+        this.paymentStatusFilter === 'ALL' ||
+        payment.status === this.paymentStatusFilter;
+
+      const matchesSearch =
+        !search ||
+        [
+          payment.userId,
+          payment.planName,
+          payment.planId,
+          payment.subscriptionNumber,
+          payment.transactionReference
+        ].some((value) => (value || '').toLowerCase().includes(search));
+
       return matchesStatus && matchesSearch;
     });
   }
 
   get activeSubscriptionsCount(): number {
-    return this.filteredSubscriptions.filter((subscription) => subscription.status === 'ACTIVE').length;
+    return this.filteredSubscriptions.filter(
+      (subscription) => subscription.status === 'ACTIVE'
+    ).length;
   }
 
   get expiringSoonCount(): number {
-    return this.filteredSubscriptions.filter((subscription) =>
-      subscription.status === 'ACTIVE' &&
-      typeof subscription.daysRemaining === 'number' &&
-      subscription.daysRemaining >= 0 &&
-      subscription.daysRemaining <= 7
+    return this.filteredSubscriptions.filter(
+      (subscription) =>
+        subscription.status === 'ACTIVE' &&
+        typeof subscription.daysRemaining === 'number' &&
+        subscription.daysRemaining >= 0 &&
+        subscription.daysRemaining <= 7
     ).length;
   }
 
@@ -354,6 +445,8 @@ export class AdminSubscriptionsComponent implements OnInit {
 
   loadSubscriptions(): void {
     this.loading = true;
+    this.error = '';
+
     this.subscriptionService.getAllSubscriptions().subscribe({
       next: (data: SubscriptionResponse[]) => {
         this.subscriptions = data;
@@ -366,13 +459,10 @@ export class AdminSubscriptionsComponent implements OnInit {
     });
   }
 
-  refreshAll(): void {
-    this.loadSubscriptions();
-    this.loadPayments();
-  }
-
   loadPayments(): void {
     this.paymentsLoading = true;
+    this.paymentsError = '';
+
     this.subscriptionService.getPaymentHistory().subscribe({
       next: (data: SubscriptionPaymentHistory[]) => {
         this.payments = data;
@@ -385,8 +475,14 @@ export class AdminSubscriptionsComponent implements OnInit {
     });
   }
 
-  formatDate(date: Date | undefined): string {
+  refreshAll(): void {
+    this.loadSubscriptions();
+    this.loadPayments();
+  }
+
+  formatDate(date: Date | string | undefined): string {
     if (!date) return '-';
+
     return new Date(date).toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
@@ -394,7 +490,7 @@ export class AdminSubscriptionsComponent implements OnInit {
     });
   }
 
-  formatDateTime(date: Date | undefined): string {
+  formatDateTime(date: Date | string | undefined): string {
     if (!date) return '-';
     return new Date(date).toLocaleString('en-US');
   }
@@ -423,18 +519,20 @@ export class AdminSubscriptionsComponent implements OnInit {
     }
   }
 
-  trackBySubscription(_: number, subscription: SubscriptionResponse): string {
-    return subscription.subscriptionId || subscription.subscriptionNumber || String(_);
+  trackBySubscription(index: number, subscription: SubscriptionResponse): string {
+    return subscription.subscriptionId || subscription.subscriptionNumber || String(index);
   }
 
-  trackByPayment(_: number, payment: SubscriptionPaymentHistory): string {
-    return payment.paymentId || String(_);
+  trackByPayment(index: number, payment: SubscriptionPaymentHistory): string {
+    return payment.paymentId || String(index);
   }
 
   onCancel(id: string): void {
     if (!id) return;
+
     if (confirm('Cancel this subscription?')) {
       this.cancelInProgress[id] = true;
+
       this.subscriptionService.cancelSubscription(id).subscribe({
         next: () => {
           this.loadSubscriptions();

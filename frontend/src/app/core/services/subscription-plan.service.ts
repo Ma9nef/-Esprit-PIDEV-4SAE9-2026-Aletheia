@@ -8,6 +8,7 @@ import {
   SubscriptionPlanRequest,
   SubscriptionPlanResponse
 } from '../models/subscription-plan.model';
+import { SubscriptionPlan, SubscriptionPlanRequest, SubscriptionPlanResponse } from '../models/subscription-plan.model';
 
 @Injectable({
   providedIn: 'root'

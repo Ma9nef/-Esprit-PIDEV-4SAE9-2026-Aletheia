@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { SubscriptionPlanService } from '../../core/services/subscription-plan.service';
 import { SubscriptionPlanRecommendation, SubscriptionPlanResponse } from '../../core/models/subscription-plan.model';
 import { AuthService } from '../../core/services/auth.service';
+import { SubscriptionPlanResponse } from '../../core/models/subscription-plan.model';
 
 @Component({
   selector: 'app-subscription-plans-list',
@@ -40,6 +41,7 @@ import { AuthService } from '../../core/services/auth.service';
           <p *ngIf="!plan.maxCourses" class="feature">📚 Unlimited courses</p>
           <p class="feature">🎓 Certification included? {{ plan.certificationIncluded ? 'Yes' : 'No' }}</p>
           <a [routerLink]="['/checkout']" [queryParams]="{ planId: plan.planId }" class="btn-subscribe">Choose this plan</a>
+          <a [routerLink]="['/checkout', plan.planId]" class="btn-subscribe">Choose this plan</a>
         </div>
       </div>
 

@@ -1,0 +1,180 @@
+<div class="formation-detail-container">
+  <div *ngIf="loading" class="state-message">
+    Loading formation details...
+  </div>
+
+  <div *ngIf="errorMessage" class="state-message error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="formation as f" class="formation-detail-layout">
+    <div class="formation-main-card">
+      <div class="formation-topbar">
+        <a routerLink="/formations" class="back-link">
+          <span class="back-arrow">←</span>
+          <span>Back to formations</span>
+        </a>
+      </div>
+
+      <div class="formation-tag-row">
+        <span class="formation-tag">Training Program</span>
+        <span *ngIf="f.level" class="formation-level">{{ f.level }}</span>
+      </div>
+
+      <h1 class="formation-title">{{ f.title }}</h1>
+
+      <p class="formation-lead">
+        Build practical skills through a structured in-person training experience.
+      </p>
+
+      <div class="formation-section">
+        <h3>About this program</h3>
+        <p>{{ f.description || 'No description available for this training program.' }}</p>
+      </div>
+
+      <div class="formation-section" *ngIf="f.objective">
+        <h3>Training Objective</h3>
+        <p>{{ f.objective }}</p>
+      </div>
+
+      <div class="formation-section" *ngIf="f.prerequisites">
+        <h3>Prerequisites</h3>
+        <p>{{ f.prerequisites }}</p>
+      </div>
+
+      <div class="formation-benefits-block">
+        <h3>What you will gain</h3>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-icon">✓</div>
+            <div class="benefit-content">
+              <h4>Practical learning</h4>
+              <p>Gain hands-on knowledge you can apply directly in real situations.</p>
+            </div>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">★</div>
+            <div class="benefit-content">
+              <h4>Guided experience</h4>
+              <p>Follow a structured path with clear progression and trainer support.</p>
+            </div>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">↗</div>
+            <div class="benefit-content">
+              <h4>Skill improvement</h4>
+              <p>Strengthen your profile with practical and targeted competencies.</p>
+            </div>
+          </div>
+
+          <div class="benefit-card">
+            <div class="benefit-icon">◎</div>
+            <div class="benefit-content">
+              <h4>Professional growth</h4>
+              <p>Prepare for real learning outcomes in a focused classroom environment.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="formation-side-card">
+      <div class="side-card-header">
+        <span class="side-card-label">Quick Info</span>
+      </div>
+
+      <div class="info-row">
+        <div class="info-left">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 7V12L15 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="info-name">Duration</span>
+        </div>
+        <span class="info-data">{{ f.duration }} h</span>
+      </div>
+
+      <div class="info-row">
+        <div class="info-left">
+          <div class="info-icon">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M17 21V19A4 4 0 0 0 13 15H5A4 4 0 0 0 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+              <path d="M23 21V19A4 4 0 0 0 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M16 3.13A4 4 0 0 1 16 10.87" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="info-name">Capacity</span>
+        </div>
+        <span class="info-data">{{ f.capacity }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="f.level">
+        <div class="info-left">
+          <div class="info-icon simple-icon">L</div>
+          <span class="info-name">Level</span>
+        </div>
+        <span class="info-data">{{ f.level }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="f.location">
+        <div class="info-left">
+          <div class="info-icon simple-icon">📍</div>
+          <span class="info-name">Location</span>
+        </div>
+        <span class="info-data">{{ f.location }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="f.startDate">
+        <div class="info-left">
+          <div class="info-icon simple-icon">🗓</div>
+          <span class="info-name">Start Date</span>
+        </div>
+        <span class="info-data">{{ f.startDate | date:'mediumDate' }}</span>
+      </div>
+
+      <div class="info-row" *ngIf="f.endDate">
+        <div class="info-left">
+          <div class="info-icon simple-icon">🗓</div>
+          <span class="info-name">End Date</span>
+        </div>
+        <span class="info-data">{{ f.endDate | date:'mediumDate' }}</span>
+      </div>
+
+      <div class="enroll-section">
+        <button
+          *ngIf="!alreadyEnrolled"
+          class="enroll-btn"
+          type="button"
+          (click)="enrollNow()"
+          [disabled]="enrollLoading"
+        >
+          {{ enrollLoading ? 'Enrolling...' : 'Enroll Now' }}
+        </button>
+
+        <div *ngIf="alreadyEnrolled" class="already-enrolled-box">
+          <button class="already-enrolled-btn" type="button" disabled>
+            Already Enrolled
+          </button>
+
+          <button class="my-programs-btn" type="button" (click)="goToMyEnrollments()">
+            Go to My Enrolled Programs
+          </button>
+        </div>
+
+        <p *ngIf="enrollSuccessMessage" class="enroll-message success">
+          {{ enrollSuccessMessage }}
+        </p>
+
+        <p *ngIf="enrollErrorMessage" class="enroll-message error-text">
+          {{ enrollErrorMessage }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

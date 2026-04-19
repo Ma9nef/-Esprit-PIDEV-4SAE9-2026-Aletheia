@@ -23,11 +23,21 @@ import { LearnerAssessmentComponent } from './front-office/learner-assessment/le
 import { ManageCoursesComponent } from './back-office/manage-courses/manage-courses.component';
 import { LibraryComponent } from './front-office/library/library.component';
 import { Explore3dComponent } from './front-office/explore3d/explore3d.component';
-import {OffersListComponent} from "./front-office/offers-list/offers-list.component";
-import {CheckoutComponent} from "./front-office/checkout/checkout.component";
-import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
+import { OffersListComponent } from './front-office/offers-list/offers-list.component';
+import { CheckoutComponent } from './front-office/checkout/checkout.component';
+import { SubscriptionPlansListComponent } from './front-office/subscription-plans-list/subscription-plans-list.component';
 import { VideoRoomComponent } from './front-office/video-room/video-room.component';
 import { SubscriptionNotificationsComponent } from './front-office/subscription-notifications/subscription-notifications.component';
+import { ResourcesComponent } from './front-office/resources/resources.component';
+import { MyBorrowsComponent } from './front-office/my-borrows/my-borrows.component';
+import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
+import { ListSubmissionsComponent } from './list-submissions/list-submissions.component';
+import { FormationListComponent } from './front-office/formation-list/formation-list.component';
+import { FormationDetailComponent } from './front-office/formation-detail/formation-detail.component';
+import { MyEnrolledFormationsComponent } from './front-office/my-enrolled-formations/my-enrolled-formations.component';
+import { FormationProgramSpaceComponent } from './front-office/formation-program-space/formation-program-space.component';
+import { FormationProgramSessionsComponent } from './front-office/formation-program-sessions/formation-program-sessions.component';
+import { FormationProgramAttendanceComponent } from './front-office/formation-program-attendance/formation-program-attendance.component';
 
 const routes: Routes = [
   { path: '', component: TemplateComponent },
@@ -35,14 +45,37 @@ const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'services', component: ServicesComponent },
   { path: 'contact', component: FooterComponent },
+
   { path: 'dashboardLearner', component: DashboardComponent },
   { path: 'dashboardInstructor', component: TrainerDashboardComponent },
+
   { path: 'offers', component: OffersListComponent },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'checkout/:planId', component: CheckoutComponent },
   { path: 'plans', component: SubscriptionPlansListComponent },
   { path: 'subscription-notifications', component: SubscriptionNotificationsComponent },
+
   { path: 'front/room/:id', component: VideoRoomComponent },
+  { path: 'front/courses', component: CatalogComponent },
+  { path: 'front/course-details/:id', component: CourseDetailsComponent },
+  { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
+  { path: 'front/library', component: LibraryComponent },
+  { path: 'front/resources', component: ResourcesComponent },
+  { path: 'front/my-borrows', component: MyBorrowsComponent },
+
+  { path: 'manage-assessments', component: ManageAssessmentsComponent },
+  { path: 'add-assessment', component: AssessmentFormComponent },
+  { path: 'edit-assessment/:id', component: AssessmentFormComponent },
+  { path: 'manage-certificates', component: ManageCertificatesComponent },
+  { path: 'my-certificates', component: LearnerCertificatesComponent },
+  { path: 'assessment', component: LearnerAssessmentComponent },
+  { path: 'verify/:code', component: VerifyCertificateComponent },
+
+  { path: 'explore', component: Explore3dComponent },
+  { path: 'Explore3dcertificates', component: ExploreCertificatesComponent },
+  { path: 'submissions', component: ListSubmissionsComponent },
+
+  { path: 'back-office/manage-courses', component: ManageCoursesComponent },
 
   {
     path: 'dashboardAdmin',
@@ -52,31 +85,28 @@ const routes: Routes = [
       { path: 'manage-users', component: ManageUsersComponent }
     ]
   },
-  { path: 'front/courses', component: CatalogComponent },
-  { path: 'front/course-details/:id', component: CourseDetailsComponent },
-  { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
-  { path: 'manage-assessments', component: ManageAssessmentsComponent },
-  { path: 'verify/:code', component: VerifyCertificateComponent },
-  { path: 'add-assessment', component: AssessmentFormComponent },
-  { path: 'manage-certificates', component: ManageCertificatesComponent },
-  { path: 'edit-assessment/:id', component: AssessmentFormComponent },
-  { path: 'my-certificates', component: LearnerCertificatesComponent },
-  { path: 'assessment', component: LearnerAssessmentComponent },
-  { path: 'front/library', component: LibraryComponent },
-  { path: 'explore', component: Explore3dComponent },
-  { path: 'back-office/manage-courses', component: ManageCoursesComponent },
+
   {
     path: 'back-office',
-    loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)
+    loadChildren: () =>
+      import('./back-office/back-office.module').then((m) => m.BackOfficeModule)
   },
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
-  }
+    loadChildren: () =>
+      import('./auth/auth.module').then((m) => m.AuthModule)
+  },
+
+  { path: 'formations', component: FormationListComponent },
+  { path: 'formations/:id', component: FormationDetailComponent },
+  { path: 'formations/:id/program-space', component: FormationProgramSpaceComponent },
+  { path: 'formations/:id/program-space/sessions', component: FormationProgramSessionsComponent },
+  { path: 'formations/:id/program-space/attendance', component: FormationProgramAttendanceComponent },
+  { path: 'my-enrolled-formations', component: MyEnrolledFormationsComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

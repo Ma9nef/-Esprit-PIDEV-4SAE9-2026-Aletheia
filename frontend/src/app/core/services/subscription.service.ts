@@ -9,6 +9,7 @@ import {
   SubscriptionResponse,
   UserSubscription
 } from '../models/subscription.model';
+import { SubscriptionRequest, SubscriptionResponse, UserSubscription } from '../models/subscription.model';
 
 @Injectable({
   providedIn: 'root'

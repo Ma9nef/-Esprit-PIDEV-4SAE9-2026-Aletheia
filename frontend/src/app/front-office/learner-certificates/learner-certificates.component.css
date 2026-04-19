@@ -1,4 +1,27 @@
-/* --- 1. PREMIUM THEME VARIABLES --- */
+.page-number-badge {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    z-index: 1000;
+}
+
+.prediction-banner {
+    background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);
+    border-left: 5px solid #ffc107;
+}
+
+.credential-card {
+    transition: transform 0.3s ease;
+}
+
+.credential-card:hover {
+    transform: translateY(-10px);
+}
 .page-wrapper {
     /* Light Mode - Soft & Airy */
     --bg-color: #f3f4f6;

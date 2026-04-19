@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../core/services/auth.service';
 import { CartService, Cart } from '../../core/services/cart.service';
+import { LoanService } from '../../core/services/loan.service';
+import { NotificationService } from '../../core/services/notification.service';
 
 interface Product {
   id: number;
@@ -56,6 +58,11 @@ export class LibraryComponent implements OnInit {
   checkoutSuccess = false;
   userId: number | null = null;
 
+  // Borrow state
+  borrowedProductIds = new Set<number>();
+  borrowingProductId: number | null = null;
+  borrowToast: { message: string; type: 'success' | 'error' } | null = null;
+
   categories = [
     { id: 'all', name: 'All Categories' },
     { id: 'book', name: 'Book' },
@@ -75,7 +82,9 @@ export class LibraryComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    private cartService: CartService
+    private cartService: CartService,
+    private loanService: LoanService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -83,8 +92,55 @@ export class LibraryComponent implements OnInit {
     if (user) {
       this.userId = user.id;
       this.loadCart();
+      this.loadActiveLoans();
     }
     this.loadLibraryResources();
+  }
+
+  loadActiveLoans(): void {
+    if (!this.userId) return;
+    this.loanService.getActiveLoansByUser(this.userId).subscribe({
+      next: (loans) => {
+        this.borrowedProductIds = new Set(loans.map(l => l.productId));
+      },
+      error: () => { /* non-blocking — borrow button still shows */ }
+    });
+  }
+
+  isAlreadyBorrowed(resourceId: number): boolean {
+    return this.borrowedProductIds.has(resourceId);
+  }
+
+  borrowProduct(resource: LibraryResource): void {
+    if (!this.userId) {
+      this.showBorrowToast('Please log in to borrow books.', 'error');
+      return;
+    }
+    this.borrowingProductId = resource.id;
+    this.loanService.borrow(this.userId, resource.id).subscribe({
+      next: (loan) => {
+        this.borrowedProductIds.add(resource.id);
+        // Reflect stock decrement locally
+        if (resource.stockQuantity != null && resource.stockQuantity > 0) {
+          resource.stockQuantity--;
+        }
+        this.borrowingProductId = null;
+        this.showBorrowToast(
+          `"${resource.title}" borrowed! Due back on ${loan.dueDate}.`,
+          'success'
+        );
+      },
+      error: (err) => {
+        this.borrowingProductId = null;
+        const msg = err?.error?.message || 'Failed to borrow. Please try again.';
+        this.showBorrowToast(msg, 'error');
+      }
+    });
+  }
+
+  showBorrowToast(message: string, type: 'success' | 'error'): void {
+    this.borrowToast = { message, type };
+    setTimeout(() => this.borrowToast = null, 5000);
   }
 
   loadCart(): void {
@@ -142,6 +198,11 @@ export class LibraryComponent implements OnInit {
 
       return matchesSearch && matchesCategory && matchesType;
     });
+  }
+
+  countForCategory(catId: string): number {
+    if (catId === 'all') return this.libraryResources.length;
+    return this.libraryResources.filter(r => r.category === catId).length;
   }
 
   onSearchChange(query: string): void {
@@ -231,6 +292,8 @@ export class LibraryComponent implements OnInit {
         this.checkoutSuccess = true;
         this.cart = null;
         this.loadCart();
+        this.notificationService.refreshUnreadCount();
+        this.notificationService.loadNotifications();
       },
       error: (err) => {
         console.error('Error during checkout:', err);
