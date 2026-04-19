@@ -33,12 +33,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.core.Attribute;
-import weka.core.DenseInstance;
-import weka.core.Instance;
-import weka.core.Instances;
-import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -317,7 +311,6 @@ public class CertificateServiceImpl implements ICertificateService {
         }
     }
     public Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception {
-        // 1. Define Attributes
         Attribute progressAttr = new Attribute("progress");
         ArrayList<String> statusLabels = new ArrayList<>(Arrays.asList("OTHER", "COMPLETED"));
         Attribute targetAttr = new Attribute("target_status", statusLabels);
@@ -326,7 +319,6 @@ public class CertificateServiceImpl implements ICertificateService {
         attributes.add(progressAttr);
         attributes.add(targetAttr);
 
-        // 2. Build Training Set
         Instances trainingData = new Instances("PredictionRelation", attributes, 0);
         trainingData.setClassIndex(1);
 
@@ -343,16 +335,11 @@ public class CertificateServiceImpl implements ICertificateService {
             trainingData.add(inst);
         }
 
-        // 3. Train Model (CHANGED TO RANDOM FOREST)
         RandomForest model = new RandomForest();
-
-        // Optional: Set hyperparameters
-        model.setNumIterations(100); // Number of trees in the forest
-        model.setNumFeatures(0);     // 0 means it will use log2(number of attributes) + 1
-
+        model.setNumIterations(100);
+        model.setNumFeatures(0);
         model.buildClassifier(trainingData);
 
-        // 4. Predict
         Enrollment target = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() -> new RuntimeException("Enrollment not found"));
 
@@ -361,11 +348,8 @@ public class CertificateServiceImpl implements ICertificateService {
         testInstance.setValue(progressAttr, target.getProgress() != null ? target.getProgress() : 0);
 
         double[] distribution = model.distributionForInstance(testInstance);
-
-        // distribution[1] corresponds to the probability of "COMPLETED"
         int probabilityScore = (int) (distribution[1] * 100);
 
-        // Custom Recommendations
         String recommendation;
         if (probabilityScore > 85) recommendation = "Success highly likely. Proceed to final exam.";
         else if (probabilityScore > 60) recommendation = "Good progress. Complete remaining labs to ensure pass.";
@@ -449,69 +433,6 @@ public class CertificateServiceImpl implements ICertificateService {
         result.put("score", probabilityScore);
         result.put("recommendation", recommendation);
         result.put("currentProgress", userProgress);
-
-        return result;
-    }
-    public Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception {
-        // 1. Define Attributes
-        Attribute progressAttr = new Attribute("progress");
-
-        // Match these to your EnrollmentStatus enum values
-        ArrayList<String> statusLabels = new ArrayList<>(Arrays.asList("OTHER", "COMPLETED"));
-        Attribute targetAttr = new Attribute("target_status", statusLabels);
-
-        ArrayList<Attribute> attributes = new ArrayList<>();
-        attributes.add(progressAttr);
-        attributes.add(targetAttr);
-
-        // 2. Build Training Set
-        Instances trainingData = new Instances("PredictionRelation", attributes, 0);
-        trainingData.setClassIndex(1);
-
-        List<Enrollment> allData = enrollmentRepository.findAll();
-
-        // Optimization: If you have less than 2 records, AI can't learn.
-        if (allData.size() < 2) {
-            throw new RuntimeException("Not enough historical data to run AI prediction.");
-        }
-
-        for (Enrollment e : allData) {
-            Instance inst = new DenseInstance(2);
-            inst.setValue(progressAttr, e.getProgress() != null ? e.getProgress() : 0);
-
-            // Map Enum to AI categories
-            String aiStatus = (e.getStatus() == EnrollmentStatus.COMPLETED) ? "COMPLETED" : "OTHER";
-            inst.setValue(targetAttr, aiStatus);
-            trainingData.add(inst);
-        }
-
-        // 3. Train Model
-        NaiveBayes model = new NaiveBayes();
-        model.buildClassifier(trainingData);
-
-        // 4. Predict
-        Enrollment target = enrollmentRepository.findById(enrollmentId)
-                .orElseThrow(() -> new RuntimeException("Enrollment not found"));
-
-        Instance testInstance = new DenseInstance(2);
-        testInstance.setDataset(trainingData);
-        testInstance.setValue(progressAttr, target.getProgress());
-
-        double[] distribution = model.distributionForInstance(testInstance);
-
-        // distribution[1] corresponds to the probability of "COMPLETED"
-        int probabilityScore = (int) (distribution[1] * 100);
-
-        // Custom Recommendations based on score
-        String recommendation;
-        if (probabilityScore > 85) recommendation = "Success highly likely. Proceed to final exam.";
-        else if (probabilityScore > 60) recommendation = "Good progress. Complete remaining labs to ensure pass.";
-        else recommendation = "At risk of incompletion. Recommend tutor intervention.";
-
-        Map<String, Object> result = new HashMap<>();
-        result.put("score", probabilityScore);
-        result.put("recommendation", recommendation);
-        result.put("currentProgress", target.getProgress());
 
         return result;
     }

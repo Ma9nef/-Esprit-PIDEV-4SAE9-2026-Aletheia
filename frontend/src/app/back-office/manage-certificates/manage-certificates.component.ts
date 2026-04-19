@@ -26,16 +26,6 @@ getProbabilityColor(score: number): string {
   }
 }
 
-getProbabilityColor(score: number): string {
-  if (score >= 80) {
-    return 'success'; // Green: High probability of passing
-  } else if (score >= 50) {
-    return 'warning'; // Yellow/Orange: Moderate risk
-  } else {
-    return 'danger';  // Red: High risk of failure
-  }
-}
-
   @ViewChild('sigCanvas') canvasContext!: ElementRef;
   signaturePad!: SignaturePad;
 isSendingEmail: { [key: number]: boolean } = {};

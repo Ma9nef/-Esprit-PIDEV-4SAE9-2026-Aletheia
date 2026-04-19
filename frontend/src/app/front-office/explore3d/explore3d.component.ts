@@ -1000,13 +1000,6 @@ export class Explore3dComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.keys['s'] || this.keys['arrowdown'])                     { moveX -= fwdX; moveZ -= fwdZ; }
     if (this.keys['d'] || this.keys['arrowright'])                    { moveX += rightX; moveZ += rightZ; }
     if (this.keys['a'] || this.keys['q'] || this.keys['arrowleft'])  { moveX -= rightX; moveZ -= rightZ; }
-    if (this.keys['z'] || this.keys['arrowup'])    dz -= 1;
-    if (this.keys['w'] || this.keys['arrowup'])    dz -= 1;
-    if (this.keys['s'] || this.keys['arrowdown'])  dz += 1;
-    if (this.keys['a'] || this.keys['arrowleft'])  dx -= 1;
-    if (this.keys['q'] || this.keys['arrowleft'])  dx -= 1;
-    if (this.keys['d'] || this.keys['arrowright']) dx += 1;
-
     this.isMoving = moveX !== 0 || moveZ !== 0;
 
     if (this.isMoving) {

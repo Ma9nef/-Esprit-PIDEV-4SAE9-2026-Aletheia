@@ -15,46 +15,37 @@ export class HomeComponent {
   onSearchSubmit(): void {
     const query = this.searchControl.value?.trim();
     if (query) {
-      // ✅ goes to CatalogComponent (course list)
-      this.router.navigate(['/front/courses'], { queryParams: { search: query } });
+      void this.router.navigate(['/front/courses'], { queryParams: { search: query } });
     } else {
-      this.router.navigate(['/front/courses']);
+      void this.router.navigate(['/front/courses']);
     }
   }
 
   navigateToCourses(): void {
-    // ✅ goes to CatalogComponent (course list)
-    this.router.navigate(['/front/courses']);
+    void this.router.navigate(['/front/courses']);
   }
 
   navigateToLibrary(): void {
-    // ✅ goes to LibraryComponent
-    this.router.navigate(['/front/library']);
+    void this.router.navigate(['/front/library']);
   }
 
   navigateToExplore3d(): void {
-    this.router.navigate(['/explore']);
+    void this.router.navigate(['/explore']);
   }
 
   navigateToLiveSessions(): void {
-    // ⚠️ Only keep this if you REALLY have this route in AppRoutingModule
-    this.router.navigate(['/live-sessions']);
-  }
-  navigateToOffers() {
-    this.router.navigate(['/offers']);
+    void this.router.navigate(['/live-sessions']);
   }
 
-  navigateToSubscriptionPlans() {
-    this.router.navigate(['/plans']);
+  navigateToOffers(): void {
+    void this.router.navigate(['/offers']);
   }
+
+  navigateToSubscriptionPlans(): void {
+    void this.router.navigate(['/plans']);
+  }
+
   navigateToFormations(): void {
-    this.router.navigate(['/formations']);
-  }
-  navigateToOffers() {
-    this.router.navigate(['/offers']);
-  }
-
-  navigateToSubscriptionPlans() {
-    this.router.navigate(['/plans']);
+    void this.router.navigate(['/formations']);
   }
 }

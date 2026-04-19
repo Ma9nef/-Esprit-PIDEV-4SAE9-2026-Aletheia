@@ -22,10 +22,6 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
 
   correctCount = 0;
   wrongCount = 0;
-  hasPassed = false;
-
-  correctCount = 0;
-  wrongCount = 0;
 
   currentQuestionIndex = 0;
   timeLeft: number = 0;
@@ -123,29 +119,6 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
         this.loading = false;
       }
     });
-    this.loading = true;
-    this.assessmentService.getAssessmentById(a.id).subscribe({
-      next: (fullAssessment) => {
-        if (fullAssessment.questions) {
-          fullAssessment.questions = this.shuffle(fullAssessment.questions);
-          fullAssessment.questions.forEach((q: any) => {
-            if (q.options) q.options = this.shuffle(q.options);
-          });
-        }
-        this.selectedAssessment = fullAssessment;
-        this.userAnswers = {};
-        this.currentQuestionIndex = 0;
-        this.currentView = 'taking';
-        this.startTimer(15);
-        this.loading = false;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      },
-      error: (err) => {
-        console.error("Could not load questions", err);
-        alert("Error: Impossible to load questions.");
-        this.loading = false;
-      }
-    });
   }
 
   submitAssessment() {
@@ -164,16 +137,6 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
         const qTotal = this.getQuestionsArray().length;
         this.correctCount = res.correctAnswers !== undefined ? res.correctAnswers : Math.round((res.score / this.selectedAssessment.totalScore) * qTotal);
         this.wrongCount = qTotal - this.correctCount;
-
-        this.hasPassed = this.finalScore >= (this.selectedAssessment.totalScore / 2);
-        if (this.hasPassed) this.triggerCelebration();
-        this.finalScore = res.score;
-
-        // LOGIC FIX: If correctAnswers is 0 but score is high, we calculate it manually
-        const qTotal = this.getQuestionsArray().length;
-        this.correctCount = res.correctAnswers !== undefined ? res.correctAnswers : Math.round((res.score / this.selectedAssessment.totalScore) * qTotal);
-        this.wrongCount = qTotal - this.correctCount;
-
         this.hasPassed = this.finalScore >= (this.selectedAssessment.totalScore / 2);
         if (this.hasPassed) this.triggerCelebration();
         this.currentView = 'result';

@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SubscriptionNotificationService } from '../../core/services/subscription-notification.service';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import { ResourceManagementService } from '../resources/resource-management.service';
 import { Resource, ResourceType } from '../resources/resource-management.model';
 
@@ -13,17 +11,10 @@ import { Resource, ResourceType } from '../resources/resource-management.model';
   styleUrls: ['./admin-dashboard.component.css']
 })
 export class AdminDashboardComponent implements OnInit {
-
   showDashboardContent = true;
-  showDashboardWidgets = true;   // ✅ ADD THIS LINE
-  adminUnreadNotificationCount = 0;
   showDashboardWidgets = true;
+  adminUnreadNotificationCount = 0;
 
-  constructor(
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private notificationService: SubscriptionNotificationService
-  ) {}
   // ── Resource management state ──────────────────────────────────────────────
   resources: Resource[] = [];
   resourcesLoading = false;
@@ -45,23 +36,26 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private notificationService: SubscriptionNotificationService,
     private resourceSvc: ResourceManagementService
   ) {}
 
   ngOnInit(): void {
-    // Listen for child route changes
-    this.activatedRoute.firstChild?.url.subscribe(() => {
-      // If there's a child route active (like manage-library or manage-users), hide dashboard content
-      this.showDashboardContent = !this.activatedRoute.firstChild;
-    });
+    this.updateDashboardVisibility();
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
-        this.showDashboardContent = !this.activatedRoute.firstChild;
+        this.updateDashboardVisibility();
         this.loadAdminUnreadCount();
+        if (this.showDashboardContent) {
+          this.loadResources();
+        }
       });
 
     this.loadAdminUnreadCount();
+    if (this.showDashboardContent) {
+      this.loadResources();
+    }
   }
 
   markAdminNotificationsAsRead(): void {
@@ -81,13 +75,10 @@ export class AdminDashboardComponent implements OnInit {
         this.adminUnreadNotificationCount = 0;
       }
     });
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.showDashboardContent = !this.activatedRoute.firstChild;
-        if (this.showDashboardContent) this.loadResources();
-      });
-    this.loadResources();
+  }
+
+  private updateDashboardVisibility(): void {
+    this.showDashboardContent = !this.activatedRoute.firstChild;
   }
 
   // ── Load ───────────────────────────────────────────────────────────────────
@@ -102,7 +93,7 @@ export class AdminDashboardComponent implements OnInit {
 
   // ── Filtering ──────────────────────────────────────────────────────────────
   get filteredResources(): Resource[] {
-    return this.resources.filter(r => {
+    return this.resources.filter((r) => {
       const matchType = this.resourceFilterType === 'ALL' || r.type === this.resourceFilterType;
       const matchName = !this.resourceSearchTerm || r.name.toLowerCase().includes(this.resourceSearchTerm.toLowerCase());
       return matchType && matchName;
