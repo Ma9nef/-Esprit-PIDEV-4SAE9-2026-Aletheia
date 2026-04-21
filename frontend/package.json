@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:selected-services": "ng test --include=\"src/app/core/services/admin-formation.service.spec.ts\" --include=\"src/app/core/services/catalog-menu.service.spec.ts\" --include=\"src/app/core/services/course-api.service.spec.ts\" --include=\"src/app/core/services/enrollment.service.spec.ts\" --include=\"src/app/core/services/formation-public.service.spec.ts\" --include=\"src/app/core/services/instructor-formation.service.spec.ts\" --include=\"src/app/core/services/submission.service.spec.ts\" --include=\"src/app/core/services/assessment.service.spec.ts\" --include=\"src/app/core/services/question.service.spec.ts\" --include=\"src/app/core/services/certificate.service.spec.ts\""
   },
   "private": true,
   "dependencies": {

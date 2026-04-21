@@ -39,7 +39,12 @@ public class ApiGatewayApplication {
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("lb://COURSES-SERVICE"))
-
+                .route("courses-lesson-instructor", r -> r.path("/api/lesson/instructor/**")
+                        .filters(f -> f
+                                .rewritePath("/api/(?<segment>.*)", "/${segment}")
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("http://localhost:8081"))
                 // Route for Submissions (starts with /api/assessment-results)
                 .route("assessments", r -> r.path("/api/assessments/**")
                         .filters(f -> f
