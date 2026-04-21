@@ -40,6 +40,9 @@ jobs:
           - backend/microservices/user-service
           - backend/microservices/courses
           - backend/microservices/Library
+          - backend/microservices/offer
+          - backend/microservices/events
+          - backend/microservices/ResourceManagement
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,6 +80,12 @@ jobs:
             context: ./backend/microservices/courses
           - name: library
             context: ./backend/microservices/Library
+          - name: offer
+            context: ./backend/microservices/offer
+          - name: events
+            context: ./backend/microservices/events
+          - name: resource-management
+            context: ./backend/microservices/ResourceManagement
     steps:
       - name: Checkout
         uses: actions/checkout@v4

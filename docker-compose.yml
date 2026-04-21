@@ -10,11 +10,63 @@ services:
       - mysql_data:/var/lib/mysql
       - ./docker/mysql/init:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$${MYSQL_ROOT_PASSWORD} || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 30s
+    networks:
+      - aletheia-network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: aletheia-mongodb
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE_OFFER:-offer_db}
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok", "mongodb://localhost:27017/admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - aletheia-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: aletheia-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+    networks:
+      - aletheia-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: aletheia-kafka
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    depends_on:
+      zookeeper:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     networks:
       - aletheia-network
 
@@ -130,6 +182,85 @@ services:
     networks:
       - aletheia-network
 
+  offer:
+    build:
+      context: ./backend/microservices/offer
+    container_name: aletheia-offer
+    environment:
+      SERVER_PORT: 8086
+      CONFIG_SERVER_URL: http://config-server:9999
+      EUREKA_DEFAULT_ZONE: http://eureka:8761/eureka
+      EUREKA_INSTANCE_HOSTNAME: offer
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/${MONGO_DATABASE_OFFER:-offer_db}
+      JWT_SECRET: ${JWT_SECRET:-CHANGE_ME_CHANGE_ME_CHANGE_ME_123456}
+    ports:
+      - "8086:8086"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - aletheia-network
+
+  events:
+    build:
+      context: ./backend/microservices/events
+    container_name: aletheia-events
+    environment:
+      SERVER_PORT: 8090
+      CONFIG_SERVER_URL: http://config-server:9999
+      EUREKA_DEFAULT_ZONE: http://eureka:8761/eureka
+      EUREKA_INSTANCE_HOSTNAME: events
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE_EVENTS:-event_db}?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      JWT_SECRET: ${JWT_SECRET:-CHANGE_ME_CHANGE_ME_CHANGE_ME_123456}
+      JWT_EXPIRATION_MS: 86400000
+    ports:
+      - "8090:8090"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+    networks:
+      - aletheia-network
+
+  resource-management:
+    build:
+      context: ./backend/microservices/ResourceManagement
+    container_name: aletheia-resource-management
+    environment:
+      SERVER_PORT: 8094
+      CONFIG_SERVER_URL: http://config-server:9999
+      EUREKA_DEFAULT_ZONE: http://eureka:8761/eureka
+      EUREKA_INSTANCE_HOSTNAME: resource-management
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${MYSQL_DATABASE_RESOURCE_MANAGEMENT:-aletheia_resources}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: ${KAFKA_BOOTSTRAP_SERVERS:-kafka:9092}
+      APP_KAFKA_ENABLED: ${APP_KAFKA_ENABLED:-true}
+      APP_KAFKA_TOPIC_RESERVATION_EVENTS: ${APP_KAFKA_TOPIC_RESERVATION_EVENTS:-reservation-events}
+      JWT_SECRET: ${JWT_SECRET:-CHANGE_ME_CHANGE_ME_CHANGE_ME_123456}
+    ports:
+      - "8094:8094"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka:
+        condition: service_healthy
+      config-server:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - aletheia-network
+
   api-gateway:
     build:
       context: ./backend/ApiGateway
@@ -141,6 +272,9 @@ services:
       USER_SERVICE_URL: http://user-service:8080
       COURSES_SERVICE_URL: http://courses:8081
       LIBRARY_SERVICE_URL: http://library:8082
+      EVENTS_SERVICE_URL: http://events:8090
+      OFFER_SERVICE_URL: http://offer:8086
+      RESOURCE_MANAGEMENT_SERVICE_URL: http://resource-management:8094
     ports:
       - "8089:8089"
     depends_on:
@@ -151,6 +285,12 @@ services:
       courses:
         condition: service_started
       library:
+        condition: service_started
+      offer:
+        condition: service_started
+      events:
+        condition: service_started
+      resource-management:
         condition: service_started
     networks:
       - aletheia-network
@@ -169,6 +309,9 @@ services:
 
 volumes:
   mysql_data:
+  mongo_data:
+  zookeeper_data:
+  kafka_data:
 
 networks:
   aletheia-network:

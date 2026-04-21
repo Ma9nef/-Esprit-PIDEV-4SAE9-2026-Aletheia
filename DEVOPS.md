@@ -1,6 +1,6 @@
 # DevOps Quick Start
 
-This repository now includes a first DevOps setup for the core stack on branch `test-devops`.
+This repository now includes a DevOps setup for the main local stack on branch `test-devops`.
 
 ## Covered services
 
@@ -11,6 +11,12 @@ This repository now includes a first DevOps setup for the core stack on branch `
 - `backend/microservices/user-service`
 - `backend/microservices/courses`
 - `backend/microservices/Library`
+- `backend/microservices/offer`
+- `backend/microservices/events`
+- `backend/microservices/ResourceManagement`
+- `mongodb`
+- `zookeeper`
+- `kafka`
 
 ## Local prerequisites
 
@@ -31,7 +37,19 @@ On Windows PowerShell:
 Copy-Item .env.example .env
 ```
 
-## Start the core stack
+If you chain commands in PowerShell, use `;` instead of `&&` (older PowerShell versions do not support `&&`):
+
+```powershell
+Set-Location path\to\repo; docker compose up -d --build
+```
+
+The example file now also includes:
+
+- MySQL database names for `events` and `ResourceManagement`
+- MongoDB database name for `offer`
+- Kafka bootstrap server and topic defaults
+
+## Start the full stack
 
 ```bash
 docker compose up --build
@@ -46,7 +64,15 @@ docker compose up --build
 - User Service: `http://localhost:8080`
 - Courses Service: `http://localhost:8081`
 - Library Service: `http://localhost:8082`
+- Offer Service: `http://localhost:8086`
+- API Gateway routes to Offer: `http://localhost:8089/api/offers/**`
+- Events Service: `http://localhost:8090`
+- API Gateway routes to Events: `http://localhost:8089/api/events/**`
+- Resource Management Service: `http://localhost:8094`
+- API Gateway routes to Resource Management: `http://localhost:8089/api/rm/resources/**`
 - MySQL: `localhost:3306`
+- MongoDB: `localhost:27017` inside the Compose network
+- Kafka broker: `kafka:9092` inside the Compose network
 
 ## Stop the stack
 
@@ -60,6 +86,12 @@ To also remove the database volume:
 docker compose down -v
 ```
 
+To restart after code or config changes:
+
+```bash
+docker compose up --build
+```
+
 ## CI
 
 GitHub Actions workflow:
@@ -69,5 +101,6 @@ GitHub Actions workflow:
 The workflow:
 
 - builds the Angular frontend
-- packages the Spring Boot core services
-- builds Docker images for the core stack
+- packages all targeted Spring Boot services
+- builds Docker images for the full local stack
+
