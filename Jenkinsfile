@@ -63,7 +63,7 @@ pipeline {
             steps {
                 dir("${LIBRARY_DIR}") {
                     echo 'Compiling source code (skip tests for fast feedback)…'
-                    sh './mvnw clean compile -DskipTests --no-transfer-progress'
+                    sh 'mvn clean compile -DskipTests --no-transfer-progress'
                 }
             }
         }
@@ -74,7 +74,7 @@ pipeline {
             steps {
                 dir("${LIBRARY_DIR}") {
                     echo 'Running JUnit 5 tests with JaCoCo instrumentation…'
-                    sh './mvnw test --no-transfer-progress'
+                    sh 'mvn test --no-transfer-progress'
                 }
             }
             post {
@@ -102,7 +102,7 @@ pipeline {
             steps {
                 dir("${LIBRARY_DIR}") {
                     echo 'Packaging into executable JAR…'
-                    sh './mvnw verify -DskipTests --no-transfer-progress'
+                    sh 'mvn verify -DskipTests --no-transfer-progress'
                 }
             }
             post {
@@ -121,7 +121,7 @@ pipeline {
                 dir("${LIBRARY_DIR}") {
                     withSonarQubeEnv("${SONAR_SERVER}") {
                         sh """
-                            ./mvnw sonar:sonar \\
+                            mvn sonar:sonar \\
                               -Dsonar.projectKey=aletheia-library \\
                               -Dsonar.projectName='Aletheia Library Microservice' \\
                               -Dsonar.branch.name=${env.BRANCH_NAME} \\
