@@ -1,0 +1,229 @@
+// ═══════════════════════════════════════════════════════════════════════════
+//  Aletheia – Library Microservice  |  CI/CD Pipeline
+//  Branch  : Library_managment
+//  Stack   : Spring Boot 4 · Maven · Docker · SonarQube · JUnit5 / JaCoCo
+// ═══════════════════════════════════════════════════════════════════════════
+
+pipeline {
+
+    agent any
+
+    // ── Tool aliases (must match names configured in Jenkins → Global Tools) ──
+    tools {
+        maven 'Maven-3.9'
+        jdk   'JDK-17'
+    }
+
+    // ── Pipeline-wide environment variables ─────────────────────────────────
+    environment {
+        // Docker Hub (or private registry) – set in Jenkins Credentials as
+        // a "Username with password" secret named DOCKERHUB_CREDENTIALS
+        DOCKER_CREDENTIALS_ID = 'DOCKERHUB_CREDENTIALS'
+        DOCKER_REGISTRY       = 'docker.io'
+        DOCKER_IMAGE          = "aletheia/library"
+        DOCKER_TAG            = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
+
+        // SonarQube server name configured in Jenkins → Configure System
+        SONAR_SERVER          = 'SonarQube'
+
+        // Maven working directory
+        LIBRARY_DIR           = 'backend/microservices/Library'
+    }
+
+    // ── Build triggers ───────────────────────────────────────────────────────
+    triggers {
+        // Poll SCM every 5 minutes (replace with webhook for instant builds)
+        pollSCM('H/5 * * * *')
+    }
+
+    // ── Pipeline options ─────────────────────────────────────────────────────
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        timestamps()
+        timeout(time: 30, unit: 'MINUTES')
+        disableConcurrentBuilds()
+    }
+
+    // ════════════════════════════════════════════════════════════════════════
+    //  S T A G E S
+    // ════════════════════════════════════════════════════════════════════════
+    stages {
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('📥  Checkout') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                echo "Checking out branch: ${env.BRANCH_NAME}"
+                checkout scm
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('🔧  Build') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                dir("${LIBRARY_DIR}") {
+                    echo 'Compiling source code (skip tests for fast feedback)…'
+                    sh './mvnw clean compile -DskipTests --no-transfer-progress'
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('🧪  Unit Tests') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                dir("${LIBRARY_DIR}") {
+                    echo 'Running JUnit 5 tests with JaCoCo instrumentation…'
+                    sh './mvnw test --no-transfer-progress'
+                }
+            }
+            post {
+                always {
+                    // Publish JUnit XML results
+                    junit testResults: "${LIBRARY_DIR}/target/surefire-reports/*.xml",
+                          allowEmptyResults: true
+
+                    // Publish JaCoCo HTML report
+                    publishHTML(target: [
+                        allowMissing         : true,
+                        alwaysLinkToLastBuild: true,
+                        keepAll              : true,
+                        reportDir            : "${LIBRARY_DIR}/target/site/jacoco",
+                        reportFiles          : 'index.html',
+                        reportName           : 'JaCoCo Coverage Report'
+                    ])
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('📦  Package') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                dir("${LIBRARY_DIR}") {
+                    echo 'Packaging into executable JAR…'
+                    sh './mvnw verify -DskipTests --no-transfer-progress'
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: "${LIBRARY_DIR}/target/*.jar",
+                                     fingerprint: true,
+                                     allowEmptyArchive: false
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('🔍  SonarQube Analysis') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                dir("${LIBRARY_DIR}") {
+                    withSonarQubeEnv("${SONAR_SERVER}") {
+                        sh """
+                            ./mvnw sonar:sonar \\
+                              -Dsonar.projectKey=aletheia-library \\
+                              -Dsonar.projectName='Aletheia Library Microservice' \\
+                              -Dsonar.branch.name=${env.BRANCH_NAME} \\
+                              -Dsonar.sources=src/main/java \\
+                              -Dsonar.tests=src/test/java \\
+                              -Dsonar.java.binaries=target/classes \\
+                              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \\
+                              --no-transfer-progress
+                        """
+                    }
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('🚦  Quality Gate') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                echo 'Waiting for SonarQube Quality Gate result…'
+                timeout(time: 5, unit: 'MINUTES') {
+                    // abortPipeline: true  → fails the build if gate is RED
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('🐳  Docker Build') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                dir("${LIBRARY_DIR}") {
+                    echo "Building Docker image: ${DOCKER_IMAGE}:${DOCKER_TAG}"
+                    sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} -t ${DOCKER_IMAGE}:latest ."
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('📤  Docker Push') {
+        // ────────────────────────────────────────────────────────────────────
+            steps {
+                echo "Pushing image to registry: ${DOCKER_REGISTRY}"
+                withCredentials([usernamePassword(
+                    credentialsId : "${DOCKER_CREDENTIALS_ID}",
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh """
+                        echo "${DOCKER_PASS}" | docker login ${DOCKER_REGISTRY} -u "${DOCKER_USER}" --password-stdin
+                        docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                        docker push ${DOCKER_IMAGE}:latest
+                        docker logout ${DOCKER_REGISTRY}
+                    """
+                }
+            }
+        }
+
+        // ────────────────────────────────────────────────────────────────────
+        stage('🚀  Deploy (Staging)') {
+        // ────────────────────────────────────────────────────────────────────
+            when {
+                // Only auto-deploy from the integration branch
+                branch 'Library_managment'
+            }
+            steps {
+                echo 'Pulling & restarting Library container on the staging host…'
+                sh """
+                    docker compose -f backend/docker-compose.yml pull library
+                    docker compose -f backend/docker-compose.yml up -d --no-deps library
+                """
+            }
+        }
+
+    } // end stages
+
+    // ════════════════════════════════════════════════════════════════════════
+    //  P O S T   A C T I O N S
+    // ════════════════════════════════════════════════════════════════════════
+    post {
+
+        always {
+            echo "Pipeline finished – status: ${currentBuild.currentResult}"
+            // Remove dangling Docker images to keep agent disk clean
+            sh 'docker image prune -f || true'
+        }
+
+        success {
+            echo '✅  Build PASSED – all quality gates green.'
+        }
+
+        failure {
+            echo '❌  Build FAILED – check logs above for details.'
+            // Uncomment to enable email notifications:
+            // mail to: 'team@esprit.tn',
+            //      subject: "[Jenkins] ${env.JOB_NAME} #${env.BUILD_NUMBER} FAILED",
+            //      body: "Check console output at ${env.BUILD_URL}"
+        }
+
+        unstable {
+            echo '⚠️   Build UNSTABLE – some tests may have failed or quality gate is yellow.'
+        }
+
+    }
+}

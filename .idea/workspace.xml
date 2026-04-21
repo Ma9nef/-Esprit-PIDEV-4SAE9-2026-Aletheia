@@ -4,40 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="ya manef salla7">
-      <change beforePath="$PROJECT_DIR$/backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/ResourceManagement.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/ResourceManagement.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/aletheia-platform.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/aletheia-platform.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/courses-service.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/courses-service.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/event-microservice.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/event-microservice.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/library-service.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/library-service.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/src/main/java/com/esprit/microservice/library/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/src/main/java/com/esprit/microservice/library/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Library/src/main/java/com/esprit/microservice/library/config/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Notification/app/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Notification/app/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/JwtReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/JwtReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/service/core/CertificateServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/service/core/CertificateServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignClientConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/controller/ResourceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/controller/ResourceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/controller/TestTokenController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/service/RoomWebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/service/RoomWebSocketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" afterDir="false" />
+    <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="Merge remote-tracking branch 'origin/course-managment' into Library_managment&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;backend/.idea/compiler.xml&#10;#&#9;backend/.idea/encodings.xml&#10;#&#9;backend/.idea/misc.xml&#10;#&#9;backend/microservices/Notification/app/config.py&#10;#&#9;backend/microservices/ResourceManagement/src/test/resources/application.properties&#10;#&#9;backend/microservices/events/src/main/resources/application.properties&#10;#&#9;frontend/src/app/back-office/back-office-routing.module.ts&#10;#&#9;frontend/src/app/back-office/back-office.module.ts&#10;#&#9;frontend/src/app/front-office/front-office.module.ts">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Library/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/angular.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/angular.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/borrowing-policies/borrowing-policies.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/borrowing-policies/borrowing-policies.component.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +113,7 @@
     "Spring Boot.UserService.executor": "Run",
     "Spring Boot.configServer.executor": "Run",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "course-managment",
+    "git-widget-placeholder": "Library__managment",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/BabaYaga/Desktop/aletheia-platform/-Esprit-PIDEV-4SAE9-2026-Aletheia",
