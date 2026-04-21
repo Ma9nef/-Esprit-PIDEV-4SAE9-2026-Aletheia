@@ -124,7 +124,6 @@ pipeline {
                             mvn sonar:sonar \\
                               -Dsonar.projectKey=aletheia-library \\
                               -Dsonar.projectName='Aletheia Library Microservice' \\
-                              -Dsonar.branch.name=${env.BRANCH_NAME} \\
                               -Dsonar.sources=src/main/java \\
                               -Dsonar.tests=src/test/java \\
                               -Dsonar.java.binaries=target/classes \\
