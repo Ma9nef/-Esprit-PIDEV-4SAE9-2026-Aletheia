@@ -13,8 +13,8 @@ pipeline {
         // Décommente et adapte si Maven n'est pas dans le PATH du service Jenkins :
         // MVN = 'C:\\\\apache-maven-3.9.6\\\\bin\\\\mvn.cmd'
         MVN = 'mvn'
-        // Évite des PluginResolutionException si Maven Central est lent (timeouts / Wi‑Fi)
-        MAVEN_OPTS = '-Dmaven.wagon.http.connectionTimeout=600000 -Dmaven.wagon.http.readTimeout=600000 -Dmaven.wagon.http.retryHandler.count=5'
+        // Wagon = HTTP Maven vers Central (réseau lent / Wi‑Fi) — timeouts en millisecondes
+        MAVEN_OPTS = '-Dmaven.wagon.http.connectionTimeout=1200000 -Dmaven.wagon.http.readTimeout=1200000 -Dmaven.wagon.http.retryHandler.count=5'
     }
 
     stages {
@@ -75,12 +75,14 @@ pipeline {
 }
 
 void buildMaven(String path) {
+    // repackage skip en CI : évite téléchargements lourds (buildpack) + JAR "fat" inutile pour "compile OK".
+    // L’image Docker reconstruit un package complet dans son propre `docker build`.
+    def mvnArgs = '-B -U -DskipTests package -Dspring-boot.repackage.skip=true'
     dir(path) {
         if (isUnix()) {
-            sh "${MVN} -B -U -DskipTests package"
+            sh "${MVN} ${mvnArgs}"
         } else {
-            // -U force la mise à jour des dépendances / plugins (utile si cache .m2 partiel)
-            bat "${MVN} -B -U -DskipTests package"
+            bat "${MVN} ${mvnArgs}"
         }
     }
 }
