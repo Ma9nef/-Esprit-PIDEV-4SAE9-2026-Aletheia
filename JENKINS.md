@@ -70,6 +70,13 @@ Dans le `Jenkinsfile`, tu peux alors remplacer `agent any` par un `tools { maven
 - **`mvn` introuvable** : Maven n’est pas dans le PATH du **service** Jenkins. Soit tu ajoutes Maven au PATH **système** et tu redémarres le service Jenkins, soit tu définis dans le `Jenkinsfile` une variable `MVN` avec le chemin complet vers `mvn.cmd`.
 - **`npm` introuvable** : idem pour Node (PATH système ou chemin complet dans le stage frontend).
 - **Build très long** : normal la première fois (téléchargement des dépendances Maven/npm).
+- **Erreur `PluginResolutionException` / `plexus-compiler-javac`** (réseau lent ou cache corrompu) :
+  1. Relance le build (souvent transitoire).
+  2. Le `Jenkinsfile` fixe des **timeouts MAVEN** plus longs + `-U` sur `mvn` ; pousse le fichier à jour sur Git.
+  3. Si ça continue : le dépôt Maven du compte **LocalSystem** (souvent utilisé par le service Jenkins) est ici :  
+     `C:\Windows\System32\config\systemprofile\.m2\repository\`  
+     Supprime le dossier `org\codehaus\plexus\plexus-compiler-javac` (ou toute l’arborescence `org\codehaus\plexus` en dernier recours), puis relance le build.
+  4. Vérifie ta connexion (Wi‑Fi, VPN) : Maven Central doit être accessible sans coupure.
 
 ## 8. Fichier livré dans le projet
 

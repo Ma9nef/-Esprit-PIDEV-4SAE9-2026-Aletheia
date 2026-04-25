@@ -13,6 +13,8 @@ pipeline {
         // Décommente et adapte si Maven n'est pas dans le PATH du service Jenkins :
         // MVN = 'C:\\\\apache-maven-3.9.6\\\\bin\\\\mvn.cmd'
         MVN = 'mvn'
+        // Évite des PluginResolutionException si Maven Central est lent (timeouts / Wi‑Fi)
+        MAVEN_OPTS = '-Dmaven.wagon.http.connectionTimeout=600000 -Dmaven.wagon.http.readTimeout=600000 -Dmaven.wagon.http.retryHandler.count=5'
     }
 
     stages {
@@ -75,9 +77,10 @@ pipeline {
 void buildMaven(String path) {
     dir(path) {
         if (isUnix()) {
-            sh "${MVN} -B -DskipTests package"
+            sh "${MVN} -B -U -DskipTests package"
         } else {
-            bat "${MVN} -B -DskipTests package"
+            // -U force la mise à jour des dépendances / plugins (utile si cache .m2 partiel)
+            bat "${MVN} -B -U -DskipTests package"
         }
     }
 }
