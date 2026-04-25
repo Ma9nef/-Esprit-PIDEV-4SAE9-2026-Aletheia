@@ -13,8 +13,8 @@ pipeline {
         // Décommente et adapte si Maven n'est pas dans le PATH du service Jenkins :
         // MVN = 'C:\\\\apache-maven-3.9.6\\\\bin\\\\mvn.cmd'
         MVN = 'mvn'
-        // Wagon = HTTP Maven vers Central (réseau lent / Wi‑Fi) — timeouts en millisecondes
-        MAVEN_OPTS = '-Dmaven.wagon.http.connectionTimeout=1200000 -Dmaven.wagon.http.readTimeout=1200000 -Dmaven.wagon.http.retryHandler.count=5'
+        // Wagon : timeouts longs + préférer IPv4 (souvent plus stable sur Wi‑Fi Windows)
+        MAVEN_OPTS = '-Djava.net.preferIPv4Stack=true -Dmaven.wagon.http.connectionTimeout=1200000 -Dmaven.wagon.http.readTimeout=1200000 -Dmaven.wagon.http.retryHandler.count=5'
     }
 
     stages {
@@ -79,10 +79,13 @@ void buildMaven(String path) {
     // L’image Docker reconstruit un package complet dans son propre `docker build`.
     def mvnArgs = '-B -U -DskipTests package -Dspring-boot.repackage.skip=true'
     dir(path) {
-        if (isUnix()) {
-            sh "${MVN} ${mvnArgs}"
-        } else {
-            bat "${MVN} ${mvnArgs}"
+        // Rejoue jusqu’à 3× si Maven Central coupe (Connection reset / réseau instable)
+        retry(3) {
+            if (isUnix()) {
+                sh "${MVN} ${mvnArgs}"
+            } else {
+                bat "${MVN} ${mvnArgs}"
+            }
         }
     }
 }

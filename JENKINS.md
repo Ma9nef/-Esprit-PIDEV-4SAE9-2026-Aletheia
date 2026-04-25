@@ -70,6 +70,7 @@ Dans le `Jenkinsfile`, tu peux alors remplacer `agent any` par un `tools { maven
 - **`mvn` introuvable** : Maven n’est pas dans le PATH du **service** Jenkins. Soit tu ajoutes Maven au PATH **système** et tu redémarres le service Jenkins, soit tu définis dans le `Jenkinsfile` une variable `MVN` avec le chemin complet vers `mvn.cmd`.
 - **`npm` introuvable** : idem pour Node (PATH système ou chemin complet dans le stage frontend).
 - **Build très long** : normal la première fois (téléchargement des dépendances Maven/npm).
+- **`Connection reset` sur des dépendances** (ex. `tomcat-embed-websocket`, `spring-boot-http-converter`) : la connexion vers **repo.maven.apache.org** a été **coupée** (Wi‑Fi, box, VPN). Le `Jenkinsfile` **reprend chaque `mvn` jusqu’à 3 fois** (`retry`) et favorise l’**IPv4**. Utilise l’**Ethernet** si possible, coupe le **VPN** le temps du build, ou relance le build manuellement.
 - **Erreur `Read timed out` sur un `.jar` Maven Central** (ex. pendant `spring-boot-maven-plugin:repackage`) : connexion trop lente ou coupée. Le `Jenkinsfile` utilise **`-Dspring-boot.repackage.skip=true`** pour ne pas exécuter le repackage en CI (compile + `package` sans JAR exécutable « fat » ; les **Dockerfiles** refont un `mvn package` complet au build d’image). Utilise le **câble réseau** si possible et relance le build.
 - **Erreur `PluginResolutionException` / `plexus-compiler-javac`** (réseau lent ou cache corrompu) :
   1. Relance le build (souvent transitoire).
