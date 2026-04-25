@@ -92,6 +92,11 @@ To restart after code or config changes:
 docker compose up --build
 ```
 
+## Jenkins (intégration continue — cours)
+
+- `Jenkinsfile` à la racine : pipeline Maven + npm aligné sur le monorepo.
+- Guide d’installation Windows et création du job Pipeline : [JENKINS.md](JENKINS.md).
+
 ## CI
 
 GitHub Actions workflow:
