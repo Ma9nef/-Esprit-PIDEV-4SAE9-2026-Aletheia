@@ -9,6 +9,7 @@ Aletheia is a full-stack microservices-based web application for library managem
 ## Features
 
 ### Learner
+
 - 🔐 **Authentication & Authorization** – JWT-based login/register with role-based access (Admin, Instructor, Learner)
 - 🌌 **3D Campus Explorer** – Walk an interactive 3D campus with six buildings, a central fountain, stone benches, and animated lighting, all built with Three.js
 - 📚 **Digital Library** – Browse, search, and filter library resources (books, PDFs, exams, children materials) with category-colored cards and real-time stock indicators
@@ -25,12 +26,14 @@ Aletheia is a full-stack microservices-based web application for library managem
 - 🗓️ **Resource Booking** – Check availability and reserve rooms, devices, and materials
 
 ### Instructor / Trainer
+
 - ✏️ **Course Management** – Create, edit, and publish courses and lessons
 - 📋 **Assessment Management** – Build and manage quizzes and assessments
 - 🎓 **Certificate Management** – Issue certificates to learners
 - 📊 **Trainer Dashboard** – Overview of own courses and learner activity
 
 ### Admin
+
 - 👥 **User Management** – View, create, update, and deactivate platform users
 - 📚 **Library Admin** – Manage library products, stock levels, and categories
 - 🗓️ **Resource Admin** – Manage rooms, devices, materials, and reservations
@@ -44,46 +47,52 @@ Aletheia is a full-stack microservices-based web application for library managem
 
 ### Frontend
 
-| Technology | Version | Purpose |
-|---|---|---|
-| **Angular** | 16 | SPA framework |
-| **TypeScript** | 5.1 | Language |
-| **Three.js** | 0.183 | 3D campus rendering |
-| **Bootstrap** | 5.3 | UI components |
-| **RxJS** | 7.x | Reactive programming |
-| **Chart.js** | – | Analytics charts |
-| **jsPDF** | – | Certificate PDF generation |
-| **QRCode** | – | Certificate QR codes |
-| **Signature Pad** | – | Digital signature support |
+
+| Technology        | Version | Purpose                    |
+| ----------------- | ------- | -------------------------- |
+| **Angular**       | 16      | SPA framework              |
+| **TypeScript**    | 5.1     | Language                   |
+| **Three.js**      | 0.183   | 3D campus rendering        |
+| **Bootstrap**     | 5.3     | UI components              |
+| **RxJS**          | 7.x     | Reactive programming       |
+| **Chart.js**      | –       | Analytics charts           |
+| **jsPDF**         | –       | Certificate PDF generation |
+| **QRCode**        | –       | Certificate QR codes       |
+| **Signature Pad** | –       | Digital signature support  |
+
 
 ### Backend
 
-| Technology | Version | Purpose |
-|---|---|---|
-| **Java** | 17 | Language |
-| **Spring Boot** | 3.3 / 4.0 | Microservice framework |
-| **Spring Cloud** | 2023.x / 2025.x | Service discovery & gateway |
-| **Spring Security + JWT** | – | Authentication & authorization |
-| **Spring Data JPA** | – | Database ORM |
-| **MySQL** | 8 | Relational database |
-| **Lombok** | – | Boilerplate reduction |
-| **MapStruct** | – | DTO mapping |
-| **Cloudinary** | – | Image/avatar upload |
-| **Springdoc OpenAPI** | – | Swagger UI API docs |
-| **Maven** | 3.8+ | Build tool |
+
+| Technology                | Version         | Purpose                        |
+| ------------------------- | --------------- | ------------------------------ |
+| **Java**                  | 17              | Language                       |
+| **Spring Boot**           | 3.3 / 4.0       | Microservice framework         |
+| **Spring Cloud**          | 2023.x / 2025.x | Service discovery & gateway    |
+| **Spring Security + JWT** | –               | Authentication & authorization |
+| **Spring Data JPA**       | –               | Database ORM                   |
+| **MySQL**                 | 8               | Relational database            |
+| **Lombok**                | –               | Boilerplate reduction          |
+| **MapStruct**             | –               | DTO mapping                    |
+| **Cloudinary**            | –               | Image/avatar upload            |
+| **Springdoc OpenAPI**     | –               | Swagger UI API docs            |
+| **Maven**                 | 3.8+            | Build tool                     |
+
 
 ## Microservices Architecture
 
-| Service | Port | Description |
-|---|---|---|
-| **Eureka** | 8761 | Service discovery server |
-| **API Gateway** | 8080 | Centralized routing via Spring Cloud Gateway |
-| **User Service** | 8081 | User authentication, profiles, and management |
-| **Courses** | 8082 | Course management, enrollment, assessments, certificates |
-| **Library** | 8083 | Library products, stock, cart, and checkout |
-| **ResourceManagement** | 8094 | Room/device/material availability and reservations |
-| **Events** | 8085 | Event creation and registration |
-| **Offer** | 8086 | Offers, flash sales, coupons, and subscriptions |
+
+| Service                | Port | Description                                              |
+| ---------------------- | ---- | -------------------------------------------------------- |
+| **Eureka**             | 8761 | Service discovery server                                 |
+| **API Gateway**        | 8080 | Centralized routing via Spring Cloud Gateway             |
+| **User Service**       | 8081 | User authentication, profiles, and management            |
+| **Courses**            | 8082 | Course management, enrollment, assessments, certificates |
+| **Library**            | 8083 | Library products, stock, cart, and checkout              |
+| **ResourceManagement** | 8094 | Room/device/material availability and reservations       |
+| **Events**             | 8085 | Event creation and registration                          |
+| **Offer**              | 8086 | Offers, flash sales, coupons, and subscriptions          |
+
 
 ## Architecture
 
@@ -166,82 +175,75 @@ Aletheia/
 Start services in this order (Eureka must be first):
 
 1. **Start the Eureka Server**
-   ```bash
+  ```bash
    cd backend/eureka
    ./mvnw spring-boot:run
-   ```
-
+  ```
 2. **Start the API Gateway**
-   ```bash
+  ```bash
    cd backend/ApiGateway
    ./mvnw spring-boot:run
-   ```
-
+  ```
 3. **Start the User Service**
-   ```bash
+  ```bash
    cd backend/user-service
    ./mvnw spring-boot:run
-   ```
-
+  ```
 4. **Start the Courses Service**
-   ```bash
+  ```bash
    cd backend/courses
    ./mvnw spring-boot:run
-   ```
-
+  ```
 5. **Start the Library Service**
-   ```bash
+  ```bash
    cd backend/Library
    ./mvnw spring-boot:run
-   ```
-
+  ```
 6. **Start the Resource Management Service**
-   ```bash
+  ```bash
    cd backend/ResourceManagement
    ./mvnw spring-boot:run
-   ```
-
+  ```
 7. **Start the Events Service**
-   ```bash
+  ```bash
    cd backend/events
    ./mvnw spring-boot:run
-   ```
-
+  ```
 8. **Start the Offer Service**
-   ```bash
+  ```bash
    cd backend/offer
    ./mvnw spring-boot:run
-   ```
+  ```
 
 > ⚠️ Make sure MySQL is running and the required databases are created before starting services. Update `application.properties` in each service with your database credentials.
 
 ### Frontend Setup
 
 1. **Install dependencies**
-   ```bash
+  ```bash
    cd frontend
    npm install
-   ```
-
+  ```
 2. **Run the development server**
-   ```bash
+  ```bash
    ng serve
-   ```
-
+  ```
 3. Open your browser and navigate to `http://localhost:4200`
 
 ### Default Routes
 
-| URL | Page |
-|---|---|
-| `/` | Landing / Home |
-| `/explore` | 3D Campus Explorer |
-| `/front/library` | Digital Library |
-| `/front/resources` | Resource Booking |
-| `/front/courses` | Course Catalog |
-| `/front/offers` | Offers & Plans |
-| `/dashboardLearner` | Learner Dashboard |
-| `/dashboardAdmin` | Admin Dashboard |
+
+| URL                 | Page               |
+| ------------------- | ------------------ |
+| `/`                 | Landing / Home     |
+| `/explore`          | 3D Campus Explorer |
+| `/front/library`    | Digital Library    |
+| `/front/resources`  | Resource Booking   |
+| `/front/courses`    | Course Catalog     |
+| `/front/offers`     | Offers & Plans     |
+| `/dashboardLearner` | Learner Dashboard  |
+| `/dashboardAdmin`   | Admin Dashboard    |
+
 
 ## API Documentation
 
@@ -253,12 +255,14 @@ Once services are running, Swagger UI is available at:
 
 ## Contributors
 
+
 | Name | Role | GitHub |
-|------|------|--------|
+| ---- | ---- | ------ |
 |      |      |        |
 |      |      |        |
 |      |      |        |
 |      |      |        |
+
 
 ## Academic Context
 
@@ -272,3 +276,4 @@ Developed at **Esprit School of Engineering – Tunisia**
 - **Angular** – Frontend framework
 - **Three.js** – 3D visualization library
 - All open-source contributors whose libraries made this project possible
+

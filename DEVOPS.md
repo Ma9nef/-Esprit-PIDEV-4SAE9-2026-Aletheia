@@ -97,6 +97,12 @@ docker compose up --build
 - `Jenkinsfile` à la racine : pipeline Maven + npm aligné sur le monorepo.
 - Guide d’installation Windows et création du job Pipeline : [JENKINS.md](JENKINS.md).
 
+## SonarQube (qualité de code)
+
+- Service Docker **`sonarqube`** (port **9000**) dans [docker-compose.yml](docker-compose.yml).
+- Réacteur Maven **[backend/pom.xml](backend/pom.xml)** pour une analyse unique de tous les modules Java.
+- Procédure détaillée + Jenkins (`RUN_SONAR`, credential `sonar-token`) : [SONARQUBE.md](SONARQUBE.md).
+
 ## CI
 
 GitHub Actions workflow:

@@ -4,6 +4,11 @@
 pipeline {
     agent any
 
+    parameters {
+        booleanParam(name: 'RUN_SONAR', defaultValue: false, description: 'Analyser le backend avec SonarQube (credential Jenkins sonar-token requis)')
+        string(name: 'SONAR_HOST_URL', defaultValue: 'http://localhost:9000', trim: true, description: 'URL SonarQube (ex. http://localhost:9000)')
+    }
+
     options {
         timestamps()
         disableConcurrentBuilds(abortPrevious: true)
@@ -59,6 +64,27 @@ pipeline {
                     buildMaven('backend/microservices/offer')
                     buildMaven('backend/microservices/events')
                     buildMaven('backend/microservices/ResourceManagement')
+                }
+            }
+        }
+
+        stage('SonarQube (backend)') {
+            when {
+                expression { return params.RUN_SONAR == true }
+            }
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    dir('backend') {
+                        script {
+                            def url = params.SONAR_HOST_URL
+                            def cmd = "${MVN} -B compile sonar:sonar -Dsonar.host.url=${url} -Dsonar.token=${SONAR_TOKEN} -Dsonar.projectKey=aletheia-backend -Dsonar.projectName=Aletheia Backend"
+                            if (isUnix()) {
+                                sh cmd
+                            } else {
+                                bat cmd
+                            }
+                        }
+                    }
                 }
             }
         }

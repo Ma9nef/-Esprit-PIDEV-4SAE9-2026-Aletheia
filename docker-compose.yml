@@ -307,11 +307,29 @@ services:
     networks:
       - aletheia-network
 
+  sonarqube:
+    image: sonarqube:community
+    container_name: aletheia-sonarqube
+    environment:
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+    ports:
+      - "9000:9000"
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    mem_limit: 2g
+    networks:
+      - aletheia-network
+
 volumes:
   mysql_data:
   mongo_data:
   zookeeper_data:
   kafka_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
 
 networks:
   aletheia-network:
