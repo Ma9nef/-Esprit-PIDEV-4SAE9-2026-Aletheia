@@ -77,7 +77,8 @@ pipeline {
                     dir('backend') {
                         script {
                             def url = params.SONAR_HOST_URL
-                            def cmd = "${MVN} -B compile sonar:sonar -Dsonar.host.url=${url} -Dsonar.token=${SONAR_TOKEN} -Dsonar.projectKey=aletheia-backend -Dsonar.projectName=Aletheia Backend"
+                            // Pas d'espace dans -Dsonar.projectName=... sans guillemets (sinon "Backend" est vu comme phase Maven).
+                            def cmd = "${MVN} -B compile sonar:sonar -Dsonar.host.url=${url} -Dsonar.token=${SONAR_TOKEN} -Dsonar.projectKey=aletheia-backend -Dsonar.projectName=Aletheia-Backend"
                             if (isUnix()) {
                                 sh cmd
                             } else {
