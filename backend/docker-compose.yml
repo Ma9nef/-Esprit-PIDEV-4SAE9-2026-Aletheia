@@ -13,6 +13,14 @@ services:
     depends_on:
       - eureka
 
+  api-gateway:
+    build: ./ApiGateway
+    container_name: api-gateway
+    ports:
+      - "8089:8089"
+    depends_on:
+      - config-server
+
   mysql-courses:
     image: mysql:8.0
     container_name: mysql-courses
@@ -30,21 +38,10 @@ services:
     ports:
       - "8081:8081"
     depends_on:
+      - api-gateway
       - mysql-courses
-      - eureka
-      - config-server
     environment:
       SPRING_CONFIG_IMPORT: optional:configserver:http://config-server:9999
-
-  api-gateway:
-    build: ./ApiGateway
-    container_name: api-gateway
-    ports:
-      - "8089:8089"
-    depends_on:
-      - eureka
-      - config-server
-      - courses-service
 
 volumes:
   mysql_courses_data:
