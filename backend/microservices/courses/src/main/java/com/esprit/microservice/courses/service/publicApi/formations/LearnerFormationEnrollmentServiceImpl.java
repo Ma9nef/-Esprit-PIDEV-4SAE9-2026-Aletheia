@@ -1,0 +1,89 @@
+package com.esprit.microservice.courses.service.publicApi.formations;
+
+import com.esprit.microservice.courses.client.ProductClient;
+import com.esprit.microservice.courses.dto.ProductDTO;
+import com.esprit.microservice.courses.dto.training.MyEnrolledFormationDTO;
+import com.esprit.microservice.courses.entity.formations.Formation;
+import com.esprit.microservice.courses.entity.progress.FormationEnrollment;
+import com.esprit.microservice.courses.repository.FormationEnrollmentRepository;
+import com.esprit.microservice.courses.repository.FormationRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class LearnerFormationEnrollmentServiceImpl implements LearnerFormationEnrollmentService {
+
+    private final FormationEnrollmentRepository formationEnrollmentRepository;
+    private final FormationRepository formationRepository;
+    private final ProductClient productClient;
+
+    public LearnerFormationEnrollmentServiceImpl(FormationEnrollmentRepository formationEnrollmentRepository,
+                                                 FormationRepository formationRepository,
+                                                 ProductClient productClient) {
+        this.formationEnrollmentRepository = formationEnrollmentRepository;
+        this.formationRepository = formationRepository;
+        this.productClient = productClient;
+    }
+
+    @Override
+    public FormationEnrollment enroll(Long userId, Long formationId) {
+        if (formationEnrollmentRepository.existsByUserIdAndFormation_Id(userId, formationId)) {
+            throw new RuntimeException("User is already enrolled in this formation");
+        }
+
+        Formation formation = formationRepository.findById(formationId)
+                .orElseThrow(() -> new RuntimeException("Formation not found with id: " + formationId));
+
+        if (Boolean.TRUE.equals(formation.getArchived())) {
+            throw new RuntimeException("You cannot enroll in an archived formation");
+        }
+
+        FormationEnrollment enrollment = new FormationEnrollment();
+        enrollment.setUserId(userId);
+        enrollment.setFormation(formation);
+
+        return formationEnrollmentRepository.save(enrollment);
+    }
+
+    @Override
+    public List<FormationEnrollment> getMyEnrollments(Long userId) {
+        return formationEnrollmentRepository.findByUserId(userId);
+    }
+
+    public List<MyEnrolledFormationDTO> getMyEnrolledFormations(Long userId) {
+        List<FormationEnrollment> enrollments = formationEnrollmentRepository.findByUserId(userId);
+
+        return enrollments.stream().map(enrollment -> {
+            Formation formation = enrollment.getFormation();
+
+            MyEnrolledFormationDTO dto = new MyEnrolledFormationDTO();
+            dto.setEnrollmentId(enrollment.getId());
+            dto.setStatus(enrollment.getStatus().name());
+            dto.setEnrolledAt(enrollment.getEnrolledAt());
+
+            dto.setFormationId(formation.getId());
+            dto.setInstructorId(formation.getInstructorId());
+            dto.setTitle(formation.getTitle());
+            dto.setDescription(formation.getDescription());
+            dto.setDuration(formation.getDuration());
+            dto.setCapacity(formation.getCapacity());
+            dto.setArchived(formation.getArchived());
+
+            ProductDTO product = null;
+            if (formation.getProductId() != null) {
+                product = productClient.getProductById(formation.getProductId());
+            }
+
+            if (product != null) {
+                dto.setProductId(product.getId());
+                dto.setProductTitle(product.getTitle());
+                dto.setProductDescription(product.getDescription());
+                dto.setProductAuthor(product.getAuthor());
+                dto.setProductFileUrl(product.getFileUrl());
+            }
+
+            return dto;
+        }).toList();
+    }
+}
