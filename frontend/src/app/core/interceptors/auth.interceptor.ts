@@ -9,11 +9,11 @@ import {
 export class AuthInterceptor implements HttpInterceptor {
 
   private allowedHosts = [
-    'http://localhost:8080', // user-service
+    'http://localhost:18080', // user-service (Docker hôte) si accès direct
+    'http://localhost:8089', // API Gateway
     'http://localhost:8081', // courses
     'http://localhost:8082', // library
     'http://localhost:8086', // offer
-    'http://localhost:8089', // API Gateway
     'http://localhost:8090', // events
     'http://localhost:8094'  // resource management
   ];

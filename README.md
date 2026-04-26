@@ -150,13 +150,18 @@ Aletheia/
 │       └── core/              # Services, guards, models
 ├── backend/
 │   ├── eureka/                # Service discovery
+│   ├── config-server/         # Config centralisée
 │   ├── ApiGateway/            # Gateway routing
-│   ├── user-service/          # Auth & user management
-│   ├── courses/               # Courses & assessments
-│   ├── Library/               # Library & cart
-│   ├── ResourceManagement/    # Resource booking
-│   ├── events/                # Events
-│   └── offer/                 # Offers & subscriptions
+│   ├── microservices/         # 7 services (branche type course-managment)
+│   │   ├── user-service/      # Auth & comptes
+│   │   ├── courses/           # Formations, évaluations, certificats
+│   │   ├── Library/           # Médiathèque, panier
+│   │   ├── offer/             # Offres & abonnements (Java)
+│   │   ├── events/
+│   │   ├── ResourceManagement/
+│   │   └── Notification/      # API notifications (Python / FastAPI)
+│   └── ml/                    # optionnel
+│       └── offer-recommendation/  # Python (reco abonnement) + données
 └── README.md
 ```
 
@@ -186,34 +191,36 @@ Start services in this order (Eureka must be first):
   ```
 3. **Start the User Service**
   ```bash
-   cd backend/user-service
+   cd backend/microservices/user-service
    ./mvnw spring-boot:run
   ```
 4. **Start the Courses Service**
   ```bash
-   cd backend/courses
+   cd backend/microservices/courses
    ./mvnw spring-boot:run
   ```
 5. **Start the Library Service**
   ```bash
-   cd backend/Library
+   cd backend/microservices/Library
    ./mvnw spring-boot:run
   ```
 6. **Start the Resource Management Service**
   ```bash
-   cd backend/ResourceManagement
+   cd backend/microservices/ResourceManagement
    ./mvnw spring-boot:run
   ```
 7. **Start the Events Service**
   ```bash
-   cd backend/events
+   cd backend/microservices/events
    ./mvnw spring-boot:run
   ```
 8. **Start the Offer Service**
   ```bash
-   cd backend/offer
+   cd backend/microservices/offer
    ./mvnw spring-boot:run
   ```
+
+Machine learning (recommandation d’abonnement) : scripts Python dans `backend/ml/offer-recommendation/`. L’image Docker y copie ce dossier vers `/app/ml/offer-recommendation/`.
 
 > ⚠️ Make sure MySQL is running and the required databases are created before starting services. Update `application.properties` in each service with your database credentials.
 

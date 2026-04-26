@@ -58,10 +58,11 @@ docker compose up --build
 ## Exposed ports
 
 - Frontend: `http://localhost:4200`
-- API Gateway: `http://localhost:8089`
+- API Gateway (trafic HTTP / routage) : `http://localhost:8089`
+- Actuator sur l’API Gateway (health, prometheus) : `http://localhost:8092` — Spring Cloud Gateway ne sert pas `/actuator` sur 8089 ; le port management est séparé.
 - Config Server: `http://localhost:9999`
 - Eureka: `http://localhost:8761`
-- User Service: `http://localhost:8080`
+- User Service (accès hôte Docker, port mappé) : `http://localhost:18080` (évite 8080 si Jenkins l’utilise) ; en interne Compose : `user-service:8080`
 - Courses Service: `http://localhost:8081`
 - Library Service: `http://localhost:8082`
 - Offer Service: `http://localhost:8086`

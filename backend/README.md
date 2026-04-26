@@ -1,3 +1,29 @@
+# Aletheia — backend
+
+## Arborescence (même principe que la branche `course-managment`)
+
+Tout le code métier vit sous **`backend/microservices/`**. L’infrastructure (discovery, config, routage) est directement sous **`backend/`**, pas mélangée aux microservices.
+
+```
+backend/
+├── eureka/                 # service discovery
+├── config-server/          # configuration centralisée
+├── ApiGateway/             # Spring Cloud Gateway
+├── microservices/
+│   ├── user-service/       # Java (Spring Boot)
+│   ├── courses/            # Java
+│   ├── Library/            # Java
+│   ├── offer/              # Java
+│   ├── events/             # Java
+│   ├── ResourceManagement/  # Java
+│   └── Notification/       # FastAPI (Python) — pas de pom Maven
+└── ml/                     # optionnel : scripts Python / données ML (hors JAR, ex. reco abonnement)
+```
+
+Compiler avec Maven (agrégateur) : `cd backend` puis `mvn -DskipTests compile` (modules listés dans `pom.xml`). **Notification** n’est pas un module Maven : lancer l’app Python depuis `backend/microservices/Notification` (voir `run.py` / `pyproject` si présent).
+
+---
+
 # API Gateway Configuration - COMPLETE ✅
 
 **Status Date:** March 1, 2026

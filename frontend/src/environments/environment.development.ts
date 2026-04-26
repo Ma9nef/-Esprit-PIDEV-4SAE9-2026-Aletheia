@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8080/api',
+  // Aligné sur l’API Gateway (8080 souvent pris par Jenkins)
+  apiBaseUrl: 'http://localhost:8089/api',
   apiUrl: 'http://localhost:8089/api'
 };
 

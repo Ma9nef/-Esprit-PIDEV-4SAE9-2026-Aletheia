@@ -1,10 +1,10 @@
 FROM maven:3.9-eclipse-temurin-17 AS builder
 WORKDIR /app
 
-COPY pom.xml .
+COPY microservices/offer/pom.xml .
 RUN mvn dependency:go-offline -B
 
-COPY src ./src
+COPY microservices/offer/src ./src
 RUN mvn clean package -DskipTests -B
 
 FROM eclipse-temurin:17-jre-alpine
@@ -13,6 +13,8 @@ WORKDIR /app
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 
 COPY --from=builder /app/target/*.jar app.jar
+# ML offer recommendation (see ../../ml/offer-recommendation in repo)
+COPY ml/offer-recommendation /app/ml/offer-recommendation
 
 RUN chown -R appuser:appgroup /app
 USER appuser

@@ -87,24 +87,34 @@ jobs:
         include:
           - name: frontend
             context: ./frontend
+            file: Dockerfile
           - name: api-gateway
             context: ./backend/ApiGateway
+            file: Dockerfile
           - name: config-server
             context: ./backend/config-server
+            file: Dockerfile
           - name: eureka
             context: ./backend/eureka
+            file: Dockerfile
           - name: user-service
             context: ./backend/microservices/user-service
+            file: Dockerfile
           - name: courses
             context: ./backend/microservices/courses
+            file: Dockerfile
           - name: library
             context: ./backend/microservices/Library
+            file: Dockerfile
           - name: offer
-            context: ./backend/microservices/offer
+            context: ./backend
+            file: microservices/offer/Dockerfile
           - name: events
             context: ./backend/microservices/events
+            file: Dockerfile
           - name: resource-management
             context: ./backend/microservices/ResourceManagement
+            file: Dockerfile
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -116,5 +126,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ${{ matrix.context }}
+          file: ${{ matrix.context }}/${{ matrix.file }}
           push: false
           tags: aletheia/${{ matrix.name }}:ci

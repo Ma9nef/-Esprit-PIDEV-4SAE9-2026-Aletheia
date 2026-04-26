@@ -1,0 +1,70 @@
+# MongoDB for offer (same role as docker-compose: mongodb:27017)
+# Apply first: kubectl apply -f k8s/aletheia/mongodb.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  namespace: aletheia
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/part-of: aletheia
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: mongodb
+  ports:
+    - name: mongodb
+      port: 27017
+      targetPort: mongodb
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: aletheia
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/part-of: aletheia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: mongodb
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:7.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mongodb
+              containerPort: 27017
+          env:
+            - name: MONGO_INITDB_DATABASE
+              value: "offer_db"
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+          readinessProbe:
+            exec:
+              command: ["mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok", "mongodb://127.0.0.1:27017/admin"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command: ["mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok", "mongodb://127.0.0.1:27017/admin"]
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+      volumes:
+        - name: data
+          emptyDir: {}
