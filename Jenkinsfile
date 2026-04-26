@@ -15,7 +15,7 @@ pipeline {
         stage('Build Eureka') {
             steps {
                 dir("${BACKEND_DIR}/eureka") {
-                    bat 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
         stage('Build Config Server') {
             steps {
                 dir("${BACKEND_DIR}/config-server") {
-                    bat 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
         stage('Build API Gateway') {
             steps {
                 dir("${BACKEND_DIR}/ApiGateway") {
-                    bat 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
@@ -39,7 +39,7 @@ pipeline {
         stage('Build Courses Service') {
             steps {
                 dir("${BACKEND_DIR}/microservices/courses") {
-                    bat 'mvn clean package -DskipTests'
+                    sh 'mvn clean package -DskipTests'
                 }
             }
         }
@@ -47,7 +47,7 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    bat 'docker compose build'
+                    sh 'docker compose build'
                 }
             }
         }
@@ -55,14 +55,14 @@ pipeline {
         stage('Start Containers') {
             steps {
                 dir("${BACKEND_DIR}") {
-                    bat 'docker compose up -d'
+                    sh 'docker compose up -d'
                 }
             }
         }
 
         stage('Show Containers') {
             steps {
-                bat 'docker ps'
+                sh 'docker ps'
             }
         }
     }
