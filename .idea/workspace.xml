@@ -5,39 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="ya manef salla7">
-      <change beforePath="$PROJECT_DIR$/backend/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/ResourceManagement.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/ResourceManagement.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/aletheia-platform.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/aletheia-platform.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/courses-service.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/courses-service.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/event-microservice.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/event-microservice.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/library-service.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/library-service.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/src/main/java/com/esprit/microservice/library/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/src/main/java/com/esprit/microservice/library/config/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Library/src/main/java/com/esprit/microservice/library/config/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Notification/app/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Notification/app/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/config/CorsConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/JwtReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/JwtReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/service/core/CertificateServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/service/core/CertificateServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignClientConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/FeignConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/controller/ResourceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/controller/ResourceController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/controller/TestTokenController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/service/RoomWebSocketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/java/com/esprit/microservice/events/service/RoomWebSocketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/events/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/events/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/explore3d/explore3d.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,6 +37,11 @@
     <option name="cachedIndexableFilesCount" value="414" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="course-managment" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -74,12 +50,12 @@
     &quot;assignee&quot;: &quot;Seif123840&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Ma9nef/-Esprit-PIDEV-4SAE9-2026-Aletheia.git&quot;,
-    &quot;accountId&quot;: &quot;6fcdbb90-0ae2-41f3-b3ee-b9ddcef7998c&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Ma9nef/-Esprit-PIDEV-4SAE9-2026-Aletheia.git",
+    "accountId": "3237b34d-abe1-48d6-8a87-61e621825ffe"
   }
-}</component>
+}]]></component>
   <component name="HttpClientOnboardingState">{
   &quot;isOnboardingCommentShown&quot;: true
 }</component>
@@ -128,6 +104,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "Spring Boot.AletheiaApplication.executor": "Run",
     "Spring Boot.ApiGatewayApplication.executor": "Run",
+    "Spring Boot.ConfigServerApplication.executor": "Run",
     "Spring Boot.CoursesApplication.executor": "Run",
     "Spring Boot.CoursesService.executor": "Run",
     "Spring Boot.EurekaApplication.executor": "Run",
@@ -142,7 +119,7 @@
     "Spring Boot.UserService.executor": "Run",
     "Spring Boot.configServer.executor": "Run",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "course-managment",
+    "git-widget-placeholder": "test-devops",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/BabaYaga/Desktop/aletheia-platform/-Esprit-PIDEV-4SAE9-2026-Aletheia",
@@ -191,6 +168,7 @@
           <value>
             <map>
               <entry key="ApiGatewayApplication" value="STOPPED" />
+              <entry key="ConfigServerApplication" value="STOPPED" />
               <entry key="CoursesService" value="STOPPED" />
               <entry key="EurekaApplication" value="STOPPED" />
               <entry key="EventsService" value="STOPPED" />
@@ -205,7 +183,7 @@
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="HTTP Request.All in test">
+  <component name="RunManager" selected="Spring Boot.ConfigServerApplication">
     <configuration name="All in test" type="HttpClient.HttpRequestRunConfigurationType" factoryName="HTTP Request" temporary="true" path="$PROJECT_DIR$/backend/test.http">
       <method v="2" />
     </configuration>
@@ -238,6 +216,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ConfigServerApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="config-server" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.configserver.ConfigServerApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="CoursesService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="courses" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.courses.CoursesApplication" />
@@ -252,6 +237,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="EventsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="event-microservice (1)" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.events.EventsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="EventsService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="event-microservice" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.events.EventsApplication" />
@@ -262,6 +254,13 @@
     <configuration name="LibraryService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Library" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.library.LibraryApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OfferApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="offer (1)" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.offer.OfferApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -298,6 +297,9 @@
       <item itemvalue="HTTP Request.All in test" />
       <item itemvalue="HTTP Request.test | Checkout — triggers Feign call to user-service" />
       <item itemvalue="JUnit.All in Library" />
+      <item itemvalue="Spring Boot.ConfigServerApplication" />
+      <item itemvalue="Spring Boot.EventsApplication" />
+      <item itemvalue="Spring Boot.OfferApplication" />
       <item itemvalue="Spring Boot.configServer" />
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.CoursesService" />
