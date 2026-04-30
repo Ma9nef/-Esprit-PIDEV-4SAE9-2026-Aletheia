@@ -140,7 +140,7 @@ pipeline {
         // ────────────────────────────────────────────────────────────────────
             steps {
                 echo 'Waiting for SonarQube Quality Gate result…'
-                timeout(time: 5, unit: 'MINUTES') {
+                timeout(time: 15, unit: 'MINUTES') {
                     // abortPipeline: true  → fails the build if gate is RED
                     waitForQualityGate abortPipeline: true
                 }
