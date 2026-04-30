@@ -9,10 +9,10 @@ pipeline {
     agent any
 
     // ── Tool aliases (must match names configured in Jenkins → Global Tools) ──
-    tools {
-        maven 'Maven-3.9'
-        jdk   'JDK-17'
-    }
+   tools {
+    maven 'maven3'
+    jdk   'JAVA_HOME'
+}
 
     // ── Pipeline-wide environment variables ─────────────────────────────────
     environment {
