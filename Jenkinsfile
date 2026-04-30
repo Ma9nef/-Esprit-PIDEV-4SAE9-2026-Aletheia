@@ -24,7 +24,7 @@ pipeline {
         DOCKER_TAG            = "${env.BRANCH_NAME}-${env.BUILD_NUMBER}"
 
         // SonarQube server name configured in Jenkins → Configure System
-        SONAR_SERVER          = 'SonarQube'
+        SONAR_SERVER          = 'Sonarqube'
 
         // Maven working directory
         LIBRARY_DIR           = 'backend/microservices/Library'
