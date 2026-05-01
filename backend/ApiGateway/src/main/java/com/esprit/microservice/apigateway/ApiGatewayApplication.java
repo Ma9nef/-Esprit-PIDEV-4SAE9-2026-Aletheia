@@ -32,15 +32,19 @@ public class ApiGatewayApplication {
                         .uri("http://localhost:8081"))
                 .route("courses-instructor", r -> r.path("/api/instructor/**")
                         .uri("http://localhost:8081"))
-                .route("courses-lesson", r -> r.path("/api/lesson/learn/**")
-                        .filters(f -> f.rewritePath("/api/(?<segment>.*)", "/${segment}"))
+                .route("courses-lesson", r -> r.path("/api/lesson/**")
                         .uri("http://localhost:8081"))
                 .route("pidev-features", r -> r.path("/pidev/**")
                         .filters(f -> f
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("lb://COURSES-SERVICE"))
-
+                .route("courses-lesson-instructor", r -> r.path("/api/lesson/instructor/**")
+                        .filters(f -> f
+                                .rewritePath("/api/(?<segment>.*)", "/${segment}")
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("http://localhost:8081"))
                 // Route for Submissions (starts with /api/assessment-results)
                 .route("assessments", r -> r.path("/api/assessments/**")
                         .filters(f -> f
@@ -93,6 +97,9 @@ public class ApiGatewayApplication {
                         .uri("lb://EVENT-MICROSERVICE"))
 
                 // RESOURCE MANAGEMENT SERVICE
+                .route("resource-management-rm", r -> r.path("/api/rm/**")
+                        .filters(f -> f.rewritePath("/api/rm/(?<segment>.*)", "/api/${segment}"))
+                        .uri("lb://RESOURCEMANAGEMENT"))
                 .route("resources-service", r -> r.path("/api/resources/**")
                         .uri("lb://RESOURCEMANAGEMENT"))
                 .route("reservations-service", r -> r.path("/api/reservations/**")

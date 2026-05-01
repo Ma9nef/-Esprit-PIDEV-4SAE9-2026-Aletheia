@@ -24,87 +24,43 @@ public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
- /*
-@Bean
-   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-       http
-               .csrf(csrf -> csrf.disable())
-               .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-               .sessionManagement(session ->
-                       session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               )
-               .authorizeHttpRequests(auth -> auth
-                       // Permettre les requêtes OPTIONS pour CORS preflight
-                       .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                       // Endpoints publics
-                       .requestMatchers("/api/auth/**").permitAll()
-                       // WebSocket endpoints - VERY IMPORTANT
-                       .requestMatchers("/room/**").permitAll()
-                       .requestMatchers("/room/*").permitAll()
-                       .requestMatchers("/ws/**").permitAll()
-                       .requestMatchers("/ws/*").permitAll()
-                       .requestMatchers("/socket.io/**").permitAll() // For SockJS fallback
-                       // Endpoints protégés
-                       .requestMatchers("/api/events/**").authenticated()
-                       .requestMatchers("/api/allocations/**").authenticated()
-                       .anyRequest().authenticated()
-               )
-               .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/room/**").permitAll()
+                        .requestMatchers("/room/*").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/ws/*").permitAll()
+                        .requestMatchers("/socket.io/**").permitAll()
+                        .requestMatchers("/api/events/**").authenticated()
+                        .requestMatchers("/api/allocations/**").authenticated()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-       return http.build();
-   }
-
- */
- @Bean
- public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-     http
-             .csrf(csrf -> csrf.disable())
-             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-             .authorizeHttpRequests(auth -> auth
-                     .anyRequest().permitAll()  // TOUT PERMETTRE POUR TEST
-             )
-             // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)  // COMMENTÉ
-             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-     return http.build();
- }
+        return http.build();
+    }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
-        // Autoriser votre frontend Angular
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-
-        // Autoriser toutes les méthodes HTTP nécessaires
-        configuration.setAllowedMethods(Arrays.asList(
-                "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"
-        ));
-
-        // Autoriser tous les headers
-        configuration.setAllowedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "X-Requested-With",
-                "Cache-Control"
-        ));
-
-        // Exposer les headers
-        configuration.setExposedHeaders(Arrays.asList(
-                "Authorization",
-                "Content-Disposition"
-        ));
-
-        // Autoriser les credentials
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With", "Cache-Control"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Disposition"));
         configuration.setAllowCredentials(true);
-
-        // Temps de cache pour les preflight requests
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
 }

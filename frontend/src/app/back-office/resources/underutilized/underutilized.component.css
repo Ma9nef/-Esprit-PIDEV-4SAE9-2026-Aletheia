@@ -1,0 +1,22 @@
+.uu-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.uu-condition {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.uu-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e2e8f0;
+}
+
+.uu-dot-filled {
+  background: #f59e0b;
+}

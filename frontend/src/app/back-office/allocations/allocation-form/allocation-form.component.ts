@@ -8,6 +8,7 @@ import { ResourceService } from '../resource.service';
 import { Allocation, Event, Resource, RESOURCE_TYPES } from '../allocation.model';
 
 @Component({
+  standalone: false,
   selector: 'app-allocation-form',
   templateUrl: './allocation-form.component.html',
   styleUrls: ['./allocation-form.component.css']

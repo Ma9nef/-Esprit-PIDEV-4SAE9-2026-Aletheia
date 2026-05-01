@@ -6,6 +6,7 @@ import { AllocationService } from '../allocation'; // Correction: allocation.ser
 import { RESOURCE_TYPES, EVENT_STATUS } from '../allocation.model';
 
 @Component({
+  standalone: false,
   selector: 'app-allocation-detail',
   templateUrl: './allocation-detail.component.html',
   styleUrls: ['./allocation-detail.component.css']

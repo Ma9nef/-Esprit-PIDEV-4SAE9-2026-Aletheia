@@ -37,6 +37,7 @@ interface LibraryResource {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-library',
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.css']

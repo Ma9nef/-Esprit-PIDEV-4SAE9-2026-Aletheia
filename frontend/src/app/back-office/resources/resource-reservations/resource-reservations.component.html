@@ -9,7 +9,6 @@
     <div class="rr-header-info" *ngIf="resource">
       <h1 class="rr-title">Reservations — {{ resource.name }}</h1>
       <span class="rr-resource-badge rr-badge-{{ resource.type.toLowerCase() }}">
-        {{ resource.type === 'ROOM' ? '🏫' : resource.type === 'DEVICE' ? '💻' : '📦' }}
         {{ resource.type }}
       </span>
     </div>
@@ -81,12 +80,15 @@
     <div class="rr-card" *ngFor="let r of filtered">
       <div class="rr-card-top">
         <div class="rr-card-info">
-          <span class="rr-event-id">Event: <strong>{{ r.eventId }}</strong></span>
-          <span class="rr-created-by" *ngIf="r.createdBy">by {{ r.createdBy }}</span>
+          <span class="rr-event-id" *ngIf="r.sessionTitle">Session: <strong>{{ r.sessionTitle }}</strong></span>
+          <span class="rr-event-id" *ngIf="!r.sessionTitle">Instructor: <strong>{{ r.instructorId }}</strong></span>
+          <span class="rr-created-by" *ngIf="r.courseCode">{{ r.courseCode }}</span>
         </div>
-        <span class="rr-status-badge" [ngClass]="statusClass(r.status)">
-          {{ statusLabel(r.status) }}
-        </span>
+        <div class="rr-badge-group">
+          <span class="rr-status-badge" [ngClass]="statusClass(r.status)">
+            {{ statusLabel(r.status) }}
+          </span>
+        </div>
       </div>
 
       <div class="rr-time-row">
@@ -107,22 +109,59 @@
         </div>
       </div>
 
+      <div class="rr-extra-info">
+        <div class="rr-notes" *ngIf="r.recurrenceGroupId">
+          <strong>Recurring group:</strong> {{ r.recurrenceGroupId }}
+        </div>
+        <div class="rr-cancel-reason" *ngIf="r.status === 'CANCELLED' && r.cancellationReason">
+          <strong>Cancellation reason:</strong> {{ r.cancellationReason }}
+        </div>
+        <div class="rr-expiry-warning" *ngIf="r.status === 'PENDING' && r.expiresAt">
+          Expires: {{ formatDate(r.expiresAt) }}
+        </div>
+      </div>
+
       <div class="rr-card-actions" *ngIf="r.status !== 'CANCELLED'">
         <button
           class="rr-btn-confirm"
           *ngIf="r.status === 'PENDING'"
           [disabled]="actionInProgress === r.id"
-          (click)="confirm(r.id)">
+          (click)="approve(r.id)">
           <span class="rr-btn-spinner" *ngIf="actionInProgress === r.id"></span>
-          Confirm
+          Approve
         </button>
         <button
           class="rr-btn-cancel"
           [disabled]="actionInProgress === r.id"
-          (click)="cancel(r.id)">
+          (click)="openCancelModal(r.id)">
           <span class="rr-btn-spinner" *ngIf="actionInProgress === r.id"></span>
           Cancel reservation
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Modal -->
+  <div class="rr-modal-overlay" *ngIf="showCancelModal" (click)="closeCancelModal()">
+    <div class="rr-modal" (click)="$event.stopPropagation()">
+      <div class="rr-modal-header">
+        <h2 class="rr-modal-title">Cancel reservation</h2>
+        <button class="rr-modal-close" (click)="closeCancelModal()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="rr-modal-body">
+        <p class="rr-modal-text">Are you sure you want to cancel this reservation?</p>
+        <label class="rr-modal-label">Cancellation reason (optional):</label>
+        <textarea
+          class="rr-modal-textarea"
+          [(ngModel)]="cancelReason"
+          placeholder="Enter reason for cancellation…"
+          rows="3"></textarea>
+      </div>
+      <div class="rr-modal-footer">
+        <button class="rr-modal-btn rr-modal-btn-ghost" (click)="closeCancelModal()">Cancel</button>
+        <button class="rr-modal-btn rr-modal-btn-danger" (click)="confirmCancel()">Confirm cancellation</button>
       </div>
     </div>
   </div>

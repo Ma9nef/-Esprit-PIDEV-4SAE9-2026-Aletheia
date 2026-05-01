@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
@@ -46,8 +47,5 @@ export class HomeComponent {
 
   navigateToSubscriptionPlans() {
     this.router.navigate(['/plans']);
-  }
-  navigateToFormations(): void {
-    this.router.navigate(['/formations']);
   }
 }

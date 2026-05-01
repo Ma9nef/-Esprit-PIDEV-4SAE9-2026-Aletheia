@@ -1,29 +1,30 @@
 package com.esprit.microservice.resourcemanagement.service;
 
-import com.esprit.microservice.resourcemanagement.client.EventServiceClient;
-import com.esprit.microservice.resourcemanagement.dto.request.CheckAvailabilityRequest;
+import com.esprit.microservice.resourcemanagement.dto.request.CancelReservationRequest;
 import com.esprit.microservice.resourcemanagement.dto.request.CreateReservationRequest;
-import com.esprit.microservice.resourcemanagement.dto.response.AvailabilityCheckResponse;
+import com.esprit.microservice.resourcemanagement.dto.request.RejectReservationRequest;
 import com.esprit.microservice.resourcemanagement.dto.response.ReservationResponse;
-import com.esprit.microservice.resourcemanagement.dto.response.ResourceResponse;
+import com.esprit.microservice.resourcemanagement.entity.InstructorProfile;
 import com.esprit.microservice.resourcemanagement.entity.Reservation;
-import com.esprit.microservice.resourcemanagement.entity.Resource;
 import com.esprit.microservice.resourcemanagement.entity.ReservationAuditLog;
+import com.esprit.microservice.resourcemanagement.entity.Resource;
+import com.esprit.microservice.resourcemanagement.entity.TeachingSession;
+import com.esprit.microservice.resourcemanagement.entity.enums.MaintenanceStatus;
 import com.esprit.microservice.resourcemanagement.entity.enums.ReservationStatus;
-import com.esprit.microservice.resourcemanagement.exception.InvalidTimeRangeException;
+import com.esprit.microservice.resourcemanagement.exception.BookingPolicyViolationException;
 import com.esprit.microservice.resourcemanagement.exception.ReservationConflictException;
 import com.esprit.microservice.resourcemanagement.exception.ReservationNotFoundException;
-import com.esprit.microservice.resourcemanagement.mapper.ReservationMapper;
-import com.esprit.microservice.resourcemanagement.mapper.ResourceMapper;
+import com.esprit.microservice.resourcemanagement.exception.ResourceUnderMaintenanceException;
 import com.esprit.microservice.resourcemanagement.repository.ReservationAuditLogRepository;
 import com.esprit.microservice.resourcemanagement.repository.ReservationRepository;
-import com.esprit.microservice.resourcemanagement.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -32,262 +33,329 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
-    private final ResourceRepository resourceRepository;
     private final ReservationAuditLogRepository auditLogRepository;
     private final ResourceService resourceService;
-    private final ReservationMapper reservationMapper;
-    private final ResourceMapper resourceMapper;
+    private final TeachingSessionService teachingSessionService;
+    private final InstructorProfileService profileService;
+    private final MaintenanceWindowService maintenanceWindowService;
+    private final KafkaEventPublisher kafkaEventPublisher;
+    private final WaitlistService waitlistService;
 
-    @Autowired(required = false)
-    private ReservationEventPublisher eventPublisher;
+    @Value("${app.reservation.default-expiry-hours:24}")
+    private int defaultExpiryHours;
 
-    @Autowired(required = false)
-    private EventServiceClient eventServiceClient;
+    @Value("${app.reservation.max-duration-hours:8}")
+    private int maxDurationHours;
 
-    /**
-     * Create a new reservation with full conflict detection and pessimistic locking.
-     *
-     * CONCURRENCY STRATEGY (Hybrid Approach):
-     * ─────────────────────────────────────────
-     * We use BOTH pessimistic and optimistic locking for maximum safety:
-     *
-     * 1. PESSIMISTIC WRITE LOCK (Primary — on conflict detection query):
-     *    The findConflictingReservationsWithLock() query acquires a row-level
-     *    exclusive lock (SELECT ... FOR UPDATE) on all existing reservations
-     *    that overlap the requested time window. This prevents two concurrent
-     *    transactions from both seeing "no conflicts" and both inserting.
-     *    This is the CRITICAL mechanism that prevents double-booking.
-     *
-     * 2. OPTIMISTIC LOCKING (Secondary — on the Reservation entity via @Version):
-     *    Acts as a safety net for update operations (e.g., cancel). If two
-     *    requests try to cancel the same reservation simultaneously, the second
-     *    one fails with OptimisticLockingFailureException rather than silently
-     *    overwriting.
-     *
-     * WHY PESSIMISTIC for creation:
-     *   Optimistic locking alone is insufficient for INSERT operations because
-     *   there's no existing row to version-check against. A pessimistic lock
-     *   on the conflict query serializes concurrent inserts for the same resource
-     *   and time range, guaranteeing at most one reservation is created.
-     */
-    @Transactional
-    public ReservationResponse createReservation(CreateReservationRequest request, String createdBy) {
-        log.info("Creating reservation: resource={}, event={}, from={} to={}",
-                request.getResourceId(), request.getEventId(),
-                request.getStartTime(), request.getEndTime());
+    @Value("${app.reservation.max-advance-booking-days:90}")
+    private int maxAdvanceBookingDays;
 
-        // 1. Validate time range
-        if (!request.getEndTime().isAfter(request.getStartTime())) {
-            throw new InvalidTimeRangeException();
-        }
-
-        // 2. Validate event exists in the Event microservice (via Feign)
-        validateEventExists(request.getEventId());
-
-        // 3. Validate resource exists and is active
-        Resource resource = resourceService.findResourceOrThrow(request.getResourceId());
-
-        // 4. CRITICAL: Check for conflicts using pessimistic lock
-        //    This SELECT ... FOR UPDATE locks overlapping rows so no other
-        //    transaction can insert a conflicting reservation concurrently.
-        List<Reservation> conflicts = reservationRepository.findConflictingReservationsWithLock(
-                request.getResourceId(),
-                request.getStartTime(),
-                request.getEndTime());
-
-        if (!conflicts.isEmpty()) {
-            log.warn("Reservation conflict detected: {} conflicting reservations for resource={}",
-                    conflicts.size(), request.getResourceId());
-            throw new ReservationConflictException(
-                    String.format("Resource '%s' is already reserved during the requested time period. " +
-                                    "Found %d conflicting reservation(s).",
-                            resource.getName(), conflicts.size()));
-        }
-
-        // 5. Create and save reservation
-        Reservation reservation = reservationMapper.toEntity(request);
-        reservation.setCreatedBy(createdBy);
-        Reservation saved = reservationRepository.save(reservation);
-
-        // 6. Audit log
-        auditLogRepository.save(ReservationAuditLog.builder()
-                .reservationId(saved.getId())
-                .action("CREATED")
-                .newStatus(saved.getStatus().name())
-                .performedBy(createdBy)
-                .details(Map.of(
-                        "resourceId", saved.getResourceId().toString(),
-                        "eventId", saved.getEventId(),
-                        "startTime", saved.getStartTime().toString(),
-                        "endTime", saved.getEndTime().toString()))
-                .build());
-
-        // 7. Publish event (async, non-blocking)
-        if (eventPublisher != null) {
-            eventPublisher.publishReservationCreated(saved);
-        }
-
-        log.info("Reservation created: id={}", saved.getId());
-        return reservationMapper.toResponseWithResourceName(saved, resource);
-    }
-
-    /**
-     * Confirm a pending reservation.
-     * Uses optimistic locking via @Version to prevent concurrent status changes.
-     */
-    @Transactional
-    public ReservationResponse confirmReservation(UUID id, String performedBy) {
-        log.info("Confirming reservation id={}", id);
-        Reservation reservation = findReservationOrThrow(id);
-
-        if (reservation.getStatus() != ReservationStatus.PENDING) {
-            throw new IllegalArgumentException(
-                    "Only PENDING reservations can be confirmed. Current status: " + reservation.getStatus());
-        }
-
-        String oldStatus = reservation.getStatus().name();
-        reservation.setStatus(ReservationStatus.CONFIRMED);
-        Reservation saved = reservationRepository.save(reservation);
-
-        auditLogRepository.save(ReservationAuditLog.builder()
-                .reservationId(saved.getId())
-                .action("CONFIRMED")
-                .oldStatus(oldStatus)
-                .newStatus(saved.getStatus().name())
-                .performedBy(performedBy)
-                .build());
-
-        if (eventPublisher != null) {
-            eventPublisher.publishReservationConfirmed(saved);
-        }
-
-        log.info("Reservation confirmed: id={}", saved.getId());
-        return reservationMapper.toResponse(saved);
-    }
-
-    /**
-     * Cancel a reservation.
-     * Uses optimistic locking via @Version to prevent concurrent cancellations.
-     */
-    @Transactional
-    public ReservationResponse cancelReservation(UUID id, String performedBy) {
-        log.info("Cancelling reservation id={}", id);
-        Reservation reservation = findReservationOrThrow(id);
-
-        if (reservation.getStatus() == ReservationStatus.CANCELLED) {
-            throw new IllegalArgumentException("Reservation is already cancelled");
-        }
-
-        String oldStatus = reservation.getStatus().name();
-        reservation.setStatus(ReservationStatus.CANCELLED);
-        Reservation saved = reservationRepository.save(reservation);
-
-        auditLogRepository.save(ReservationAuditLog.builder()
-                .reservationId(saved.getId())
-                .action("CANCELLED")
-                .oldStatus(oldStatus)
-                .newStatus(saved.getStatus().name())
-                .performedBy(performedBy)
-                .build());
-
-        if (eventPublisher != null) {
-            eventPublisher.publishReservationCancelled(saved);
-        }
-
-        log.info("Reservation cancelled: id={}", saved.getId());
-        return reservationMapper.toResponse(saved);
-    }
+    // ── queries ───────────────────────────────────────────────────────────
 
     @Transactional(readOnly = true)
-    public List<ReservationResponse> getReservationsByEventId(String eventId) {
-        return reservationRepository.findByEventIdAndDeletedFalse(eventId)
-                .stream()
-                .map(reservationMapper::toResponse)
+    public List<ReservationResponse> listForInstructor(String instructorId) {
+        return reservationRepository.findByInstructorIdAndDeletedFalse(instructorId).stream()
+                .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public ReservationResponse getReservationById(UUID id) {
-        Reservation reservation = findReservationOrThrow(id);
-        return reservationMapper.toResponse(reservation);
+    public List<ReservationResponse> listAll() {
+        return reservationRepository.findAll().stream()
+                .filter(r -> !Boolean.TRUE.equals(r.getDeleted()))
+                .map(this::toResponse)
+                .collect(Collectors.toList());
     }
 
-    /**
-     * Check availability for a resource or resource type in a given time range.
-     * Uses non-locking query since this is a read-only operation.
-     */
     @Transactional(readOnly = true)
-    public AvailabilityCheckResponse checkAvailability(CheckAvailabilityRequest request) {
-        if (!request.getEndTime().isAfter(request.getStartTime())) {
-            throw new InvalidTimeRangeException();
-        }
-
-        // If checking a specific resource
-        if (request.getResourceId() != null) {
-            Resource resource = resourceService.findResourceOrThrow(request.getResourceId());
-            List<Reservation> conflicts = reservationRepository.findConflictingReservations(
-                    request.getResourceId(), request.getStartTime(), request.getEndTime());
-
-            boolean available = conflicts.isEmpty();
-            return AvailabilityCheckResponse.builder()
-                    .available(available)
-                    .availableResources(available ?
-                            List.of(resourceMapper.toResponse(resource)) : List.of())
-                    .conflictingReservations(conflicts.stream()
-                            .map(reservationMapper::toResponse)
-                            .collect(Collectors.toList()))
-                    .build();
-        }
-
-        // If checking by resource type
-        if (request.getType() != null) {
-            List<Resource> available = resourceRepository.findAvailableByType(
-                    request.getType(), request.getStartTime(), request.getEndTime());
-
-            List<ResourceResponse> availableResponses = available.stream()
-                    .map(resourceMapper::toResponse)
-                    .collect(Collectors.toList());
-
-            return AvailabilityCheckResponse.builder()
-                    .available(!available.isEmpty())
-                    .availableResources(availableResponses)
-                    .conflictingReservations(List.of())
-                    .build();
-        }
-
-        throw new IllegalArgumentException("Either resourceId or type must be provided");
+    public ReservationResponse getById(UUID id) {
+        return toResponse(findOrThrow(id));
     }
+
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> getByRecurrenceGroup(UUID groupId) {
+        return reservationRepository.findByRecurrenceGroupIdAndDeletedFalse(groupId).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> listSwappable(String excludeInstructorId) {
+        return reservationRepository.findSwappableReservations(excludeInstructorId, LocalDateTime.now()).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<ReservationResponse> getPending() {
+        return reservationRepository.findByStatusAndDeletedFalse(ReservationStatus.PENDING).stream()
+                .map(this::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    // ── booking engine ────────────────────────────────────────────────────
 
     /**
-     * Validates that the given eventId corresponds to an existing event
-     * in the Event microservice (called via OpenFeign).
-     *
-     * If the eventId is not a numeric Long, or the Event service is unavailable,
-     * validation is skipped with a warning to avoid blocking reservation creation
-     * due to a downstream service failure (resilient degradation).
+     * Core booking flow as per spec §5.2.
+     * Returns the saved reservation (PENDING or CONFIRMED).
      */
-    private void validateEventExists(String eventId) {
-        if (eventServiceClient == null) {
-            log.warn("EventServiceClient not available — skipping event validation");
-            return;
+    public ReservationResponse create(CreateReservationRequest req, String instructorId) {
+        LocalDateTime start = req.getStartTime();
+        LocalDateTime end   = req.getEndTime();
+
+        // ① Validate time range
+        validateTimeRange(start, end, maxDurationHours);
+
+        if (start.isAfter(LocalDateTime.now().plusDays(maxAdvanceBookingDays))) {
+            throw new BookingPolicyViolationException(
+                    "Cannot book more than " + maxAdvanceBookingDays + " days in advance");
         }
-        try {
-            Long id = Long.parseLong(eventId);
-            eventServiceClient.getEventById(id);
-            log.info("Event validation passed for eventId={}", eventId);
-        } catch (NumberFormatException e) {
-            log.warn("eventId '{}' is not a numeric Long — skipping event validation", eventId);
-        } catch (Exception e) {
-            log.warn("Event service unreachable or event not found for eventId='{}': {} — skipping validation",
-                    eventId, e.getMessage());
+
+        // ② Load instructor profile
+        InstructorProfile profile = profileService.getOrCreate(instructorId);
+
+        // ③ Load and validate resource
+        Resource resource = resourceService.findOrThrow(req.getResourceId());
+
+        if (resource.getMaintenanceStatus() != MaintenanceStatus.OPERATIONAL) {
+            throw new ResourceUnderMaintenanceException(
+                    "Resource '" + resource.getName() + "' is not operational");
+        }
+
+        // ④ Check maintenance windows
+        if (maintenanceWindowService.hasMaintenanceConflict(resource.getId(), start, end)) {
+            throw new ResourceUnderMaintenanceException(
+                    "Resource '" + resource.getName() + "' has a maintenance window in this slot");
+        }
+
+        // ⑤ Advance booking policy (skip if trusted)
+        if (resource.getMinAdvanceBookingHours() != null && !Boolean.TRUE.equals(profile.getIsTrusted())) {
+            long hoursUntilStart = ChronoUnit.HOURS.between(LocalDateTime.now(), start);
+            if (hoursUntilStart < resource.getMinAdvanceBookingHours()) {
+                throw new BookingPolicyViolationException(
+                        "Booking requires at least " + resource.getMinAdvanceBookingHours()
+                                + " hours advance notice");
+            }
+        }
+
+        // ⑥ Conflict detection with pessimistic lock
+        List<Reservation> conflicts = reservationRepository
+                .findConflictingReservationsWithLock(resource.getId(), start, end);
+        if (!conflicts.isEmpty()) {
+            throw new ReservationConflictException(
+                    "Resource '" + resource.getName() + "' is already booked for this time slot");
+        }
+
+        TeachingSession session = teachingSessionService.findOrThrow(req.getTeachingSessionId());
+
+        // ⑦ Smart approval logic
+        boolean forceApproval = profile.getReputationScore() < 50;
+        boolean needsApproval = forceApproval || Boolean.TRUE.equals(resource.getRequiresApproval())
+                && !profile.canAutoConfirmApprovalRequired();
+
+        ReservationStatus status;
+        String qrToken = null;
+        LocalDateTime expiresAt = null;
+
+        if (needsApproval) {
+            status    = ReservationStatus.PENDING;
+            expiresAt = LocalDateTime.now().plusHours(defaultExpiryHours);
+        } else {
+            status   = ReservationStatus.CONFIRMED;
+            qrToken  = UUID.randomUUID().toString();
+        }
+
+        Reservation reservation = Reservation.builder()
+                .resource(resource)
+                .teachingSession(session)
+                .instructorId(instructorId)
+                .startTime(start)
+                .endTime(end)
+                .status(status)
+                .qrCodeToken(qrToken)
+                .expiresAt(expiresAt)
+                .noShow(false)
+                .deleted(false)
+                .build();
+
+        Reservation saved = reservationRepository.save(reservation);
+
+        // ⑧ Audit log
+        saveAuditLog(saved.getId(), "CREATED", null, status.name(), instructorId,
+                Map.of("resourceId", resource.getId().toString(),
+                       "sessionId", session.getId().toString()));
+
+        // Kafka events
+        profileService.incrementReservations(instructorId);
+
+        if (status == ReservationStatus.PENDING) {
+            kafkaEventPublisher.approvalNeeded(
+                    saved.getId().toString(), resource.getId().toString(), instructorId);
+        } else {
+            kafkaEventPublisher.reservationConfirmed(
+                    saved.getId().toString(), instructorId,
+                    resource.getId().toString(), qrToken);
+        }
+
+        return toResponse(saved);
+    }
+
+    /** Admin: approve a PENDING reservation → CONFIRMED */
+    public ReservationResponse approve(UUID id, String adminId) {
+        Reservation reservation = findOrThrow(id);
+        if (reservation.getStatus() != ReservationStatus.PENDING) {
+            throw new IllegalArgumentException("Reservation is not PENDING");
+        }
+
+        String qrToken = UUID.randomUUID().toString();
+        reservation.setStatus(ReservationStatus.CONFIRMED);
+        reservation.setQrCodeToken(qrToken);
+        reservation.setExpiresAt(null);
+        Reservation saved = reservationRepository.save(reservation);
+
+        saveAuditLog(id, "CONFIRMED", "PENDING", "CONFIRMED", adminId, Map.of());
+
+        kafkaEventPublisher.reservationConfirmed(
+                id.toString(),
+                reservation.getInstructorId(),
+                reservation.getResource().getId().toString(),
+                qrToken);
+
+        return toResponse(saved);
+    }
+
+    /** Admin: reject a PENDING reservation */
+    public ReservationResponse reject(UUID id, RejectReservationRequest req, String adminId) {
+        Reservation reservation = findOrThrow(id);
+        if (reservation.getStatus() != ReservationStatus.PENDING) {
+            throw new IllegalArgumentException("Reservation is not PENDING");
+        }
+
+        reservation.setStatus(ReservationStatus.REJECTED);
+        reservation.setRejectionReason(req.getReason());
+        Reservation saved = reservationRepository.save(reservation);
+
+        saveAuditLog(id, "REJECTED", "PENDING", "REJECTED", adminId,
+                Map.of("reason", req.getReason() != null ? req.getReason() : ""));
+
+        kafkaEventPublisher.reservationRejected(id.toString(),
+                reservation.getInstructorId(), req.getReason());
+
+        return toResponse(saved);
+    }
+
+    /** Instructor or Admin: cancel a reservation */
+    public ReservationResponse cancel(UUID id, CancelReservationRequest req, String actorId) {
+        Reservation reservation = findOrThrow(id);
+
+        if (reservation.getStatus() == ReservationStatus.CANCELLED
+                || reservation.getStatus() == ReservationStatus.REJECTED) {
+            throw new IllegalArgumentException("Reservation is already " + reservation.getStatus());
+        }
+
+        String oldStatus = reservation.getStatus().name();
+        reservation.setStatus(ReservationStatus.CANCELLED);
+        reservation.setCancellationReason(req.getReason());
+        Reservation saved = reservationRepository.save(reservation);
+
+        // Apply reputation penalty for late cancellations
+        if (reservation.getStatus() == ReservationStatus.CONFIRMED) {
+            long minutesBefore = ChronoUnit.MINUTES.between(
+                    LocalDateTime.now(), reservation.getStartTime());
+            if (minutesBefore < 1440) { // < 24 hours
+                profileService.recordLateCancellation(reservation.getInstructorId(),
+                        (int) minutesBefore);
+            }
+        }
+
+        saveAuditLog(id, "CANCELLED", oldStatus, "CANCELLED", actorId,
+                Map.of("reason", req.getReason() != null ? req.getReason() : ""));
+
+        kafkaEventPublisher.reservationCancelled(id.toString(),
+                reservation.getInstructorId(), req.getReason());
+
+        // Notify waitlist
+        waitlistService.processWaitlistAfterCancellation(
+                reservation.getResource().getId(),
+                reservation.getStartTime(),
+                reservation.getEndTime());
+
+        return toResponse(saved);
+    }
+
+    /** Admin: cancel all reservations in a recurrence group */
+    public void cancelGroup(UUID groupId, String adminId) {
+        List<Reservation> group = reservationRepository.findByRecurrenceGroupIdAndDeletedFalse(groupId);
+        for (Reservation r : group) {
+            if (r.getStatus() != ReservationStatus.CANCELLED
+                    && r.getStatus() != ReservationStatus.REJECTED) {
+                r.setStatus(ReservationStatus.CANCELLED);
+                r.setCancellationReason("Group cancelled by admin");
+                reservationRepository.save(r);
+                saveAuditLog(r.getId(), "CANCELLED", r.getStatus().name(),
+                        "CANCELLED", adminId, Map.of("groupId", groupId.toString()));
+            }
         }
     }
 
-    private Reservation findReservationOrThrow(UUID id) {
+    // ── helpers ───────────────────────────────────────────────────────────
+
+    public static void validateTimeRange(LocalDateTime start, LocalDateTime end, int maxHours) {
+        if (!end.isAfter(start)) {
+            throw new com.esprit.microservice.resourcemanagement.exception.InvalidTimeRangeException(
+                    "endTime must be after startTime");
+        }
+        long hours = ChronoUnit.HOURS.between(start, end);
+        if (hours > maxHours) {
+            throw new com.esprit.microservice.resourcemanagement.exception.InvalidTimeRangeException(
+                    "Reservation duration cannot exceed " + maxHours + " hours");
+        }
+    }
+
+    public Reservation findOrThrow(UUID id) {
         return reservationRepository.findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new ReservationNotFoundException(id));
+                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found: " + id));
+    }
+
+    private void saveAuditLog(UUID reservationId, String action, String oldStatus,
+                               String newStatus, String performedBy,
+                               Map<String, String> details) {
+        ReservationAuditLog log = ReservationAuditLog.builder()
+                .reservationId(reservationId)
+                .action(action)
+                .oldStatus(oldStatus)
+                .newStatus(newStatus)
+                .performedBy(performedBy)
+                .build();
+        log.setDetails(details);
+        auditLogRepository.save(log);
+    }
+
+    public ReservationResponse toResponse(Reservation r) {
+        return ReservationResponse.builder()
+                .id(r.getId())
+                .resourceId(r.getResource() != null ? r.getResource().getId() : null)
+                .resourceName(r.getResource() != null ? r.getResource().getName() : null)
+                .resourceLocation(r.getResource() != null ? r.getResource().getLocation() : null)
+                .teachingSessionId(r.getTeachingSession() != null ? r.getTeachingSession().getId() : null)
+                .sessionTitle(r.getTeachingSession() != null ? r.getTeachingSession().getTitle() : null)
+                .courseCode(r.getTeachingSession() != null ? r.getTeachingSession().getCourseCode() : null)
+                .instructorId(r.getInstructorId())
+                .startTime(r.getStartTime())
+                .endTime(r.getEndTime())
+                .status(r.getStatus())
+                .recurrenceGroupId(r.getRecurrenceGroupId())
+                .qrCodeToken(r.getQrCodeToken())
+                .checkedInAt(r.getCheckedInAt())
+                .noShow(r.getNoShow())
+                .rejectionReason(r.getRejectionReason())
+                .cancellationReason(r.getCancellationReason())
+                .expiresAt(r.getExpiresAt())
+                .createdAt(r.getCreatedAt())
+                .build();
     }
 }

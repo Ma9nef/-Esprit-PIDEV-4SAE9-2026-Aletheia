@@ -1,6 +1,5 @@
 package com.esprit.microservice.courses.service.publicApi.formations;
 
-import com.esprit.microservice.courses.dto.training.MyEnrolledFormationDTO;
 import com.esprit.microservice.courses.entity.formations.Formation;
 import com.esprit.microservice.courses.entity.progress.FormationEnrollment;
 import com.esprit.microservice.courses.repository.FormationEnrollmentRepository;
@@ -44,27 +43,5 @@ public class LearnerFormationEnrollmentServiceImpl implements LearnerFormationEn
     @Override
     public List<FormationEnrollment> getMyEnrollments(Long userId) {
         return formationEnrollmentRepository.findByUserId(userId);
-    }
-    public List<MyEnrolledFormationDTO> getMyEnrolledFormations(Long userId) {
-        List<FormationEnrollment> enrollments = formationEnrollmentRepository.findByUserId(userId);
-
-        return enrollments.stream().map(enrollment -> {
-            Formation formation = enrollment.getFormation();
-
-            MyEnrolledFormationDTO dto = new MyEnrolledFormationDTO();
-            dto.setEnrollmentId(enrollment.getId());
-            dto.setStatus(enrollment.getStatus().name());
-            dto.setEnrolledAt(enrollment.getEnrolledAt());
-
-            dto.setFormationId(formation.getId());
-            dto.setInstructorId(formation.getInstructorId());
-            dto.setTitle(formation.getTitle());
-            dto.setDescription(formation.getDescription());
-            dto.setDuration(formation.getDuration());
-            dto.setCapacity(formation.getCapacity());
-            dto.setArchived(formation.getArchived());
-
-            return dto;
-        }).toList();
     }
 }

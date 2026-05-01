@@ -10,30 +10,28 @@ import java.util.UUID;
 @Entity
 @Table(name = "reservations", indexes = {
         @Index(name = "idx_reservation_resource_time", columnList = "resource_id, start_time, end_time"),
-        @Index(name = "idx_reservation_event", columnList = "event_id"),
         @Index(name = "idx_reservation_status", columnList = "status"),
+        @Index(name = "idx_reservation_recurrence", columnList = "recurrence_group_id"),
+        @Index(name = "idx_reservation_instructor", columnList = "instructor_id"),
         @Index(name = "idx_reservation_deleted", columnList = "deleted")
 })
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(name = "resource_id", nullable = false)
-    private UUID resourceId;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resource_id", insertable = false, updatable = false)
+    @JoinColumn(name = "resource_id", nullable = false)
     private Resource resource;
 
-    @Column(name = "event_id", nullable = false)
-    private String eventId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teaching_session_id", nullable = false)
+    private TeachingSession teachingSession;
+
+    @Column(name = "instructor_id", nullable = false, length = 100)
+    private String instructorId;
 
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
@@ -42,20 +40,35 @@ public class Reservation {
     private LocalDateTime endTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 30)
     @Builder.Default
     private ReservationStatus status = ReservationStatus.PENDING;
 
-    /**
-     * Optimistic locking version field.
-     * Used to detect concurrent modifications and prevent lost updates.
-     */
+    @Column(name = "recurrence_group_id")
+    private UUID recurrenceGroupId;
+
+    @Column(name = "qr_code_token", length = 100)
+    private String qrCodeToken;
+
+    @Column(name = "checked_in_at")
+    private LocalDateTime checkedInAt;
+
+    @Column(name = "no_show")
+    @Builder.Default
+    private Boolean noShow = false;
+
+    @Column(name = "rejection_reason", columnDefinition = "TEXT")
+    private String rejectionReason;
+
+    @Column(name = "cancellation_reason", columnDefinition = "TEXT")
+    private String cancellationReason;
+
+    @Column(name = "expires_at")
+    private LocalDateTime expiresAt;
+
     @Version
     @Column(nullable = false)
     private Long version;
-
-    @Column(name = "created_by")
-    private String createdBy;
 
     @Column(nullable = false)
     @Builder.Default
@@ -69,21 +82,32 @@ public class Reservation {
 
     @PrePersist
     public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        if (this.status == null) this.status = ReservationStatus.PENDING;
-        if (this.deleted == null) this.deleted = false;
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    /**
-     * Check if this reservation is active (not cancelled and not soft-deleted).
-     */
     public boolean isActive() {
-        return !Boolean.TRUE.equals(deleted) && status != ReservationStatus.CANCELLED;
+        return !Boolean.TRUE.equals(deleted)
+                && status != ReservationStatus.CANCELLED
+                && status != ReservationStatus.REJECTED;
+    }
+
+    public boolean isPending() {
+        return status == ReservationStatus.PENDING;
+    }
+
+    public boolean isConfirmed() {
+        return status == ReservationStatus.CONFIRMED;
+    }
+
+    public boolean isExpired() {
+        return status == ReservationStatus.PENDING
+                && expiresAt != null
+                && LocalDateTime.now().isAfter(expiresAt);
     }
 }

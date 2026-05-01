@@ -25,6 +25,7 @@ import ml.dmlc.xgboost4j.java.Booster;
 import ml.dmlc.xgboost4j.java.DMatrix;
 import ml.dmlc.xgboost4j.java.XGBoost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -66,21 +67,19 @@ public class CertificateServiceImpl implements ICertificateService {
     private HttpServletRequest request;
     @Autowired
     private JavaMailSender mailSender;
+    @Value("${spring.mail.username}")
+    private String mailFrom;
 
-    /**
-     * MÉTHODE CORRIGÉE (MODE DEBUG POUR POSTMAN)
-     */
     private Long getConnectedUserId() {
         String authHeader = request.getHeader("Authorization");
-
-        // Si aucun token n'est fourni (comme dans votre Postman),
-        // on fait comme si c'était l'utilisateur n°1 qui était connecté.
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println("⚠️ MODE DEBUG : Aucun Token reçu, on force l'ID Utilisateur à 1");
-            return 1L; // <-- Changez ce chiffre si votre utilisateur a un autre ID dans la base
+            throw new RuntimeException("Unauthorized: no valid token provided");
         }
-
-        return jwtReader.extractUserId(authHeader);
+        Long userId = jwtReader.extractUserId(authHeader);
+        if (userId == null) {
+            throw new RuntimeException("Unauthorized: could not extract user ID from token");
+        }
+        return userId;
     }
     @Override
     public void sendCertificateByEmail(Long certificateId, String recipientEmail) throws MessagingException {
@@ -94,9 +93,7 @@ public class CertificateServiceImpl implements ICertificateService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-        // --- ADD THIS LINE HERE ---
-        // It must match your spring.mail.username exactly!
-        helper.setFrom("skanderferjani07@gmail.com");
+        helper.setFrom(mailFrom);
 
         helper.setTo(recipientEmail);
         helper.setSubject("Your Certificate of Completion - " + cert.getCertificateCode());
@@ -138,8 +135,6 @@ public class CertificateServiceImpl implements ICertificateService {
         // Generate a unique code
         String uniqueCode = "CERT-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         certificate.setCertificateCode(uniqueCode);
-
-        System.out.println("✅ Succès : Certificat généré pour l'utilisateur ID: " + enrollment.getUserId());
 
         return certificateRepository.save(certificate);
     }

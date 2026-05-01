@@ -1,26 +1,26 @@
 package com.esprit.microservice.resourcemanagement.dto.request;
 
-import com.esprit.microservice.resourcemanagement.entity.enums.ResourceType;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.esprit.microservice.resourcemanagement.entity.enums.MaintenanceStatus;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UpdateResourceRequest {
 
     private String name;
-
-    private ResourceType type;
-
-    @Positive(message = "Capacity must be a positive number")
     private Integer capacity;
+    private String description;
+    private String location;
+    private Boolean requiresApproval;
+    private MaintenanceStatus maintenanceStatus;
 
-    private Map<String, Object> metadata;
+    @Min(1) @Max(5)
+    private Integer conditionScore;
+
+    private Integer maxReservationHours;
+    private Integer minAdvanceBookingHours;
+    private Map<String, Object> attributes;
 }

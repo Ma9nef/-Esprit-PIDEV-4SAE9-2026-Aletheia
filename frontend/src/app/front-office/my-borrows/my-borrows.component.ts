@@ -3,6 +3,7 @@ import { LoanDTO, LoanService } from '../../core/services/loan.service';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-my-borrows',
   templateUrl: './my-borrows.component.html',
   styleUrls: ['./my-borrows.component.css']

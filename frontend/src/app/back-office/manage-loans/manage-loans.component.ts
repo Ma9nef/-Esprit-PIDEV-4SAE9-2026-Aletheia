@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoanDTO, LoanService, LoanStatus } from '../../core/services/loan.service';
 
 @Component({
+  standalone: false,
   selector: 'app-manage-loans',
   templateUrl: './manage-loans.component.html',
   styleUrls: ['./manage-loans.component.css']

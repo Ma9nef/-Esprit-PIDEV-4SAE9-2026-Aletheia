@@ -1,6 +1,5 @@
 package com.esprit.microservice.courses.RestController.formations;
 
-import com.esprit.microservice.courses.dto.training.MyEnrolledFormationDTO;
 import com.esprit.microservice.courses.entity.formations.Formation;
 import com.esprit.microservice.courses.entity.progress.FormationEnrollment;
 import com.esprit.microservice.courses.service.publicApi.formations.LearnerFormationEnrollmentService;
@@ -43,10 +42,12 @@ public class PublicFormationController {
         );
     }
 
-    @GetMapping("/my-enrollments/{userId}")
-    public ResponseEntity<List<MyEnrolledFormationDTO>> getMyEnrollments(@PathVariable Long userId) {
+    @GetMapping("/my-enrollments")
+    public ResponseEntity<List<FormationEnrollment>> getMyEnrollments(
+            @RequestParam Long userId
+    ) {
         return ResponseEntity.ok(
-                learnerFormationEnrollmentService.getMyEnrolledFormations(userId)
+                learnerFormationEnrollmentService.getMyEnrollments(userId)
         );
     }
 }
