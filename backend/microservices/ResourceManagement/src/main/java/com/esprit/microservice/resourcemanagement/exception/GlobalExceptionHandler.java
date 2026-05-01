@@ -46,6 +46,27 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(ResourceUnderMaintenanceException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceUnderMaintenance(
+            ResourceUnderMaintenanceException ex, HttpServletRequest request) {
+        log.warn("Resource under maintenance: {}", ex.getMessage());
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(BookingPolicyViolationException.class)
+    public ResponseEntity<ApiErrorResponse> handleBookingPolicyViolation(
+            BookingPolicyViolationException ex, HttpServletRequest request) {
+        log.warn("Booking policy violation: {}", ex.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
+    @ExceptionHandler(WaitlistException.class)
+    public ResponseEntity<ApiErrorResponse> handleWaitlistException(
+            WaitlistException ex, HttpServletRequest request) {
+        log.warn("Waitlist error: {}", ex.getMessage());
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), request);
+    }
+
     @ExceptionHandler(OptimisticLockingFailureException.class)
     public ResponseEntity<ApiErrorResponse> handleOptimisticLocking(
             OptimisticLockingFailureException ex, HttpServletRequest request) {

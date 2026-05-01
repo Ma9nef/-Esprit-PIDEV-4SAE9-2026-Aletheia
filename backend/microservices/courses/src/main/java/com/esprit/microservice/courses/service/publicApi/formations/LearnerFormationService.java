@@ -1,10 +1,12 @@
 package com.esprit.microservice.courses.service.publicApi.formations;
 
-import com.esprit.microservice.courses.dto.training.FormationDetailsDTO;
+
+
+import com.esprit.microservice.courses.entity.formations.Formation;
 
 import java.util.List;
 
 public interface LearnerFormationService {
-    List<FormationDetailsDTO> getAllAvailableFormations();
-    FormationDetailsDTO getAvailableFormationById(Long id);
+    List<Formation> getAllAvailableFormations();
+    Formation getAvailableFormationById(Long id);
 }

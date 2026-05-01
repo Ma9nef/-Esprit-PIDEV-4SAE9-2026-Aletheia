@@ -21,40 +21,18 @@ public class ApiGatewayApplication {
 
                 // USER SERVICE
                 .route("user-service", r -> r.path("/api/users/**")
-                        .filters(f -> f
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("lb://ALETHEIA-PLATFORM"))
 
                 // COURSES SERVICE
-                .route("course-enrollments", r -> r.path(
-                                "/course/public/enrollments",
-                                "/course/public/enrollments/**"
-                        )
-                        .filters(f -> f
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
-                        .uri("http://localhost:8081"))
                 .route("courses-api", r -> r.path("/api/courses/**")
                         .uri("http://localhost:8081"))
-                .route("formations-api", r -> r.path("/api/formations/**").filters(f -> f
-                                .rewritePath("/course/(?<segment>.*)", "/${segment}")
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                .route("formations-api", r -> r.path("/api/formations/**")
                         .uri("http://localhost:8081"))
                 .route("courses-legacy", r -> r.path("/course/**")
-                        .filters(f -> f
-                                .rewritePath("/course/(?<segment>.*)", "/${segment}")
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("http://localhost:8081"))
                 .route("courses-instructor", r -> r.path("/api/instructor/**")
-                        .filters(f -> f
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("http://localhost:8081"))
-                .route("courses-lesson", r -> r.path("/api/lesson/learn/**")
-                        .filters(f -> f.rewritePath("/api/(?<segment>.*)", "/${segment}"))
+                .route("courses-lesson", r -> r.path("/api/lesson/**")
                         .uri("http://localhost:8081"))
                 .route("pidev-features", r -> r.path("/pidev/**")
                         .filters(f -> f
@@ -79,10 +57,7 @@ public class ApiGatewayApplication {
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("lb://COURSES-SERVICE"))
-                .route("formations-admin", r -> r.path("/api/admin/formations", "/api/admin/formations/**")
-                        .filters(f -> f
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                .route("formations-admin", r -> r.path("/api/admin/formations/**")
                         .uri("http://localhost:8081"))
 
                 // LIBRARY SERVICE
@@ -114,11 +89,7 @@ public class ApiGatewayApplication {
                         .uri("lb://OFFER"))
                 .route("subscription-plans", r -> r.path("/api/subscription-plans/**")
                         .uri("lb://OFFER"))
-                .route("catalog-api", r -> r.path("/api/catalog", "/api/catalog/**")
-                        .filters(f -> f
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
-                        .uri("http://localhost:8081"))
+
                 // EVENT SERVICE
                 .route("event-service", r -> r.path("/api/events/**")
                         .uri("lb://EVENT-MICROSERVICE"))
@@ -126,6 +97,9 @@ public class ApiGatewayApplication {
                         .uri("lb://EVENT-MICROSERVICE"))
 
                 // RESOURCE MANAGEMENT SERVICE
+                .route("resource-management-rm", r -> r.path("/api/rm/**")
+                        .filters(f -> f.rewritePath("/api/rm/(?<segment>.*)", "/api/${segment}"))
+                        .uri("lb://RESOURCEMANAGEMENT"))
                 .route("resources-service", r -> r.path("/api/resources/**")
                         .uri("lb://RESOURCEMANAGEMENT"))
                 .route("reservations-service", r -> r.path("/api/reservations/**")

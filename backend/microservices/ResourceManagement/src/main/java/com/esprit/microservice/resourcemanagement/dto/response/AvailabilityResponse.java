@@ -1,21 +1,22 @@
 package com.esprit.microservice.resourcemanagement.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Data @Builder
 public class AvailabilityResponse {
-    private Long id;
-    private UUID resourceId;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private LocalDateTime createdAt;
+    private boolean available;
+    private LocalDateTime nextFreeWindow;
+    private List<ResourceResponse> availableResources;
+    private List<AlternativeSuggestion> suggestions;
+
+    @Data @Builder
+    public static class AlternativeSuggestion {
+        private ResourceResponse resource;
+        private String reason;
+        private double score;
+    }
 }

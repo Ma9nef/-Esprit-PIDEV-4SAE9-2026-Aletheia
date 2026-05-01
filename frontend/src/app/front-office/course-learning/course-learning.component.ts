@@ -4,6 +4,7 @@ import { CourseApiService, LessonLearningDTO, CourseProgressDTO } from '../../co
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
+  standalone: false,
   selector: 'app-course-learning',
   templateUrl: './course-learning.component.html',
   styleUrls: ['./course-learning.component.css']
@@ -156,11 +157,11 @@ export class CourseLearningComponent implements OnInit {
 
     // ✅ complete current, then open next
     this.courseApi.completeLesson(this.courseId, currentLessonId).subscribe({
-      next: (p: CourseProgressDTO) => {
+      next: (p) => {
         this.progress = p;
         this.openLesson(next.id);
       },
-      error: (err: any) => {
+      error: (err) => {
         this.error = err?.error?.message || 'Failed to save progress. Please retry.';
       }
     });

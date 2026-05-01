@@ -1,8 +1,5 @@
 package com.esprit.microservice.courses.service.publicApi.formations;
 
-import com.esprit.microservice.courses.client.ProductClient;
-import com.esprit.microservice.courses.dto.ProductDTO;
-import com.esprit.microservice.courses.dto.training.MyEnrolledFormationDTO;
 import com.esprit.microservice.courses.entity.formations.Formation;
 import com.esprit.microservice.courses.entity.progress.FormationEnrollment;
 import com.esprit.microservice.courses.repository.FormationEnrollmentRepository;
@@ -16,14 +13,11 @@ public class LearnerFormationEnrollmentServiceImpl implements LearnerFormationEn
 
     private final FormationEnrollmentRepository formationEnrollmentRepository;
     private final FormationRepository formationRepository;
-    private final ProductClient productClient;
 
     public LearnerFormationEnrollmentServiceImpl(FormationEnrollmentRepository formationEnrollmentRepository,
-                                                 FormationRepository formationRepository,
-                                                 ProductClient productClient) {
+                                                 FormationRepository formationRepository) {
         this.formationEnrollmentRepository = formationEnrollmentRepository;
         this.formationRepository = formationRepository;
-        this.productClient = productClient;
     }
 
     @Override
@@ -49,41 +43,5 @@ public class LearnerFormationEnrollmentServiceImpl implements LearnerFormationEn
     @Override
     public List<FormationEnrollment> getMyEnrollments(Long userId) {
         return formationEnrollmentRepository.findByUserId(userId);
-    }
-
-    public List<MyEnrolledFormationDTO> getMyEnrolledFormations(Long userId) {
-        List<FormationEnrollment> enrollments = formationEnrollmentRepository.findByUserId(userId);
-
-        return enrollments.stream().map(enrollment -> {
-            Formation formation = enrollment.getFormation();
-
-            MyEnrolledFormationDTO dto = new MyEnrolledFormationDTO();
-            dto.setEnrollmentId(enrollment.getId());
-            dto.setStatus(enrollment.getStatus().name());
-            dto.setEnrolledAt(enrollment.getEnrolledAt());
-
-            dto.setFormationId(formation.getId());
-            dto.setInstructorId(formation.getInstructorId());
-            dto.setTitle(formation.getTitle());
-            dto.setDescription(formation.getDescription());
-            dto.setDuration(formation.getDuration());
-            dto.setCapacity(formation.getCapacity());
-            dto.setArchived(formation.getArchived());
-
-            ProductDTO product = null;
-            if (formation.getProductId() != null) {
-                product = productClient.getProductById(formation.getProductId());
-            }
-
-            if (product != null) {
-                dto.setProductId(product.getId());
-                dto.setProductTitle(product.getTitle());
-                dto.setProductDescription(product.getDescription());
-                dto.setProductAuthor(product.getAuthor());
-                dto.setProductFileUrl(product.getFileUrl());
-            }
-
-            return dto;
-        }).toList();
     }
 }

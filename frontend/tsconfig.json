@@ -1,10 +1,11 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-   // "ignoreDeprecations": "6.0",
     "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitOverride": true,
@@ -13,17 +14,24 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "declaration": false,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": ["ES2022", "DOM"],
-    "types": ["jasmine"],
-    "skipLibCheck": true
+    "lib": [
+      "ES2022",
+      "ESNext",
+      "ESNext.AsyncIterable",
+      "dom"
+    ],
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "angularCompilerOptions": {
+    "enableControlFlow": true,   // ✅ ADD THIS LINE
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

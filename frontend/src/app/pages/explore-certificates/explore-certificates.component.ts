@@ -3,6 +3,7 @@ import { CertificateService } from '../../core/services/certificate.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-explore-certificates',
   templateUrl: './explore-certificates.component.html',
   styleUrls: ['./explore-certificates.component.css']

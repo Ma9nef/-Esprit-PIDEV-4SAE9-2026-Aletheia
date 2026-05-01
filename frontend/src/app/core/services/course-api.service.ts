@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 export interface CourseAdminDTO {
   id: number;
   title: string;
@@ -31,8 +30,10 @@ export interface LessonLearningDTO {
   id: number;
   courseId?: number;
   title: string;
+
   contentText?: string;
   youtubeVideoId?: string;
+
   hasPdf?: boolean;
   orderIndex?: number;
   durationMinutes?: number;
@@ -54,31 +55,29 @@ export interface EnrollmentDTO {
 
 @Injectable({ providedIn: 'root' })
 export class CourseApiService {
-  private COURSE_API = 'http://localhost:8089/course/public/courses';
-  private ENROLL_API = 'http://localhost:8089/course/public/enrollments';
-  private LESSON_LEARN_API = 'http://localhost:8089/api/lesson/learn';
-  private ADMIN_COURSE_API = 'http://localhost:8089/course/admin/courses';
-private PROGRESS_API = 'http://localhost:8089/course/progress';
+  private COURSE_API = 'http://localhost:8081/course/public/courses';
+  private ENROLL_API = 'http://localhost:8081/course/public/enrollments';
+  private LESSON_LEARN_API = 'http://localhost:8081/lesson/learn';
+  private ADMIN_COURSE_API = 'http://localhost:8081/course/admin/courses';
+
+  // ✅ Progress API
+  private PROGRESS_API = 'http://localhost:8081/progress';
 
   constructor(private http: HttpClient) {}
 
+  // -----------------------
+  // ✅ JWT headers
+  // -----------------------
   private authHeaders(): HttpHeaders {
-    const token =
-      localStorage.getItem('token') ||
-      localStorage.getItem('access_token') ||
-      localStorage.getItem('jwt') ||
-      localStorage.getItem('authToken');
-  
-    if (!token) {
-      console.warn('No JWT token found in localStorage');
-      return new HttpHeaders();
-    }
-  
-    return new HttpHeaders({
-      Authorization: token.startsWith('Bearer ') ? token : `Bearer ${token}`
-    });
+    const token = localStorage.getItem('token');
+    const headers: Record<string, string> = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return new HttpHeaders(headers);
   }
 
+  // -----------------------
+  // ✅ COURSES
+  // -----------------------
   getAllPublicCourses(): Observable<CoursePublicDTO[]> {
     return this.http.get<CoursePublicDTO[]>(this.COURSE_API);
   }
@@ -87,6 +86,9 @@ private PROGRESS_API = 'http://localhost:8089/course/progress';
     return this.http.get<CoursePublicDTO>(`${this.COURSE_API}/${id}`);
   }
 
+  // -----------------------
+  // ✅ ENROLLMENT
+  // -----------------------
   enroll(courseId: number): Observable<EnrollmentDTO> {
     return this.http.post<EnrollmentDTO>(
       `${this.ENROLL_API}/${courseId}`,
@@ -117,6 +119,9 @@ private PROGRESS_API = 'http://localhost:8089/course/progress';
     });
   }
 
+  // -----------------------
+  // ✅ LESSONS (LEARN)
+  // -----------------------
   listLessonsByCourse(courseId: number): Observable<LessonLearningDTO[]> {
     return this.http.get<LessonLearningDTO[]>(
       `${this.LESSON_LEARN_API}/by-course/${courseId}`
@@ -160,11 +165,16 @@ private PROGRESS_API = 'http://localhost:8089/course/progress';
     return null;
   }
 
+  // -----------------------
+  // ✅ PROGRESS (JWT)
+  // -----------------------
   getCourseProgress(courseId: number): Observable<CourseProgressDTO> {
-    return this.http.get<CourseProgressDTO>(
-      `${this.PROGRESS_API}/courses/${courseId}`,
-      { headers: this.authHeaders() }
-    );
+    console.log('Calling progress API for course', courseId);
+
+  return this.http.get<CourseProgressDTO>(
+    `${this.PROGRESS_API}/courses/${courseId}`,
+    { headers: this.authHeaders() }
+  );
   }
 
   completeLesson(courseId: number, lessonId: number): Observable<CourseProgressDTO> {
@@ -175,6 +185,7 @@ private PROGRESS_API = 'http://localhost:8089/course/progress';
     );
   }
 
+  // optional (only if you implement it backend-side)
   openLesson(courseId: number, lessonId: number): Observable<void> {
     return this.http.post<void>(
       `${this.PROGRESS_API}/courses/${courseId}/lessons/${lessonId}/open`,
@@ -182,7 +193,6 @@ private PROGRESS_API = 'http://localhost:8089/course/progress';
       { headers: this.authHeaders() }
     );
   }
-
   getAdminCourses(): Observable<CourseAdminDTO[]> {
     return this.http.get<CourseAdminDTO[]>(
       this.ADMIN_COURSE_API,

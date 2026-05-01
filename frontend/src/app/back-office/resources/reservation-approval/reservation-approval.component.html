@@ -1,0 +1,78 @@
+<div class="approval-container">
+  <div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <h2>Pending Reservations
+      <span class="badge bg-warning text-dark ms-2">{{ reservations.length }}</span>
+    </h2>
+    <button class="btn btn-outline-secondary btn-sm" (click)="load()" [disabled]="loading">Refresh</button>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger alert-dismissible">
+    {{ error }}
+    <button type="button" class="btn-close" (click)="error = ''"></button>
+  </div>
+
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary"></div>
+  </div>
+
+  <div *ngIf="!loading && reservations.length === 0" class="text-center py-5 text-muted">
+    No pending reservations at this time.
+  </div>
+
+  <div *ngIf="!loading && reservations.length > 0" class="table-responsive">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Instructor</th>
+          <th>Resource</th>
+          <th>Session</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Expires</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of reservations">
+          <td><small>{{ r.instructorId }}</small></td>
+          <td>{{ r.resourceName || r.resourceId }}<br><small class="text-muted">{{ r.resourceLocation }}</small></td>
+          <td>{{ r.sessionTitle || '—' }}<br><small class="text-muted">{{ r.courseCode }}</small></td>
+          <td>{{ formatDate(r.startTime) }}</td>
+          <td>{{ formatDate(r.endTime) }}</td>
+          <td>{{ formatDate(r.expiresAt!) }}</td>
+          <td>
+            <div class="d-flex gap-2">
+              <button class="btn btn-sm btn-success"
+                      [disabled]="actionInProgress === r.id"
+                      (click)="approve(r.id)">
+                <span *ngIf="actionInProgress === r.id" class="spinner-border spinner-border-sm me-1"></span>
+                Approve
+              </button>
+              <button class="btn btn-sm btn-danger"
+                      [disabled]="actionInProgress === r.id"
+                      (click)="openRejectModal(r.id)">
+                Reject
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Reject modal -->
+  <div *ngIf="showRejectModal" class="modal-backdrop-custom">
+    <div class="modal-dialog-custom card">
+      <div class="card-body">
+        <h5>Reject Reservation</h5>
+        <label class="form-label">Reason (required)</label>
+        <textarea class="form-control mb-3" rows="3" [(ngModel)]="rejectReason"
+                  placeholder="Explain why this reservation is rejected…"></textarea>
+        <div class="d-flex gap-2">
+          <button class="btn btn-danger" (click)="confirmReject()" [disabled]="!rejectReason.trim()">Confirm Reject</button>
+          <button class="btn btn-secondary" (click)="closeRejectModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

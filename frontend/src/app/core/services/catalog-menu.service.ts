@@ -15,7 +15,7 @@ export type CourseMiniDTO = {
 @Injectable({ providedIn: 'root' })
 export class CatalogMenuService {
   // ✅ si vous passez par gateway plus tard, remplacez baseUrl par 8089/courses/...
-  private baseUrl = 'http://localhost:8089/api/catalog';
+  private baseUrl = 'http://localhost:8081/api/catalog';
 
   constructor(private http: HttpClient) {}
 

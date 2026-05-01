@@ -1,30 +1,38 @@
 package com.esprit.microservice.resourcemanagement.dto.request;
 
 import com.esprit.microservice.resourcemanagement.entity.enums.ResourceType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class CreateResourceRequest {
 
-    @NotBlank(message = "Resource name is required")
+    @NotBlank
     private String name;
 
-    @NotNull(message = "Resource type is required")
+    @NotNull
     private ResourceType type;
 
-    @Positive(message = "Capacity must be a positive number")
+    @Min(1)
     private Integer capacity;
 
-    private Map<String, Object> metadata;
+    private String description;
+
+    private String location;
+
+    private Boolean requiresApproval;
+
+    @Min(1) @Max(5)
+    private Integer conditionScore = 5;
+
+    private Integer maxReservationHours;
+
+    private Integer minAdvanceBookingHours;
+
+    private Map<String, Object> attributes;
 }
