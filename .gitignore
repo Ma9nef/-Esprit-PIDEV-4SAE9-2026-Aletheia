@@ -18,3 +18,5 @@ backend/microservices/Notification/venv/
 
 # Python env files
 .env.*
+**/.idea/
+*.iml
