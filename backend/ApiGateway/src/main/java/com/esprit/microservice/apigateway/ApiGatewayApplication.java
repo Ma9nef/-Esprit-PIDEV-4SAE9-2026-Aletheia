@@ -167,6 +167,18 @@ public class ApiGatewayApplication {
                 .route("notification-service", r -> r.path("/api/notifications/**")
                         .uri("lb://NOTIFICATION"))
 
+                // USER SERVICE — auth & admin (otherwise POST /api/auth/login → 404)
+                .route("user-auth", r -> r.path("/api/auth/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("lb://ALETHEIA-PLATFORM"))
+                .route("user-admin-users", r -> r.path("/api/admin/users/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("lb://ALETHEIA-PLATFORM"))
+
                 .build();
     }
 }
