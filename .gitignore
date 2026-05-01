@@ -1,27 +1,20 @@
-# IntelliJ
-.idea/
-*.iml
+# ======================
+# Python (CRITICAL FIX)
+# ======================
 
-# Java / Maven / Gradle
-**/target/
-**/build/
-*.class
-*.log
+# Bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
 
-# Node / Angular
-**/node_modules/
-**/dist/
-.angular/
-npm-cache/
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
 
-# Env / secrets
-.env
-*.key
-*.pem
+# Specific path (your case)
+backend/microservices/Notification/venv/
 
-# Angular cache
-frontend/.angular/
-
-# Optional but recommended
-node_modules/
-dist/
+# Python env files
+.env.*
