@@ -53,7 +53,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     // ── CORS preflight ──────────────────────────────────
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-
+                    .requestMatchers("/actuator/**").permitAll()
 
                     // ── Public file downloads ───────────────────────────
                     .requestMatchers(HttpMethod.GET, "/api/files/**").permitAll()

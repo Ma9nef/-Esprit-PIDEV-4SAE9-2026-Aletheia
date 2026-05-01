@@ -7,10 +7,9 @@ import { Certificate } from '../models/certificate.model';
   providedIn: 'root'
 })
 export class CertificateService {
+  // API Gateway
+  private apiUrl = 'http://localhost:8089/pidev/certificate';
 
-  // ✅ Now pointing to API Gateway Port 8089
-  // Assuming the Gateway routes 'pidev/certificate' to your microservice
-private apiUrl = 'http://localhost:8089/pidev/certificate';
   constructor(private http: HttpClient) {}
 
   predictSuccess(userId: number): Observable<any> {
@@ -29,7 +28,6 @@ private apiUrl = 'http://localhost:8089/pidev/certificate';
     const formData = new FormData();
     formData.append('file', blob, `certificate_${id}.pdf`);
 
-    // UPDATED: Removed hardcoded 8081, using this.apiUrl
     return this.http.post(`${this.apiUrl}/${id}/upload`, formData, {
       responseType: 'text'
     });
@@ -44,7 +42,9 @@ private apiUrl = 'http://localhost:8089/pidev/certificate';
   }
 
   downloadModernPdf(id: number): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/export-modern/${id}`, { responseType: 'blob' });
+    return this.http.get(`${this.apiUrl}/export-modern/${id}`, {
+      responseType: 'blob'
+    });
   }
 
   getStats(): Observable<any> {
@@ -60,7 +60,6 @@ private apiUrl = 'http://localhost:8089/pidev/certificate';
   }
 
   downloadCertificateFile(id: number): Observable<Blob> {
-    // UPDATED: Removed hardcoded 8081, using this.apiUrl
     return this.http.get(`${this.apiUrl}/${id}/download`, {
       responseType: 'blob'
     });

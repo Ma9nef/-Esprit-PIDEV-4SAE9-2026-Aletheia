@@ -2,7 +2,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SubscriptionPlan, SubscriptionPlanRequest, SubscriptionPlanResponse } from '../models/subscription-plan.model';
+import {
+  SubscriptionPlan,
+  SubscriptionPlanRecommendation,
+  SubscriptionPlanRequest,
+  SubscriptionPlanResponse
+} from '../models/subscription-plan.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +30,10 @@ export class SubscriptionPlanService {
   // Récupérer les plans actifs (pour le frontoffice)
   getActivePlans(): Observable<SubscriptionPlanResponse[]> {
     return this.http.get<SubscriptionPlanResponse[]>(`${this.apiUrl}/active`);
+  }
+
+  getRecommendedPlan(userId: string): Observable<SubscriptionPlanRecommendation> {
+    return this.http.get<SubscriptionPlanRecommendation>(`${this.apiUrl}/recommendation/${userId}`);
   }
 
   // Créer un plan (admin)

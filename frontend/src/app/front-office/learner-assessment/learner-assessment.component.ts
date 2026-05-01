@@ -137,7 +137,6 @@ export class LearnerAssessmentComponent implements OnInit, OnDestroy {
         const qTotal = this.getQuestionsArray().length;
         this.correctCount = res.correctAnswers !== undefined ? res.correctAnswers : Math.round((res.score / this.selectedAssessment.totalScore) * qTotal);
         this.wrongCount = qTotal - this.correctCount;
-
         this.hasPassed = this.finalScore >= (this.selectedAssessment.totalScore / 2);
         if (this.hasPassed) this.triggerCelebration();
         this.currentView = 'result';

@@ -13,6 +13,8 @@ public interface SubscriptionRepository extends MongoRepository<Subscription, St
 
     List<Subscription> findByUserId(String userId);
 
+    List<Subscription> findByUserIdOrderByCreatedAtDesc(String userId);
+
     Optional<Subscription> findBySubscriptionNumber(String subscriptionNumber);
 
     List<Subscription> findByUserIdAndStatus(String userId, String status);
@@ -21,6 +23,8 @@ public interface SubscriptionRepository extends MongoRepository<Subscription, St
     Optional<Subscription> findActiveSubscriptionByUserId(String userId, LocalDateTime now);
 
     List<Subscription> findByStatusAndEndDateBefore(String status, LocalDateTime date);
+
+    List<Subscription> findByStatusAndEndDateBetween(String status, LocalDateTime start, LocalDateTime end);
 
     List<Subscription> findByPlanId(String planId);
 

@@ -1,14 +1,11 @@
 <div class="aletheia-dashboard aletheia-admin">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar" aria-label="Admin navigation">
     <div class="sidebar-brand">
       <span class="brand-text">ALETHEIA</span>
       <span class="brand-role">Admin</span>
     </div>
     <nav class="sidebar-nav" aria-label="Admin menu">
-      <a routerLink="/back-office/admin" routerLinkActive="nav-item--active"
-         [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+      <a routerLink="/back-office/admin" routerLinkActive="nav-item--active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         </span>
@@ -26,102 +23,72 @@
         </span>
         <span class="nav-label">Courses</span>
       </a>
-      <a routerLink="/back-office/admin/training-programs"
-   routerLinkActive="nav-item--active"
-   class="nav-item">
-  <span class="nav-icon" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-    </svg>
-  </span>
-  <span class="nav-label">Training Program</span>
-</a>
-      <a routerLink="/back-office/admin/manage-library" routerLinkActive="nav-item--active"
-         [routerLinkActiveOptions]="{exact:true}" class="nav-item">
+      <a routerLink="/back-office/admin/training-programs" routerLinkActive="nav-item--active" class="nav-item">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="nav-label">Training Program</span>
+      </a>
+      <a routerLink="/back-office/admin/manage-library" routerLinkActive="nav-item--active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
         </span>
         <span class="nav-label">Library</span>
       </a>
-      <a href="#" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </span>
-        <span class="nav-label">Revenue</span>
-      </a>
       <a routerLink="/back-office/admin/offers" routerLinkActive="nav-item--active" class="nav-item">
-  <span class="nav-icon" aria-hidden="true">
-    <!-- Icon of your choice – example: a gift or tag icon -->
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-      <circle cx="12" cy="12" r="4"/>
-    </svg>
-  </span>
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+        </span>
         <span class="nav-label">Offers</span>
       </a>
-
-
-      <!-- NEW: Subscription Plan button -->
       <a routerLink="/back-office/admin/subscription-plans" routerLinkActive="nav-item--active" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-            <line x1="1" y1="10" x2="23" y2="10"></line>
-          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
         </span>
         <span class="nav-label">Subscription Plan</span>
       </a>
-
+      <a routerLink="/back-office/admin/subscriptions" routerLinkActive="nav-item--active" class="nav-item">
+        <span class="nav-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 7V3m8 4V3M4 11h16"></path><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 15h3M13 15h3M8 18h8"></path></svg>
+        </span>
+        <span class="nav-label">Subscriptions</span>
+      </a>
       <a routerLink="/back-office/admin/resources" routerLinkActive="nav-item--active" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="6" height="6" rx="1"/><rect x="9" y="3" width="6" height="6" rx="1"/><rect x="16" y="3" width="6" height="6" rx="1"/><rect x="2" y="12" width="6" height="6" rx="1"/><rect x="9" y="12" width="6" height="6" rx="1"/><rect x="16" y="12" width="6" height="6" rx="1"/></svg>
         </span>
         <span class="nav-label">Resources</span>
       </a>
-
       <a routerLink="/back-office/admin/loans" routerLinkActive="nav-item--active" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
         </span>
         <span class="nav-label">Loans</span>
       </a>
-
       <a routerLink="/back-office/admin/borrowing-policies" routerLinkActive="nav-item--active" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </span>
         <span class="nav-label">Borrow Policies</span>
       </a>
-
       <a routerLink="/back-office/admin/inventory-analytics" routerLinkActive="nav-item--active" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         </span>
         <span class="nav-label">Inventory Analytics</span>
       </a>
-
-      <a href="#" class="nav-item">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        </span>
-        <span class="nav-label">Settings</span>
-      </a>
     </nav>
   </aside>
 
-  <!-- MAIN -->
   <main class="main-content">
-
-    <!-- HEADER -->
     <header class="top-header">
       <div class="header-left">
         <h1 class="page-title">Admin Dashboard</h1>
       </div>
       <div class="header-right">
-        <button type="button" class="icon-btn" aria-label="Notifications">
+        <button type="button" class="icon-btn" aria-label="Notifications" (click)="markAdminNotificationsAsRead()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span class="badge-dot" aria-hidden="true">5</span>
+          <span *ngIf="adminUnreadNotificationCount > 0" class="badge-dot" aria-hidden="true">{{ adminUnreadNotificationCount }}</span>
         </button>
         <div class="avatar-wrap" aria-hidden="true">
           <span class="avatar">AD</span>
@@ -129,13 +96,9 @@
       </div>
     </header>
 
-    <!-- ROUTER -->
     <router-outlet></router-outlet>
 
-    <!-- DASHBOARD CONTENT -->
     <ng-container *ngIf="showDashboardContent">
-
-      <!-- ANALYTICS -->
       <section class="analytics-row" aria-label="Analytics overview">
         <div class="analytics-card">
           <span class="analytics-label">Total Revenue</span>
@@ -168,45 +131,25 @@
         </div>
       </section>
 
-      <!-- STATS -->
       <section *ngIf="showDashboardWidgets" class="stats-blocks" aria-label="Users and courses statistics">
         <div class="stats-block">
           <h2 class="stats-block-title">Users Statistics</h2>
           <ul class="stats-list" role="list">
-            <li class="stats-list-item">
-              <span class="stats-list-label">Students</span>
-              <span class="stats-list-value">6,240</span>
-            </li>
-            <li class="stats-list-item">
-              <span class="stats-list-label">Trainers</span>
-              <span class="stats-list-value">89</span>
-            </li>
-            <li class="stats-list-item">
-              <span class="stats-list-label">Admins</span>
-              <span class="stats-list-value">12</span>
-            </li>
+            <li class="stats-list-item"><span class="stats-list-label">Students</span><span class="stats-list-value">6,240</span></li>
+            <li class="stats-list-item"><span class="stats-list-label">Trainers</span><span class="stats-list-value">89</span></li>
+            <li class="stats-list-item"><span class="stats-list-label">Admins</span><span class="stats-list-value">12</span></li>
           </ul>
         </div>
         <div class="stats-block">
           <h2 class="stats-block-title">Courses Statistics</h2>
           <ul class="stats-list" role="list">
-            <li class="stats-list-item">
-              <span class="stats-list-label">Active</span>
-              <span class="stats-list-value">142</span>
-            </li>
-            <li class="stats-list-item">
-              <span class="stats-list-label">Draft</span>
-              <span class="stats-list-value">14</span>
-            </li>
-            <li class="stats-list-item">
-              <span class="stats-list-label">Archived</span>
-              <span class="stats-list-value">8</span>
-            </li>
+            <li class="stats-list-item"><span class="stats-list-label">Active</span><span class="stats-list-value">142</span></li>
+            <li class="stats-list-item"><span class="stats-list-label">Draft</span><span class="stats-list-value">14</span></li>
+            <li class="stats-list-item"><span class="stats-list-label">Archived</span><span class="stats-list-value">8</span></li>
           </ul>
         </div>
       </section>
 
-      <!-- CHART -->
       <section class="section chart-section" aria-labelledby="revenue-chart-heading">
         <h2 id="revenue-chart-heading" class="section-title">Revenue Overview</h2>
         <div class="chart-placeholder" role="img" aria-label="Revenue chart placeholder">
@@ -220,18 +163,11 @@
             <div class="chart-bar chart-bar--current" style="--h: 90%;"></div>
           </div>
           <div class="chart-labels">
-            <span>Mon</span>
-            <span>Tue</span>
-            <span>Wed</span>
-            <span>Thu</span>
-            <span>Fri</span>
-            <span>Sat</span>
-            <span>Sun</span>
+            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
           </div>
         </div>
       </section>
 
-      <!-- TABLE -->
       <section class="section" aria-labelledby="activity-heading">
         <div class="section-header">
           <h2 id="activity-heading" class="section-title">Recent Activity</h2>
@@ -240,49 +176,20 @@
         <div class="table-wrap">
           <table class="data-table" role="table">
             <thead>
-              <tr>
-                <th scope="col">Activity</th>
-                <th scope="col">User</th>
-                <th scope="col">Date</th>
-              </tr>
+              <tr><th scope="col">Activity</th><th scope="col">User</th><th scope="col">Date</th></tr>
             </thead>
             <tbody>
-              <tr>
-                <td>New course published: React Advanced</td>
-                <td>Sarah M.</td>
-                <td>Feb 16, 10:30</td>
-              </tr>
-              <tr>
-                <td>User registration: john.doe@email.com</td>
-                <td>—</td>
-                <td>Feb 16, 09:15</td>
-              </tr>
-              <tr>
-                <td>Certificate issued: JavaScript Fundamentals</td>
-                <td>Maria K.</td>
-                <td>Feb 15, 16:45</td>
-              </tr>
-              <tr>
-                <td>Course enrollment: Cloud Architecture</td>
-                <td>James L.</td>
-                <td>Feb 15, 14:20</td>
-              </tr>
-              <tr>
-                <td>Workshop scheduled: API Design</td>
-                <td>Admin</td>
-                <td>Feb 15, 11:00</td>
-              </tr>
+              <tr><td>New course published: React Advanced</td><td>Sarah M.</td><td>Feb 16, 10:30</td></tr>
+              <tr><td>User registration: john.doe@email.com</td><td>—</td><td>Feb 16, 09:15</td></tr>
+              <tr><td>Certificate issued: JavaScript Fundamentals</td><td>Maria K.</td><td>Feb 15, 16:45</td></tr>
+              <tr><td>Course enrollment: Cloud Architecture</td><td>James L.</td><td>Feb 15, 14:20</td></tr>
+              <tr><td>Workshop scheduled: API Design</td><td>Admin</td><td>Feb 15, 11:00</td></tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <!-- ══════════════════════════════════════════════════════════════════ -->
-      <!-- RESOURCE MANAGEMENT WIDGET                                         -->
-      <!-- ══════════════════════════════════════════════════════════════════ -->
       <section class="section res-section" aria-labelledby="res-heading">
-
-        <!-- Section header -->
         <div class="section-header">
           <h2 id="res-heading" class="section-title">
             <span class="res-section-icon">🏗️</span> Resource Management
@@ -295,39 +202,31 @@
           </div>
         </div>
 
-        <!-- Error -->
         <div class="res-alert-error" *ngIf="resourcesError">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           {{ resourcesError }}
           <button class="res-btn-retry" (click)="loadResources()">Retry</button>
         </div>
 
-        <!-- Filters -->
         <div class="res-filters" *ngIf="!resourcesError">
           <div class="res-search">
             <svg class="res-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input type="text" class="res-input" [(ngModel)]="resourceSearchTerm" placeholder="Search resources…">
           </div>
           <div class="res-filter-pills">
-            <button *ngFor="let t of resourceTypes" class="res-fpill"
-              [class.res-fpill--active]="resourceFilterType === t"
-              (click)="resourceFilterType = t">
+            <button *ngFor="let t of resourceTypes" class="res-fpill" [class.res-fpill--active]="resourceFilterType === t" (click)="resourceFilterType = t">
               {{ t === 'ALL' ? 'All' : typeIcon($any(t)) + ' ' + typeLabel($any(t)) }}
               <span class="res-fpill-count" *ngIf="t !== 'ALL'">{{ countByType($any(t)) }}</span>
             </button>
           </div>
         </div>
 
-        <!-- Loader -->
         <div class="res-loader" *ngIf="resourcesLoading">
           <div class="res-spinner"></div>
           <span>Loading resources…</span>
         </div>
 
-        <!-- Table -->
         <div class="table-wrap" *ngIf="!resourcesLoading && !resourcesError">
-
-          <!-- Empty state -->
           <div class="res-empty" *ngIf="filteredResources.length === 0 && resources.length === 0">
             <span>🏗️</span>
             <p>No resources yet. <button class="res-link" (click)="openCreateForm()">Create the first one.</button></p>
@@ -350,39 +249,22 @@
             <tbody>
               <tr *ngFor="let r of filteredResources">
                 <td class="res-name-cell">{{ r.name }}</td>
-                <td>
-                  <span class="res-badge" [ngClass]="typeBadgeClass(r.type)">
-                    {{ typeIcon(r.type) }} {{ typeLabel(r.type) }}
-                  </span>
-                </td>
+                <td><span class="res-badge" [ngClass]="typeBadgeClass(r.type)">{{ typeIcon(r.type) }} {{ typeLabel(r.type) }}</span></td>
                 <td>
                   <span *ngIf="r.capacity !== null && r.capacity !== undefined">{{ r.capacity }}</span>
                   <span *ngIf="r.capacity === null || r.capacity === undefined" class="res-muted">—</span>
                 </td>
                 <td class="res-actions-cell">
-                  <button class="res-action res-action--reservations" title="View reservations" (click)="viewReservations(r.id)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    Reservations
-                  </button>
-                  <button class="res-action res-action--edit" title="Edit" (click)="openEditForm(r)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Edit
-                  </button>
-                  <button class="res-action res-action--delete" title="Delete" (click)="confirmDeleteResource(r.id)">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    Delete
-                  </button>
+                  <button class="res-action res-action--reservations" title="View reservations" (click)="viewReservations(r.id)">Reservations</button>
+                  <button class="res-action res-action--edit" title="Edit" (click)="openEditForm(r)">Edit</button>
+                  <button class="res-action res-action--delete" title="Delete" (click)="confirmDeleteResource(r.id)">Delete</button>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-
       </section>
-      <!-- ══ END RESOURCE MANAGEMENT ══════════════════════════════════════ -->
-
     </ng-container>
-
   </main>
 </div>
 

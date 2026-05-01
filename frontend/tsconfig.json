@@ -3,7 +3,6 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-   // "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -19,11 +18,17 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": ["ES2022", "DOM"],
-    "types": ["jasmine"],
-    "skipLibCheck": true
+    "lib": [
+      "ES2022",
+      "ESNext",
+      "ESNext.AsyncIterable",
+      "DOM"
+    ],
+    "skipLibCheck": true,
+    "types": ["node", "jasmine"]
   },
   "angularCompilerOptions": {
+    "enableControlFlow": true,
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,

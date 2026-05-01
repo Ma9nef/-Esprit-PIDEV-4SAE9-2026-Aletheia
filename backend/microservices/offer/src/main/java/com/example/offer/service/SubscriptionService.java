@@ -8,6 +8,7 @@ import com.example.offer.model.SubscriptionPlan;
 import com.example.offer.repository.SubscriptionRepository;
 import com.example.offer.repository.SubscriptionPlanRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +23,7 @@ public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
     private final SubscriptionPlanRepository planRepository;
+    private final SubscriptionNotificationService notificationService;
 
     // Récupérer tous les abonnements
     public List<SubscriptionResponseDTO> getAllSubscriptions() {
@@ -147,7 +149,14 @@ public class SubscriptionService {
             sub.setStatus("EXPIRED");
             sub.setUpdatedAt(LocalDateTime.now());
             subscriptionRepository.save(sub);
+            notificationService.notifySubscriptionExpired(sub, planRepository.findById(sub.getPlanId()).orElse(null));
         }
+    }
+
+    @Scheduled(cron = "${subscription.notifications.maintenance-cron:0 0 */6 * * *}")
+    public void runNotificationMaintenance() {
+        checkExpiredSubscriptions();
+        notificationService.createExpirationReminders();
     }
 
     // Méthodes privées
@@ -158,6 +167,9 @@ public class SubscriptionService {
     }
 
     private int calculateDaysRemaining(LocalDateTime endDate) {
+        if (endDate == null) {
+            return 0;
+        }
         return (int) java.time.Duration.between(LocalDateTime.now(), endDate).toDays();
     }
 
@@ -166,14 +178,24 @@ public class SubscriptionService {
         dto.setSubscriptionId(subscription.getId());
         dto.setSubscriptionNumber(subscription.getSubscriptionNumber());
         dto.setUserId(subscription.getUserId());
+        dto.setPlanId(subscription.getPlanId());
         dto.setStartDate(subscription.getStartDate());
         dto.setEndDate(subscription.getEndDate());
         dto.setStatus(subscription.getStatus());
+        dto.setCreatedAt(subscription.getCreatedAt());
+        dto.setUpdatedAt(subscription.getUpdatedAt());
+        dto.setDaysRemaining(calculateDaysRemaining(subscription.getEndDate()));
 
         // Ajouter le nom du plan
-        planRepository.findById(subscription.getPlanId()).ifPresent(plan ->
-                dto.setPlanName(plan.getName())
-        );
+        planRepository.findById(subscription.getPlanId()).ifPresent(plan -> {
+            dto.setPlanName(plan.getName());
+            dto.setPlanDescription(plan.getDescription());
+            dto.setPlanPrice(plan.getPrice());
+            dto.setDurationDays(plan.getDurationDays());
+            dto.setMaxCourses(plan.getMaxCourses());
+            dto.setCertificationIncluded(plan.getCertificationIncluded());
+            dto.setPlanActive(plan.getIsActive());
+        });
 
         return dto;
     }

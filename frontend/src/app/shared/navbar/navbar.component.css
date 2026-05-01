@@ -1560,3 +1560,9 @@ input:focus-visible {
     right: -4px;
   }
 }
+/* Important: le mega-menu est en position absolute; il doit “dépasser” le header */
+.navbar {
+  position: relative;
+  z-index: 3000;
+  overflow: visible;
+}

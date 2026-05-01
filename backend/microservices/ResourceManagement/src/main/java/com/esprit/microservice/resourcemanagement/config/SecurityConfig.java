@@ -59,6 +59,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                     // ── CORS preflight ──────────────────────────────────
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                    .requestMatchers("/actuator/**").permitAll()
 
                     // ── Swagger / OpenAPI ───────────────────────────────
                     .requestMatchers("/swagger-ui/**", "/swagger-ui.html",

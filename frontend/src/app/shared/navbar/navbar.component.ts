@@ -3,8 +3,10 @@ import { Router, NavigationEnd } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
+
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { SubscriptionNotificationService } from '../../core/services/subscription-notification.service';
 import { NotificationService, AppNotification } from 'src/app/core/services/notification.service';
 
 @Component({
@@ -21,14 +23,15 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isUserDropdownOpen = false;
   isNotificationPanelOpen = false;
 
-  notifications: AppNotification[] = [];
+  unreadNotificationCount = 0;
   unreadCount = 0;
-
-  private subs = new Subscription();
+  notifications: AppNotification[] = [];
 
   searchControl = new FormControl('');
   searchQuery = '';
   currentRoute = '';
+
+  private subs = new Subscription();
 
   currentUser = {
     name: '',
@@ -51,23 +54,21 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     public themeService: ThemeService,
     private auth: AuthService,
+    private subscriptionNotificationService: SubscriptionNotificationService,
     public notificationService: NotificationService
   ) {}
 
-  // ✅ Always reads current token from localStorage
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
   }
 
   get isAdmin(): boolean {
     const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_ADMIN" etc.
     return !!u && (u.role === 'ADMIN' || u.role === 'ROLE_ADMIN');
   }
 
   get isInstructor(): boolean {
     const u = this.auth.getUserFromToken();
-    // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
     return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
   }
 
@@ -78,32 +79,42 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateCurrentUser();
-
     this.currentRoute = this.router.url;
+    this.loadUnreadNotificationCount();
 
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => {
-        this.currentRoute = this.router.url;
-        this.updateCurrentUser();
-      });
+    this.subs.add(
+      this.router.events
+        .pipe(filter((e) => e instanceof NavigationEnd))
+        .subscribe(() => {
+          this.currentRoute = this.router.url;
+          this.updateCurrentUser();
+          this.loadUnreadNotificationCount();
+        })
+    );
 
-    this.searchControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe(query => {
-        this.searchQuery = query || '';
-      });
+    this.subs.add(
+      this.searchControl.valueChanges
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe((query) => {
+          this.searchQuery = query || '';
+        })
+    );
 
     if (this.isLoggedIn) {
       this.notificationService.startPolling();
-    }
 
-    this.subs.add(
-      this.notificationService.unreadCount$.subscribe(c => (this.unreadCount = c))
-    );
-    this.subs.add(
-      this.notificationService.notifications$.subscribe(n => (this.notifications = n))
-    );
+      this.subs.add(
+        this.notificationService.unreadCount$.subscribe((count) => {
+          this.unreadCount = count;
+        })
+      );
+
+      this.subs.add(
+        this.notificationService.notifications$.subscribe((notifications) => {
+          this.notifications = notifications;
+        })
+      );
+    }
   }
 
   ngOnDestroy(): void {
@@ -115,7 +126,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const u = this.auth.getUserFromToken();
 
     if (!u) {
-      this.currentUser = { name: '', email: '', avatar: 'https://i.pravatar.cc/150?img=12' };
+      this.currentUser = {
+        name: '',
+        email: '',
+        avatar: 'https://i.pravatar.cc/150?img=12'
+      };
       return;
     }
 
@@ -131,6 +146,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     } else if (role === 'LEARNER') {
       this.router.navigate(['/my-certificates']);
     }
+
+    this.isUserDropdownOpen = false;
   }
 
   goToAssessments(): void {
@@ -141,11 +158,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     } else if (role === 'LEARNER') {
       this.router.navigate(['/assessment']);
     }
+
+    this.isUserDropdownOpen = false;
   }
-  goToSubmissions() {
-  this.router.navigate(['/submissions']);
-  this.isUserDropdownOpen = false; // Close menu after click
-}
+
+  goToSubmissions(): void {
+    this.router.navigate(['/submissions']);
+    this.isUserDropdownOpen = false;
+  }
 
   toggleNotificationPanel(): void {
     this.isNotificationPanelOpen = !this.isNotificationPanelOpen;
@@ -170,10 +190,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   getNotificationIcon(type: string): string {
     switch (type) {
-      case 'SUCCESS': return '✓';
-      case 'WARNING': return '⚠';
-      case 'ERROR':   return '✕';
-      default:        return 'i';
+      case 'SUCCESS':
+        return '✓';
+      case 'WARNING':
+        return '⚠';
+      case 'ERROR':
+        return '✕';
+      default:
+        return 'i';
     }
   }
 
@@ -181,11 +205,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
     const date = new Date(dateStr);
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
-    const diffMin = Math.floor(diffMs / 60_000);
+    const diffMin = Math.floor(diffMs / 60000);
+
     if (diffMin < 1) return 'just now';
     if (diffMin < 60) return `${diffMin}m ago`;
+
     const diffH = Math.floor(diffMin / 60);
     if (diffH < 24) return `${diffH}h ago`;
+
     const diffD = Math.floor(diffH / 24);
     return `${diffD}d ago`;
   }
@@ -195,6 +222,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (this.userDropdown && !this.userDropdown.nativeElement.contains(event.target as Node)) {
       this.isUserDropdownOpen = false;
     }
+
     if (this.notificationPanel && !this.notificationPanel.nativeElement.contains(event.target as Node)) {
       this.isNotificationPanelOpen = false;
     }
@@ -219,8 +247,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   onSearchSubmit(): void {
     if (this.searchQuery.trim()) {
-      // ⚠️ use your real route:
-      this.router.navigate(['/front/courses'], { queryParams: { search: this.searchQuery } });
+      this.router.navigate(['/front/courses'], {
+        queryParams: { search: this.searchQuery }
+      });
       this.isMobileMenuOpen = false;
     }
   }
@@ -235,10 +264,17 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.isUserDropdownOpen = false;
   }
 
+  goToSubscriptionNotifications(): void {
+    this.router.navigate(['/subscription-notifications']);
+    this.isUserDropdownOpen = false;
+  }
+
   onDashboardClick(): void {
     const user = this.auth.getUserFromToken();
+
     if (user) {
       const role = user.role.toLowerCase();
+
       if (role === 'admin') {
         this.router.navigate(['/dashboardAdmin']);
       } else if (role === 'trainer' || role === 'instructor') {
@@ -247,6 +283,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
         this.router.navigate(['/dashboardLearner']);
       }
     }
+
     this.isUserDropdownOpen = false;
   }
 
@@ -263,6 +300,28 @@ export class NavbarComponent implements OnInit, OnDestroy {
       avatar: 'https://i.pravatar.cc/150?img=12'
     };
 
+    this.unreadNotificationCount = 0;
+    this.unreadCount = 0;
+    this.notifications = [];
+
     this.router.navigate(['/home']);
+  }
+
+  private loadUnreadNotificationCount(): void {
+    const user = this.auth.getUserFromToken();
+
+    if (!user) {
+      this.unreadNotificationCount = 0;
+      return;
+    }
+
+    this.subscriptionNotificationService.getUserUnreadCount(String(user.id)).subscribe({
+      next: (response) => {
+        this.unreadNotificationCount = response.unreadCount ?? 0;
+      },
+      error: () => {
+        this.unreadNotificationCount = 0;
+      }
+    });
   }
 }

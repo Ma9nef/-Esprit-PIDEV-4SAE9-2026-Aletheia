@@ -6,6 +6,10 @@
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="courses" />
         <module name="config-server" />
@@ -31,7 +35,16 @@
         <sourceTestOutputDir name="../../offer/target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="offer" />
+        <module name="courses" />
+        <module name="Library" />
+        <module name="user-service" />
+        <module name="ApiGateway" />
+        <module name="eureka" />
+        <module name="offer" />
       </profile>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
       <profile name="Annotation profile for Aletheia" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />

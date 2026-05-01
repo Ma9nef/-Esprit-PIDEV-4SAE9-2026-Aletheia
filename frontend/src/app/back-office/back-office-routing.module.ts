@@ -20,6 +20,7 @@ import {AdminFlashSalesComponent} from "./admin-flash-sales/admin-flash-sales.co
 import {FlashSaleFormComponent} from "./flash-sale-form/flash-sale-form.component";
 import {AdminAnalyticsComponent} from "./admin-analytics/admin-analytics.component";
 import {AdminSubscriptionPlansComponent} from "./admin-subscription-plans/admin-subscription-plans.component";
+import { AdminSubscriptionsComponent } from './admin-subscriptions/admin-subscriptions.component';
 import {
   SubscriptionPlanFormComponent
 } from "./admin-subscription-plans/subscription-plan-form/subscription-plan-form.component";
@@ -37,16 +38,15 @@ import { InventoryAnalyticsComponent } from './inventory-analytics/inventory-ana
 import { TrainingProgramComponent } from './training-program/training-program.component';
 import { TrainingProgramSessionsComponent } from './training-program-sessions/training-program-sessions.component';
 import { AdminTrainingProgramComponent } from './admin-training-program/admin-training-program.component';
+
 const routes: Routes = [
   {
     path: 'admin',
     component: AdminDashboardComponent,
     children: [
       { path: 'manage-library', component: ManageLibraryComponent },
-      { path: 'users', component: ManageUsersComponent },
       { path: 'manage-users', component: ManageUsersComponent },
       { path: 'courses', component: ManageCoursesComponent },
-      { path: 'training-programs', component: AdminTrainingProgramComponent },
       { path: 'offers', component: AdminOffersComponent },
       { path: 'offers/new', component: OfferFormComponent },
       { path: 'offers/:id', component: OfferFormComponent },
@@ -60,21 +60,22 @@ const routes: Routes = [
       { path: 'subscription-plans', component: AdminSubscriptionPlansComponent },
       { path: 'subscription-plans/new', component: SubscriptionPlanFormComponent },
       { path: 'subscription-plans/edit/:id', component: SubscriptionPlanFormComponent },
+      { path: 'subscriptions', component: AdminSubscriptionsComponent },
       { path: 'events', component: EventListComponent },
       { path: 'events/new', component: EventFormComponent },
       { path: 'events/edit/:id', component: EventFormComponent },
-
-   { path: 'allocations', component: AllocationListComponent },
-   { path: 'allocations/new', component: AllocationFormComponent },
-   { path: 'allocations/edit/:id', component: AllocationFormComponent },
-   { path: 'allocations/:id', component: AllocationDetailComponent },
-   { path: 'resources', component: ManageResourcesComponent },
-   { path: 'resources/new', component: ResourceFormComponent },
-   { path: 'resources/edit/:id', component: ResourceFormComponent },
-   { path: 'resources/:id/reservations', component: ResourceReservationsComponent },
-   { path: 'loans', component: ManageLoansComponent },
-   { path: 'borrowing-policies', component: BorrowingPoliciesComponent },
-   { path: 'inventory-analytics', component: InventoryAnalyticsComponent },
+      { path: 'allocations', component: AllocationListComponent },
+      { path: 'allocations/new', component: AllocationFormComponent },
+      { path: 'allocations/edit/:id', component: AllocationFormComponent },
+      { path: 'allocations/:id', component: AllocationDetailComponent },
+      { path: 'resources', component: ManageResourcesComponent },
+      { path: 'resources/new', component: ResourceFormComponent },
+      { path: 'resources/edit/:id', component: ResourceFormComponent },
+      { path: 'resources/:id/reservations', component: ResourceReservationsComponent },
+      { path: 'loans', component: ManageLoansComponent },
+      { path: 'borrowing-policies', component: BorrowingPoliciesComponent },
+      { path: 'inventory-analytics', component: InventoryAnalyticsComponent },
+      { path: 'training-programs', component: AdminTrainingProgramComponent }
     ]
   },
 
