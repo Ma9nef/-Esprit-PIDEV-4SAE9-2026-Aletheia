@@ -18,7 +18,6 @@ interface LibraryResource {
 }
 
 @Component({
-  standalone: false,
   selector: 'app-manage-library',
   templateUrl: './manage-library.component.html',
   styleUrls: ['./manage-library.component.css']

@@ -4,7 +4,6 @@ import { CertificateService } from '../../core/services/certificate.service';
 import { Location } from '@angular/common'; // Import this correctly
 
 @Component({
-  standalone: false,
   selector: 'app-verify-certificate',
   templateUrl: './verify-certificate.component.html',
   styleUrls: ['./verify-certificate.component.css']

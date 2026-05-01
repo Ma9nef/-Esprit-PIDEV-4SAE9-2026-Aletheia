@@ -18,7 +18,6 @@ type CourseCreatedResponse = {
 };
 
 @Component({
-  standalone: false,
   selector: 'app-create-course',
   templateUrl: './create-course.component.html',
   styleUrls: ['./create-course.component.css']

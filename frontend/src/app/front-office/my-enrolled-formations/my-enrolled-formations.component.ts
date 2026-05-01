@@ -27,6 +27,8 @@ export class MyEnrolledFormationsComponent implements OnInit {
 
     this.formationService.getMyEnrolledFormations().subscribe({
       next: (data: MyEnrolledFormation[]) => {
+        console.log('MY ENROLLED FORMATIONS =', data);
+      
         this.formations = data;
         this.loading = false;
       },
@@ -37,4 +39,5 @@ export class MyEnrolledFormationsComponent implements OnInit {
       }
     });
   }
+  
 }

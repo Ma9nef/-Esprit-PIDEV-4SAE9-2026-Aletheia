@@ -24,7 +24,6 @@ interface BuildingInfo {
 }
 
 @Component({
-  standalone: false,
   selector: 'app-explore3d',
   templateUrl: './explore3d.component.html',
   styleUrls: ['./explore3d.component.css']

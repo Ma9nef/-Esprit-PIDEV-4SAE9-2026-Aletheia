@@ -62,7 +62,7 @@ export class FormationDetailComponent implements OnInit {
     this.formationPublicService.getMyEnrolledFormations().subscribe({
       next: (data: MyEnrolledFormation[]) => {
         this.alreadyEnrolled = data.some(
-          (enrollment: MyEnrolledFormation) => enrollment.formationId === formationId
+          (enrollment: MyEnrolledFormation) => enrollment.formation.id === formationId
         );
       },
       error: (error: unknown) => {

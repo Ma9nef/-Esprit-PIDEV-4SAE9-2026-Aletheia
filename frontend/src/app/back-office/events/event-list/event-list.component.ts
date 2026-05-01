@@ -9,7 +9,6 @@ import { EventResponse } from '../event.model';
 
 
 @Component({
-  standalone: false,
   selector: 'app-event-list',
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.css'],

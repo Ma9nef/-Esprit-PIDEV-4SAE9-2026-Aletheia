@@ -7,7 +7,6 @@ import {
 } from 'src/app/core/services/catalog-menu.service';
 
 @Component({
-  standalone: false,
   selector: 'app-explore-mega-menu',
   templateUrl: './explore-mega-menu.component.html',
   styleUrls: ['./explore-mega-menu.component.css']

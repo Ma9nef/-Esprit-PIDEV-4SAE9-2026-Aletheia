@@ -10,7 +10,6 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 @Component({
-  standalone: false,
   selector: 'app-manage-assessments',
   templateUrl: './manage-assessments.component.html',
   styleUrls: ['./manage-assessments.component.css']

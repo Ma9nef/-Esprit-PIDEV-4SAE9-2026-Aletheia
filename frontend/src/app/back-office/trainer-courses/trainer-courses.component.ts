@@ -9,7 +9,6 @@ type InstructorCourseRowDTO = {
 };
 
 @Component({
-  standalone: false,
   selector: 'app-trainer-courses',
   templateUrl: './trainer-courses.component.html',
   styleUrls: ['./trainer-courses.component.css']

@@ -14,7 +14,6 @@ type CourseDetailsVM = CoursePublicDTO & {
 };
 
 @Component({
-  standalone: false,
   selector: 'app-course-details',
   templateUrl: './course-details.component.html',
   styleUrls: ['./course-details.component.css'] // ✅ ensure your premium CSS loads

@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { FaceDetectionService, FaceDetectionResult } from '../service/face-detection.service';
 
 @Component({
-  standalone: false,
   selector: 'app-video-room',
   templateUrl: './video-room.component.html',
   styleUrls: ['./video-room.component.css'],

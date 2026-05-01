@@ -15,7 +15,7 @@ import { AuthRoutingModule } from './auth-routing.module';
   imports: [
     CommonModule,
     FormsModule   ,
-    AuthRoutingModule
+    AuthRoutingModule   
   ],
   exports: [
     LoginComponent,

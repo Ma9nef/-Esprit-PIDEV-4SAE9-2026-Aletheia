@@ -40,10 +40,19 @@ public class SecurityConfig {
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                         .requestMatchers("/course/public/**").permitAll()
-                        .requestMatchers("/api/formations/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/formations").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/formations/*").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/formations/*/enroll").hasRole("LEARNER")
+                        .requestMatchers(HttpMethod.GET, "/api/formations/my-enrollments").hasRole("LEARNER")
+                        .requestMatchers(HttpMethod.GET, "/api/formations/*/attendance/me").hasRole("LEARNER")
+
                         .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -54,13 +63,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 }

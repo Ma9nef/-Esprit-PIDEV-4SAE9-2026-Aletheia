@@ -46,6 +46,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             Long userId = jwtReader.extractUserId(authHeader);
             String role = jwtReader.extractRole(authHeader);
 
+            System.out.println("DEBUG JWT userId = " + userId);
+            System.out.println("DEBUG JWT role = " + role);
+
             if (userId == null || role == null || role.isBlank()) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
@@ -61,6 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }

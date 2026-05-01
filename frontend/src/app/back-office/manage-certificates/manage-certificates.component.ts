@@ -10,12 +10,12 @@ import { UserService } from 'src/app/core/services/user.service';
 declare var bootstrap: any;
 
 @Component({
-  standalone: false,
   selector: 'app-manage-certificates',
   templateUrl: './manage-certificates.component.html',
   styleUrls: ['./manage-certificates.component.css']
 })
 export class ManageCertificatesComponent implements OnInit, AfterViewInit {
+    @ViewChild('signatureCanvas') signatureCanvas!: ElementRef<HTMLCanvasElement>;
 getProbabilityColor(score: number): string {
   if (score >= 80) {
     return 'success'; // Green: High probability of passing

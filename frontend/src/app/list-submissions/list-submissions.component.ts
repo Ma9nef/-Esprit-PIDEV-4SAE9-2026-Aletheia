@@ -4,7 +4,6 @@ import { UserService } from 'src/app/core/services/user.service'; // Ensure this
 import { forkJoin } from 'rxjs';
 
 @Component({
-  standalone: false,
   selector: 'app-list-submissions',
   templateUrl: './list-submissions.component.html',
   styleUrls: ['./list-submissions.component.css']
@@ -15,7 +14,7 @@ export class ListSubmissionsComponent implements OnInit {
   usersList: any[] = []; // To store the list of students
   loading: boolean = false;
   selectedIds: Set<number> = new Set();
-
+  
   filter = { search: '', status: 'ALL', minScore: 0 };
 
   constructor(
@@ -23,19 +22,19 @@ export class ListSubmissionsComponent implements OnInit {
     private userService: UserService // Inject the user service
   ) {}
 
-  ngOnInit(): void {
-    this.loadData();
+  ngOnInit(): void { 
+    this.loadData(); 
   }
 
   loadData() {
     this.loading = true;
-
+    
     // STEP 1: Load all users first
     this.userService.getAllUsers().subscribe({
       next: (userData: any) => {
         // Handle paginated or list response
         this.usersList = userData.content ? userData.content : (Array.isArray(userData) ? userData : []);
-
+        
         // STEP 2: Once users are loaded, load submissions
         this.fetchSubmissions();
       },
@@ -52,7 +51,7 @@ export class ListSubmissionsComponent implements OnInit {
         this.allSubmissions = res.map(s => {
           // STEP 3: Manual Join - Find the user in our list by userId
           const student = this.usersList.find(u => u.id === s.userId);
-
+          
           let fullName = "Unknown Learner";
           if (student) {
             fullName = `${student.prenom} ${student.nom}`.trim();
@@ -100,7 +99,7 @@ export class ListSubmissionsComponent implements OnInit {
 
   exportToCSV() {
     const headers = ['Learner Name', 'Score', 'Outcome', 'Date'];
-    const rows = this.filteredSubmissions.map(s =>
+    const rows = this.filteredSubmissions.map(s => 
       [s.userName, s.score + '%', s.displayStatus, s.submittedAt].join(',')
     );
     const csvContent = "data:text/csv;charset=utf-8," + headers.join(',') + '\n' + rows.join('\n');
@@ -113,7 +112,7 @@ export class ListSubmissionsComponent implements OnInit {
 
   deleteSelected() {
     const idsToDelete = Array.from(this.selectedIds);
-
+    
     if (confirm(`Are you sure you want to delete ${idsToDelete.length} selected record(s)?`)) {
       this.loading = true;
 
@@ -125,7 +124,7 @@ export class ListSubmissionsComponent implements OnInit {
         next: () => {
           // Success: Clear selection and reload data from server
           this.selectedIds.clear();
-          this.loadData();
+          this.loadData(); 
           alert('Records deleted successfully');
         },
         error: (err) => {

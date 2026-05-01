@@ -26,6 +26,17 @@
         </span>
         <span class="nav-label">Courses</span>
       </a>
+      <a routerLink="/back-office/admin/training-programs"
+   routerLinkActive="nav-item--active"
+   class="nav-item">
+  <span class="nav-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+    </svg>
+  </span>
+  <span class="nav-label">Training Program</span>
+</a>
       <a routerLink="/back-office/admin/manage-library" routerLinkActive="nav-item--active"
          [routerLinkActiveOptions]="{exact:true}" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
@@ -33,12 +44,12 @@
         </span>
         <span class="nav-label">Library</span>
       </a>
-      <button type="button" class="nav-item nav-item--disabled" disabled>
+      <a href="#" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </span>
         <span class="nav-label">Revenue</span>
-      </button>
+      </a>
       <a routerLink="/back-office/admin/offers" routerLinkActive="nav-item--active" class="nav-item">
   <span class="nav-icon" aria-hidden="true">
     <!-- Icon of your choice – example: a gift or tag icon -->
@@ -69,48 +80,6 @@
         <span class="nav-label">Resources</span>
       </a>
 
-      <a routerLink="/back-office/admin/resources/reservations/pending" routerLinkActive="nav-item--active" class="nav-item nav-item--sub">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        </span>
-        <span class="nav-label">Pending Approvals</span>
-      </a>
-
-      <a routerLink="/back-office/admin/resources/checkin" routerLinkActive="nav-item--active" class="nav-item nav-item--sub">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM17 17h3v3h-3zM14 17h3"/></svg>
-        </span>
-        <span class="nav-label">Check-in Scanner</span>
-      </a>
-
-      <a routerLink="/back-office/admin/resources/swaps" routerLinkActive="nav-item--active" class="nav-item nav-item--sub">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
-        </span>
-        <span class="nav-label">Swap Requests</span>
-      </a>
-
-      <a routerLink="/back-office/admin/resources/stats/platform" routerLinkActive="nav-item--active" class="nav-item nav-item--sub">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        </span>
-        <span class="nav-label">Platform Stats</span>
-      </a>
-
-      <a routerLink="/back-office/admin/resources/stats/leaderboard" routerLinkActive="nav-item--active" class="nav-item nav-item--sub">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-6"/></svg>
-        </span>
-        <span class="nav-label">Leaderboard</span>
-      </a>
-
-      <a routerLink="/back-office/admin/resources/stats/underutilized" routerLinkActive="nav-item--active" class="nav-item nav-item--sub">
-        <span class="nav-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </span>
-        <span class="nav-label">Underutilized</span>
-      </a>
-
       <a routerLink="/back-office/admin/loans" routerLinkActive="nav-item--active" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
@@ -132,12 +101,12 @@
         <span class="nav-label">Inventory Analytics</span>
       </a>
 
-      <button type="button" class="nav-item nav-item--disabled" disabled>
+      <a href="#" class="nav-item">
         <span class="nav-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </span>
         <span class="nav-label">Settings</span>
-      </button>
+      </a>
     </nav>
   </aside>
 
@@ -148,7 +117,6 @@
     <header class="top-header">
       <div class="header-left">
         <h1 class="page-title">Admin Dashboard</h1>
-        <p class="page-subtitle">Centralized view of platform performance, users, and resources.</p>
       </div>
       <div class="header-right">
         <button type="button" class="icon-btn" aria-label="Notifications">
@@ -166,15 +134,6 @@
 
     <!-- DASHBOARD CONTENT -->
     <ng-container *ngIf="showDashboardContent">
-
-      <section class="admin-toolbar" aria-label="Quick actions">
-        <span class="admin-toolbar__label">Quick actions</span>
-        <div class="admin-toolbar__actions">
-          <a routerLink="/back-office/admin/users" class="admin-toolbar__action">Manage users</a>
-          <a routerLink="/back-office/admin/courses" class="admin-toolbar__action">Review courses</a>
-          <a routerLink="/back-office/admin/resources" class="admin-toolbar__action">Open resources</a>
-        </div>
-      </section>
 
       <!-- ANALYTICS -->
       <section class="analytics-row" aria-label="Analytics overview">
@@ -202,9 +161,9 @@
           <span class="analytics-label">Total Resources</span>
           <span class="analytics-value">{{ resourcesLoading ? '…' : resources.length }}</span>
           <div class="res-type-pills">
-            <span class="res-type-pill res-pill-room">🏫 {{ roomCount }} classrooms</span>
-            <span class="res-type-pill res-pill-device">💻 {{ deviceCount }} devices</span>
-            <span class="res-type-pill res-pill-material">🔧 {{ equipmentCount }} equipment</span>
+            <span class="res-type-pill res-pill-room">🏫 {{ countByType('ROOM') }} rooms</span>
+            <span class="res-type-pill res-pill-device">💻 {{ countByType('DEVICE') }} devices</span>
+            <span class="res-type-pill res-pill-material">📦 {{ countByType('MATERIAL') }} materials</span>
           </div>
         </div>
       </section>
@@ -276,7 +235,7 @@
       <section class="section" aria-labelledby="activity-heading">
         <div class="section-header">
           <h2 id="activity-heading" class="section-title">Recent Activity</h2>
-          <button type="button" class="link-more link-more--disabled" disabled>View all</button>
+          <a href="#" class="link-more">View all</a>
         </div>
         <div class="table-wrap">
           <table class="data-table" role="table">
@@ -325,19 +284,13 @@
 
         <!-- Section header -->
         <div class="section-header">
-          <div>
-            <h2 id="res-heading" class="section-title">
-              <span class="res-section-icon">🏗️</span> Resource Management
-            </h2>
-            <p class="res-section-subtitle">Create, filter, and manage room/device/material availability quickly.</p>
-          </div>
+          <h2 id="res-heading" class="section-title">
+            <span class="res-section-icon">🏗️</span> Resource Management
+          </h2>
           <div class="res-header-actions">
             <button class="res-btn-primary" (click)="openCreateForm()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               New Resource
-            </button>
-            <button class="res-btn-ghost" (click)="loadResources()">
-              Refresh
             </button>
           </div>
         </div>
@@ -347,25 +300,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           {{ resourcesError }}
           <button class="res-btn-retry" (click)="loadResources()">Retry</button>
-        </div>
-
-        <div class="res-overview" *ngIf="!resourcesError && !resourcesLoading">
-          <div class="res-overview-card">
-            <span class="res-overview-label">Total</span>
-            <strong class="res-overview-value">{{ resources.length }}</strong>
-          </div>
-          <div class="res-overview-card">
-            <span class="res-overview-label">Classrooms</span>
-            <strong class="res-overview-value">{{ roomCount }}</strong>
-          </div>
-          <div class="res-overview-card">
-            <span class="res-overview-label">Devices</span>
-            <strong class="res-overview-value">{{ deviceCount }}</strong>
-          </div>
-          <div class="res-overview-card">
-            <span class="res-overview-label">Equipment</span>
-            <strong class="res-overview-value">{{ equipmentCount }}</strong>
-          </div>
         </div>
 
         <!-- Filters -->
@@ -382,19 +316,6 @@
               <span class="res-fpill-count" *ngIf="t !== 'ALL'">{{ countByType($any(t)) }}</span>
             </button>
           </div>
-          <select class="res-sort" [(ngModel)]="resourceSort" aria-label="Sort resources">
-            <option value="NAME_ASC">Sort: Name A-Z</option>
-            <option value="NAME_DESC">Sort: Name Z-A</option>
-            <option value="CAPACITY_DESC">Sort: Capacity high to low</option>
-            <option value="CAPACITY_ASC">Sort: Capacity low to high</option>
-          </select>
-          <button class="res-btn-ghost" *ngIf="hasActiveResourceFilters" (click)="clearResourceFilters()">
-            Clear filters
-          </button>
-        </div>
-
-        <div class="res-results" *ngIf="!resourcesError && !resourcesLoading">
-          Showing <strong>{{ filteredResources.length }}</strong> of <strong>{{ resources.length }}</strong> resources
         </div>
 
         <!-- Loader -->
@@ -414,7 +335,7 @@
 
           <div class="res-empty" *ngIf="filteredResources.length === 0 && resources.length > 0">
             <span>🔍</span>
-            <p>No resources match your filter. <button class="res-link" (click)="clearResourceFilters()">Clear filters</button></p>
+            <p>No resources match your filter.</p>
           </div>
 
           <table class="data-table" *ngIf="filteredResources.length > 0">
@@ -428,17 +349,15 @@
             </thead>
             <tbody>
               <tr *ngFor="let r of filteredResources">
-                <td class="res-name-cell">
-                  <span class="res-name-main">{{ r.name }}</span>
-                  <span class="res-name-meta">ID: {{ r.id }}</span>
-                </td>
+                <td class="res-name-cell">{{ r.name }}</td>
                 <td>
                   <span class="res-badge" [ngClass]="typeBadgeClass(r.type)">
                     {{ typeIcon(r.type) }} {{ typeLabel(r.type) }}
                   </span>
                 </td>
                 <td>
-                  <span class="res-capacity" [class.res-muted]="r.capacity === null || r.capacity === undefined">{{ capacityLabel(r) }}</span>
+                  <span *ngIf="r.capacity !== null && r.capacity !== undefined">{{ r.capacity }}</span>
+                  <span *ngIf="r.capacity === null || r.capacity === undefined" class="res-muted">—</span>
                 </td>
                 <td class="res-actions-cell">
                   <button class="res-action res-action--reservations" title="View reservations" (click)="viewReservations(r.id)">
@@ -494,7 +413,7 @@
           <label *ngFor="let t of resourceTypeOptions"
             class="res-type-option"
             [class.res-type-option--active]="resourceFormType === t">
-            <input type="radio" [(ngModel)]="resourceFormType" [value]="t" (ngModelChange)="onResourceTypeChanged()" hidden>
+            <input type="radio" [(ngModel)]="resourceFormType" [value]="t" hidden>
             <span class="res-type-icon">{{ typeIcon(t) }}</span>
             <span class="res-type-label">{{ typeLabel(t) }}</span>
           </label>
@@ -505,34 +424,6 @@
       <div class="res-form-field">
         <label class="res-form-label">Capacity <span class="res-form-hint">(optional)</span></label>
         <input type="number" class="res-form-input res-form-input--short" [(ngModel)]="resourceFormCapacity" placeholder="e.g. 30" min="1">
-      </div>
-
-      <div class="res-form-field" *ngIf="isRoomResourceForm">
-        <label class="res-form-label">
-          Room location on map <span class="res-required">*</span>
-          <span class="res-form-hint">(click map to pin the exact room position)</span>
-        </label>
-
-        <div class="res-map-controls">
-          <div class="res-map-controls-group">
-            <button type="button" class="res-map-btn" (click)="panRoomMap('up')">↑</button>
-            <button type="button" class="res-map-btn" (click)="panRoomMap('left')">←</button>
-            <button type="button" class="res-map-btn" (click)="panRoomMap('right')">→</button>
-            <button type="button" class="res-map-btn" (click)="panRoomMap('down')">↓</button>
-          </div>
-          <div class="res-map-controls-group">
-            <button type="button" class="res-map-btn" (click)="zoomRoomMap(1)">Zoom +</button>
-            <button type="button" class="res-map-btn" (click)="zoomRoomMap(-1)">Zoom −</button>
-            <button type="button" class="res-map-btn" (click)="centerRoomMapOnPin()">Center on pin</button>
-          </div>
-        </div>
-
-        <div class="res-map-click-area" (click)="onRoomMapClick($event)">
-          <img [src]="roomMapImageUrl" alt="Room location picker map" class="res-map-image">
-          <div class="res-map-overlay">Click anywhere on the map to pin this room location</div>
-        </div>
-
-        <div class="res-map-coordinate">{{ roomCoordinateLabel }}</div>
       </div>
     </div>
 

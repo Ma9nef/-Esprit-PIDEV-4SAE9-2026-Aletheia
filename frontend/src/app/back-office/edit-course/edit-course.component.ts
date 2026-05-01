@@ -25,7 +25,6 @@ type CourseUpdatePayload = {
 };
 
 @Component({
-  standalone: false,
   selector: 'app-edit-course',
   templateUrl: './edit-course.component.html',
   styleUrls: ['./edit-course.component.css']

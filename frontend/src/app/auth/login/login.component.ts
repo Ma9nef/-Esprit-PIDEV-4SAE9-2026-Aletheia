@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
-  standalone: false,
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -37,10 +36,10 @@ export class LoginComponent implements AfterViewInit {
 
         if (role === 'INSTRUCTOR') {
           this.router.navigate(['/back-office/trainer']);
-        }
+        } 
         else if (role === 'ADMIN') {
           this.router.navigate(['/back-office/admin']);
-        }
+        } 
         else {
           this.router.navigate(['/front/courses']);
         }

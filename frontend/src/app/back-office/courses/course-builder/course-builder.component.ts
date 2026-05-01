@@ -24,7 +24,6 @@ type LessonAdminDTO = {
 };
 
 @Component({
-  standalone: false,
   selector: 'app-course-builder',
   templateUrl: './course-builder.component.html',
   styleUrls: ['./course-builder.component.css']

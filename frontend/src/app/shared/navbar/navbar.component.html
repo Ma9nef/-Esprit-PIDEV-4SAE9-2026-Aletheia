@@ -24,8 +24,8 @@
         <a
           *ngIf="isLoggedIn && isAdmin"
           class="menu-item"
-          [class.active]="currentRoute.startsWith('/back-office/admin')"
-          (click)="navigateTo('/back-office/admin')">
+          [class.active]="currentRoute.startsWith('/admin')"
+          (click)="navigateTo('dashboardAdmin')">
 
           <span class="menu-label">Dashboard</span>
         </a>
@@ -34,8 +34,8 @@
         <a
           *ngIf="isLoggedIn && isInstructor"
           class="menu-item"
-          [class.active]="currentRoute.startsWith('/back-office/trainer')"
-          (click)="navigateTo('/back-office/trainer')">
+          [class.active]="currentRoute.startsWith('/instructor')"
+          (click)="navigateTo('/instructor/dashboard')">
 
           <span class="menu-label">Dashboard</span>
         </a>
@@ -232,10 +232,10 @@
           <div class="dropdown-divider"></div>
 
           <!-- ✅ Optional: dashboard inside dropdown too -->
-          <a class="dropdown-item" *ngIf="isAdmin" (click)="navigateTo('/back-office/admin')">
+          <a class="dropdown-item" *ngIf="isAdmin" (click)="navigateTo('/admin/dashboard')">
             <span>Dashboard</span>
           </a>
-          <a class="dropdown-item" *ngIf="isInstructor" (click)="navigateTo('/back-office/trainer')">
+          <a class="dropdown-item" *ngIf="isInstructor" (click)="navigateTo('/instructor/dashboard')">
             <span>Dashboard</span>
           </a>
           <a class="dropdown-item" *ngIf="isLearner" (click)="navigateTo('/dashboardLearner')">
@@ -334,8 +334,8 @@
       <a
         *ngIf="isLoggedIn && isAdmin"
         class="mobile-menu-item"
-        [class.active]="currentRoute.startsWith('/back-office/admin')"
-        (click)="navigateTo('/back-office/admin')">
+        [class.active]="currentRoute.startsWith('/admin')"
+        (click)="navigateTo('/admin/dashboard')">
         <span>Dashboard</span>
       </a>
 
@@ -343,8 +343,8 @@
       <a
         *ngIf="isLoggedIn && isInstructor"
         class="mobile-menu-item"
-        [class.active]="currentRoute.startsWith('/back-office/trainer')"
-        (click)="navigateTo('/back-office/trainer')">
+        [class.active]="currentRoute.startsWith('/instructor')"
+        (click)="navigateTo('/instructor/dashboard')">
         <span>Dashboard</span>
       </a>
     </nav>

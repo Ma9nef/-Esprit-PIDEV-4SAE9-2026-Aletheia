@@ -1,6 +1,0 @@
-.approval-container { padding: 1.5rem; }
-.modal-backdrop-custom {
-  position: fixed; inset: 0; background: rgba(0,0,0,.4);
-  display: flex; align-items: center; justify-content: center; z-index: 1050;
-}
-.modal-dialog-custom { width: 480px; max-width: 95vw; }

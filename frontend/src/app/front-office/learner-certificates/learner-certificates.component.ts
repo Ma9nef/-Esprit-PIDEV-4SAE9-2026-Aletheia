@@ -9,7 +9,6 @@ import * as QRCode from 'qrcode';
 import JSZip from 'jszip'; // Required for Batch Download
 
 @Component({
-  standalone: false,
   selector: 'app-learner-certificates',
   templateUrl: './learner-certificates.component.html',
   styleUrls: ['./learner-certificates.component.css']

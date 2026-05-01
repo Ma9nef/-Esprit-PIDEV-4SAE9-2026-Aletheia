@@ -3,7 +3,6 @@ import { CourseApiService, CoursePublicDTO } from '../../core/services/course-ap
 import { Router } from '@angular/router';
 
 @Component({
-  standalone: false,
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css']

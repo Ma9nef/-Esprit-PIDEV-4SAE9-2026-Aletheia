@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BorrowingPolicyDTO, LoanService, ProductType, UserRole } from '../../core/services/loan.service';
 
 @Component({
-  standalone: false,
   selector: 'app-borrowing-policies',
   templateUrl: './borrowing-policies.component.html',
   styleUrls: ['./borrowing-policies.component.css']

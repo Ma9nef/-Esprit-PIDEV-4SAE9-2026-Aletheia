@@ -37,7 +37,7 @@
           <span class="policy-label">Restricted types</span>
           <div class="type-chips">
             <span *ngFor="let t of policy.restrictedProductTypes" class="chip-restricted">{{ t }}</span>
-            <span *ngIf="!policy.restrictedProductTypes.length" class="chip-none">None</span>
+            <span *ngIf="!policy.restrictedProductTypes?.length" class="chip-none">None</span>
           </div>
         </div>
         <button class="edit-btn" (click)="startEdit(policy)">Edit Policy</button>

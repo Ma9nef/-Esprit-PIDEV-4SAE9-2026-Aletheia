@@ -1,14 +1,13 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, HostListener } from '@angular/core';
-import { Router, NavigationEnd, RouterModule } from '@angular/router';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Router, NavigationEnd } from '@angular/router';
+import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../core/services/theme.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { NotificationService, AppNotification } from 'src/app/core/services/notification.service';
+
 @Component({
-  standalone: false,
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
@@ -69,12 +68,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   get isInstructor(): boolean {
     const u = this.auth.getUserFromToken();
     // ⚠️ adapte si c’est "ROLE_INSTRUCTOR" etc.
-    return !!u && (
-      u.role === 'INSTRUCTOR' ||
-      u.role === 'ROLE_INSTRUCTOR' ||
-      u.role === 'TRAINER' ||
-      u.role === 'ROLE_TRAINER'
-    );
+    return !!u && (u.role === 'INSTRUCTOR' || u.role === 'ROLE_INSTRUCTOR');
   }
 
   get isLearner(): boolean {
@@ -246,9 +240,9 @@ export class NavbarComponent implements OnInit, OnDestroy {
     if (user) {
       const role = user.role.toLowerCase();
       if (role === 'admin') {
-        this.router.navigate(['/back-office/admin']);
+        this.router.navigate(['/dashboardAdmin']);
       } else if (role === 'trainer' || role === 'instructor') {
-        this.router.navigate(['/back-office/trainer']);
+        this.router.navigate(['/dashboardInstructor']);
       } else {
         this.router.navigate(['/dashboardLearner']);
       }

@@ -1,48 +1,7 @@
 <div class="manage-users-container">
-  <div class="header-row">
-    <div>
-      <h2>Users Management</h2>
-      <p class="subheading">Search, filter and manage user roles from a single workspace.</p>
-    </div>
-    <button type="button" class="refresh-btn" (click)="loadUsers()" [disabled]="loading">Refresh</button>
-  </div>
+  <h2>Manage Users</h2>
 
   <div *ngIf="error" class="error-message">{{ error }}</div>
-  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
-
-  <div class="stats-row" *ngIf="!loading">
-    <div class="stat-card">
-      <span class="stat-label">Total users</span>
-      <span class="stat-value">{{ users.length }}</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">Admins</span>
-      <span class="stat-value">{{ countByRole('ADMIN') }}</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">Instructors</span>
-      <span class="stat-value">{{ countByRole('INSTRUCTOR') }}</span>
-    </div>
-    <div class="stat-card">
-      <span class="stat-label">Learners</span>
-      <span class="stat-value">{{ countByRole('LEARNER') }}</span>
-    </div>
-  </div>
-
-  <div class="toolbar" *ngIf="!loading && users.length > 0">
-    <div class="search-wrap">
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        class="search-input"
-        placeholder="Search by ID, name, or email"
-      />
-    </div>
-    <select [(ngModel)]="selectedRole" class="filter-select">
-      <option value="ALL">All roles</option>
-      <option *ngFor="let role of roles" [value]="role">{{ roleLabel(role) }}</option>
-    </select>
-  </div>
 
   <div *ngIf="loading" class="loading">Loading users...</div>
 
@@ -53,31 +12,26 @@
           <th>ID</th>
           <th>Name</th>
           <th>Email</th>
-          <th>Current role</th>
           <th>Role</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of filteredUsers">
+        <tr *ngFor="let user of users">
           <td>{{ user.id }}</td>
-          <td>{{ fullName(user) }}</td>
+          <td>{{ user.nom }} {{ user.prenom }}</td>
           <td>{{ user.email }}</td>
           <td>
-            <span [class]="roleBadgeClass(user.role)">{{ roleLabel(user.role) }}</span>
-          </td>
-          <td>
-            <select [value]="user.role" (change)="updateRole(user, $event)" [disabled]="isSaving(user.id)">
+            <select [value]="user.role" (change)="updateRole(user, $event)">
               <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
             </select>
-            <span *ngIf="isSaving(user.id)" class="saving-indicator">Saving…</span>
+          </td>
+          <td>
+            <!-- Additional actions can be added here -->
           </td>
         </tr>
       </tbody>
     </table>
-  </div>
-
-  <div *ngIf="!loading && users.length > 0 && filteredUsers.length === 0" class="no-users">
-    No users match your search/filter.
   </div>
 
   <div *ngIf="!loading && users.length === 0" class="no-users">

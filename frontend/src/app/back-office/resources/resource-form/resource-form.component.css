@@ -116,36 +116,9 @@
 .rf-input--short { max-width: 160px; }
 
 .rf-textarea { resize: vertical; min-height: 100px; font-family: 'Courier New', monospace; font-size: .875rem; }
-.rf-textarea--short { min-height: 70px; font-family: inherit; font-size: .9375rem; }
 
 .rf-field-error { display: block; margin-top: .35rem; font-size: .8125rem; color: var(--rf-red); }
 .rf-field-hint { margin: .35rem 0 0; font-size: .8125rem; color: var(--rf-muted); }
-
-/* Section divider */
-.rf-section-divider {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--rf-border);
-}
-
-.rf-section-title {
-  font-size: .95rem;
-  font-weight: 600;
-  color: var(--rf-text);
-  margin-bottom: 1rem;
-}
-
-/* Field row for side-by-side layout */
-.rf-field-row {
-  display: flex;
-  gap: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.rf-field-half {
-  flex: 1;
-  min-width: 140px;
-}
 
 /* Type grid */
 .rf-type-grid {

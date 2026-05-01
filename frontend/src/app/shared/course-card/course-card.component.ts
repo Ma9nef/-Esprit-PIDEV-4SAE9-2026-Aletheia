@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 @Component({
-  standalone: false,
   selector: 'app-course-card',
   templateUrl: './course-card.component.html',
   styleUrls: ['./course-card.component.css']

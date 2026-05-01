@@ -2,6 +2,7 @@ package com.esprit.microservice.courses.RestController.formations;
 
 import com.esprit.microservice.courses.entity.formations.Formation;
 import com.esprit.microservice.courses.entity.progress.FormationEnrollment;
+import com.esprit.microservice.courses.security.JwtReader;
 import com.esprit.microservice.courses.service.publicApi.formations.LearnerFormationEnrollmentService;
 import com.esprit.microservice.courses.service.publicApi.formations.LearnerFormationService;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,16 @@ public class PublicFormationController {
 
     private final LearnerFormationService learnerFormationService;
     private final LearnerFormationEnrollmentService learnerFormationEnrollmentService;
+    private final JwtReader jwtReader;
 
-    public PublicFormationController(LearnerFormationService learnerFormationService,
-                                     LearnerFormationEnrollmentService learnerFormationEnrollmentService) {
+    public PublicFormationController(
+            LearnerFormationService learnerFormationService,
+            LearnerFormationEnrollmentService learnerFormationEnrollmentService,
+            JwtReader jwtReader
+    ) {
         this.learnerFormationService = learnerFormationService;
         this.learnerFormationEnrollmentService = learnerFormationEnrollmentService;
+        this.jwtReader = jwtReader;
     }
 
     @GetMapping
@@ -35,8 +41,10 @@ public class PublicFormationController {
     @PostMapping("/{formationId}/enroll")
     public ResponseEntity<FormationEnrollment> enrollInFormation(
             @PathVariable Long formationId,
-            @RequestParam Long userId
+            @RequestHeader("Authorization") String authorization
     ) {
+        Long userId = jwtReader.extractUserId(authorization);
+
         return ResponseEntity.ok(
                 learnerFormationEnrollmentService.enroll(userId, formationId)
         );
@@ -44,8 +52,10 @@ public class PublicFormationController {
 
     @GetMapping("/my-enrollments")
     public ResponseEntity<List<FormationEnrollment>> getMyEnrollments(
-            @RequestParam Long userId
+            @RequestHeader("Authorization") String authorization
     ) {
+        Long userId = jwtReader.extractUserId(authorization);
+
         return ResponseEntity.ok(
                 learnerFormationEnrollmentService.getMyEnrollments(userId)
         );
