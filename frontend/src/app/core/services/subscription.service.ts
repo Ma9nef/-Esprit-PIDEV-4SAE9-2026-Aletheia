@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
   SubscriptionCheckoutRequest,
@@ -9,14 +9,15 @@ import {
   SubscriptionResponse,
   UserSubscription
 } from '../models/subscription.model';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubscriptionService {
-  private apiUrl = '/api/subscriptions'; // Sera proxifié ou redirigé via API Gateway
+  private apiUrl = '/api/subscriptions'; // Proxifié vers la gateway (8089) par le dev-server
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private auth: AuthService) {}
 
   // Backoffice - Récupérer tous les abonnements
   getAllSubscriptions(): Observable<SubscriptionResponse[]> {
@@ -44,7 +45,18 @@ export class SubscriptionService {
   }
 
   createCheckoutSession(request: SubscriptionCheckoutRequest): Observable<SubscriptionCheckoutResponse> {
-    return this.http.post<SubscriptionCheckoutResponse>(`${this.apiUrl}/checkout-session`, request);
+    const token = this.auth.getToken();
+    const headers = token
+      ? new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+          'X-Auth-Token': token
+        })
+      : undefined;
+    return this.http.post<SubscriptionCheckoutResponse>(
+      `${this.apiUrl}/checkout-session`,
+      request,
+      headers ? { headers } : {}
+    );
   }
 
   // Annuler un abonnement

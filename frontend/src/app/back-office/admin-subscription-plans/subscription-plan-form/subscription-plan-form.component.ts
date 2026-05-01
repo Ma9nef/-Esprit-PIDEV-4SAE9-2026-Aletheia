@@ -204,18 +204,18 @@ export class SubscriptionPlanFormComponent implements OnInit {
 
     if (this.isEditMode && this.planId) {
       this.planService.updatePlan(this.planId, request).subscribe({
-        next: () => this.router.navigate(['/admin/subscription-plans']),
+        next: () => this.router.navigate(['/back-office/admin/subscription-plans']),
         error: handleError
       });
     } else {
       this.planService.createPlan(request).subscribe({
-        next: () => this.router.navigate(['/admin/subscription-plans']),
+        next: () => this.router.navigate(['/back-office/admin/subscription-plans']),
         error: handleError
       });
     }
   }
 
   onCancel(): void {
-    this.router.navigate(['/admin/subscription-plans']);
+    this.router.navigate(['/back-office/admin/subscription-plans']);
   }
 }

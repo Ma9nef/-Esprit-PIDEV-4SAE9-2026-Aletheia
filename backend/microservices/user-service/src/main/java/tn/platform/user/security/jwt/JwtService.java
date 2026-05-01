@@ -26,8 +26,10 @@ public class JwtService {
 
     @PostConstruct
     public void init() {
+        jwtSecret = jwtSecret != null ? jwtSecret.trim() : "";
         key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
-        System.out.println("USER jwt.secret SHA-256 = " + sha256Hex(jwtSecret));    }
+        System.out.println("USER jwt.secret SHA-256 = " + sha256Hex(jwtSecret));
+    }
 
     public String generateToken(User user) {
 

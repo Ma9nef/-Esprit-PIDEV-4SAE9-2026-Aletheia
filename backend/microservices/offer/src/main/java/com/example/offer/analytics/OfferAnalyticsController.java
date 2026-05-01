@@ -2,8 +2,6 @@ package com.example.offer.analytics;
 
 import lombok.RequiredArgsConstructor;
 import org.bson.Document;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +12,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/analytics")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200") // IMPORTANT: Autorise les requêtes depuis Angular
 public class OfferAnalyticsController {
 
     private final OfferHistoryService analyticsService;

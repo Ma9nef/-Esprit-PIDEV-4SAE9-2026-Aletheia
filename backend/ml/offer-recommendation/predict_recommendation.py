@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 
 import joblib
+import numpy as np
 import pandas as pd
 
 
@@ -32,12 +33,33 @@ CATEGORICAL_FEATURES = [
     "fastCancellationProfile",
 ]
 
+NUMERIC_FEATURES = [c for c in FEATURE_COLUMNS if c not in CATEGORICAL_FEATURES]
+
+
+def _scalar_to_cat_str(v: object) -> str:
+    """Avoid pandas.NA in cells — sklearn imputers use X != X and break on pd.NA."""
+    if v is None:
+        return ""
+    try:
+        if isinstance(v, float) and np.isnan(v):
+            return ""
+    except (TypeError, ValueError):
+        pass
+    try:
+        if pd.isna(v):
+            return ""
+    except TypeError:
+        pass
+    return str(v)
+
 
 def build_input_row(payload: dict) -> pd.DataFrame:
     row = {column: payload.get(column) for column in FEATURE_COLUMNS}
     dataframe = pd.DataFrame([row], columns=FEATURE_COLUMNS)
+    for column in NUMERIC_FEATURES:
+        dataframe[column] = pd.to_numeric(dataframe[column], errors="coerce")
     for column in CATEGORICAL_FEATURES:
-        dataframe[column] = dataframe[column].astype("string")
+        dataframe[column] = dataframe[column].map(_scalar_to_cat_str).astype(object)
     return dataframe
 
 

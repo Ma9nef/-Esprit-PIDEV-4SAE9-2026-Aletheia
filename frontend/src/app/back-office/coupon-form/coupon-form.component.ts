@@ -199,7 +199,7 @@ export class CouponFormComponent implements OnInit {
       next: () => {
         this.successMessage = this.isEdit ? 'Coupon updated successfully.' : 'Coupon created successfully.';
         this.saving = false;
-        setTimeout(() => this.router.navigate(['/admin/coupons']), 1500);
+        setTimeout(() => this.router.navigate(['/back-office/admin/coupons']), 1500);
       },
       error: (e) => {
         this.error = e?.error?.message || 'Error saving coupon.';

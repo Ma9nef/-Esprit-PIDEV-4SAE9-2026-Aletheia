@@ -197,7 +197,7 @@ export class FlashSaleFormComponent implements OnInit {
       next: () => {
         this.successMessage = this.isEdit ? 'Flash Sale updated successfully.' : 'Flash Sale created successfully.';
         this.saving = false;
-        setTimeout(() => this.router.navigate(['/admin/flash-sales']), 1500);
+        setTimeout(() => this.router.navigate(['/back-office/admin/flash-sales']), 1500);
       },
       error: (e) => {
         this.error = e?.error?.message || 'Error saving flash sale.';

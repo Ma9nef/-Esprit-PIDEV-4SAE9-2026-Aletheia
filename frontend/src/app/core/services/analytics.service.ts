@@ -82,8 +82,8 @@ export interface DashboardData {
 })
 export class AnalyticsService {
 
-  // CORRECTION: Port 8083 (votre backend tourne sur ce port)
-  private apiUrl = 'api/analytics';
+  /** Root-relative so the dev proxy and AuthInterceptor (`/api` check) both match. */
+  private apiUrl = '/api/analytics';
 
   constructor(private http: HttpClient) {
     console.log('🔌 Analytics Service connecté à:', this.apiUrl);

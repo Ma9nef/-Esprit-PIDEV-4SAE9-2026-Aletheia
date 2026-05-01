@@ -289,6 +289,18 @@ export class CheckoutComponent implements OnInit {
   paySubscription(): void {
     if (!this.selectedPlan?.planId || !this.currentUserId || this.paymentLoading) return;
 
+    if (!this.authService.isLoggedIn()) {
+      this.paymentError =
+        'Session expirée ou vous n’êtes pas connecté. Reconnectez-vous puis réessayez le paiement.';
+      return;
+    }
+
+    if (!this.authService.getToken()) {
+      this.paymentError =
+        'Aucun jeton dans le navigateur (localStorage). Déconnectez-vous puis reconnectez-vous.';
+      return;
+    }
+
     this.paymentLoading = true;
     this.paymentError = '';
 
@@ -310,10 +322,61 @@ export class CheckoutComponent implements OnInit {
         this.paymentLoading = false;
       },
       error: (err) => {
-        this.paymentError = err?.error?.message || 'Error while creating the Stripe checkout session.';
+        this.paymentError = this.checkoutPaymentErrorMessage(err);
         this.paymentLoading = false;
       }
     });
+  }
+
+  /** Interprète la réponse offer (401 Authentication required vs JWT invalide / secret). */
+  private checkoutPaymentErrorMessage(err: unknown): string {
+    const e = err as {
+      status?: number;
+      error?: unknown;
+    };
+    const status = e?.status;
+    const raw = e?.error;
+    let message = '';
+    if (typeof raw === 'string') {
+      try {
+        const parsed = JSON.parse(raw) as { message?: string };
+        message = typeof parsed?.message === 'string' ? parsed.message : '';
+      } catch {
+        message = raw;
+      }
+    } else if (raw && typeof (raw as { message?: string }).message === 'string') {
+      message = (raw as { message: string }).message;
+    }
+
+    if (status === 401 || status === 403) {
+      const lower = message.toLowerCase();
+      if (
+        message === 'Authentication required' ||
+        lower.includes('authentication required')
+      ) {
+        return (
+          'Le backend ne reçoit pas votre jeton (Authorization / X-Auth-Token). ' +
+          'Utilisez `ng serve` avec proxy.conf.js, puis vérifiez dans Network que le POST vers ' +
+          '`/api/subscriptions/checkout-session` contient bien ces en-têtes. Sinon : déconnexion puis reconnexion.'
+        );
+      }
+      if (
+        lower.includes('jwt_secret') ||
+        lower.includes('invalid or expired jwt') ||
+        lower.includes('jwt has no role')
+      ) {
+        return (
+          'Jeton refusé par offer : la même variable JWT_SECRET doit être utilisée pour user-service et offer ' +
+          '(ou la même valeur par défaut dans les deux application.properties), puis reconnectez-vous.'
+        );
+      }
+      return (
+        message ||
+        'Accès refusé (401/403). Déconnexion, reconnexion, puis réessayez.'
+      );
+    }
+
+    return message || 'Erreur lors de la création de la session Stripe.';
   }
 
   private loadPlan(planId: string): void {

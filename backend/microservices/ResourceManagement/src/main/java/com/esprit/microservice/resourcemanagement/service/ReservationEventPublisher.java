@@ -8,7 +8,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Publishes reservation lifecycle events to Kafka.
@@ -50,19 +52,24 @@ public class ReservationEventPublisher {
             return;
         }
 
-        Map<String, Object> event = Map.of(
-                "eventType", eventType,
-                "reservationId", reservation.getId().toString(),
-                "resourceId", reservation.getResourceId().toString(),
-                "eventId", reservation.getEventId(),
-                "startTime", reservation.getStartTime().toString(),
-                "endTime", reservation.getEndTime().toString(),
-                "status", reservation.getStatus().name(),
-                "timestamp", LocalDateTime.now().toString()
-        );
+        UUID resourceKey = reservation.getResource() != null ? reservation.getResource().getId() : null;
+        UUID teachingSessionId = reservation.getTeachingSession() != null
+                ? reservation.getTeachingSession().getId()
+                : null;
+
+        Map<String, Object> event = new HashMap<>();
+        event.put("eventType", eventType);
+        event.put("reservationId", reservation.getId().toString());
+        event.put("resourceId", resourceKey != null ? resourceKey.toString() : "");
+        event.put("teachingSessionId", teachingSessionId != null ? teachingSessionId.toString() : "");
+        event.put("startTime", reservation.getStartTime().toString());
+        event.put("endTime", reservation.getEndTime().toString());
+        event.put("status", reservation.getStatus().name());
+        event.put("timestamp", LocalDateTime.now().toString());
 
         try {
-            kafkaTemplate.send(topic, reservation.getResourceId().toString(), event);
+            String kafkaKey = resourceKey != null ? resourceKey.toString() : reservation.getId().toString();
+            kafkaTemplate.send(topic, kafkaKey, event);
             log.info("Published {} event for reservation={}", eventType, reservation.getId());
         } catch (Exception e) {
             log.error("Failed to publish {} event for reservation={}: {}",

@@ -1,7 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, interval, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { BehaviorSubject, interval, of, Subscription } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 export type NotificationType = 'INFO' | 'WARNING' | 'SUCCESS' | 'ERROR';
 
@@ -34,8 +34,14 @@ export class NotificationService implements OnDestroy {
   startPolling(): void {
     this.refreshUnreadCount();
     this.pollSub = interval(30_000)
-      .pipe(switchMap(() => this.http.get<{ count: number }>(`${this.base}/mine/unread-count`)))
-      .subscribe({ next: res => this._unreadCount$.next(res.count), error: () => {} });
+      .pipe(
+        switchMap(() =>
+          this.http
+            .get<{ count: number }>(`${this.base}/mine/unread-count`)
+            .pipe(catchError(() => of({ count: this._unreadCount$.getValue() })))
+        )
+      )
+      .subscribe({ next: (res) => this._unreadCount$.next(res.count) });
   }
 
   stopPolling(): void {
@@ -43,10 +49,10 @@ export class NotificationService implements OnDestroy {
   }
 
   refreshUnreadCount(): void {
-    this.http.get<{ count: number }>(`${this.base}/mine/unread-count`).subscribe({
-      next: res => this._unreadCount$.next(res.count),
-      error: () => {}
-    });
+    this.http
+      .get<{ count: number }>(`${this.base}/mine/unread-count`)
+      .pipe(catchError(() => of({ count: this._unreadCount$.getValue() })))
+      .subscribe({ next: (res) => this._unreadCount$.next(res.count) });
   }
 
   loadNotifications(skip = 0, limit = 20): void {

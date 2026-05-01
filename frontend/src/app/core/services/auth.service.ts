@@ -17,8 +17,15 @@ export class AuthService {
   login(data: any) {
     return this.http.post<any>(`${this.API}/login`, data).pipe(
       tap(res => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('role', res.role);
+        const t = res?.token != null ? String(res.token).trim() : '';
+        if (t) {
+          localStorage.setItem('token', t);
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('jwt');
+        }
+        if (res?.role != null) {
+          localStorage.setItem('role', String(res.role));
+        }
       })
     );
   }
@@ -29,11 +36,18 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('jwt');
     localStorage.removeItem('role');
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  getToken(): string | null {
+    const raw =
+      localStorage.getItem('token') ??
+      localStorage.getItem('accessToken') ??
+      localStorage.getItem('jwt');
+    const t = raw?.trim();
+    return t ? t : null;
   }
 
   isLoggedIn(): boolean {

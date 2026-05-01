@@ -198,7 +198,7 @@ export class OfferFormComponent implements OnInit {
       next: () => {
         this.successMessage = this.isEdit ? 'Offer updated successfully.' : 'Offer created successfully.';
         this.saving = false;
-        setTimeout(() => this.router.navigate(['/admin/offers']), 1500);
+        setTimeout(() => this.router.navigate(['/back-office/admin/offers']), 1500);
       },
       error: (e) => {
         this.error = e?.error?.message || 'Error saving offer.';

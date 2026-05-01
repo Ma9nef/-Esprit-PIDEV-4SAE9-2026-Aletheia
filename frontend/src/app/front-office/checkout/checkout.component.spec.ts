@@ -24,7 +24,13 @@ describe('CheckoutComponent', () => {
     couponServiceSpy = jasmine.createSpyObj<CouponService>('CouponService', ['applyCoupon']);
     planServiceSpy = jasmine.createSpyObj<SubscriptionPlanService>('SubscriptionPlanService', ['getPlanById']);
     subscriptionServiceSpy = jasmine.createSpyObj<SubscriptionService>('SubscriptionService', ['createCheckoutSession']);
-    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', ['getUserFromToken']);
+    authServiceSpy = jasmine.createSpyObj<AuthService>('AuthService', [
+      'getUserFromToken',
+      'isLoggedIn',
+      'getToken'
+    ]);
+    authServiceSpy.isLoggedIn.and.returnValue(true);
+    authServiceSpy.getToken.and.returnValue('test-jwt-token');
 
     queryParamMap$ = new Subject();
     paramMap$ = new Subject();

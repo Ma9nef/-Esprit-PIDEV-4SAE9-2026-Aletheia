@@ -119,7 +119,7 @@
     <!-- TRENDS TAB -->
     <div *ngIf="activeTab === 'trends'" class="tab-panel">
       <div class="panel">
-        <h4>Monthly Borrow Count — {{ report.currentYearTrends[0].year ?? 'This Year' }}</h4>
+        <h4>Monthly Borrow Count — {{ report.currentYearTrends.length ? report.currentYearTrends[0].year : 'This Year' }}</h4>
         <div class="bar-chart" *ngIf="report.currentYearTrends.length; else noTrends">
           <div class="bar-col" *ngFor="let t of report.currentYearTrends">
             <div class="bar-value">{{ t.borrowCount }}</div>
