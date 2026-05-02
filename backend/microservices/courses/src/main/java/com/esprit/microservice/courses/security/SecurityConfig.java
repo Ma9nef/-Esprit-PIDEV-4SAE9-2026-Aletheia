@@ -45,6 +45,7 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.GET, "/api/formations").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/formations/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/formations/*/sessions").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/api/formations/*/enroll").hasRole("LEARNER")
                         .requestMatchers(HttpMethod.GET, "/api/formations/my-enrollments").hasRole("LEARNER")
