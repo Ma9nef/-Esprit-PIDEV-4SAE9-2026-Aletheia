@@ -1,0 +1,265 @@
+<section class="library-section">
+
+  <!-- Borrow Toast Notification -->
+  <div *ngIf="borrowToast" class="borrow-toast" [class.borrow-toast--success]="borrowToast.type === 'success'" [class.borrow-toast--error]="borrowToast.type === 'error'">
+    <span>{{ borrowToast.type === 'success' ? '✓' : '✕' }}</span>
+    {{ borrowToast.message }}
+  </div>
+
+  <!-- Hero Section -->
+  <div class="library-hero">
+    <span class="hero-deco hero-deco-1"></span>
+    <span class="hero-deco hero-deco-2"></span>
+    <span class="hero-deco hero-deco-3"></span>
+    <div class="hero-content">
+      <h1 class="hero-title">Resource Library</h1>
+      <p class="hero-subtitle">Access curated learning materials, tutorials, and documentation</p>
+    </div>
+    <!-- Cart Button (floating top-right of hero) -->
+    <button *ngIf="userId" class="cart-toggle-btn" (click)="toggleCart()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="cart-badge" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="library-container">
+
+    <!-- Filters Sidebar -->
+    <aside class="filters-sidebar">
+      <div class="filter-section">
+        <h3 class="filter-title">Search</h3>
+        <input
+          #searchInput
+          type="text"
+          class="search-input"
+          placeholder="Search resources..."
+          (input)="onSearchChange(searchInput.value)">
+      </div>
+
+      <div class="filter-section">
+        <h3 class="filter-title">Category</h3>
+        <div class="filter-options">
+          <button
+            *ngFor="let cat of categories"
+            [class.active]="selectedCategory === cat.id"
+            (click)="onCategoryChange(cat.id)"
+            class="filter-btn">
+            <span>{{ cat.name }}</span>
+            <span class="filter-count-badge">{{ countForCategory(cat.id) }}</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-section">
+        <h3 class="filter-title">Resource Type</h3>
+        <div class="filter-options">
+          <button
+            *ngFor="let type of resourceTypes"
+            [class.active]="selectedResourceType === type.id"
+            (click)="onResourceTypeChange(type.id)"
+            class="filter-btn">
+            {{ type.name }}
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="library-content">
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-state">
+        <div class="spinner"></div>
+        <p>Loading library resources...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-state">
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="loadLibraryResources()">Retry</button>
+      </div>
+
+      <!-- Resources Grid -->
+      <div *ngIf="!loading && !error" class="resources-grid">
+        <!-- No Results -->
+        <div *ngIf="filteredResources.length === 0" class="no-results">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V15M9 3H15M9 3V9M21 3H15M21 3V9M15 9V15H21V9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>No resources found matching your filters</p>
+        </div>
+
+        <!-- Resource Cards -->
+        <div
+          *ngFor="let resource of filteredResources"
+          class="resource-card"
+          [attr.data-category]="resource.category">
+
+          <!-- Resource Image/Icon -->
+          <div class="resource-image">
+            <img
+              *ngIf="resource.imageUrl"
+              [src]="resource.imageUrl"
+              [alt]="resource.title"
+              class="card-image">
+            <div *ngIf="!resource.imageUrl" class="resource-icon">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 19.5C4 18.837 4.26339 18.2011 4.73223 17.7322C5.20107 17.2634 5.83696 17 6.5 17H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M6.5 2H20V22H6.5C5.83696 22 5.20107 21.7366 4.73223 21.2678C4.26339 20.7989 4 20.163 4 19.5V4.5C4 3.83696 4.26339 3.20107 4.73223 2.73223C5.20107 2.26339 5.83696 2 6.5 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="resource-badge">{{ resource.resourceType }}</div>
+            <div class="stock-badge"
+              [class.stock-in]="(resource.stockQuantity ?? 0) > 0 && !resource.lowStock"
+              [class.stock-low]="resource.lowStock && (resource.stockQuantity ?? 0) > 0"
+              [class.stock-out]="(resource.stockQuantity ?? 0) === 0">
+              <span *ngIf="(resource.stockQuantity ?? 0) > 0 && !resource.lowStock">✓ In Stock ({{ resource.stockQuantity }})</span>
+              <span *ngIf="resource.lowStock && (resource.stockQuantity ?? 0) > 0">⚠ Low Stock ({{ resource.stockQuantity }})</span>
+              <span *ngIf="(resource.stockQuantity ?? 0) === 0">✗ Out of Stock</span>
+            </div>
+          </div>
+
+          <!-- Resource Info -->
+          <div class="resource-info">
+            <h3 class="resource-title">{{ resource.title }}</h3>
+            <p class="resource-description">{{ resource.description }}</p>
+
+            <!-- Price -->
+            <div class="resource-price" *ngIf="resource.price !== undefined && resource.price !== null">
+              <span class="price-tag">{{ resource.price | currency:'USD' }}</span>
+            </div>
+
+            <div class="resource-meta">
+              <span class="resource-category">{{ resource.category }}</span>
+              <span *ngIf="resource.createdDate" class="resource-date">{{ resource.createdDate | date: 'MMM dd, yyyy' }}</span>
+            </div>
+
+            <div class="resource-actions">
+              <!-- ── Purchase buttons (all types) ───────────────────────────── -->
+              <button
+                *ngIf="userId && !isInCart(resource.id) && (resource.stockQuantity ?? 0) > 0"
+                (click)="addToCart(resource)"
+                class="btn-add-cart">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                Add to Cart
+              </button>
+              <button *ngIf="userId && isInCart(resource.id)" class="btn-in-cart" disabled>
+                ✓ In Cart
+              </button>
+              <button *ngIf="userId && (resource.stockQuantity ?? 0) === 0" class="btn-out-stock" disabled>
+                Out of Stock
+              </button>
+
+              <!-- ── Borrow button (BOOK type only) ──────────────────────────── -->
+              <ng-container *ngIf="resource.category === 'book'">
+                <!-- Already borrowed -->
+                <button *ngIf="isAlreadyBorrowed(resource.id)" class="btn-borrowed" disabled>
+                  📖 Borrowed
+                </button>
+                <!-- Borrowing in progress -->
+                <button *ngIf="!isAlreadyBorrowed(resource.id) && borrowingProductId === resource.id"
+                        class="btn-borrowing" disabled>
+                  Borrowing…
+                </button>
+                <!-- Borrow available -->
+                <button
+                  *ngIf="userId && !isAlreadyBorrowed(resource.id) && borrowingProductId !== resource.id && (resource.stockQuantity ?? 0) > 0"
+                  (click)="borrowProduct(resource)"
+                  class="btn-borrow">
+                  📚 Borrow
+                </button>
+                <!-- Not logged in -->
+                <button
+                  *ngIf="!userId && (resource.stockQuantity ?? 0) > 0"
+                  class="btn-borrow btn-borrow--guest"
+                  (click)="showBorrowToast('Please log in to borrow books.', 'error')">
+                  📚 Borrow
+                </button>
+              </ng-container>
+
+              <button class="btn-view">View Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <div *ngIf="!loading && !error && filteredResources.length > 0" class="results-info">
+        Showing {{ filteredResources.length }} resource<span *ngIf="filteredResources.length !== 1">s</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Overlay -->
+  <div class="cart-overlay" *ngIf="cartOpen" (click)="toggleCart()"></div>
+
+  <!-- Cart Sidebar Panel -->
+  <div class="cart-panel" [class.cart-panel--open]="cartOpen">
+    <div class="cart-panel-header">
+      <h2>Shopping Cart</h2>
+      <button class="cart-close-btn" (click)="toggleCart()">✕</button>
+    </div>
+
+    <!-- Checkout Success Message -->
+    <div *ngIf="checkoutSuccess" class="checkout-success">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <h3>Order Placed Successfully!</h3>
+      <p>Your purchased items are now available in your dashboard under "My Purchases".</p>
+      <a routerLink="/dashboardLearner" class="btn-go-dashboard">Go to Dashboard</a>
+    </div>
+
+    <!-- Cart Items -->
+    <div *ngIf="!checkoutSuccess" class="cart-panel-body">
+      <div *ngIf="!cart || cart.items.length === 0" class="cart-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <p>Your cart is empty</p>
+        <span>Browse the library and add items to get started.</span>
+      </div>
+
+      <div *ngIf="cart && cart.items.length > 0" class="cart-items-list">
+        <div class="cart-item" *ngFor="let item of cart.items">
+          <div class="cart-item-info">
+            <h4 class="cart-item-title">{{ item.product.title }}</h4>
+            <p class="cart-item-price">{{ item.product.price | currency:'USD' }} × {{ item.quantity }}</p>
+          </div>
+          <div class="cart-item-actions">
+            <span class="cart-item-subtotal">{{ item.product.price * item.quantity | currency:'USD' }}</span>
+            <button class="cart-item-remove" (click)="removeFromCart(item.id)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-2 14H7L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cart Footer -->
+    <div *ngIf="!checkoutSuccess && cart && cart.items.length > 0" class="cart-panel-footer">
+      <div class="cart-total">
+        <span>Total:</span>
+        <strong>{{ getCartTotal() | currency:'USD' }}</strong>
+      </div>
+      <button class="btn-clear-cart" (click)="clearCart()">Clear Cart</button>
+      <button class="btn-checkout" (click)="checkout()" [disabled]="checkoutLoading">
+        <span *ngIf="!checkoutLoading">Checkout</span>
+        <span *ngIf="checkoutLoading">Processing...</span>
+      </button>
+    </div>
+  </div>
+</section>
+

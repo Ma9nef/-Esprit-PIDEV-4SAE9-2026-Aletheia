@@ -1,0 +1,168 @@
+<div class="container py-4 cd">
+
+  <a class="cd-back" (click)="back()">← Back to courses</a>
+
+  <div *ngIf="loading" class="cd-loading">Loading...</div>
+  <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+
+  <ng-container *ngIf="course">
+
+    <!-- HERO -->
+    <div class="cd-hero">
+      <div class="cd-hero-inner">
+        <div class="cd-hero-left">
+          <div class="cd-breadcrumb">
+            <span class="dot"></span>
+            <span class="muted">Course</span>
+          </div>
+
+          <h1 class="cd-title">{{ course.title }}</h1>
+
+          <div class="cd-subline">
+            <span class="cd-pill">
+              <span class="ico"></span>
+              Instructor: <b>{{ course.instructorName || '—' }}</b>
+            </span>
+
+            <span class="cd-pill" *ngIf="course.category">
+              <span class="ico"></span>
+              {{ course.category }}
+            </span>
+
+            <span class="cd-pill" *ngIf="course.subCategory">
+              <span class="ico"></span>
+              {{ course.subCategory }}
+            </span>
+          </div>
+
+          <p class="cd-desc">
+            {{ course.description }}
+          </p>
+
+          <div class="cd-quick">
+            <div class="q">
+              <div class="q-label">Duration</div>
+              <div class="q-value">{{ course.durationHours }}h</div>
+            </div>
+            <div class="q">
+              <div class="q-label">Created</div>
+              <div class="q-value">{{ course.createdAt | date:'mediumDate' }}</div>
+            </div>
+            <div class="q">
+              <div class="q-label">Access</div>
+              <div class="q-value">Lifetime (demo)</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cd-hero-right">
+          <!-- Decorative block -->
+          <div class="cd-hero-art"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN GRID -->
+    <div class="cd-grid">
+
+      <!-- LEFT: content sections -->
+      <div class="cd-main">
+
+        <!-- About -->
+        <section class="cd-section">
+          <h3 class="cd-h3">About this course</h3>
+          <p class="cd-text">
+            {{ course.description }}
+          </p>
+        </section>
+
+        <!-- What you'll learn (demo but looks real) -->
+        <section class="cd-section">
+          <h3 class="cd-h3">What you’ll learn</h3>
+
+          <div class="cd-learn-grid">
+            <div class="learn-item"> Build clean REST APIs with Spring Boot</div>
+            <div class="learn-item"> Structure your project (controller/service/repo)</div>
+            <div class="learn-item"> Handle validation, errors and best practices</div>
+            <div class="learn-item">Prepare your app for real production use</div>
+          </div>
+
+          <div class="cd-hint">
+            (Replace these later with real learning outcomes.)
+          </div>
+        </section>
+
+        <!-- Requirements (demo) -->
+        <section class="cd-section">
+          <h3 class="cd-h3">Requirements</h3>
+          <ul class="cd-list">
+            <li>Basic Java knowledge</li>
+            <li>Understanding of HTTP basics</li>
+            <li>Motivation to build real APIs</li>
+          </ul>
+        </section>
+
+      </div>
+
+      <!-- RIGHT: sticky purchase/enroll card -->
+      <aside class="cd-side">
+        <div class="cd-card">
+          <div class="cd-price">
+            <div class="price-label">Price</div>
+            <div class="price-value">{{ course.price }} <span>$</span></div>
+          </div>
+
+          <div class="cd-meta">
+            <div class="meta-row">
+              <span class="meta-ico"></span>
+              <span class="meta-txt"><b>{{ course.durationHours }}</b> hours of content</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-ico"></span>
+              <span class="meta-txt">Created <b>{{ course.createdAt | date:'mediumDate' }}</b></span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-ico"></span>
+              <span class="meta-txt">Certificate (demo)</span>
+            </div>
+          </div>
+
+          <div class="cd-divider"></div>
+
+          <!-- Actions -->
+          <ng-container *ngIf="isEnrolled; else enrollBlock">
+            <div class="cd-enrolled">
+              <span class="check">✓</span>
+              <span>Enrolled</span>
+            </div>
+
+            <button class="cd-btn cd-btn-success" (click)="goToLearning()">
+              Continue Learning
+            </button>
+          </ng-container>
+
+          <ng-template #enrollBlock>
+            <button
+              class="cd-btn cd-btn-primary"
+              [disabled]="enrolling"
+              (click)="enroll()">
+              {{ enrolling ? 'Enrolling...' : 'Enroll now' }}
+            </button>
+
+            <div class="cd-note">
+              Instant access after enrollment
+            </div>
+          </ng-template>
+
+          <div class="cd-perks">
+            <div class="perk"> Full lifetime access</div>
+            <div class="perk">Progress tracking</div>
+            <div class="perk"> Learn at your pace</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+  </ng-container>
+</div>
