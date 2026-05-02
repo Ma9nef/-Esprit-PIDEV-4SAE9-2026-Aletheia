@@ -1,0 +1,85 @@
+# Offer microservice (image from local registry, same as eureka-registry)
+#
+# 1) kubectl apply -f k8s/aletheia/mongodb.yaml
+# 2) Build + push image:
+#    powershell -ExecutionPolicy Bypass -File .\k8s\aletheia\push-image.ps1 -Name aletheia-offer -Context backend\microservices\offer
+# 3) kubectl apply -f k8s/aletheia/offer-registry.yaml
+# 4) kubectl -n aletheia get pods
+# 5) Port-forward: kubectl -n aletheia port-forward svc/offer 8086:8086
+#
+# Eureka K8s service must be running (eureka.aletheia). Config Server is disabled for this demo
+# (SPRING_CLOUD_CONFIG_ENABLED=false) so the app uses only the JAR + env below.
+apiVersion: v1
+kind: Service
+metadata:
+  name: offer
+  namespace: aletheia
+  labels:
+    app.kubernetes.io/name: offer
+    app.kubernetes.io/part-of: aletheia
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: offer
+  ports:
+    - name: http
+      port: 8086
+      targetPort: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: offer
+  namespace: aletheia
+  labels:
+    app.kubernetes.io/name: offer
+    app.kubernetes.io/part-of: aletheia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: offer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: offer
+    spec:
+      containers:
+        - name: offer
+          image: host.docker.internal:5000/aletheia-offer:local
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8086
+          env:
+            - name: SERVER_PORT
+              value: "8086"
+            - name: SPRING_CLOUD_CONFIG_ENABLED
+              value: "false"
+            - name: EUREKA_DEFAULT_ZONE
+              value: "http://eureka:8761/eureka"
+            - name: EUREKA_INSTANCE_HOSTNAME
+              value: "offer"
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://mongodb:27017/offer_db"
+            - name: JWT_SECRET
+              value: "CHANGE_ME_CHANGE_ME_CHANGE_ME_123456"
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 45
+            periodSeconds: 10
+            timeoutSeconds: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            timeoutSeconds: 3
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"

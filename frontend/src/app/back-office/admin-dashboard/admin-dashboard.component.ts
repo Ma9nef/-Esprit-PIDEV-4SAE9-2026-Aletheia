@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { SubscriptionNotificationService } from '../../core/services/subscription-notification.service';
 import { ResourceManagementService } from '../resources/resource-management.service';
 import { Resource, ResourceType } from '../resources/resource-management.model';
 
@@ -13,6 +14,7 @@ export class AdminDashboardComponent implements OnInit {
 
   showDashboardContent = true;
   showDashboardWidgets = true;
+  adminUnreadNotificationCount = 0;
 
   // ── Resource management state ──────────────────────────────────────────────
   resources: Resource[] = [];
@@ -35,6 +37,7 @@ export class AdminDashboardComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private notificationService: SubscriptionNotificationService,
     private resourceSvc: ResourceManagementService
   ) {}
 
@@ -51,6 +54,29 @@ export class AdminDashboardComponent implements OnInit {
         if (this.showDashboardContent) this.loadResources();
       });
     this.loadResources();
+  }
+
+  markAdminNotificationsAsRead(): void {
+    this.notificationService.markAllAdminNotificationsAsRead().subscribe({
+      next: () => {
+        this.adminUnreadNotificationCount = 0;
+      }
+    });
+  }
+
+  private loadAdminUnreadCount(): void {
+    this.notificationService.getAdminUnreadCount().subscribe({
+      next: (response) => {
+        this.adminUnreadNotificationCount = response.unreadCount ?? 0;
+      },
+      error: () => {
+        this.adminUnreadNotificationCount = 0;
+      }
+    });
+  }
+
+  private updateDashboardVisibility(): void {
+    this.showDashboardContent = !this.activatedRoute.firstChild;
   }
 
   // ── Load ───────────────────────────────────────────────────────────────────

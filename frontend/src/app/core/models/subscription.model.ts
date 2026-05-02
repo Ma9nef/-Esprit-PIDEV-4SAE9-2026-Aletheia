@@ -13,6 +13,22 @@ export interface SubscriptionRequest {
   status?: string;               // Statut : ACTIVE, EXPIRED, CANCELED, PENDING (par défaut "PENDING")
 }
 
+export interface SubscriptionCheckoutRequest {
+  userId: string;
+  planId: string;
+  successUrl: string;
+  cancelUrl: string;
+}
+
+export interface SubscriptionCheckoutResponse {
+  success: boolean;
+  message: string;
+  checkoutUrl?: string;
+  sessionId?: string;
+  paymentId?: string;
+  subscriptionId?: string;
+}
+
 /**
  * Réponse après création ou modification d'un abonnement.
  * Correspond à `SubscriptionResponseDTO` côté backend.
@@ -23,10 +39,56 @@ export interface SubscriptionResponse {
   subscriptionId?: string;       // ID de l'abonnement créé
   subscriptionNumber?: string;   // Numéro unique de l'abonnement
   userId?: string;               // ID de l'utilisateur
+  planId?: string;
   planName?: string;             // Nom du plan souscrit
+  planDescription?: string;
+  planPrice?: number;
+  durationDays?: number;
+  maxCourses?: number;
+  certificationIncluded?: boolean;
+  planActive?: boolean;
   startDate?: Date;              // Date de début effective
   endDate?: Date;                // Date de fin effective
   status?: string;               // Statut actuel
+  daysRemaining?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface SubscriptionPaymentHistory {
+  paymentId: string;
+  userId: string;
+  planId: string;
+  planName?: string;
+  subscriptionId?: string;
+  subscriptionNumber?: string;
+  amount?: number;
+  currency?: string;
+  provider?: string;
+  status?: string;
+  transactionReference?: string;
+  failureReason?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  paidAt?: Date;
+}
+
+export interface SubscriptionNotification {
+  notificationId: string;
+  recipientType?: string;
+  recipientId?: string;
+  type?: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt?: Date;
+  readAt?: Date;
+  relatedSubscriptionId?: string;
+  relatedPlanId?: string;
+}
+
+export interface UnreadNotificationCount {
+  unreadCount: number;
 }
 
 /**

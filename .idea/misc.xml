@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/backend/ApiGateway/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/courses/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/eureka/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/events/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Library/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/offer/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/user-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/ResourceManagement/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/Notification/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/courses/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/events/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/Library/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/offer/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/ResourceManagement/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/microservices/user-service/pom.xml" />
+        <option value="$PROJECT_DIR$/backend/config-server/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="17" project-jdk-type="JavaSDK" />
+</project>

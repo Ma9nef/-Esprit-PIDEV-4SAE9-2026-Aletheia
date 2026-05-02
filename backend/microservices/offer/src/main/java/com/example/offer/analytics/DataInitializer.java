@@ -1,22 +1,16 @@
 package com.example.offer.analytics;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
 
-@Profile("dev")
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
-
-    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     private final OfferHistoryRepository repository;
 
@@ -24,7 +18,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         // Check if database is empty
         if (repository.count() == 0) {
-            log.info("Adding test data to offer history...");
+            System.out.println("📦 Adding test data...");
 
             Random random = new Random();
             String[] offerTypes = {"FLASH_SALE", "OFFER", "COUPON"};
@@ -73,10 +67,10 @@ public class DataInitializer implements CommandLineRunner {
                 repository.save(history);
             }
 
-            log.info("50 test records added to offer history.");
+            System.out.println("✅ 50 test records added!");
 
         } else {
-            log.info("Database already contains {} records, skipping seed.", repository.count());
+            System.out.println("📊 Database already contains " + repository.count() + " records");
         }
     }
 }

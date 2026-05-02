@@ -16,11 +16,16 @@ public class ApiGatewayApplication {
     }
 
     @Bean
-    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
+    public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
         return builder.routes()
 
                 // USER SERVICE
-                .route("user-service", r -> r.path("/api/users/**")
+                .route("user-service", r -> r.path("/api/auth/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("lb://ALETHEIA-PLATFORM"))
+                .route("admin-users-service", r -> r.path("/api/admin/users/**", "/api/admin/users")
                         .filters(f -> f
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
@@ -97,7 +102,6 @@ public class ApiGatewayApplication {
                 .route("inventory-analytics", r -> r.path("/api/inventory-analytics/**")
                         .uri("lb://LIBRARY-SERVICE"))
 
-                // OFFER SERVICE
                 .route("offer-service", r -> r.path("/api/offers/**")
                         .uri("lb://OFFER"))
                 .route("flash-sales", r -> r.path("/api/flash-sales/**")
@@ -108,17 +112,14 @@ public class ApiGatewayApplication {
                         .uri("lb://OFFER"))
                 .route("subscription-plans", r -> r.path("/api/subscription-plans/**")
                         .uri("lb://OFFER"))
-                .route("catalog-api", r -> r.path("/api/catalog", "/api/catalog/**")
-                        .filters(f -> f
-                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
-                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
-                        .uri("http://localhost:8081"))
+                .route("subscriptions", r -> r.path("/api/subscriptions/**")
+                        .uri("lb://OFFER"))
+
                 // EVENT SERVICE
                 .route("event-service", r -> r.path("/api/events/**")
                         .uri("lb://EVENT-MICROSERVICE"))
                 .route("event-websocket", r -> r.path("/room/**")
                         .uri("lb://EVENT-MICROSERVICE"))
-
                 // RESOURCE MANAGEMENT SERVICE
                 .route("resources-service", r -> r.path("/api/resources/**")
                         .uri("lb://RESOURCEMANAGEMENT"))

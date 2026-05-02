@@ -10,7 +10,7 @@ export type JwtUser = {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private API = 'http://localhost:8080/api/auth';
+  private API = 'http://localhost:8089/api/auth';
 
   constructor(private http: HttpClient) {}
 

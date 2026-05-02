@@ -16,6 +16,9 @@ npm-cache/
 
 # Env / secrets
 .env
+.env.local
+**/.env.local
+**/.env.local.*
 *.key
 *.pem
 

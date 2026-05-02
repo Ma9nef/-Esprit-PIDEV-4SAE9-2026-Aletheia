@@ -11,9 +11,8 @@ import tn.platform.user.user.entity.Role;
 import tn.platform.user.user.entity.User;
 import tn.platform.user.user.repository.UserRepository;
 import tn.platform.user.security.jwt.JwtService;
-
 import java.time.LocalDateTime;
-
+import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -106,4 +105,8 @@ public class AuthServiceImpl implements AuthService {
         );
     }
 
+    @Override
+    public List<?> getAllUsers() {
+        return userRepository.findAll();
+    }
 }

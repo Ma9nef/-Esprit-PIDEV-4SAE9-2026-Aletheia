@@ -31,6 +31,7 @@ public class SecurityConfig {
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/offers/public/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/flash-sales/active").permitAll()
                 .anyRequest().authenticated()

@@ -48,3 +48,32 @@ export interface SubscriptionPlanResponse {
   certificationIncluded?: boolean;         // Certifications incluses ?
   isActive?: boolean;                      // Plan actif ?
 }
+
+export interface RecommendationFeatures {
+  lastPlanId?: string;
+  mostRenewedPlanId?: string;
+  totalSubscriptions?: number;
+  renewalCount?: number;
+  cancelCount?: number;
+  expiredWithoutRenewalCount?: number;
+  successfulPaymentsCount?: number;
+  failedPaymentsCount?: number;
+  canceledPaymentsCount?: number;
+  paymentSuccessRate?: number;
+  averageDaysBetweenSubscriptions?: number;
+  loyalCustomer?: boolean;
+  fastCancellationProfile?: boolean;
+}
+
+export interface SubscriptionPlanRecommendation {
+  success: boolean;
+  message: string;
+  userId: string;
+  recommendedPlanId?: string;
+  recommendedPlanName?: string;
+  recommendedPlanPrice?: number;
+  confidenceScore?: number;
+  recommendationType?: string;
+  reasons?: string[];
+  features?: RecommendationFeatures;
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/backend/ApiGateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/Library/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/Notification/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/ResourceManagement/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/config-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/courses/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/eureka/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/events/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/offer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/events/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/microservices/Library/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/microservices/courses/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/microservices/events/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/microservices/offer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/microservices/user-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/offer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/backend/user-service/src/main/java" charset="UTF-8" />
+  </component>
+</project>

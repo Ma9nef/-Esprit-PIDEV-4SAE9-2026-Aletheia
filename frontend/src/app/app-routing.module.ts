@@ -23,10 +23,11 @@ import { LearnerAssessmentComponent } from './front-office/learner-assessment/le
 import { ManageCoursesComponent } from './back-office/manage-courses/manage-courses.component';
 import { LibraryComponent } from './front-office/library/library.component';
 import { Explore3dComponent } from './front-office/explore3d/explore3d.component';
-import {OffersListComponent} from "./front-office/offers-list/offers-list.component";
-import {CheckoutComponent} from "./front-office/checkout/checkout.component";
-import {SubscriptionPlansListComponent} from "./front-office/subscription-plans-list/subscription-plans-list.component";
+import { OffersListComponent } from './front-office/offers-list/offers-list.component';
+import { CheckoutComponent } from './front-office/checkout/checkout.component';
+import { SubscriptionPlansListComponent } from './front-office/subscription-plans-list/subscription-plans-list.component';
 import { VideoRoomComponent } from './front-office/video-room/video-room.component';
+import { SubscriptionNotificationsComponent } from './front-office/subscription-notifications/subscription-notifications.component';
 import { ResourcesComponent } from './front-office/resources/resources.component';
 import { MyBorrowsComponent } from './front-office/my-borrows/my-borrows.component';
 import { ExploreCertificatesComponent } from './pages/explore-certificates/explore-certificates.component';
@@ -42,11 +43,16 @@ import { FormationProgramAttendanceComponent } from './front-office/formation-pr
   { path: 'about', component: AboutComponent },
   { path: 'services', component: ServicesComponent },
   { path: 'contact', component: FooterComponent },
+
   { path: 'dashboardLearner', component: DashboardComponent },
   { path: 'dashboardInstructor', component: TrainerDashboardComponent },
+
   { path: 'offers', component: OffersListComponent },
   { path: 'checkout', component: CheckoutComponent },
+  { path: 'checkout/:planId', component: CheckoutComponent },
   { path: 'plans', component: SubscriptionPlansListComponent },
+  { path: 'subscription-notifications', component: SubscriptionNotificationsComponent },
+
   { path: 'front/room/:id', component: VideoRoomComponent },
 
   {
@@ -60,20 +66,36 @@ import { FormationProgramAttendanceComponent } from './front-office/formation-pr
   { path: 'front/courses', component: CatalogComponent },
   { path: 'front/course-details/:id', component: CourseDetailsComponent },
   { path: 'front/courses/:courseId/learn', component: CourseLearningComponent },
+  { path: 'front/library', component: LibraryComponent },
+  { path: 'front/resources', component: ResourcesComponent },
+  { path: 'front/my-borrows', component: MyBorrowsComponent },
+
   { path: 'manage-assessments', component: ManageAssessmentsComponent },
   { path: 'verify/:code', component: VerifyCertificateComponent },
   { path: 'add-assessment', component: AssessmentFormComponent },
   { path: 'manage-certificates', component: ManageCertificatesComponent },
   { path: 'edit-assessment/:id', component: AssessmentFormComponent },
+  { path: 'manage-certificates', component: ManageCertificatesComponent },
   { path: 'my-certificates', component: LearnerCertificatesComponent },
   { path: 'assessment', component: LearnerAssessmentComponent },
   { path: 'front/library', component: LibraryComponent },
   { path: 'front/resources', component: ResourcesComponent },
   { path: 'front/my-borrows', component: MyBorrowsComponent },
   { path: 'explore', component: Explore3dComponent },
+  { path: 'Explore3dcertificates', component: ExploreCertificatesComponent },
   { path: 'submissions', component: ListSubmissionsComponent },
   { path: 'Explore3dcertificates', component: ExploreCertificatesComponent },
   { path: 'back-office/manage-courses', component: ManageCoursesComponent },
+
+  {
+    path: 'dashboardAdmin',
+    component: AdminDashboardComponent,
+    children: [
+      { path: 'manage-library', component: ManageLibraryComponent },
+      { path: 'manage-users', component: ManageUsersComponent }
+    ]
+  },
+
   {
     path: 'back-office',
     loadChildren: () => import('./back-office/back-office.module').then(m => m.BackOfficeModule)
@@ -82,6 +104,7 @@ import { FormationProgramAttendanceComponent } from './front-office/formation-pr
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
+
   { path: 'formations', component: FormationListComponent },
   { path: 'formations/:id', component: FormationDetailComponent },
   { path: 'formations/:id/program-space', component: FormationProgramSpaceComponent },
@@ -94,4 +117,4 @@ import { FormationProgramAttendanceComponent } from './front-office/formation-pr
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
