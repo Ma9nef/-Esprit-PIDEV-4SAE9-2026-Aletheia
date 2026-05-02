@@ -1,8 +1,7 @@
 package com.esprit.microservice.courses.RestController.formations;
 
-import com.esprit.microservice.courses.dto.training.FormationDetailsDTO;
 import com.esprit.microservice.courses.dto.training.FormationSessionDTO;
-import com.esprit.microservice.courses.dto.training.MyEnrolledFormationDTO;
+import com.esprit.microservice.courses.entity.formations.Formation;
 import com.esprit.microservice.courses.entity.progress.FormationEnrollment;
 import com.esprit.microservice.courses.security.JwtReader;
 import com.esprit.microservice.courses.service.publicApi.formations.LearnerFormationEnrollmentService;
@@ -22,10 +21,12 @@ public class PublicFormationController {
     private final LearnerFormationSessionService learnerFormationSessionService;
     private final JwtReader jwtReader;
 
-    public PublicFormationController(LearnerFormationService learnerFormationService,
-                                     LearnerFormationEnrollmentService learnerFormationEnrollmentService,
-                                     LearnerFormationSessionService learnerFormationSessionService,
-                                     JwtReader jwtReader) {
+    public PublicFormationController(
+            LearnerFormationService learnerFormationService,
+            LearnerFormationEnrollmentService learnerFormationEnrollmentService,
+            LearnerFormationSessionService learnerFormationSessionService,
+            JwtReader jwtReader
+    ) {
         this.learnerFormationService = learnerFormationService;
         this.learnerFormationEnrollmentService = learnerFormationEnrollmentService;
         this.learnerFormationSessionService = learnerFormationSessionService;
@@ -33,13 +34,21 @@ public class PublicFormationController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FormationDetailsDTO>> getAllFormations() {
+    public ResponseEntity<List<Formation>> getAllFormations() {
         return ResponseEntity.ok(learnerFormationService.getAllAvailableFormations());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<FormationDetailsDTO> getFormationById(@PathVariable Long id) {
+    public ResponseEntity<Formation> getFormationById(@PathVariable Long id) {
         return ResponseEntity.ok(learnerFormationService.getAvailableFormationById(id));
+    }
+
+    // ✅ NEW: Sessions endpoint
+    @GetMapping("/{formationId}/sessions")
+    public ResponseEntity<List<FormationSessionDTO>> getFormationSessions(@PathVariable Long formationId) {
+        return ResponseEntity.ok(
+                learnerFormationSessionService.getSessionsByFormation(formationId)
+        );
     }
 
     @PostMapping("/{formationId}/enroll")
@@ -48,25 +57,20 @@ public class PublicFormationController {
             @RequestHeader("Authorization") String authorization
     ) {
         Long userId = jwtReader.extractUserId(authorization);
+
         return ResponseEntity.ok(
                 learnerFormationEnrollmentService.enroll(userId, formationId)
         );
     }
 
     @GetMapping("/my-enrollments")
-    public ResponseEntity<List<MyEnrolledFormationDTO>> getMyEnrollments(
+    public ResponseEntity<List<FormationEnrollment>> getMyEnrollments(
             @RequestHeader("Authorization") String authorization
     ) {
         Long userId = jwtReader.extractUserId(authorization);
-        return ResponseEntity.ok(
-                learnerFormationEnrollmentService.getMyEnrolledFormations(userId)
-        );
-    }
 
-    @GetMapping("/{id}/sessions")
-    public ResponseEntity<List<FormationSessionDTO>> getFormationSessions(@PathVariable Long id) {
         return ResponseEntity.ok(
-                learnerFormationSessionService.getSessionsByFormation(id)
+                learnerFormationEnrollmentService.getMyEnrollments(userId)
         );
     }
 }

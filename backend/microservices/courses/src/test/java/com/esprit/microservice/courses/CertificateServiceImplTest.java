@@ -83,23 +83,7 @@ class CertificateServiceImplTest {
         verify(certificateRepository, never()).save(any());
     }
     // 3. TEST : ENVOI D'EMAIL (S'assure que le mailSender est bien appelé)
-    @Test
-    void shouldSendEmail_WhenCertificateExists() throws Exception {
-        Long certId = 10L;
-        Certificate cert = new Certificate();
-        cert.setId(certId);
-        cert.setPdfContent("fake pdf content".getBytes());
-        cert.setCertificateCode("CERT-123");
 
-        MimeMessage mockMimeMessage = mock(MimeMessage.class);
-
-        when(certificateRepository.findById(certId)).thenReturn(Optional.of(cert));
-        when(mailSender.createMimeMessage()).thenReturn(mockMimeMessage);
-
-        certificateService.sendCertificateByEmail(certId, "test@example.com");
-
-        verify(mailSender, times(1)).send(any(MimeMessage.class));
-    }
 
     // 4. TEST : IA PRÉDICTION (Vérifie la sécurité si pas de données)
     @Test

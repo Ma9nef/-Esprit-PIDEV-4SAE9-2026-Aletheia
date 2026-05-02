@@ -21,6 +21,9 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ml.dmlc.xgboost4j.java.Booster;
+import ml.dmlc.xgboost4j.java.DMatrix;
+import ml.dmlc.xgboost4j.java.XGBoost;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -33,6 +36,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.RandomForest;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -311,45 +315,55 @@ public class CertificateServiceImpl implements ICertificateService {
         }
     }
     public Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception {
-        Attribute progressAttr = new Attribute("progress");
-        ArrayList<String> statusLabels = new ArrayList<>(Arrays.asList("OTHER", "COMPLETED"));
-        Attribute targetAttr = new Attribute("target_status", statusLabels);
-
-        ArrayList<Attribute> attributes = new ArrayList<>();
-        attributes.add(progressAttr);
-        attributes.add(targetAttr);
-
-        Instances trainingData = new Instances("PredictionRelation", attributes, 0);
-        trainingData.setClassIndex(1);
-
+        // 1. Fetch Data
         List<Enrollment> allData = enrollmentRepository.findAll();
-        if (allData.size() < 2) {
-            throw new RuntimeException("Not enough historical data to run AI prediction.");
+        if (allData.size() < 5) { // XGBoost usually needs a bit more data to be stable
+            throw new RuntimeException("Not enough historical data to run XGBoost prediction.");
         }
 
-        for (Enrollment e : allData) {
-            Instance inst = new DenseInstance(2);
-            inst.setValue(progressAttr, e.getProgress() != null ? e.getProgress() : 0);
-            String aiStatus = (e.getStatus() == EnrollmentStatus.COMPLETED) ? "COMPLETED" : "OTHER";
-            inst.setValue(targetAttr, aiStatus);
-            trainingData.add(inst);
+        // 2. Prepare Training Data for XGBoost (Features and Labels)
+        float[] trainDataArray = new float[allData.size()];
+        float[] trainLabelsArray = new float[allData.size()];
+
+        for (int i = 0; i < allData.size(); i++) {
+            Enrollment e = allData.get(i);
+            // Feature: Progress (normalized or raw)
+            trainDataArray[i] = e.getProgress() != null ? e.getProgress().floatValue() : 0.0f;
+            // Label: 1 for COMPLETED, 0 for OTHER
+            trainLabelsArray[i] = (e.getStatus() == EnrollmentStatus.COMPLETED) ? 1.0f : 0.0f;
         }
 
-        RandomForest model = new RandomForest();
-        model.setNumIterations(100);
-        model.setNumFeatures(0);
-        model.buildClassifier(trainingData);
+        // Create DMatrix (Rows, Columns, Data) - Here we only have 1 feature: progress
+        DMatrix trainMat = new DMatrix(trainDataArray, allData.size(), 1, Float.NaN);
+        trainMat.setLabel(trainLabelsArray);
 
+        // 3. Set XGBoost Parameters
+        Map<String, Object> params = new HashMap<>();
+        params.put("eta", 0.01);              // Learning rate
+        params.put("max_depth", 3);          // Depth of trees
+        params.put("objective", "binary:logistic"); // Binary classification outputting probability
+        params.put("eval_metric", "logloss");
+
+        // 4. Train Model
+        int nRounds = 50; // Number of boosting iterations
+        Booster model = XGBoost.train(trainMat, params, nRounds, new HashMap<>(), null, null);
+
+        // 5. Predict for target enrollment
         Enrollment target = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() -> new RuntimeException("Enrollment not found"));
 
-        Instance testInstance = new DenseInstance(2);
-        testInstance.setDataset(trainingData);
-        testInstance.setValue(progressAttr, target.getProgress() != null ? target.getProgress() : 0);
+        float[] testDataArray = new float[]{
+                target.getProgress() != null ? target.getProgress().floatValue() : 0.0f
+        };
+        DMatrix testMat = new DMatrix(testDataArray, 1, 1, Float.NaN);
 
-        double[] distribution = model.distributionForInstance(testInstance);
-        int probabilityScore = (int) (distribution[1] * 100);
+        // Predict returns a 2D array [row][prediction]
+        float[][] predictionResult = model.predict(testMat);
+        float probability = predictionResult[0][0]; // Probability of being "1" (COMPLETED)
 
+        int probabilityScore = (int) (probability * 100);
+
+        // 6. Custom Recommendations
         String recommendation;
         if (probabilityScore > 85) recommendation = "Success highly likely. Proceed to final exam.";
         else if (probabilityScore > 60) recommendation = "Good progress. Complete remaining labs to ensure pass.";
@@ -359,6 +373,11 @@ public class CertificateServiceImpl implements ICertificateService {
         result.put("score", probabilityScore);
         result.put("recommendation", recommendation);
         result.put("currentProgress", target.getProgress());
+        result.put("modelUsed", "XGBoost");
+
+        // Cleanup memory (Important for XGBoost native memory)
+        trainMat.dispose();
+        testMat.dispose();
 
         return result;
     }

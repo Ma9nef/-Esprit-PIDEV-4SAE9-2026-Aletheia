@@ -43,12 +43,18 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers("/course/public/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/api/formations").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/formations/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/formations/*/sessions").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/formations/*/enroll").hasRole("LEARNER")
+                        .requestMatchers(HttpMethod.GET, "/api/formations/my-enrollments").hasRole("LEARNER")
+                        .requestMatchers(HttpMethod.GET, "/api/formations/*/attendance/me").hasRole("LEARNER")
+
                         .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
-                        .requestMatchers("/api/formations/**").permitAll()
-                        .requestMatchers("/api/instructor/**").hasAnyRole("INSTRUCTOR", "TRAINER")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/pidev/assessments/**").permitAll()
-                        .requestMatchers("/pidev/certificate/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -59,13 +65,16 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+
         config.setAllowedOrigins(List.of("http://localhost:4200"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
+
         return source;
     }
 }

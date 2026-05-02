@@ -1,5 +1,6 @@
 package com.esprit.microservice.courses.service.instructor.formations;
 
+
 import com.esprit.microservice.courses.entity.formations.Formation;
 import com.esprit.microservice.courses.repository.FormationRepository;
 import org.springframework.stereotype.Service;
@@ -53,13 +54,6 @@ public class InstructorFormationServiceImpl implements InstructorFormationServic
         existingFormation.setDescription(updatedFormation.getDescription());
         existingFormation.setDuration(updatedFormation.getDuration());
         existingFormation.setCapacity(updatedFormation.getCapacity());
-
-        existingFormation.setLocation(updatedFormation.getLocation());
-        existingFormation.setStartDate(updatedFormation.getStartDate());
-        existingFormation.setEndDate(updatedFormation.getEndDate());
-        existingFormation.setLevel(updatedFormation.getLevel());
-        existingFormation.setObjective(updatedFormation.getObjective());
-        existingFormation.setPrerequisites(updatedFormation.getPrerequisites());
 
         return formationRepository.save(existingFormation);
     }

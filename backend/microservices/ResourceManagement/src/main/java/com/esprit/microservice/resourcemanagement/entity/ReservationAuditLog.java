@@ -1,29 +1,29 @@
 package com.esprit.microservice.resourcemanagement.entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
 @Entity
-@Table(name = "reservation_audit_log", indexes = {
+@Table(name = "reservation_audit_logs", indexes = {
         @Index(name = "idx_audit_reservation", columnList = "reservation_id"),
-        @Index(name = "idx_audit_performed_at", columnList = "performed_at")
+        @Index(name = "idx_audit_performed_by", columnList = "performed_by")
 })
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class ReservationAuditLog {
 
+    @Transient
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @Column(name = "reservation_id", nullable = false)
     private UUID reservationId;
@@ -31,20 +31,40 @@ public class ReservationAuditLog {
     @Column(nullable = false, length = 50)
     private String action;
 
-    @Column(name = "old_status", length = 50)
+    @Column(name = "old_status", length = 30)
     private String oldStatus;
 
-    @Column(name = "new_status", length = 50)
+    @Column(name = "new_status", length = 30)
     private String newStatus;
 
-    @Column(name = "performed_by")
+    @Column(name = "performed_by", length = 100)
     private String performedBy;
 
-    @Column(name = "performed_at", nullable = false)
-    @Builder.Default
-    private LocalDateTime performedAt = LocalDateTime.now();
+    @Column(name = "details_json", columnDefinition = "TEXT")
+    private String detailsJson;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "json")
-    private Map<String, Object> details;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime timestamp;
+
+    @PrePersist
+    public void onCreate() {
+        timestamp = LocalDateTime.now();
+    }
+
+    public void setDetails(Map<String, String> details) {
+        try {
+            detailsJson = OBJECT_MAPPER.writeValueAsString(details);
+        } catch (JsonProcessingException e) {
+            detailsJson = "{}";
+        }
+    }
+
+    public Map<String, String> getDetails() {
+        if (detailsJson == null) return Map.of();
+        try {
+            return OBJECT_MAPPER.readValue(detailsJson, new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            return Map.of();
+        }
+    }
 }

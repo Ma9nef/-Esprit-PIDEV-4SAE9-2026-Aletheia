@@ -45,18 +45,10 @@ export class FormationListComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
     this.showingEnrolledOnly = true;
-
+  
     this.formationPublicService.getMyEnrolledFormations().subscribe({
       next: (data: MyEnrolledFormation[]) => {
-        this.formations = data.map((enrollment) => ({
-          id: enrollment.formationId,
-          instructorId: enrollment.instructorId,
-          title: enrollment.title,
-          description: enrollment.description,
-          duration: enrollment.duration,
-          capacity: enrollment.capacity,
-          archived: enrollment.archived
-        }));
+        this.formations = data.map((enrollment) => enrollment.formation);
         this.loading = false;
       },
       error: (error: unknown) => {

@@ -1,0 +1,19 @@
+EREUKA:
+  docker build -t aletheia-eureka .
+
+  docker run -p 8761:8761 --name eureka-container aletheia-eureka
+
+
+CONFIG SERVER:
+  docker build -t aletheia-config-server .
+
+docker run -p 9999:9999 --name config-container ^
+    -e EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://host.docker.internal:8761/eureka ^
+    aletheia-config-server
+
+API GATEWAY:
+  docker build -t aletheia-gateway .
+
+docker run -p 8089:8089 --name gateway-container ^
+    -e EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://host.docker.internal:8761/eureka ^
+    aletheia-gateway

@@ -79,10 +79,19 @@ public class ApiGatewayApplication {
 
                 // COURSES SERVICE
                 .route("courses-api", r -> r.path("/api/courses/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("http://localhost:8081"))
                 .route("formations-api", r -> r.path("/api/formations/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("http://localhost:8081"))
                 .route("courses-legacy", r -> r.path("/course/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("http://localhost:8081"))
                 .route("courses-instructor", r -> r.path("/api/instructor/**")
                         .filters(f -> f
@@ -115,7 +124,7 @@ public class ApiGatewayApplication {
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
                         .uri("lb://COURSES-SERVICE"))
-                .route("formations-admin", r -> r.path("/api/admin/formations/**")
+                .route("formations-admin", r -> r.path("/api/admin/formations", "/api/admin/formations/**")
                         .filters(f -> f
                                 .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
                                 .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
@@ -150,7 +159,11 @@ public class ApiGatewayApplication {
                         .uri("lb://OFFER"))
                 .route("subscription-plans", r -> r.path("/api/subscription-plans/**")
                         .uri("lb://OFFER"))
-
+                .route("catalog-api", r -> r.path("/api/catalog", "/api/catalog/**")
+                        .filters(f -> f
+                                .dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST")
+                                .dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST"))
+                        .uri("http://localhost:8081"))
                 // EVENT SERVICE
                 .route("event-service", r -> r.path("/api/events/**")
                         .uri("lb://EVENT-MICROSERVICE"))

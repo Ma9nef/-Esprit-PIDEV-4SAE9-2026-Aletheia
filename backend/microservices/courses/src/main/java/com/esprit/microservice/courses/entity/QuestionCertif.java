@@ -28,6 +28,4 @@ public class QuestionCertif {
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<QuestionOption> options;
-
-
 }
