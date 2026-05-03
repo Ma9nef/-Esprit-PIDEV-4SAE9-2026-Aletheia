@@ -1,0 +1,15 @@
+package tn.platform.user.auth.service;
+
+import tn.platform.user.auth.dto.AuthResponse;
+import tn.platform.user.auth.dto.LoginRequest;
+import tn.platform.user.auth.dto.RegisterRequest;
+import tn.platform.user.auth.dto.*;
+import java.util.List;
+public interface AuthService {
+
+    AuthResponse register(RegisterRequest request);
+
+    AuthResponse login(LoginRequest request);
+    AuthResponse registerInstructor(CreateInstructorRequest request);
+    List<?> getAllUsers();
+}

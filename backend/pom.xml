@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>tn.esprit</groupId>
+    <artifactId>aletheia-backend-aggregator</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>Aletheia Backend (aggregator)</name>
+    <description>Réacteur Maven pour compiler et analyser SonarQube sur tous les services backend sans modifier leurs pom.xml.</description>
+
+    <modules>
+        <module>eureka</module>
+        <module>config-server</module>
+        <module>ApiGateway</module>
+        <module>microservices/user-service</module>
+        <module>microservices/courses</module>
+        <module>microservices/Library</module>
+        <module>microservices/offer</module>
+        <module>microservices/events</module>
+        <module>microservices/ResourceManagement</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>4.0.0.4121</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
