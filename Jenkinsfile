@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     tools {
-        jdk 'JAVA_HOME'
-        maven 'M2_HOME'
-    }
+    jdk 'JAVA_HOME'
+    maven 'maven3'
+}
 
     environment {
         DOCKER_USER = "manef99"
