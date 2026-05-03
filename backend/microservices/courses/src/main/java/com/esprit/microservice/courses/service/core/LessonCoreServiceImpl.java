@@ -48,6 +48,7 @@ public class LessonCoreServiceImpl implements LessonCoreService {
             }
         }
 
+        // ✅ Toute modification de lesson => course repasse en attente validation admin
         Course course = existing.getCourse();
 
         if (course == null) {
@@ -68,6 +69,7 @@ public class LessonCoreServiceImpl implements LessonCoreService {
 
         return lessonRepository.save(existing);
     }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Lesson> findById(Long lessonId) {
