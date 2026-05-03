@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,13 +25,17 @@ class AdminFormationServiceImplTest {
     @InjectMocks
     private AdminFormationServiceImpl adminFormationService;
 
+    private Formation createFormation(Long id, boolean archived) {
+        Formation f = new Formation();
+        ReflectionTestUtils.setField(f, "id", id);
+        f.setArchived(archived);
+        return f;
+    }
+
     @Test
     void shouldReturnAllFormations() {
-        Formation formation1 = new Formation();
-        formation1.setId(1L);
-
-        Formation formation2 = new Formation();
-        formation2.setId(2L);
+        Formation formation1 = createFormation(1L, false);
+        Formation formation2 = createFormation(2L, false);
 
         when(formationRepository.findAll()).thenReturn(List.of(formation1, formation2));
 
@@ -46,13 +51,8 @@ class AdminFormationServiceImplTest {
 
     @Test
     void shouldReturnArchivedFormations() {
-        Formation formation1 = new Formation();
-        formation1.setId(1L);
-        formation1.setArchived(true);
-
-        Formation formation2 = new Formation();
-        formation2.setId(2L);
-        formation2.setArchived(true);
+        Formation formation1 = createFormation(1L, true);
+        Formation formation2 = createFormation(2L, true);
 
         when(formationRepository.findByArchivedTrue()).thenReturn(List.of(formation1, formation2));
 
@@ -68,13 +68,8 @@ class AdminFormationServiceImplTest {
 
     @Test
     void shouldReturnActiveFormations() {
-        Formation formation1 = new Formation();
-        formation1.setId(1L);
-        formation1.setArchived(false);
-
-        Formation formation2 = new Formation();
-        formation2.setId(2L);
-        formation2.setArchived(false);
+        Formation formation1 = createFormation(1L, false);
+        Formation formation2 = createFormation(2L, false);
 
         when(formationRepository.findByArchivedFalse()).thenReturn(List.of(formation1, formation2));
 
@@ -92,13 +87,8 @@ class AdminFormationServiceImplTest {
     void shouldArchiveFormationSuccessfully() {
         Long formationId = 1L;
 
-        Formation formation = new Formation();
-        formation.setId(formationId);
-        formation.setArchived(false);
-
-        Formation savedFormation = new Formation();
-        savedFormation.setId(formationId);
-        savedFormation.setArchived(true);
+        Formation formation = createFormation(formationId, false);
+        Formation savedFormation = createFormation(formationId, true);
 
         when(formationRepository.findById(formationId)).thenReturn(Optional.of(formation));
         when(formationRepository.save(formation)).thenReturn(savedFormation);
@@ -135,13 +125,8 @@ class AdminFormationServiceImplTest {
     void shouldUnarchiveFormationSuccessfully() {
         Long formationId = 1L;
 
-        Formation formation = new Formation();
-        formation.setId(formationId);
-        formation.setArchived(true);
-
-        Formation savedFormation = new Formation();
-        savedFormation.setId(formationId);
-        savedFormation.setArchived(false);
+        Formation formation = createFormation(formationId, true);
+        Formation savedFormation = createFormation(formationId, false);
 
         when(formationRepository.findById(formationId)).thenReturn(Optional.of(formation));
         when(formationRepository.save(formation)).thenReturn(savedFormation);

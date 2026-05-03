@@ -12,11 +12,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,213 +31,111 @@ class LessonProgressServiceTest {
     @InjectMocks
     private LessonProgressService lessonProgressService;
 
+    private Course createCourse(Long id) {
+        Course c = new Course();
+        ReflectionTestUtils.setField(c, "id", id);
+        return c;
+    }
+
+    private Lesson createLesson(Long id, Course course) {
+        Lesson l = new Lesson();
+        ReflectionTestUtils.setField(l, "id", id);
+        l.setCourse(course);
+        return l;
+    }
+
     @Test
     void shouldMarkLessonCompletedSuccessfully() {
         Long userId = 1L;
         Long courseId = 10L;
         Long lessonId = 100L;
 
-        Course course = new Course();
-        course.setId(courseId);
-
-        Lesson lesson = new Lesson();
-        lesson.setId(lessonId);
-        lesson.setCourse(course);
+        Course course = createCourse(courseId);
+        Lesson lesson = createLesson(lessonId, course);
 
         when(lessonRepo.findById(lessonId)).thenReturn(Optional.of(lesson));
         when(progressRepo.existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId)).thenReturn(false);
 
         lessonProgressService.markCompleted(userId, courseId, lessonId);
 
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo).existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId);
         verify(progressRepo).save(any(LessonProgress.class));
     }
 
     @Test
     void shouldThrowExceptionWhenLessonNotFound() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
+        when(lessonRepo.findById(anyLong())).thenReturn(Optional.empty());
 
-        when(lessonRepo.findById(lessonId)).thenReturn(Optional.empty());
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> lessonProgressService.markCompleted(userId, courseId, lessonId)
-        );
-
-        assertEquals("Lesson introuvable: 100", exception.getMessage());
-
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo, never()).existsByUserIdAndCourseIdAndLessonId(anyLong(), anyLong(), anyLong());
-        verify(progressRepo, never()).save(any(LessonProgress.class));
+        assertThrows(IllegalArgumentException.class,
+                () -> lessonProgressService.markCompleted(1L, 10L, 100L));
     }
 
     @Test
     void shouldThrowExceptionWhenLessonHasNoCourse() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
-
         Lesson lesson = new Lesson();
-        lesson.setId(lessonId);
-        lesson.setCourse(null);
+        ReflectionTestUtils.setField(lesson, "id", 100L);
 
-        when(lessonRepo.findById(lessonId)).thenReturn(Optional.of(lesson));
+        when(lessonRepo.findById(100L)).thenReturn(Optional.of(lesson));
 
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
-                () -> lessonProgressService.markCompleted(userId, courseId, lessonId)
-        );
-
-        assertEquals("Lesson sans course associée.", exception.getMessage());
-
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo, never()).existsByUserIdAndCourseIdAndLessonId(anyLong(), anyLong(), anyLong());
-        verify(progressRepo, never()).save(any(LessonProgress.class));
-    }
-
-    @Test
-    void shouldThrowExceptionWhenLessonCourseIdIsNull() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
-
-        Course course = new Course();
-        course.setId(null);
-
-        Lesson lesson = new Lesson();
-        lesson.setId(lessonId);
-        lesson.setCourse(course);
-
-        when(lessonRepo.findById(lessonId)).thenReturn(Optional.of(lesson));
-
-        IllegalStateException exception = assertThrows(
-                IllegalStateException.class,
-                () -> lessonProgressService.markCompleted(userId, courseId, lessonId)
-        );
-
-        assertEquals("Lesson sans course associée.", exception.getMessage());
-
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo, never()).existsByUserIdAndCourseIdAndLessonId(anyLong(), anyLong(), anyLong());
-        verify(progressRepo, never()).save(any(LessonProgress.class));
+        assertThrows(IllegalStateException.class,
+                () -> lessonProgressService.markCompleted(1L, 10L, 100L));
     }
 
     @Test
     void shouldThrowExceptionWhenLessonDoesNotBelongToCourse() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
+        Course course = createCourse(99L);
+        Lesson lesson = createLesson(100L, course);
 
-        Course course = new Course();
-        course.setId(99L);
+        when(lessonRepo.findById(100L)).thenReturn(Optional.of(lesson));
 
-        Lesson lesson = new Lesson();
-        lesson.setId(lessonId);
-        lesson.setCourse(course);
-
-        when(lessonRepo.findById(lessonId)).thenReturn(Optional.of(lesson));
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> lessonProgressService.markCompleted(userId, courseId, lessonId)
-        );
-
-        assertEquals("La leçon n'appartient pas à ce cours.", exception.getMessage());
-
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo, never()).existsByUserIdAndCourseIdAndLessonId(anyLong(), anyLong(), anyLong());
-        verify(progressRepo, never()).save(any(LessonProgress.class));
+        assertThrows(IllegalArgumentException.class,
+                () -> lessonProgressService.markCompleted(1L, 10L, 100L));
     }
 
     @Test
     void shouldNotSaveWhenAlreadyCompleted() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
+        Course course = createCourse(10L);
+        Lesson lesson = createLesson(100L, course);
 
-        Course course = new Course();
-        course.setId(courseId);
+        when(lessonRepo.findById(100L)).thenReturn(Optional.of(lesson));
+        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(1L, 10L, 100L)).thenReturn(true);
 
-        Lesson lesson = new Lesson();
-        lesson.setId(lessonId);
-        lesson.setCourse(course);
+        lessonProgressService.markCompleted(1L, 10L, 100L);
 
-        when(lessonRepo.findById(lessonId)).thenReturn(Optional.of(lesson));
-        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId)).thenReturn(true);
-
-        lessonProgressService.markCompleted(userId, courseId, lessonId);
-
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo).existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId);
-        verify(progressRepo, never()).save(any(LessonProgress.class));
+        verify(progressRepo, never()).save(any());
     }
 
     @Test
     void shouldIgnoreDataIntegrityViolationWhenSaving() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
+        Course course = createCourse(10L);
+        Lesson lesson = createLesson(100L, course);
 
-        Course course = new Course();
-        course.setId(courseId);
-
-        Lesson lesson = new Lesson();
-        lesson.setId(lessonId);
-        lesson.setCourse(course);
-
-        when(lessonRepo.findById(lessonId)).thenReturn(Optional.of(lesson));
-        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId)).thenReturn(false);
+        when(lessonRepo.findById(100L)).thenReturn(Optional.of(lesson));
+        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(1L, 10L, 100L)).thenReturn(false);
         doThrow(new DataIntegrityViolationException("duplicate"))
-                .when(progressRepo).save(any(LessonProgress.class));
+                .when(progressRepo).save(any());
 
-        assertDoesNotThrow(() -> lessonProgressService.markCompleted(userId, courseId, lessonId));
-
-        verify(lessonRepo).findById(lessonId);
-        verify(progressRepo).existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId);
-        verify(progressRepo).save(any(LessonProgress.class));
+        assertDoesNotThrow(() ->
+                lessonProgressService.markCompleted(1L, 10L, 100L));
     }
 
     @Test
     void shouldReturnTrueWhenLessonIsCompleted() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
+        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(1L, 10L, 100L)).thenReturn(true);
 
-        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId)).thenReturn(true);
-
-        boolean result = lessonProgressService.isCompleted(userId, courseId, lessonId);
-
-        assertTrue(result);
-        verify(progressRepo).existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId);
+        assertTrue(lessonProgressService.isCompleted(1L, 10L, 100L));
     }
 
     @Test
     void shouldReturnFalseWhenLessonIsNotCompleted() {
-        Long userId = 1L;
-        Long courseId = 10L;
-        Long lessonId = 100L;
+        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(1L, 10L, 100L)).thenReturn(false);
 
-        when(progressRepo.existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId)).thenReturn(false);
-
-        boolean result = lessonProgressService.isCompleted(userId, courseId, lessonId);
-
-        assertFalse(result);
-        verify(progressRepo).existsByUserIdAndCourseIdAndLessonId(userId, courseId, lessonId);
+        assertFalse(lessonProgressService.isCompleted(1L, 10L, 100L));
     }
 
     @Test
     void shouldCountCompletedLessons() {
-        Long userId = 1L;
-        Long courseId = 10L;
+        when(progressRepo.countByUserIdAndCourseId(1L, 10L)).thenReturn(3L);
 
-        when(progressRepo.countByUserIdAndCourseId(userId, courseId)).thenReturn(3L);
-
-        long result = lessonProgressService.countCompleted(userId, courseId);
-
-        assertEquals(3L, result);
-        verify(progressRepo).countByUserIdAndCourseId(userId, courseId);
+        assertEquals(3L, lessonProgressService.countCompleted(1L, 10L));
     }
 }

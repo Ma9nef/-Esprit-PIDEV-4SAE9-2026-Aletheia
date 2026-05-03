@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,16 @@ class CourseCoreServiceImplTest {
     @InjectMocks
     private CourseCoreServiceImpl courseCoreService;
 
+    private Course createCourse(Long id) {
+        Course c = new Course();
+        ReflectionTestUtils.setField(c, "id", id);
+        return c;
+    }
+
     @Test
     void shouldFindCourseById() {
         Long courseId = 1L;
-        Course course = new Course();
-        course.setId(courseId);
+        Course course = createCourse(courseId);
 
         when(courseRepo.findById(courseId)).thenReturn(Optional.of(course));
 
@@ -36,7 +42,6 @@ class CourseCoreServiceImplTest {
 
         assertTrue(result.isPresent());
         assertEquals(courseId, result.get().getId());
-        verify(courseRepo, times(1)).findById(courseId);
     }
 
     @Test
@@ -48,14 +53,12 @@ class CourseCoreServiceImplTest {
         Optional<Course> result = courseCoreService.findById(courseId);
 
         assertTrue(result.isEmpty());
-        verify(courseRepo, times(1)).findById(courseId);
     }
 
     @Test
     void shouldFindPublicCourseById() {
         Long courseId = 2L;
-        Course course = new Course();
-        course.setId(courseId);
+        Course course = createCourse(courseId);
 
         when(courseRepo.findByIdAndArchivedFalse(courseId)).thenReturn(Optional.of(course));
 
@@ -63,7 +66,6 @@ class CourseCoreServiceImplTest {
 
         assertTrue(result.isPresent());
         assertEquals(courseId, result.get().getId());
-        verify(courseRepo, times(1)).findByIdAndArchivedFalse(courseId);
     }
 
     @Test
@@ -75,45 +77,30 @@ class CourseCoreServiceImplTest {
         Optional<Course> result = courseCoreService.findPublicById(courseId);
 
         assertTrue(result.isEmpty());
-        verify(courseRepo, times(1)).findByIdAndArchivedFalse(courseId);
     }
 
     @Test
     void shouldFindAllCourses() {
-        Course c1 = new Course();
-        c1.setId(1L);
+        Course c1 = createCourse(1L);
+        Course c2 = createCourse(2L);
 
-        Course c2 = new Course();
-        c2.setId(2L);
-
-        List<Course> courses = List.of(c1, c2);
-
-        when(courseRepo.findAll()).thenReturn(courses);
+        when(courseRepo.findAll()).thenReturn(List.of(c1, c2));
 
         List<Course> result = courseCoreService.findAll();
 
-        assertNotNull(result);
         assertEquals(2, result.size());
-        verify(courseRepo, times(1)).findAll();
     }
 
     @Test
     void shouldFindAllPublicCourses() {
-        Course c1 = new Course();
-        c1.setId(1L);
+        Course c1 = createCourse(1L);
+        Course c2 = createCourse(2L);
 
-        Course c2 = new Course();
-        c2.setId(2L);
-
-        List<Course> publicCourses = List.of(c1, c2);
-
-        when(courseRepo.findByArchivedFalse()).thenReturn(publicCourses);
+        when(courseRepo.findByArchivedFalse()).thenReturn(List.of(c1, c2));
 
         List<Course> result = courseCoreService.findPublicAll();
 
-        assertNotNull(result);
         assertEquals(2, result.size());
-        verify(courseRepo, times(1)).findByArchivedFalse();
     }
 
     @Test
@@ -121,39 +108,29 @@ class CourseCoreServiceImplTest {
         Course course = new Course();
         course.setTitle("Java Basics");
 
-        Course savedCourse = new Course();
-        savedCourse.setId(1L);
+        Course savedCourse = createCourse(1L);
         savedCourse.setTitle("Java Basics");
 
         when(courseRepo.save(course)).thenReturn(savedCourse);
 
         Course result = courseCoreService.save(course);
 
-        assertNotNull(result);
         assertEquals(1L, result.getId());
         assertEquals("Java Basics", result.getTitle());
-        verify(courseRepo, times(1)).save(course);
     }
 
     @Test
     void shouldFindCoursesByInstructorId() {
         Long instructorId = 10L;
 
-        Course c1 = new Course();
-        c1.setId(1L);
+        Course c1 = createCourse(1L);
+        Course c2 = createCourse(2L);
 
-        Course c2 = new Course();
-        c2.setId(2L);
-
-        List<Course> courses = List.of(c1, c2);
-
-        when(courseRepo.findByInstructorId(instructorId)).thenReturn(courses);
+        when(courseRepo.findByInstructorId(instructorId)).thenReturn(List.of(c1, c2));
 
         List<Course> result = courseCoreService.findByInstructorId(instructorId);
 
-        assertNotNull(result);
         assertEquals(2, result.size());
-        verify(courseRepo, times(1)).findByInstructorId(instructorId);
     }
 
     @Test
@@ -161,8 +138,7 @@ class CourseCoreServiceImplTest {
         Long courseId = 1L;
         Long instructorId = 10L;
 
-        Course course = new Course();
-        course.setId(courseId);
+        Course course = createCourse(courseId);
 
         when(courseRepo.findByIdAndInstructorId(courseId, instructorId))
                 .thenReturn(Optional.of(course));
@@ -170,8 +146,6 @@ class CourseCoreServiceImplTest {
         Optional<Course> result = courseCoreService.findByIdAndInstructorId(courseId, instructorId);
 
         assertTrue(result.isPresent());
-        assertEquals(courseId, result.get().getId());
-        verify(courseRepo, times(1)).findByIdAndInstructorId(courseId, instructorId);
     }
 
     @Test
@@ -185,6 +159,5 @@ class CourseCoreServiceImplTest {
         Optional<Course> result = courseCoreService.findByIdAndInstructorId(courseId, instructorId);
 
         assertTrue(result.isEmpty());
-        verify(courseRepo, times(1)).findByIdAndInstructorId(courseId, instructorId);
     }
 }

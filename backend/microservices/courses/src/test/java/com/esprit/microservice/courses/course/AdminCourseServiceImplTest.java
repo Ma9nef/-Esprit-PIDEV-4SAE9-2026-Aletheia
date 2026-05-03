@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,13 +30,18 @@ class AdminCourseServiceImplTest {
     @InjectMocks
     private AdminCourseServiceImpl adminCourseService;
 
+    private Course createCourse(Long id, String title) {
+        Course course = new Course();
+        ReflectionTestUtils.setField(course, "id", id);
+        course.setTitle(title);
+        return course;
+    }
+
     @Test
     void shouldReturnCourseAdminDtoWhenCourseExists() {
         Long courseId = 1L;
 
-        Course course = new Course();
-        course.setId(courseId);
-        course.setTitle("Java");
+        Course course = createCourse(courseId, "Java");
 
         CourseAdminDTO dto = new CourseAdminDTO();
         dto.setId(courseId);
@@ -68,13 +74,8 @@ class AdminCourseServiceImplTest {
 
     @Test
     void shouldReturnAllCoursesAsAdminDtos() {
-        Course course1 = new Course();
-        course1.setId(1L);
-        course1.setTitle("Java");
-
-        Course course2 = new Course();
-        course2.setId(2L);
-        course2.setTitle("Spring");
+        Course course1 = createCourse(1L, "Java");
+        Course course2 = createCourse(2L, "Spring");
 
         CourseAdminDTO dto1 = new CourseAdminDTO();
         dto1.setId(1L);
@@ -102,12 +103,10 @@ class AdminCourseServiceImplTest {
     void shouldUnarchiveCourseSuccessfully() {
         Long courseId = 1L;
 
-        Course course = new Course();
-        course.setId(courseId);
+        Course course = createCourse(courseId, "Java");
         course.setArchived(true);
 
-        Course savedCourse = new Course();
-        savedCourse.setId(courseId);
+        Course savedCourse = createCourse(courseId, "Java");
         savedCourse.setArchived(false);
 
         CourseAdminDTO dto = new CourseAdminDTO();
@@ -150,12 +149,10 @@ class AdminCourseServiceImplTest {
     void shouldArchiveCourseSuccessfully() {
         Long courseId = 1L;
 
-        Course course = new Course();
-        course.setId(courseId);
+        Course course = createCourse(courseId, "Java");
         course.setArchived(false);
 
-        Course savedCourse = new Course();
-        savedCourse.setId(courseId);
+        Course savedCourse = createCourse(courseId, "Java");
         savedCourse.setArchived(true);
 
         CourseAdminDTO dto = new CourseAdminDTO();
