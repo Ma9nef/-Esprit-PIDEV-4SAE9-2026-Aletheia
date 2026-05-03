@@ -2,23 +2,21 @@ pipeline {
     agent any
 
     tools {
-    jdk 'JAVA_HOME'
-    maven 'maven3'
-}
+        jdk 'JAVA_HOME'
+        maven 'maven3'
+    }
 
     environment {
         DOCKER_USER = "manef99"
-        IMAGE_TAG = "1.0.0-${env.BUILD_NUMBER}"
         K8S_DIR = "k8s/aletheia"
     }
 
     stages {
-
         stage('Checkout Source') {
-    steps {
-        checkout scm
-    }
-}
+            steps {
+                checkout scm
+            }
+        }
 
         stage('Build Selected Backend Services') {
             steps {
@@ -53,8 +51,7 @@ pipeline {
                     ]
 
                     for (img in images) {
-                        sh "docker build -t ${DOCKER_USER}/${img.name}:${IMAGE_TAG} ${img.path}"
-                        sh "docker tag ${DOCKER_USER}/${img.name}:${IMAGE_TAG} ${DOCKER_USER}/${img.name}:latest"
+                        sh "docker build -t ${DOCKER_USER}/${img.name}:latest ${img.path}"
                     }
                 }
             }
@@ -75,7 +72,6 @@ pipeline {
                         ]
 
                         for (name in imageNames) {
-                            sh "docker push ${DOCKER_USER}/${name}:${IMAGE_TAG}"
                             sh "docker push ${DOCKER_USER}/${name}:latest"
                         }
                     }
@@ -85,8 +81,9 @@ pipeline {
 
         stage('Deploy Selected Services to Kubernetes') {
             steps {
-                sh "kubectl apply -f ${K8S_DIR}"
-                sh "kubectl get pods -n devops"
+                sh "kubectl apply -f ${K8S_DIR}/eureka.yaml"
+                sh "kubectl rollout restart deployment/eureka -n aletheia"
+                sh "kubectl get pods -n aletheia"
             }
         }
     }
