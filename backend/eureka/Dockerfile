@@ -1,4 +1,5 @@
 FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
 EXPOSE 8761
-ADD target/eureka-0.0.1-SNAPSHOT.jar eureka.jar
-ENTRYPOINT ["java", "-jar", "eureka.jar"]
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "app.jar"]
