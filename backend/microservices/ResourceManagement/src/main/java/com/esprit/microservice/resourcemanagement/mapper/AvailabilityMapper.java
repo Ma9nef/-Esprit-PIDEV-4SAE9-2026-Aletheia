@@ -1,7 +1,7 @@
 package com.esprit.microservice.resourcemanagement.mapper;
 
 import com.esprit.microservice.resourcemanagement.dto.request.CreateAvailabilityRequest;
-import com.esprit.microservice.resourcemanagement.dto.response.AvailabilityResponse;
+import com.esprit.microservice.resourcemanagement.dto.response.ResourceAvailabilityResponse;
 import com.esprit.microservice.resourcemanagement.entity.ResourceAvailability;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +18,8 @@ public class AvailabilityMapper {
                 .build();
     }
 
-    public AvailabilityResponse toResponse(ResourceAvailability entity) {
-        return AvailabilityResponse.builder()
+    public ResourceAvailabilityResponse toResponse(ResourceAvailability entity) {
+        return ResourceAvailabilityResponse.builder()
                 .id(entity.getId())
                 .resourceId(entity.getResourceId())
                 .startTime(entity.getStartTime())

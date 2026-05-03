@@ -22,7 +22,7 @@ public class FlexibleUuidDeserializer extends StdDeserializer<UUID> {
 
     @Override
     public UUID deserialize(JsonParser p, DeserializationContext ctx) throws JacksonException {
-        String raw = p.getText();
+        String raw = p.getString();
         if (raw == null || raw.isBlank()) {
             return null;
         }

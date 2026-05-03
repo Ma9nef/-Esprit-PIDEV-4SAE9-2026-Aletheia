@@ -5,152 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="718c3b6f-82aa-41fa-b4df-509c32f9537a" name="Changes" comment="ya manef salla7">
-      <change afterPath="$PROJECT_DIR$/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/workflows/ci.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/DEVOPS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/JENKINS.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/SONARQUBE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/HELP.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/ApiGatewayApplication.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ApiGateway/target/classes/com/esprit/microservice/apigateway/CorsConfig.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/config-server/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/config-server/src/main/resources/config/offer.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/eureka/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/eureka/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/eureka/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/eureka/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/eureka/HELP.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/eureka/target/classes/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/Library/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/ResourceManagement/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/courses/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/events/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/SubscriptionRecommendationDataInitializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/controller/SubscriptionNotificationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/controller/SubscriptionRecommendationController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/RecommendationFeaturesDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/RecommendationTrainingRowDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionCheckoutRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionCheckoutResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionNotificationResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionPaymentResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionPlanRecommendationDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/UnreadNotificationCountDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/model/NotificationRecipientType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/model/SubscriptionNotification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/model/SubscriptionNotificationType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/model/SubscriptionPayment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/model/SubscriptionPaymentStatus.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/repository/SubscriptionNotificationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/repository/SubscriptionPaymentRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/service/SubscriptionNotificationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/service/SubscriptionPaymentService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/service/SubscriptionRecommendationService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/controller/SubscriptionControllerWebMvcTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/controller/SubscriptionNotificationControllerWebMvcTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/controller/SubscriptionPlanControllerWebMvcTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/repository/SubscriptionRepositoryIntegrationTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/OfferCalculationServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/OfferServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/OfferValidationServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/SubscriptionNotificationServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/SubscriptionPaymentServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/SubscriptionPlanServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/SubscriptionRecommendationServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/java/com/example/offer/service/SubscriptionServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/offer/src/test/resources/application-test.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/microservices/user-service/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ml/offer-recommendation/predict_recommendation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ml/offer-recommendation/recommendation_dataset.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ml/offer-recommendation/requirements.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ml/offer-recommendation/subscription_recommendation_model.joblib" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/ml/offer-recommendation/train_recommendation_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/grafana/provisioning/datasources/prometheus.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/mysql/init/01-create-databases.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker/prometheus/prometheus.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-subscriptions/admin-subscriptions.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/core/services/subscription-notification.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/front-office/checkout/checkout.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/front-office/subscription-notifications/subscription-notifications.component.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/front-office/subscription-notifications/subscription-notifications.component.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/front-office/subscription-notifications/subscription-notifications.component.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/front-office/subscription-plans-list/subscription-plans-list.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/shared/components/offer-card/offer-card.component.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/app/shared/pipes/offer-filter.pipe.spec.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/k8s/aletheia/eureka-registry.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/k8s/aletheia/eureka.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/k8s/aletheia/load-eureka-image.ps1" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/k8s/aletheia/mongodb.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/k8s/aletheia/offer-registry.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/k8s/aletheia/push-image.ps1" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/java/com/esprit/microservice/apigateway/ApiGatewayApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/ApiGateway/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/backend/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/config-server/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/config-server/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/eureka/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/eureka/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/Library/src/test/java/com/esprit/microservice/library/LibraryApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/Library/src/test/java/com/esprit/microservice/library/LibraryApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/JwtAuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/courses/src/main/java/com/esprit/microservice/courses/security/JwtAuthFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/OfferApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/OfferApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/DataInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/analytics/DataInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/controller/SubscriptionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/controller/SubscriptionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/controller/SubscriptionPlanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/controller/SubscriptionPlanController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/dto/SubscriptionResponseDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/repository/SubscriptionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/repository/SubscriptionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/service/SubscriptionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/java/com/example/offer/service/SubscriptionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/offer/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/offer/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/auth/controller/AdminUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/auth/controller/AdminUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/auth/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/auth/controller/AuthController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/auth/service/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/auth/service/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/security/jwt/JwtAuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/security/jwt/JwtAuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/java/tn/platform/user/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/microservices/user-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/user-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-dashboard/admin-dashboard.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/admin-subscriptions/admin-subscriptions.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/admin-subscriptions/admin-subscriptions.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/back-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/back-office/trainer-dashboard/trainer-dashboard.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/models/subscription-plan.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/models/subscription-plan.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/models/subscription.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/models/subscription.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/subscription-plan.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/subscription-plan.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/subscription.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/subscription.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/core/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/core/services/user.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/environments/environment.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/checkout/checkout.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/checkout/checkout.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/front-office.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/front-office/subscription-plans-list/subscription-plans-list.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/front-office/subscription-plans-list/subscription-plans-list.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/shared/navbar/navbar.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/config/FlexibleUuidDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/config/FlexibleUuidDeserializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/mapper/AvailabilityMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/mapper/AvailabilityMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/mapper/ReservationMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/mapper/ResourceMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/service/ReservationEventPublisher.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/service/ResourceAvailabilityService.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/microservices/ResourceManagement/src/main/java/com/esprit/microservice/resourcemanagement/service/ResourceAvailabilityService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tmpclaude-da8d-cwd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tmpclaude-e84f-cwd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tmpclaude-f3d8-cwd" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,6 +29,7 @@
       <entry key="_C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia" value="3BOC1kchxdlVenO9AaNJ87pvgOd" />
       <entry key="_C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia/backend/courses" value="3Bx0u2z9hUe3xbqmubpLXo9M9dQ" />
       <entry key="_C:/Users/Jasser Noomani/Desktop/-Esprit-PIDEV-4SAE9-2026-Aletheia/backend/offer" value="3ByTSEqyDvDvKJ1nIlAuooGPLbD" />
+      <entry key="_C:/Users/Jasser Noomani/Desktop/New folder/-Esprit-PIDEV-4SAE9-2026-Aletheia" value="3DD92I8E4muIT3JkCGrlrEXjDQV" />
     </persistenceIdMap>
   </component>
   <component name="CopilotUserSelectedChatMode">
@@ -176,7 +42,7 @@
     </selectedModels>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="414" />
+    <option name="cachedIndexableFilesCount" value="1074" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -192,12 +58,12 @@
     &quot;assignee&quot;: &quot;Seif123840&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Ma9nef/-Esprit-PIDEV-4SAE9-2026-Aletheia.git&quot;,
-    &quot;accountId&quot;: &quot;3237b34d-abe1-48d6-8a87-61e621825ffe&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Ma9nef/-Esprit-PIDEV-4SAE9-2026-Aletheia.git",
+    "accountId": "22df1733-004a-486e-9996-afd4655fd479"
   }
-}</component>
+}]]></component>
   <component name="HttpClientOnboardingState">{
   &quot;isOnboardingCommentShown&quot;: true
 }</component>
@@ -263,7 +129,8 @@
     "Spring Boot.UserService.executor": "Run",
     "Spring Boot.configServer.executor": "Run",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "Merging library-management-docker",
+    "git-widget-placeholder": "library-management-docker",
+    "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/BabaYaga/Desktop/aletheia-platform/-Esprit-PIDEV-4SAE9-2026-Aletheia",
@@ -271,7 +138,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "SDKs",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "rest.client.default.execution.environment": "dev",
@@ -315,19 +182,16 @@
               <entry key="ConfigServerApplication" value="STOPPED" />
               <entry key="CoursesService" value="STOPPED" />
               <entry key="EurekaApplication" value="STOPPED" />
-              <entry key="EventsService" value="STOPPED" />
               <entry key="LibraryService" value="STOPPED" />
-              <entry key="OffersService" value="FAILED" />
-              <entry key="ResourcesService" value="STOPPED" />
+              <entry key="ResourcesService" value="FAILED" />
               <entry key="UserService" value="STOPPED" />
-              <entry key="configServer" value="STOPPED" />
             </map>
           </value>
         </entry>
       </map>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.ApiGatewayApplication">
+  <component name="RunManager" selected="Spring Boot.ResourcesService">
     <configuration name="ConfigServerApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.esprit.microservice.configserver.ConfigServerApplication" />
       <module name="config-server" />
@@ -407,20 +271,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="EventsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="event-microservice" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.events.EventsApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="EventsService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="event-microservice" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.events.EventsApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="LibraryService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="Library" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.esprit.microservice.library.LibraryApplication" />
@@ -429,13 +279,6 @@
       </method>
     </configuration>
     <configuration name="OfferApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="offer" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.offer.OfferApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="OffersService" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="offer" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.offer.OfferApplication" />
       <method v="2">
@@ -456,13 +299,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="configServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <module name="config-server" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="tn.esprit.spring.aletheia.configserver.ConfigServerApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <list>
       <item itemvalue="Application.ConfigServerApplication" />
       <item itemvalue="Application.EurekaApplication" />
@@ -470,15 +306,11 @@
       <item itemvalue="HTTP Request.test | Checkout — triggers Feign call to user-service" />
       <item itemvalue="JUnit.All in Library" />
       <item itemvalue="Spring Boot.ConfigServerApplication" />
-      <item itemvalue="Spring Boot.EventsApplication" />
       <item itemvalue="Spring Boot.OfferApplication" />
-      <item itemvalue="Spring Boot.configServer" />
       <item itemvalue="Spring Boot.ApiGatewayApplication" />
       <item itemvalue="Spring Boot.CoursesService" />
       <item itemvalue="Spring Boot.EurekaApplication" />
-      <item itemvalue="Spring Boot.EventsService" />
       <item itemvalue="Spring Boot.LibraryService" />
-      <item itemvalue="Spring Boot.OffersService" />
       <item itemvalue="Spring Boot.ResourcesService" />
       <item itemvalue="Spring Boot.UserService" />
     </list>
@@ -495,8 +327,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.25557.131" />
-        <option value="bundled-js-predefined-d6986cc7102b-b598e85cdad2-JavaScript-IU-252.25557.131" />
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
       </set>
     </attachedChunks>
   </component>
@@ -525,6 +357,7 @@
       <workItem from="1775738256558" duration="116000" />
       <workItem from="1775739518788" duration="8925000" />
       <workItem from="1775945468588" duration="1081000" />
+      <workItem from="1777805551066" duration="1513000" />
     </task>
     <task id="LOCAL-00001" summary="last commit before integration">
       <option name="closed" value="true" />
