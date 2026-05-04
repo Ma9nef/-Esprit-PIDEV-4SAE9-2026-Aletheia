@@ -19,7 +19,7 @@ pipeline {
             }
         }
 
-        stage('Build Selected Backend Services') {
+        stage('Build Backend Services') {
             steps {
                 script {
                     def services = [
@@ -27,7 +27,8 @@ pipeline {
                         'backend/config-server',
                         'backend/eureka',
                         'backend/microservices/courses',
-                        'backend/microservices/user-service'
+                        'backend/microservices/user-service',
+                        'backend/microservices/Library'
                     ]
 
                     for (svc in services) {
@@ -48,7 +49,9 @@ pipeline {
                         [name: 'config-server', path: 'backend/config-server'],
                         [name: 'eureka', path: 'backend/eureka'],
                         [name: 'courses', path: 'backend/microservices/courses'],
-                        [name: 'user-service', path: 'backend/microservices/user-service']
+                        [name: 'user-service', path: 'backend/microservices/user-service'],
+                        [name: 'library', path: 'backend/microservices/Library'],
+                        [name: 'frontend', path: 'frontend']
                     ]
 
                     for (img in images) {
@@ -74,7 +77,9 @@ pipeline {
                             'config-server',
                             'eureka',
                             'courses',
-                            'user-service'
+                            'user-service',
+                            'library',
+                            'frontend'
                         ]
 
                         for (name in imageNames) {
@@ -97,7 +102,7 @@ pipeline {
 
     post {
         success {
-            echo "Selected backend services deployed successfully."
+            echo "Backend services, library, and frontend pushed successfully."
         }
 
         failure {
