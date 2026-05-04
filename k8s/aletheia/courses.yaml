@@ -29,7 +29,7 @@ spec:
               value: "8081"
 
             - name: SPRING_CONFIG_IMPORT
-              value: "optional:configserver:http://config-server:8888"
+              value: "optional:configserver:http://config-server:9999"
 
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://mysql-courses:3306/course_management?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true"
