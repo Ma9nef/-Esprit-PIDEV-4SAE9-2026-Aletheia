@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-library
+  namespace: aletheia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-library
+  template:
+    metadata:
+      labels:
+        app: mysql-library
+    spec:
+      containers:
+        - name: mysql-library
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: aletheia_library
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 25
+            periodSeconds: 10
+            failureThreshold: 10
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            failureThreshold: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-library
+  namespace: aletheia
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql-library
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: 3306
