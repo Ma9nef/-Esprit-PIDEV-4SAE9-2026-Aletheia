@@ -29,7 +29,7 @@ pipeline {
                         'backend/eureka',
                         'backend/microservices/courses',
                         'backend/microservices/user-service',
-                        'backend/microservices/library'
+                        'backend/microservices/Library'
                     ]
 
                     for (svc in services) {
@@ -51,7 +51,7 @@ pipeline {
                         [name: 'eureka', path: 'backend/eureka'],
                         [name: 'courses', path: 'backend/microservices/courses'],
                         [name: 'user-service', path: 'backend/microservices/user-service'],
-                        [name: 'library', path: 'backend/microservices/library'],
+                        [name: 'library', path: 'backend/microservices/Library'],
                         [name: 'frontend', path: 'frontend']
                     ]
 
@@ -94,8 +94,6 @@ pipeline {
 
         stage('Deploy Infrastructure') {
             steps {
-                sh "kubectl apply -f ${K8S_DIR}/namespace.yaml || true"
-
                 sh "kubectl apply -f ${K8S_DIR}/eureka.yaml"
                 sh "kubectl rollout status deployment/eureka -n ${NAMESPACE} --timeout=240s"
 
