@@ -33,7 +33,9 @@ isSendingEmail: { [key: number]: boolean } = {};
   certificates: any[] = [];
   usersList: any[] = [];
   enrollments: any[] = [];
-
+selectedEnrollmentIdForXGBoost: number | null = null;
+xgboostResult: any = null;
+isXGBoostPredicting: boolean = false;
 
 selectedEnrollmentIdForPredict: number | null = null; // Changed from UserID to EnrollmentID
 successResult: any = null;
@@ -407,5 +409,30 @@ predictCertificationSuccess() {
       }
     });
 }
+predictWithXGBoost() {
+  if (!this.selectedEnrollmentIdForXGBoost) return;
 
+  this.isXGBoostPredicting = true;
+  this.xgboostResult = null;
+
+  this.certificateService.getXGBoostPrediction(this.selectedEnrollmentIdForXGBoost)
+    .subscribe({
+      next: (data) => {
+        this.xgboostResult = {
+          score: Math.round(data.probability[1] * 100),
+          label: data.label,
+          confidence: data.confidence,
+          recommendation: data.label === 'Completed'
+            ? '✅ High probability of completing this course!'
+            : '⚠️ Student may need additional support to complete.'
+        };
+        this.isXGBoostPredicting = false;
+      },
+      error: (err) => {
+        console.error("XGBoost Error:", err);
+        alert(err.error?.error || "ML Error: Check Flask is running on port 5000.");
+        this.isXGBoostPredicting = false;
+      }
+    });
+}
 }

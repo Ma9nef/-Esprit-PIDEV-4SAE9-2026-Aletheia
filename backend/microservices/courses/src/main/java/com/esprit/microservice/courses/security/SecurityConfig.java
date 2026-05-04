@@ -41,6 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/pidev/assessments/**").permitAll()
                         .requestMatchers("/pidev/certificate/**").permitAll()
+                        .requestMatchers("/pidev/certificate/predict/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

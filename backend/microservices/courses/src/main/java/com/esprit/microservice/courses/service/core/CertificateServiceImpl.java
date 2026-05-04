@@ -26,8 +26,9 @@ import ml.dmlc.xgboost4j.java.Booster;
 import ml.dmlc.xgboost4j.java.DMatrix;
 import ml.dmlc.xgboost4j.java.XGBoost;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.trees.RandomForest;
@@ -42,7 +47,7 @@ import weka.core.Attribute;
 import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
-
+import java.util.Collections;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -320,7 +325,45 @@ public class CertificateServiceImpl implements ICertificateService {
             return ResponseEntity.status(500).body("Error reading PDF file");
         }
     }
+    public Map<String, Object> checkXGBoostPrediction(Double studentProgress) {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            String url = "http://localhost:5000/predict";
 
+            // ✅ Send ONLY 1 feature (Progress_Percentage)
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("features", Collections.singletonList(studentProgress));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    url,
+                    HttpMethod.POST,
+                    entity,
+                    new ParameterizedTypeReference<Map<String, Object>>() {}
+            );
+
+            return response.getBody();
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Flask API error: " + e.getStatusCode());
+            error.put("details", e.getResponseBodyAsString());
+            return error;
+
+        } catch (ResourceAccessException e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Python service unreachable. Is Flask running on port 5000?");
+            return error;
+
+        } catch (Exception e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("error", "Unexpected error: " + e.getMessage());
+            return error;
+        }
+    }
 
     public Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception {
         // 1. Fetch Data

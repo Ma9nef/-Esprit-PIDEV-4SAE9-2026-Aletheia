@@ -31,4 +31,6 @@ public interface ICertificateService {
     Map<String, Object> predictCertificationSuccess(Long enrollmentId) throws Exception;
 
     Map<String, Object> generateAiCareerPath(Long enrollmentId) throws Exception;
+
+    Map<String, Object> checkXGBoostPrediction(Double progress);
 }

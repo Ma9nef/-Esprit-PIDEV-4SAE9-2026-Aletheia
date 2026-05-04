@@ -45,4 +45,8 @@ public class EnrollmentCoreService {
     public List<Enrollment> findAll() {
         return enrollmentRepository.findAll();
     }
-}
+
+    public Enrollment findById(Long enrollmentId) {
+        return enrollmentRepository.findById(enrollmentId)
+                .orElseThrow(() -> new RuntimeException("Enrollment not found with id: " + enrollmentId));
+    }}

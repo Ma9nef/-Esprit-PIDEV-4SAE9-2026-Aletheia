@@ -69,6 +69,10 @@ private apiUrl = 'http://localhost:8089/pidev/certificate';
   getCertificationPrediction(enrollmentId: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/predict/${enrollmentId}`);
   }
+  getXGBoostPrediction(enrollmentId: number): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/predictt/${enrollmentId}`);
+}
+  
 
   getAiCareerPath(enrollmentId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${enrollmentId}/ai-path`);

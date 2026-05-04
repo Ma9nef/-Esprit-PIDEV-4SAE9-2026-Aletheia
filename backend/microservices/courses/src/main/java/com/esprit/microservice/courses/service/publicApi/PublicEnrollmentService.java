@@ -26,4 +26,8 @@ public class PublicEnrollmentService {
     public List<Enrollment> findAll() {
         return core.findAll();
     }
+
+    public Enrollment findById(Long enrollmentId) {
+        return core.findById(enrollmentId);
+    }
 }

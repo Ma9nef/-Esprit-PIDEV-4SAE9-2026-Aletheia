@@ -1,9 +1,11 @@
     package com.esprit.microservice.courses.RestController.certificateassesment;
 
     import com.esprit.microservice.courses.entity.Certificate;
+    import com.esprit.microservice.courses.entity.progress.Enrollment;
     import com.esprit.microservice.courses.repository.CertificateRepository;
     import com.esprit.microservice.courses.security.JwtReader;
     import com.esprit.microservice.courses.service.core.ICertificateService;
+    import com.esprit.microservice.courses.service.publicApi.PublicEnrollmentService;
     import jakarta.servlet.http.HttpServletResponse;
     import org.springframework.http.HttpHeaders;
     import org.springframework.http.HttpStatus;
@@ -24,13 +26,15 @@
         private final ICertificateService certificateService;
         private final CertificateRepository certificateRepository;
         private final JwtReader jwtReader;
+        private final PublicEnrollmentService enrollmentRepository;
 
         public CertificateController(ICertificateService certificateService,
                                      CertificateRepository certificateRepository,
-                                     JwtReader jwtReader) {
+                                     JwtReader jwtReader, PublicEnrollmentService enrollmentRepository) {
             this.certificateService = certificateService;
             this.certificateRepository = certificateRepository;
             this.jwtReader = jwtReader;
+            this.enrollmentRepository = enrollmentRepository;
         }
 
         // ──────────────────────────────────────────────
@@ -222,10 +226,32 @@
                 return ResponseEntity.status(500).body(error);
             }
         }
+        @GetMapping("/predictt/{enrollmentId}")
+        public ResponseEntity<Map<String, Object>> predictSuccessXgBoost(
+                @PathVariable Long enrollmentId,
+                @RequestHeader("Authorization") String authorization) {  // ✅ JWT added
 
-        // ──────────────────────────────────────────────
-        // AI — Generate career path
-        // GET /pidev/certificate/{enrollmentId}/ai-path
+            jwtReader.extractUserId(authorization);  // ✅ validate token
+
+            try {
+                // 1. Fetch enrollment from DB
+                Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
+                        ;  // ✅ fixed
+
+                // 2. Get progress (ex: 85)
+                Integer progress = enrollment.getProgress();
+
+                // 3. Call Python XGBoost service on port 5000
+                Map<String, Object> aiResult = certificateService.checkXGBoostPrediction(Double.valueOf(progress));
+
+                return ResponseEntity.ok(aiResult);
+
+            } catch (Exception e) {
+                Map<String, Object> error = new HashMap<>();
+                error.put("error", "Erreur moteur IA : " + e.getMessage());
+                return ResponseEntity.status(500).body(error);
+            }
+        }
         // ──────────────────────────────────────────────
         @GetMapping("/{enrollmentId}/ai-path")
         public ResponseEntity<Map<String, Object>> getAiCareerPath(
