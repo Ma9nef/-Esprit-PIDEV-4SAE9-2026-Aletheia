@@ -12,6 +12,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout Source') {
             steps {
                 checkout scm
@@ -30,9 +31,9 @@ pipeline {
                     ]
 
                     for (svc in services) {
-                        echo "Building ${svc}"
+                        echo "Packaging ${svc}"
                         dir(svc) {
-                            sh 'mvn clean install -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
@@ -51,6 +52,7 @@ pipeline {
                     ]
 
                     for (img in images) {
+                        echo "Building Docker image ${DOCKER_USER}/${img.name}:latest"
                         sh "docker build -t ${DOCKER_USER}/${img.name}:latest ${img.path}"
                     }
                 }
@@ -59,7 +61,11 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-hub-cred',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
                     script {
                         sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
 
@@ -72,6 +78,7 @@ pipeline {
                         ]
 
                         for (name in imageNames) {
+                            echo "Pushing ${DOCKER_USER}/${name}:latest"
                             sh "docker push ${DOCKER_USER}/${name}:latest"
                         }
                     }
