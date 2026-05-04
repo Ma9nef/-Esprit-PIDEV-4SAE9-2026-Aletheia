@@ -9,6 +9,7 @@ pipeline {
     environment {
         DOCKER_USER = "manef99"
         K8S_DIR = "k8s/aletheia"
+        NAMESPACE = "aletheia"
     }
 
     stages {
@@ -28,7 +29,7 @@ pipeline {
                         'backend/eureka',
                         'backend/microservices/courses',
                         'backend/microservices/user-service',
-                        'backend/microservices/Library'
+                        'backend/microservices/library'
                     ]
 
                     for (svc in services) {
@@ -50,12 +51,12 @@ pipeline {
                         [name: 'eureka', path: 'backend/eureka'],
                         [name: 'courses', path: 'backend/microservices/courses'],
                         [name: 'user-service', path: 'backend/microservices/user-service'],
-                        [name: 'library', path: 'backend/microservices/Library'],
+                        [name: 'library', path: 'backend/microservices/library'],
                         [name: 'frontend', path: 'frontend']
                     ]
 
                     for (img in images) {
-                        echo "Building Docker image ${DOCKER_USER}/${img.name}:latest"
+                        echo "Building ${DOCKER_USER}/${img.name}:latest"
                         sh "docker build -t ${DOCKER_USER}/${img.name}:latest ${img.path}"
                     }
                 }
@@ -91,22 +92,71 @@ pipeline {
             }
         }
 
-        stage('Deploy Selected Services to Kubernetes') {
+        stage('Deploy Infrastructure') {
             steps {
+                sh "kubectl apply -f ${K8S_DIR}/namespace.yaml || true"
+
                 sh "kubectl apply -f ${K8S_DIR}/eureka.yaml"
-                sh "kubectl rollout restart deployment/eureka -n aletheia"
-                sh "kubectl get pods -n aletheia"
+                sh "kubectl rollout status deployment/eureka -n ${NAMESPACE} --timeout=240s"
+
+                sh "kubectl apply -f ${K8S_DIR}/config-server.yaml"
+                sh "kubectl rollout status deployment/config-server -n ${NAMESPACE} --timeout=240s"
+
+                sh "kubectl apply -f ${K8S_DIR}/mysql-courses.yaml"
+                sh "kubectl rollout status deployment/mysql-courses -n ${NAMESPACE} --timeout=240s"
+
+                sh "kubectl apply -f ${K8S_DIR}/mysql-user.yaml"
+                sh "kubectl rollout status deployment/mysql-user -n ${NAMESPACE} --timeout=240s"
+
+                sh "kubectl apply -f ${K8S_DIR}/mysql-library.yaml"
+                sh "kubectl rollout status deployment/mysql-library -n ${NAMESPACE} --timeout=240s"
+            }
+        }
+
+        stage('Deploy Backend Services') {
+            steps {
+                sh "kubectl apply -f ${K8S_DIR}/courses.yaml"
+                sh "kubectl rollout restart deployment/courses -n ${NAMESPACE}"
+                sh "kubectl rollout status deployment/courses -n ${NAMESPACE} --timeout=300s"
+
+                sh "kubectl apply -f ${K8S_DIR}/user-service.yaml"
+                sh "kubectl rollout restart deployment/user-service -n ${NAMESPACE}"
+                sh "kubectl rollout status deployment/user-service -n ${NAMESPACE} --timeout=300s"
+
+                sh "kubectl apply -f ${K8S_DIR}/library.yaml"
+                sh "kubectl rollout restart deployment/library -n ${NAMESPACE}"
+                sh "kubectl rollout status deployment/library -n ${NAMESPACE} --timeout=300s"
+            }
+        }
+
+        stage('Deploy Gateway and Frontend') {
+            steps {
+                sh "kubectl apply -f ${K8S_DIR}/api-gateway.yaml"
+                sh "kubectl rollout restart deployment/api-gateway -n ${NAMESPACE}"
+                sh "kubectl rollout status deployment/api-gateway -n ${NAMESPACE} --timeout=300s"
+
+                sh "kubectl apply -f ${K8S_DIR}/frontend.yaml"
+                sh "kubectl rollout restart deployment/frontend -n ${NAMESPACE}"
+                sh "kubectl rollout status deployment/frontend -n ${NAMESPACE} --timeout=300s"
+            }
+        }
+
+        stage('Show Kubernetes Status') {
+            steps {
+                sh "kubectl get pods -n ${NAMESPACE}"
+                sh "kubectl get svc -n ${NAMESPACE}"
             }
         }
     }
 
     post {
         success {
-            echo "Backend services, library, and frontend pushed successfully."
+            echo "All selected services deployed successfully."
         }
 
         failure {
-            echo "Pipeline failed."
+            echo "Pipeline failed. Check the failed stage logs."
+            sh "kubectl get pods -n ${NAMESPACE} || true"
         }
     }
 }

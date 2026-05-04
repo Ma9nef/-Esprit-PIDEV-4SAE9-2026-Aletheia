@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-library-pvc
+  namespace: aletheia
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-library
+  namespace: aletheia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-library
+  template:
+    metadata:
+      labels:
+        app: mysql-library
+    spec:
+      containers:
+        - name: mysql-library
+          image: mysql:8.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3306
+
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: alethia_library
+
+          volumeMounts:
+            - name: mysql-library-storage
+              mountPath: /var/lib/mysql
+
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 20
+            periodSeconds: 10
+
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 60
+            periodSeconds: 20
+
+      volumes:
+        - name: mysql-library-storage
+          persistentVolumeClaim:
+            claimName: mysql-library-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-library
+  namespace: aletheia
+spec:
+  type: ClusterIP
+  selector:
+    app: mysql-library
+  ports:
+    - port: 3306
+      targetPort: 3306
