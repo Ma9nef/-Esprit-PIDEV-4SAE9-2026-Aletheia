@@ -3,4 +3,8 @@ dist
 .angular
 .git
 .idea
+.vscode
+*.log
 npm-debug.log
+Dockerfile
+docker-compose.yml
