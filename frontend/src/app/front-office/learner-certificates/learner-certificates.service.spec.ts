@@ -9,7 +9,7 @@ describe('CertificateService', () => {
   let service: CertificateService;
   let httpMock: HttpTestingController;
 
-  const apiUrl = 'http://localhost:8089/pidev/certificate';
+  const apiUrl = '/pidev/certificate';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

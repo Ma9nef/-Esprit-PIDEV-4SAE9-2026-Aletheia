@@ -8,7 +8,7 @@ describe('InstructorFormationService', () => {
   let service: InstructorFormationService;
   let httpMock: HttpTestingController;
 
-  const apiUrl = 'http://localhost:8089/api/instructor/formations';
+  const apiUrl = '/api/instructor/formations';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

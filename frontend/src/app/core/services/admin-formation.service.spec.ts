@@ -8,7 +8,7 @@ describe('AdminFormationService', () => {
   let service: AdminFormationService;
   let httpMock: HttpTestingController;
 
-  const apiUrl = 'http://localhost:8089/api/admin/formations';
+  const apiUrl = '/api/admin/formations';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

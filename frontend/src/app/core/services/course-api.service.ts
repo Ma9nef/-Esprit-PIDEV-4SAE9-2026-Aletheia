@@ -54,11 +54,11 @@ export interface EnrollmentDTO {
 
 @Injectable({ providedIn: 'root' })
 export class CourseApiService {
-  private COURSE_API = 'http://localhost:8089/course/public/courses';
-  private ENROLL_API = 'http://localhost:8089/course/public/enrollments';
-  private LESSON_LEARN_API = 'http://localhost:8089/api/lesson/learn';
-  private ADMIN_COURSE_API = 'http://localhost:8089/course/admin/courses';
-  private PROGRESS_API = 'http://localhost:8089/progress';
+  private COURSE_API = '/course/public/courses';
+  private ENROLL_API = '/course/public/enrollments';
+  private LESSON_LEARN_API = '/api/lesson/learn';
+  private ADMIN_COURSE_API = '/course/admin/courses';
+  private PROGRESS_API = '/progress';
 
   constructor(private http: HttpClient) {}
 

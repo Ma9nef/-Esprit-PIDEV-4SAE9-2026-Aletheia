@@ -10,7 +10,7 @@ export class CertificateService {
 
   // ✅ Now pointing to API Gateway Port 8089
   // Assuming the Gateway routes 'pidev/certificate' to your microservice
-private apiUrl = 'http://localhost:8089/pidev/certificate';
+private apiUrl = '/pidev/certificate';
   constructor(private http: HttpClient) {}
 
   predictSuccess(userId: number): Observable<any> {

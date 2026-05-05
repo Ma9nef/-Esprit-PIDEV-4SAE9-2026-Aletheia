@@ -7,8 +7,8 @@ describe('AssessmentService', () => {
   let service: AssessmentService;
   let httpMock: HttpTestingController;
 
-  const ASSESSMENT_API = 'http://localhost:8089/pidev/assessments';
-  const SUBMISSION_API = 'http://localhost:8089/api/assessment-results';
+  const ASSESSMENT_API = '/pidev/assessments';
+  const SUBMISSION_API = '/api/assessment-results';
 
   beforeEach(() => {
     localStorage.setItem('token', 'fake-token');

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SubmissionService {
-  private submissionUrl = 'http://localhost:8089/api/assessment-results';
+  private submissionUrl = '/api/assessment-results';
 
   constructor(private http: HttpClient) {}
 

@@ -7,7 +7,7 @@ import { FormationSession } from '../models/formation-session.model';
   providedIn: 'root'
 })
 export class InstructorFormationSessionService {
-  private apiUrl = 'http://localhost:8089/api/instructor/formations';
+  private apiUrl = '/api/instructor/formations';
 
   constructor(private http: HttpClient) {}
 

@@ -7,8 +7,8 @@ import { Assessment } from '../models/assessment.model';
   providedIn: 'root'
 })
 export class AssessmentService {
-private assessmentUrl = 'http://localhost:8089/api/assessments';
-  private submissionUrl = 'http://localhost:8089/api/assessment-results';
+private assessmentUrl = '/api/assessments';
+  private submissionUrl = '/api/assessment-results';
 
   constructor(private http: HttpClient) {}
 

@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
     'http://localhost:8081', // courses
     'http://localhost:8082', // library
     'http://localhost:8086', // offer
-    'http://localhost:8089', // API Gateway
+    '', // API Gateway
     'http://localhost:8090', // events
     'http://localhost:8094'  // resource management
   ];

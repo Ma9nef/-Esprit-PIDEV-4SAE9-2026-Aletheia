@@ -7,7 +7,7 @@ describe('SubmissionService', () => {
   let service: SubmissionService;
   let httpMock: HttpTestingController;
 
-  const API = 'http://localhost:8089/api/assessment-results';
+  const API = '/api/assessment-results';
 
   beforeEach(() => {
     localStorage.setItem('token', 'fake-token');
