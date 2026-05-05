@@ -25,7 +25,7 @@ spec:
               value: "8082"
 
             - name: SPRING_CONFIG_IMPORT
-              value: "optional:configserver:http://config-server:8888"
+              value: "optional:configserver:http://config-server:9999"
 
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://mysql-library:3306/aletheia_library?createDatabaseIfNotExist=true&serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true"
@@ -35,6 +35,9 @@ spec:
 
             - name: SPRING_DATASOURCE_PASSWORD
               value: ""
+
+            - name: APP_JWT_SECRET
+              value: "CHANGE_ME_CHANGE_ME_CHANGE_ME_123456"
 
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://eureka:8761/eureka"
