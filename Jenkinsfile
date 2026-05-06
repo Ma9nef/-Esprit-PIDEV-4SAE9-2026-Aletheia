@@ -10,6 +10,7 @@ pipeline {
         DOCKER_USER = "manef99"
         K8S_DIR = "k8s/aletheia"
         NAMESPACE = "aletheia"
+        SONAR_SERVER = "sonarqube"
     }
 
     stages {
@@ -41,6 +42,35 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv("${SONAR_SERVER}") {
+            script {
+                def services = [
+                    [key: 'api-gateway', path: 'backend/ApiGateway'],
+                    [key: 'config-server', path: 'backend/config-server'],
+                    [key: 'eureka', path: 'backend/eureka'],
+                    [key: 'courses', path: 'backend/microservices/courses'],
+                    [key: 'user-service', path: 'backend/microservices/user-service'],
+                    [key: 'library', path: 'backend/microservices/Library']
+                ]
+
+                for (svc in services) {
+                    echo "Running SonarQube analysis for ${svc.key}"
+
+                    dir(svc.path) {
+                        sh """
+                            mvn sonar:sonar \
+                            -Dsonar.projectKey=${svc.key} \
+                            -Dsonar.projectName=${svc.key}
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
 
         stage('Build Docker Images') {
             steps {
@@ -149,11 +179,11 @@ pipeline {
 
     post {
         success {
-            echo "All selected services deployed successfully."
+            echo "Pipeline completed successfully with SonarQube analysis."
         }
 
         failure {
-            echo "Pipeline failed. Check the failed stage logs."
+            echo "Pipeline failed. Check Jenkins logs."
             sh "kubectl get pods -n ${NAMESPACE} || true"
         }
     }
