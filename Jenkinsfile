@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-        stage('Build Backend Services') {
+        stage('Test and Build Backend Services') {
             steps {
                 script {
                     def services = [
@@ -34,9 +34,9 @@ pipeline {
                     ]
 
                     for (svc in services) {
-                        echo "Packaging ${svc}"
+                        echo "Testing and building ${svc}"
                         dir(svc) {
-                            sh 'mvn clean package -DskipTests'
+                            sh 'mvn clean verify'
                         }
                     }
                 }
@@ -44,33 +44,32 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-    steps {
-        withSonarQubeEnv("${SONAR_SERVER}") {
-            script {
-                def services = [
-                    [key: 'api-gateway', path: 'backend/ApiGateway'],
-                    [key: 'config-server', path: 'backend/config-server'],
-                    [key: 'eureka', path: 'backend/eureka'],
-                    [key: 'courses', path: 'backend/microservices/courses'],
-                    [key: 'user-service', path: 'backend/microservices/user-service'],
-                    [key: 'library', path: 'backend/microservices/Library']
-                ]
+            steps {
+                withSonarQubeEnv("${SONAR_SERVER}") {
+                    script {
+                        def services = [
+                            [key: 'api-gateway', path: 'backend/ApiGateway'],
+                            [key: 'config-server', path: 'backend/config-server'],
+                            [key: 'eureka', path: 'backend/eureka'],
+                            [key: 'courses', path: 'backend/microservices/courses'],
+                            [key: 'user-service', path: 'backend/microservices/user-service'],
+                            [key: 'library', path: 'backend/microservices/Library']
+                        ]
 
-                for (svc in services) {
-                    echo "Running SonarQube analysis for ${svc.key}"
-
-                    dir(svc.path) {
-                        sh """
-                            mvn sonar:sonar \
-                            -Dsonar.projectKey=${svc.key} \
-                            -Dsonar.projectName=${svc.key}
-                        """
+                        for (svc in services) {
+                            echo "Running SonarQube analysis for ${svc.key}"
+                            dir(svc.path) {
+                                sh """
+                                    mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                                    -Dsonar.projectKey=${svc.key} \
+                                    -Dsonar.projectName=${svc.key}
+                                """
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
 
         stage('Build Docker Images') {
             steps {
@@ -179,7 +178,7 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline completed successfully with SonarQube analysis."
+            echo "Pipeline completed successfully with tests and SonarQube analysis."
         }
 
         failure {
