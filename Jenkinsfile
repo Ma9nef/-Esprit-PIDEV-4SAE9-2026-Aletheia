@@ -168,6 +168,12 @@ pipeline {
             }
         }
 
+        stage('Deploy Monitoring Resources') {
+            steps {
+                sh "kubectl apply -f ${K8S_DIR}/monitoring/ || true"
+            }
+        }
+
         stage('Show Kubernetes Status') {
             steps {
                 sh "kubectl get pods -n ${NAMESPACE}"
