@@ -7,8 +7,7 @@ import tn.platform.user.auth.dto.AuthResponse;
 import tn.platform.user.auth.dto.CreateInstructorRequest;
 import tn.platform.user.auth.service.AuthService;
 
-import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/admin/users")
