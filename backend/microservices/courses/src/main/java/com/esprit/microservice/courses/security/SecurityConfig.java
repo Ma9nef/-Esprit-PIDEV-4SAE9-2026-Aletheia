@@ -39,23 +39,25 @@ public class SecurityConfig {
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        .requestMatchers("/course/public/**").permitAll()
+        .requestMatchers("/actuator/**").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/formations").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/formations/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/formations/*/sessions").permitAll()
+        .requestMatchers("/course/public/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/api/formations/*/enroll").hasRole("LEARNER")
-                        .requestMatchers(HttpMethod.GET, "/api/formations/my-enrollments").hasRole("LEARNER")
-                        .requestMatchers(HttpMethod.GET, "/api/formations/*/attendance/me").hasRole("LEARNER")
+        .requestMatchers(HttpMethod.GET, "/api/formations").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/formations/*").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/formations/*/sessions").permitAll()
 
-                        .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+        .requestMatchers(HttpMethod.POST, "/api/formations/*/enroll").hasRole("LEARNER")
+        .requestMatchers(HttpMethod.GET, "/api/formations/my-enrollments").hasRole("LEARNER")
+        .requestMatchers(HttpMethod.GET, "/api/formations/*/attendance/me").hasRole("LEARNER")
 
-                        .anyRequest().authenticated()
-                )
+        .requestMatchers("/api/instructor/**").hasRole("INSTRUCTOR")
+        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+        .anyRequest().authenticated()
+)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
