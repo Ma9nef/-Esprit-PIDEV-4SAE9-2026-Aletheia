@@ -1,0 +1,175 @@
+<!-- src/app/front-office/events/event-list/event-list.component.html -->
+<div class="events-container">
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <span class="hero-icon">🎯</span>
+        Discover Events
+      </h1>
+      <p class="hero-subtitle">Find and join the most exciting events tailored to your interests</p>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <div class="filters-card">
+      <div class="search-wrapper">
+        <span class="search-icon">🔍</span>
+        <input 
+          type="text" 
+          placeholder="Search by title, location or description..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onSearchChange()"
+          class="search-input"
+        />
+      </div>
+      
+      <select [(ngModel)]="selectedStatus" (ngModelChange)="onStatusChange()" class="status-select">
+        <option value="">📋 All Status</option>
+        <option value="PLANNED">📅 Planned</option>
+        <option value="ONGOING">⚡ Ongoing</option>
+        <option value="COMPLETED">✅ Completed</option>
+      </select>
+      
+      <button class="ai-toggle-btn" (click)="toggleRecommendations()" [disabled]="loadingRecommendations">
+        <span class="ai-icon">🤖</span>
+        <span *ngIf="!loadingRecommendations">{{ showRecommendations ? 'Hide' : 'Show' }} AI Recommendations</span>
+        <span *ngIf="loadingRecommendations">⏳ Loading...</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="apiError">
+    <span class="error-icon">⚠️</span>
+    <p>{{ errorMessage }}</p>
+    <button (click)="loadEvents()" class="retry-btn">Réessayer</button>
+  </div>
+
+  <!-- AI Recommendations Section -->
+  <div class="recommendations-section" *ngIf="showRecommendations && recommendedEvents.length > 0 && !apiError">
+    <div class="section-header">
+      <div class="header-badge">
+        <span class="badge-icon">⚡</span>
+        <span>AI Powered</span>
+      </div>
+      <h2>
+        <span class="header-icon">🎁</span>
+        Personalized For You
+      </h2>
+      <p class="header-subtitle">Events recommended based on your interests</p>
+    </div>
+    
+    <div class="recommendations-grid">
+      <div class="recommendation-card" *ngFor="let event of recommendedEvents">
+        <div class="match-score">
+          <div class="score-ring">
+            <span class="score-value">{{ event.recommendationScore }}%</span>
+          </div>
+          <span class="score-label">match</span>
+        </div>
+        
+        <div class="card-badges">
+          <span class="status-badge" [class]="getStatusClass(event.status)">
+            {{ getStatusText(event.status) }}
+          </span>
+          <span class="ai-recommended-badge" *ngIf="event.willLike">
+            🤖 AI Recommended
+          </span>
+        </div>
+        
+        <h3 class="event-title">{{ event.title }}</h3>
+        <p class="event-description">{{ (event.description || 'No description available') | slice:0:100 }}...</p>
+        
+        <div class="event-metadata">
+          <div class="metadata-item">
+            <span class="metadata-icon">📍</span>
+            <span>{{ event.location }}</span>
+          </div>
+          <div class="metadata-item">
+            <span class="metadata-icon">📅</span>
+            <span>{{ event.startDate | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="metadata-item">
+            <span class="metadata-icon">👥</span>
+            <span>{{ event.expectedAttendees }} attendees</span>
+          </div>
+        </div>
+        
+        <button [routerLink]="['/events', event.id]" class="btn-view">
+          View Details
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Recommendations -->
+  <div class="loading-recommendations" *ngIf="showRecommendations && loadingRecommendations">
+    <div class="loading-spinner"></div>
+    <p>Analyzing your preferences...</p>
+  </div>
+
+  <!-- All Events Section -->
+  <div class="events-section">
+    <div class="section-header">
+      <h2>
+        <span class="header-icon">📋</span>
+        All Events
+        <span class="event-count">{{ filteredEvents.length }} events</span>
+      </h2>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="loading-spinner"></div>
+      <p>Loading events...</p>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="events-grid" *ngIf="!loading && !apiError">
+      <div class="event-card" *ngFor="let event of filteredEvents">
+        <div class="card-image-placeholder">
+          <span class="placeholder-icon">🎉</span>
+        </div>
+        
+        <div class="card-content">
+          <div class="card-badge" [class]="getStatusClass(event.status)">
+            {{ getStatusText(event.status) }}
+          </div>
+          
+          <h3 class="event-title">{{ event.title }}</h3>
+          <p class="event-description">{{ (event.description || 'No description available') | slice:0:100 }}{{ (event.description?.length || 0) > 100 ? '...' : '' }}</p>
+          
+          <div class="event-details">
+            <div class="detail-row">
+              <span class="detail-icon">📍</span>
+              <span>{{ event.location }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-icon">📅</span>
+              <span>{{ event.startDate | date:'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-icon">👥</span>
+              <span>{{ event.expectedAttendees }} attendees</span>
+            </div>
+          </div>
+          
+          <button [routerLink]="['/events', event.id]" class="btn-details">
+            Learn More
+            <span class="btn-icon">→</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="filteredEvents.length === 0">
+        <div class="empty-icon">🔍</div>
+        <h3>No events found</h3>
+        <p>Try adjusting your search or filter criteria</p>
+      </div>
+    </div>
+  </div>
+</div>

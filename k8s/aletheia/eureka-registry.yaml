@@ -1,0 +1,73 @@
+# Same as eureka.yaml but image is pulled from a local registry (Docker Desktop)
+# Prereq: run load-eureka-image.ps1 (it starts registry + pushes) OR push manually
+#   host.docker.internal:5000/aletheia-eureka:local
+# Docker Engine: add insecure registries: host.docker.internal:5000, 127.0.0.1:5000
+# Then: kubectl apply -f k8s/aletheia/eureka-registry.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aletheia
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka
+  namespace: aletheia
+  labels:
+    app.kubernetes.io/name: eureka
+    app.kubernetes.io/part-of: aletheia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: eureka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: eureka
+    spec:
+      containers:
+        - name: eureka
+          image: host.docker.internal:5000/aletheia-eureka:local
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8761
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 25
+            periodSeconds: 10
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka
+  namespace: aletheia
+  labels:
+    app.kubernetes.io/name: eureka
+    app.kubernetes.io/part-of: aletheia
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: eureka
+  ports:
+    - name: http
+      port: 8761
+      targetPort: http

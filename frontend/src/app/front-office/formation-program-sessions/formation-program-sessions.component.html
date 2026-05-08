@@ -1,0 +1,307 @@
+<div class="program-sessions-container">
+    <div *ngIf="loading" class="state-message">
+      Loading sessions page...
+    </div>
+  
+    <div *ngIf="errorMessage" class="state-message error">
+      {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="formation as f" class="program-sessions-page">
+      <div class="page-topbar">
+        <div class="page-topbar-left">
+          <div class="page-topbar-tags">
+            <span class="page-chip">Program Sessions</span>
+            <span *ngIf="f.level" class="page-chip subtle">{{ f.level }}</span>
+          </div>
+  
+          <h1>{{ f.title }}</h1>
+          <p>
+            Follow your schedule, track progress, and review upcoming sessions in one focused page.
+          </p>
+        </div>
+  
+        <div class="page-topbar-actions">
+          <button class="secondary-btn" type="button" (click)="goBackToDashboard()">
+            Back to Dashboard
+          </button>
+  
+          <button class="secondary-btn" type="button" (click)="goBackToMyPrograms()">
+            Back to My Programs
+          </button>
+        </div>
+      </div>
+  
+      <div class="quick-stats-row">
+        <div class="quick-stat-card">
+          <span class="quick-stat-label">Total Sessions</span>
+          <strong>{{ sessions.length }}</strong>
+        </div>
+  
+        <div class="quick-stat-card">
+          <span class="quick-stat-label">Completed</span>
+          <strong>{{ getCompletedSessionsCount() }}</strong>
+        </div>
+  
+        <div class="quick-stat-card">
+          <span class="quick-stat-label">Upcoming</span>
+          <strong>{{ getUpcomingSessionsCount() }}</strong>
+        </div>
+  
+        <div class="quick-stat-card">
+          <span class="quick-stat-label">Today</span>
+          <strong>{{ todaySessions.length }}</strong>
+        </div>
+      </div>
+  
+      <div class="progress-overview-card">
+        <div class="progress-header">
+          <div>
+            <h3>Program Progress</h3>
+            <p>Track how far you are in the session schedule.</p>
+          </div>
+          <div class="progress-percent">{{ getProgressPercentage() }}%</div>
+        </div>
+  
+        <div class="progress-bar">
+          <div class="progress-bar-fill" [style.width.%]="getProgressPercentage()"></div>
+        </div>
+  
+        <div class="progress-stats">
+          <div class="progress-stat">
+            <span class="stat-label">Completed</span>
+            <strong>{{ getCompletedSessionsCount() }}</strong>
+          </div>
+  
+          <div class="progress-stat">
+            <span class="stat-label">Remaining</span>
+            <strong>{{ getRemainingSessionsCount() }}</strong>
+          </div>
+  
+          <div class="progress-stat">
+            <span class="stat-label">Total</span>
+            <strong>{{ sessions.length }}</strong>
+          </div>
+        </div>
+      </div>
+  
+      <div class="sessions-layout">
+        <div class="main-column">
+          <div class="program-section-card featured-card">
+            <div class="card-top">
+              <div class="section-icon">🗓</div>
+              <span class="section-chip">Live Schedule</span>
+            </div>
+  
+            <h3>Today’s Session Status</h3>
+            <p class="section-description">
+              Check what is happening today in your training schedule.
+            </p>
+  
+            <div class="today-banner">
+              <div class="today-banner-top">
+                <span class="today-label">Today</span>
+                <span class="today-time">
+                  {{ now | date:'fullDate' }} — {{ now | date:'shortTime' }}
+                </span>
+              </div>
+  
+              <div *ngIf="currentSession as session" class="today-banner-content active">
+                <h4>Session happening now</h4>
+                <p>
+                  <strong>{{ session.topic }}</strong>
+                  · {{ session.startTime }} - {{ session.endTime }}
+                  · Room: {{ session.room }}
+                </p>
+              </div>
+  
+              <div *ngIf="!currentSession && nextTodaySession as nextSession" class="today-banner-content upcoming">
+                <h4>Next session today</h4>
+                <p>
+                  <strong>{{ nextSession.topic }}</strong>
+                  · starts at {{ nextSession.startTime }}
+                  · Room: {{ nextSession.room }}
+                </p>
+              </div>
+  
+              <div *ngIf="!currentSession && !nextTodaySession && hasSessionToday()" class="today-banner-content done">
+                <h4>All sessions for today are completed</h4>
+                <p>You have no more scheduled sessions today.</p>
+              </div>
+  
+              <div *ngIf="!hasSessionToday()" class="today-banner-content empty">
+                <h4>No session today</h4>
+                <p>There are no training sessions planned for today.</p>
+              </div>
+            </div>
+          </div>
+  
+          <div class="program-section-card">
+            <div class="card-top">
+              <div class="section-icon">📚</div>
+              <span class="section-chip subtle">Full Planning</span>
+            </div>
+  
+            <h3>All Sessions</h3>
+            <p class="section-description">
+              Review the full list of sessions and expand any item to see more details.
+            </p>
+  
+            <div class="session-filters">
+              <button type="button" [class.active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">
+                All
+              </button>
+              <button type="button" [class.active]="activeFilter === 'TODAY'" (click)="setFilter('TODAY')">
+                Today
+              </button>
+              <button type="button" [class.active]="activeFilter === 'UPCOMING'" (click)="setFilter('UPCOMING')">
+                Upcoming
+              </button>
+              <button type="button" [class.active]="activeFilter === 'COMPLETED'" (click)="setFilter('COMPLETED')">
+                Completed
+              </button>
+              <button type="button" [class.active]="activeFilter === 'IN_PROGRESS'" (click)="setFilter('IN_PROGRESS')">
+                In Progress
+              </button>
+            </div>
+  
+            <div *ngIf="sessionsLoading" class="mini-state-message">
+              Loading sessions...
+            </div>
+  
+            <div *ngIf="sessionsErrorMessage" class="mini-state-message error">
+              {{ sessionsErrorMessage }}
+            </div>
+  
+            <div
+              *ngIf="!sessionsLoading && !sessionsErrorMessage && getFilteredSessions().length === 0"
+              class="mini-state-message">
+              No sessions match the selected filter.
+            </div>
+  
+            <div
+              class="sessions-list"
+              *ngIf="!sessionsLoading && !sessionsErrorMessage && getFilteredSessions().length > 0">
+  
+              <div
+                class="session-item"
+                *ngFor="let session of getFilteredSessions()"
+                [class.selected]="session.id != null && isSessionSelected(session.id)"
+                (click)="session.id != null && toggleSessionDetails(session.id)">
+  
+                <div class="session-date-box">
+                  <span class="session-day">{{ session.sessionDate | date:'dd' }}</span>
+                  <span class="session-month">{{ session.sessionDate | date:'MMM' }}</span>
+                </div>
+  
+                <div class="session-main">
+                  <div class="session-top-row">
+                    <div class="session-badges">
+                      <span *ngIf="isSessionNow(session)" class="session-badge live">Now</span>
+                      <span *ngIf="!isSessionNow(session) && isSessionCompleted(session)" class="session-badge done">Completed</span>
+                      <span *ngIf="!isSessionNow(session) && !isSessionCompleted(session)" class="session-badge upcoming">Upcoming</span>
+                    </div>
+  
+                    <span class="expand-indicator">
+                      {{ session.id != null && isSessionSelected(session.id) ? '−' : '+' }}
+                    </span>
+                  </div>
+  
+                  <h4>{{ session.topic }}</h4>
+  
+                  <div class="session-meta">
+                    <span>{{ session.sessionDate | date:'fullDate' }}</span>
+                    <span>{{ session.startTime }} - {{ session.endTime }}</span>
+                    <span>Room: {{ session.room }}</span>
+                  </div>
+  
+                  <div *ngIf="session.id != null && isSessionSelected(session.id)" class="session-details-panel">
+                    <div class="details-grid">
+                      <div class="detail-box">
+                        <span class="detail-label">Topic</span>
+                        <span class="detail-value">{{ session.topic }}</span>
+                      </div>
+  
+                      <div class="detail-box">
+                        <span class="detail-label">Date</span>
+                        <span class="detail-value">{{ session.sessionDate | date:'fullDate' }}</span>
+                      </div>
+  
+                      <div class="detail-box">
+                        <span class="detail-label">Time</span>
+                        <span class="detail-value">{{ session.startTime }} - {{ session.endTime }}</span>
+                      </div>
+  
+                      <div class="detail-box">
+                        <span class="detail-label">Room</span>
+                        <span class="detail-value">{{ session.room }}</span>
+                      </div>
+  
+                      <div class="detail-box">
+                        <span class="detail-label">Status</span>
+                        <span class="detail-value">
+                          {{ isSessionNow(session) ? 'In progress' : (isSessionCompleted(session) ? 'Completed' : 'Upcoming') }}
+                        </span>
+                      </div>
+  
+                      <div class="detail-box">
+                        <span class="detail-label">Learner Note</span>
+                        <span class="detail-value">
+                          {{
+                            isSessionNow(session)
+                              ? 'Join and focus on the current session.'
+                              : (isSessionCompleted(session)
+                                ? 'This session has already been completed.'
+                                : 'Prepare your materials before this session starts.')
+                          }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+            </div>
+          </div>
+        </div>
+  
+        <aside class="sessions-sidebar">
+          <div class="sidebar-card">
+            <h4>Quick Summary</h4>
+            <p>
+              This page helps you follow your formation planning in a dedicated space,
+              without mixing attendance or documents with the session timeline.
+            </p>
+          </div>
+  
+          <div class="sidebar-card" *ngIf="getNextSessionOverall() as nextOverall">
+            <h4>Next Session</h4>
+            <p>
+              <strong>{{ nextOverall.topic }}</strong><br>
+              {{ nextOverall.sessionDate | date:'fullDate' }}<br>
+              {{ nextOverall.startTime }} - {{ nextOverall.endTime }}<br>
+              Room: {{ nextOverall.room }}
+            </p>
+          </div>
+  
+          <div class="sidebar-card" *ngIf="currentSession as session">
+            <h4>Current Session</h4>
+            <p>
+              <strong>{{ session.topic }}</strong><br>
+              {{ session.startTime }} - {{ session.endTime }}<br>
+              Room: {{ session.room }}
+            </p>
+          </div>
+  
+          <div class="sidebar-card" *ngIf="!currentSession && nextTodaySession as nextSession">
+            <h4>Next Today</h4>
+            <p>
+              <strong>{{ nextSession.topic }}</strong><br>
+              Starts at {{ nextSession.startTime }}<br>
+              Room: {{ nextSession.room }}
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>xx  

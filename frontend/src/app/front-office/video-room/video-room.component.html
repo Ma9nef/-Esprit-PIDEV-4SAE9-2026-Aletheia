@@ -1,0 +1,133 @@
+<div class="meet-container">
+  <!-- En-tête -->
+  <div class="meet-header">
+    <div class="room-info">
+      <h2>🎥 Live Room</h2>
+      <span class="participant-count">
+        <i class="fas fa-users"></i> {{ peerCount + 1 }} participant{{ peerCount === 0 ? '' : 's' }}
+      </span>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-icon" (click)="toggleMicro()" [class.active]="!microEnabled">
+        <i [class]="microEnabled ? 'fas fa-microphone' : 'fas fa-microphone-slash'"></i>
+      </button>
+      <button class="btn btn-icon" (click)="toggleCamera()" [class.active]="!cameraEnabled">
+        <i [class]="cameraEnabled ? 'fas fa-video' : 'fas fa-video-slash'"></i>
+      </button>
+      <button class="btn btn-icon" (click)="toggleScreenShare()" [class.active]="screenSharing">
+        <i class="fas fa-desktop"></i>
+      </button>
+      <button class="btn btn-icon" (click)="toggleFaceDetection()" 
+              [class.active]="faceDetectionEnabled"
+              [class.disabled]="!mlServiceAvailable"
+              title="Détection faciale">
+        <i class="fas fa-face-smile"></i>
+        <span class="badge-sm" *ngIf="currentFaceDetection && faceDetectionEnabled" 
+              [style.background-color]="getFaceDetectionColor(currentFaceDetection.class_name)">
+          {{ currentFaceDetection.class_name === 'visible' ? '✓' : '!' }}
+        </span>
+      </button>
+      <button class="btn btn-icon" (click)="toggleParticipants()">
+        <i class="fas fa-users"></i>
+      </button>
+      <button class="btn btn-danger" (click)="leaveRoom()">
+        <i class="fas fa-phone-slash"></i> Quitter
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content" [class.with-chat]="showChat">
+    <!-- Grille de vidéos -->
+    <div class="video-grid" id="videoContainer" [class.single-participant]="peerCount === 0">
+      <!-- Les vidéos seront ajoutées dynamiquement ici -->
+    </div>
+
+    <!-- Overlay Face Detection -->
+    <div class="face-detection-overlay" *ngIf="faceDetectionEnabled && currentFaceDetection">
+      <div class="face-status" [style.background-color]="getFaceDetectionColor(currentFaceDetection.class_name)">
+        <i class="fas" [ngClass]="{
+          'fa-face-smile': currentFaceDetection.class_name === 'visible',
+          'fa-face-meh': currentFaceDetection.class_name === 'covered',
+          'fa-face-frown': currentFaceDetection.class_name === 'no_face'
+        }"></i>
+        <span>{{ currentFaceDetection.class_name }}</span>
+        <small>{{ (currentFaceDetection.confidence * 100).toFixed(0) }}%</small>
+      </div>
+    </div>
+
+    <!-- Panneau latéral (chat ou participants) -->
+    <div class="side-panel" *ngIf="showChat || showParticipants">
+      <!-- Chat -->
+      <div class="chat-container" *ngIf="showChat">
+        <div class="panel-header">
+          <h3>Chat</h3>
+          <button class="btn-close" (click)="showChat = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="chat-messages" #chatMessages>
+          <div *ngFor="let msg of messages" class="chat-message" [class.own-message]="msg.isOwn">
+            <span class="sender">{{ msg.sender }}</span>
+            <span class="text">{{ msg.text }}</span>
+            <span class="time">{{ msg.time }}</span>
+          </div>
+        </div>
+
+        <!-- Indicateur de frappe -->
+<div class="typing-indicator" *ngIf="typingUsers.size > 0">
+  <div class="typing-content">
+    <span class="typing-text">{{ getTypingMessage() }}</span>
+    <span class="typing-dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </span>
+  </div>
+</div>
+        <div class="chat-input">
+          <input 
+            type="text" 
+            [(ngModel)]="newMessage" 
+            (keyup.enter)="sendMessage()" 
+            placeholder="Envoyer un message..."
+          >
+          <button (click)="sendMessage()">
+            <i class="fas fa-paper-plane"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Liste des participants -->
+      <div class="participants-container" *ngIf="showParticipants && !showChat">
+        <div class="panel-header">
+          <h3>Participants ({{ participants.length }})</h3>
+          <button class="btn-close" (click)="showParticipants = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="participants-list">
+          <div *ngFor="let participant of participants" class="participant-item">
+            <div class="participant-info">
+              <div class="participant-avatar" [class.speaking]="participant.isSpeaking">
+                {{ participant.name.charAt(0).toUpperCase() }}
+              </div>
+              <span class="participant-name">{{ participant.name }}</span>
+            </div>
+            <div class="participant-status">
+              <i *ngIf="participant.audioMuted" class="fas fa-microphone-slash muted"></i>
+              <i *ngIf="participant.videoMuted" class="fas fa-video-slash muted"></i>
+              <i *ngIf="participant.isSpeaking" class="fas fa-volume-up speaking"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton flottant du chat -->
+  <button class="chat-toggle" (click)="toggleChat()" *ngIf="!showChat">
+    <i class="fas fa-comment"></i>
+    <span class="badge" *ngIf="messages.length > 0">{{ messages.length }}</span>
+  </button>
+</div>

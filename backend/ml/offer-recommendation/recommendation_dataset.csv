@@ -1,0 +1,4 @@
+userId,labelPlanId,lastPlanId,mostRenewedPlanId,totalSubscriptions,renewalCount,cancelCount,expiredWithoutRenewalCount,successfulPaymentsCount,failedPaymentsCount,canceledPaymentsCount,paymentSuccessRate,averageDaysBetweenSubscriptions,loyalCustomer,fastCancellationProfile
+demo-loyal,69a89547ad71004854bfb34f,69a89547ad71004854bfb34f,69a89547ad71004854bfb34f,3,2,0,0,3,0,0,1.0,40.0,true,false
+demo-budget,69a894c0ad71004854bfb34d,69a894c0ad71004854bfb34d,69a89501ad71004854bfb34e,3,1,1,0,1,1,1,0.3333333333333333,37.5,false,true
+demo-upgrade,69a89501ad71004854bfb34e,69a89501ad71004854bfb34e,69a89501ad71004854bfb34e,3,1,0,0,3,0,0,1.0,37.5,false,false

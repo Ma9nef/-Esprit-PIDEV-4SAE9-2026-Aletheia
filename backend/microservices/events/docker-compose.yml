@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  mysql-event-db:
+    image: mysql:8.0
+    container_name: mysql-event-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: event_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-event-data:/var/lib/mysql
+    networks:
+      - event-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      timeout: 20s
+      retries: 10
+
+  event-service:
+    build: .
+    container_name: event-service
+    restart: always
+    depends_on:
+      mysql-event-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-event-db:3306/event_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://host.docker.internal:8761/eureka
+      APP_JWT_SECRET: CHANGE_ME_CHANGE_ME_CHANGE_ME_123456
+      ML_SENTIMENT_API_URL: http://host.docker.internal:8005
+      ML_RECOMMENDATION_API_URL: http://host.docker.internal:5000
+    ports:
+      - "8090:8090"
+    networks:
+      - event-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  event-network:
+    driver: bridge
+
+volumes:
+  mysql-event-data:
