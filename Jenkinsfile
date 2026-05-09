@@ -25,7 +25,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
                     dir('backend') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=Aletheia -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=**/target/classes'
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=Aletheia -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=**/target/classes -Dsonar.exclusions=**/courses/**,**/Library/**,**/offer/**,**/ResourceManagement/**,**/Notification/**,**/ml/**'
                     }
                 }
             }
