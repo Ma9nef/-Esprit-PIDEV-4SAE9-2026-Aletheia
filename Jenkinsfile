@@ -13,35 +13,70 @@ pipeline {
             }
         }
         
+        stage('Compile & Test') {
+            parallel {
+                stage('Eureka Compile') {
+                    steps {
+                        dir('backend/eureka') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('Config Server Compile') {
+                    steps {
+                        dir('backend/config-server') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('ApiGateway Compile') {
+                    steps {
+                        dir('backend/ApiGateway') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('User Service Compile') {
+                    steps {
+                        dir('backend/microservices/user-service') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('Events Compile & Test') {
+                    steps {
+                        dir('backend/microservices/events') {
+                            sh 'mvn clean compile'
+                            sh 'mvn test'
+                        }
+                    }
+                }
+            }
+        }
+        
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
                     script {
-                        // Analyse Eureka
+                        // Eureka
                         dir('backend/eureka') {
-                            sh 'mvn clean compile -DskipTests'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=eureka -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
-                        // Analyse Config Server
+                        // Config Server
                         dir('backend/config-server') {
-                            sh 'mvn clean compile -DskipTests'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=config-server -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
-                        // Analyse ApiGateway
+                        // ApiGateway
                         dir('backend/ApiGateway') {
-                            sh 'mvn clean compile -DskipTests'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=ApiGateway -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
-                        // Analyse User Service
+                        // User Service
                         dir('backend/microservices/user-service') {
-                            sh 'mvn clean compile -DskipTests'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=user-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
-                        // Analyse Events (avec tests)
+                        // Events (avec rapport JaCoCo)
                         dir('backend/microservices/events') {
-                            sh 'mvn clean compile -DskipTests'
-                            sh 'mvn test -Dmaven.test.failure.ignore=false'
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=events -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=events -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
                         }
                     }
                 }
