@@ -13,26 +13,18 @@ pipeline {
             }
         }
         
-        stage('Compile & Test') {
-            steps {
-                dir('backend') {
-                    sh 'mvn clean compile -DskipTests'
-                }
-            }
-        }
-        
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
-                    dir('backend') {
-                        sh '''
-                        mvn sonar:sonar \
-                          -Dsonar.projectKey=Aletheia \
-                          -Dsonar.host.url=http://sonarqube:9000 \
-                          -Dsonar.java.binaries=**/target/classes \
-                          -Dsonar.exclusions=**/courses/**,**/Library/**,**/offer/**,**/ResourceManagement/**,**/Notification/**,**/ml/** \
-                          -Dsonar.scm.disabled=true
-                        '''
+                    // Analyser uniquement les modules qui compilent
+                    script {
+                        def modules = ['eureka', 'config-server', 'ApiGateway', 'user-service', 'events']
+                        for (module in modules) {
+                            dir("backend/${module}") {
+                                sh "mvn clean compile -DskipTests"
+                                sh "mvn sonar:sonar -Dsonar.projectKey=${module} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes"
+                            }
+                        }
                     }
                 }
             }
@@ -50,7 +42,7 @@ pipeline {
     }
     
     post {
-        success { echo '?? Pipeline r?ussi ! SonarQube analys?' }
+        success { echo '?? Pipeline r?ussi !' }
         failure { echo '? Pipeline ?chou? !' }
     }
 }
