@@ -1,13 +1,14 @@
 package com.esprit.microservice.events.service;
 
+import com.esprit.microservice.events.security.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.web.socket.*;
-import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.esprit.microservice.events.security.JwtService;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -16,12 +17,11 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
 
     private static final Logger log = LoggerFactory.getLogger(RoomWebSocketHandler.class);
 
-
     private static final Map<Long, Set<WebSocketSession>> rooms = new ConcurrentHashMap<>();
-    private final ObjectMapper mapper = new ObjectMapper();
     private static final Map<String, WebSocketSession> pendingAuthSessions = new ConcurrentHashMap<>();
+    private final ObjectMapper mapper = new ObjectMapper();
 
-    // Constantes ajoutées
+    // Constantes
     private static final String ATTR_EMAIL = "email";
     private static final String ATTR_USER = "user";
     private static final String ATTR_AUTHENTICATED = "authenticated";
@@ -47,28 +47,32 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-        log.info("🔌 Nouvelle connexion WebSocket: " + session.getId());
+    public void afterConnectionEstablished(WebSocketSession session) {
+        log.info("🔌 Nouvelle connexion WebSocket: {}", session.getId());
 
         Object userAttr = session.getAttributes().get(ATTR_USER);
 
         if (userAttr != null) {
-            log.info("✅ Session pré-authentifiée via handshake");
+            log.info("✅ Session pré-authentifiée via handshake: {}", session.getId());
             addToRoom(session);
         } else {
-            log.info("⏳ Session en attente d'authentification: " + session.getId());
+            log.info("⏳ Session en attente d'authentification: {}", session.getId());
             pendingAuthSessions.put(session.getId(), session);
 
-            new Timer().schedule(new TimerTask() {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
                 @Override
                 public void run() {
                     if (pendingAuthSessions.containsKey(session.getId())) {
                         try {
-                            log.info("⏱️ Timeout d'authentification pour: " + session.getId());
+                            log.info("⏱️ Timeout d'authentification pour: {}", session.getId());
                             session.close(CloseStatus.POLICY_VIOLATION.withReason("Authentification timeout"));
                             pendingAuthSessions.remove(session.getId());
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                            log.error("Erreur lors du timeout d'authentification: {}", e.getMessage());
+                        }
                     }
+                    timer.cancel();
                 }
             }, AUTH_TIMEOUT_MS);
         }
@@ -77,7 +81,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
-        log.info("📨 Message reçu: " + payload);
+        log.info("📨 Message reçu de {}: {}", session.getId(), payload);
 
         Map<String, Object> data = mapper.readValue(payload, Map.class);
         String type = (String) data.get(FIELD_TYPE);
@@ -90,7 +94,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         if (isSessionAuthenticated(session)) {
             handleRegularMessage(session, data);
         } else {
-            log.info("❌ Message reçu de session non authentifiée: " + session.getId());
+            log.warn("❌ Message reçu de session non authentifiée: {}", session.getId());
             session.close(CloseStatus.POLICY_VIOLATION.withReason("Non authentifié"));
         }
     }
@@ -102,7 +106,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
 
     private void handleAuthMessage(WebSocketSession session, Map<String, Object> data) {
         String token = (String) data.get(FIELD_TOKEN);
-        log.info("🔐 Tentative d'authentification avec token");
+        log.info("🔐 Tentative d'authentification pour session: {}", session.getId());
 
         if (token == null || token.isEmpty()) {
             closeSessionWithError(session, "Token manquant");
@@ -118,7 +122,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                 closeSessionWithError(session, "Token invalide");
             }
         } catch (Exception e) {
-            System.err.println("❌ Erreur validation token: " + e.getMessage());
+            log.error("❌ Erreur validation token: {}", e.getMessage());
             closeSessionWithError(session, "Erreur validation");
         }
     }
@@ -127,7 +131,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
         String email = jwtService.getEmailFromToken(token);
         Long userId = jwtService.getUserIdFromToken(token);
 
-        log.info("✅ Authentification réussie pour: " + email);
+        log.info("✅ Authentification réussie pour: {}", email);
 
         session.getAttributes().put(ATTR_AUTHENTICATED, true);
         session.getAttributes().put(ATTR_EMAIL, email);
@@ -143,10 +147,10 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
 
     private void closeSessionWithError(WebSocketSession session, String reason) {
         try {
-            log.info("❌ Auth failed: " + reason);
+            log.warn("❌ Auth failed pour {}: {}", session.getId(), reason);
             session.close(CloseStatus.POLICY_VIOLATION.withReason(reason));
         } catch (Exception e) {
-            // Log error
+            log.error("Erreur lors de la fermeture de session: {}", e.getMessage());
         }
     }
 
@@ -157,19 +161,16 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             Set<WebSocketSession> sessions = rooms.get(coursId);
 
             String username = extractUsername(session);
-            log.info("🏠 Ajout à la room " + coursId + ": " + username);
+            log.info("🏠 Ajout à la room {}: {}", coursId, username);
 
-            // Envoyer son propre ID
             sendIdMessage(session);
-
-            // Notifier les utilisateurs existants
             notifyExistingUsers(session, sessions, username);
 
             sessions.add(session);
-            log.info("✅ Session ajoutée à la room: " + session.getId());
+            log.info("✅ Session ajoutée à la room: {}", session.getId());
 
         } catch (Exception e) {
-            System.err.println("❌ Erreur addToRoom: " + e.getMessage());
+            log.error("❌ Erreur addToRoom pour {}: {}", session.getId(), e.getMessage());
         }
     }
 
@@ -196,14 +197,12 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
             if (!s.getId().equals(session.getId()) && s.isOpen()) {
                 String otherName = extractUsername(s);
 
-                // Envoyer au nouveau la liste des existants
                 Map<String, Object> existingMessage = new HashMap<>();
                 existingMessage.put(FIELD_TYPE, TYPE_EXISTING_USER);
                 existingMessage.put(FIELD_ID, s.getId());
                 existingMessage.put(FIELD_NAME, otherName);
                 session.sendMessage(new TextMessage(mapper.writeValueAsString(existingMessage)));
 
-                // Notifier les existants du nouveau
                 Map<String, Object> newMessage = new HashMap<>();
                 newMessage.put(FIELD_TYPE, TYPE_NEW_USER);
                 newMessage.put(FIELD_ID, session.getId());
@@ -219,30 +218,29 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
 
         if (sessions == null) return;
 
-        String type = (String) data.get(FIELD_TYPE);
         String target = (String) data.get(FIELD_TARGET);
 
         data.put(FIELD_FROM, session.getId());
         data.put(FIELD_NAME, extractUsername(session));
 
         if (target != null) {
-            sendPrivateMessage(sessions, target, data, type);
+            sendPrivateMessage(sessions, target, data);
         } else {
-            broadcastMessage(sessions, session, data, type);
+            broadcastMessage(sessions, session, data);
         }
     }
 
-    private void sendPrivateMessage(Set<WebSocketSession> sessions, String target, Map<String, Object> data, String type) throws Exception {
+    private void sendPrivateMessage(Set<WebSocketSession> sessions, String target, Map<String, Object> data) throws Exception {
         for (WebSocketSession s : sessions) {
             if (s.getId().equals(target) && s.isOpen()) {
-                log.info("📤 Envoi privé à " + target + ": " + type);
+                log.info("📤 Envoi privé à {}: type={}", target, data.get(FIELD_TYPE));
                 s.sendMessage(new TextMessage(mapper.writeValueAsString(data)));
                 break;
             }
         }
     }
 
-    private void broadcastMessage(Set<WebSocketSession> sessions, WebSocketSession session, Map<String, Object> data, String type) throws Exception {
+    private void broadcastMessage(Set<WebSocketSession> sessions, WebSocketSession session, Map<String, Object> data) throws Exception {
         for (WebSocketSession s : sessions) {
             if (!s.getId().equals(session.getId()) && s.isOpen()) {
                 s.sendMessage(new TextMessage(mapper.writeValueAsString(data)));
@@ -267,11 +265,11 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                 rooms.remove(coursId);
             }
         }
-        log.info("🔌 Session fermée: " + session.getId() + " - " + status);
+        log.info("🔌 Session fermée: {} - {}", session.getId(), status);
     }
 
     private void notifyUserLeft(Set<WebSocketSession> sessions, WebSocketSession session, String username) {
-        if (username != null && !sessions.isEmpty()) {
+        if (username != null && !sessions.isEmpty() && !DEFAULT_USERNAME.equals(username)) {
             Map<String, Object> leaveMessage = new HashMap<>();
             leaveMessage.put(FIELD_TYPE, TYPE_USER_LEFT);
             leaveMessage.put(FIELD_ID, session.getId());
@@ -285,7 +283,7 @@ public class RoomWebSocketHandler extends TextWebSocketHandler {
                     }
                 }
             } catch (Exception e) {
-                System.err.println("❌ Erreur notification départ: " + e.getMessage());
+                log.error("❌ Erreur notification départ: {}", e.getMessage());
             }
         }
     }

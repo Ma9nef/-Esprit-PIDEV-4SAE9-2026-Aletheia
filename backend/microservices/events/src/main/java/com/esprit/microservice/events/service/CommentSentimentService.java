@@ -5,7 +5,6 @@ import com.esprit.microservice.events.entity.CommentSentiment;
 import com.esprit.microservice.events.entity.EventSentimentStats;
 import com.esprit.microservice.events.repository.CommentSentimentRepository;
 import com.esprit.microservice.events.repository.EventSentimentStatsRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class CommentSentimentService {
 
@@ -30,6 +28,15 @@ public class CommentSentimentService {
     // Injection de self pour les appels transactionnels
     @Autowired
     private CommentSentimentService self;
+
+    // Constructor injection au lieu de @RequiredArgsConstructor
+    public CommentSentimentService(CommentSentimentRepository commentSentimentRepository,
+                                   EventSentimentStatsRepository eventSentimentStatsRepository,
+                                   SentimentAnalysisService sentimentAnalysisService) {
+        this.commentSentimentRepository = commentSentimentRepository;
+        this.eventSentimentStatsRepository = eventSentimentStatsRepository;
+        this.sentimentAnalysisService = sentimentAnalysisService;
+    }
 
     @Transactional
     public CommentSentiment saveCommentWithSentiment(String comment, Long eventId, Long userId, Long processingTimeMs) {
