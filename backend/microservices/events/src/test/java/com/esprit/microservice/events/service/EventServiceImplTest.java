@@ -1,7 +1,6 @@
 package com.esprit.microservice.events.service;
 
 import com.esprit.microservice.events.entity.Event;
-import com.esprit.microservice.events.entity.EventStatus;
 import com.esprit.microservice.events.repository.EventRepository;
 import com.esprit.microservice.events.service.impl.EventServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +33,6 @@ class EventServiceImplTest {
         event = new Event();
         event.setId(1L);
         event.setTitle("Test Event");
-        event.setStatus(EventStatus.PLANNED);
         event.setStartDate(LocalDateTime.now().plusDays(1));
         event.setEndDate(LocalDateTime.now().plusDays(2));
     }
@@ -47,6 +45,15 @@ class EventServiceImplTest {
 
         assertThat(found).isNotNull();
         assertThat(found.getId()).isEqualTo(1L);
+    }
+
+    @Test
+    void getAllEvents_ShouldReturnList() {
+        when(eventRepository.findAll()).thenReturn(java.util.Arrays.asList(event));
+
+        var result = eventService.getAllEvents();
+
+        assertThat(result).hasSize(1);
     }
 
     @Test
