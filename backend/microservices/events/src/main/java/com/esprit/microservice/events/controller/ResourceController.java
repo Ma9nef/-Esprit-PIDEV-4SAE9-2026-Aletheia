@@ -1,18 +1,16 @@
 package com.esprit.microservice.events.controller;
 
+import com.esprit.microservice.events.dto.ResourceDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import com.esprit.microservice.events.entity.Resource;
 import com.esprit.microservice.events.entity.ResourceType;
 import com.esprit.microservice.events.service.ResourceService;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/resources")
@@ -23,24 +21,31 @@ public class ResourceController {
     private final ResourceService resourceService;
 
     @PostMapping
-    public ResponseEntity<Resource> createResource(@RequestBody Resource resource) {
+    public ResponseEntity<ResourceDTO> createResource(@RequestBody ResourceDTO resourceDTO) {
+        Resource resource = convertToEntity(resourceDTO);
         Resource createdResource = resourceService.createResource(resource);
-        return new ResponseEntity<>(createdResource, HttpStatus.CREATED);
+        return new ResponseEntity<>(convertToDTO(createdResource), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Resource>> getAllResources() {
-        return ResponseEntity.ok(resourceService.getAllResources());
+    public ResponseEntity<List<ResourceDTO>> getAllResources() {
+        List<ResourceDTO> dtos = resourceService.getAllResources().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Resource> getResourceById(@PathVariable Long id) {
-        return ResponseEntity.ok(resourceService.getResourceById(id));
+    public ResponseEntity<ResourceDTO> getResourceById(@PathVariable Long id) {
+        Resource resource = resourceService.getResourceById(id);
+        return ResponseEntity.ok(convertToDTO(resource));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Resource> updateResource(@PathVariable Long id, @RequestBody Resource resource) {
-        return ResponseEntity.ok(resourceService.updateResource(id, resource));
+    public ResponseEntity<ResourceDTO> updateResource(@PathVariable Long id, @RequestBody ResourceDTO resourceDTO) {
+        Resource resource = convertToEntity(resourceDTO);
+        Resource updatedResource = resourceService.updateResource(id, resource);
+        return ResponseEntity.ok(convertToDTO(updatedResource));
     }
 
     @DeleteMapping("/{id}")
@@ -50,18 +55,27 @@ public class ResourceController {
     }
 
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<Resource>> getResourcesByType(@PathVariable ResourceType type) {
-        return ResponseEntity.ok(resourceService.getResourcesByType(type));
+    public ResponseEntity<List<ResourceDTO>> getResourcesByType(@PathVariable ResourceType type) {
+        List<ResourceDTO> dtos = resourceService.getResourcesByType(type).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/available")
-    public ResponseEntity<List<Resource>> getAvailableResources() {
-        return ResponseEntity.ok(resourceService.getAvailableResources());
+    public ResponseEntity<List<ResourceDTO>> getAvailableResources() {
+        List<ResourceDTO> dtos = resourceService.getAvailableResources().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Resource>> searchResources(@RequestParam String name) {
-        return ResponseEntity.ok(resourceService.searchResourcesByName(name));
+    public ResponseEntity<List<ResourceDTO>> searchResources(@RequestParam String name) {
+        List<ResourceDTO> dtos = resourceService.searchResourcesByName(name).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}/availability")
@@ -72,52 +86,36 @@ public class ResourceController {
     }
 
     @PatchMapping("/{id}/quantity")
-    public ResponseEntity<Resource> updateResourceQuantity(
+    public ResponseEntity<ResourceDTO> updateResourceQuantity(
             @PathVariable Long id,
             @RequestParam Integer quantity) {
-        return ResponseEntity.ok(resourceService.updateResourceQuantity(id, quantity));
+        Resource resource = resourceService.updateResourceQuantity(id, quantity);
+        return ResponseEntity.ok(convertToDTO(resource));
     }
 
-    @RestController
-    @RequestMapping("/api/test")
-    public static class TestTokenController {
+    // ============ METHODES DE CONVERSION ============
 
-        @GetMapping("/public")
-        public ResponseEntity<Map<String, String>> publicEndpoint() {
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Ceci est un endpoint public");
-            response.put("status", "OK");
-            return ResponseEntity.ok(response);
-        }
+    private ResourceDTO convertToDTO(Resource resource) {
+        ResourceDTO dto = new ResourceDTO();
+        dto.setId(resource.getId());
+        dto.setName(resource.getName());
+        dto.setDescription(resource.getDescription());
+        dto.setType(resource.getType());
+        dto.setTotalQuantity(resource.getTotalQuantity());
+        dto.setReusable(resource.getReusable());
+        dto.setLocation(resource.getLocation());
+        return dto;
+    }
 
-        @GetMapping("/secure")
-        public ResponseEntity<Map<String, Object>> secureEndpoint(
-                @AuthenticationPrincipal UserDetails userDetails) {
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Ceci est un endpoint sécurisé");
-            response.put("status", "OK");
-
-            if (userDetails != null) {
-                response.put("username", userDetails.getUsername());
-                response.put("authorities", userDetails.getAuthorities());
-            }
-
-            return ResponseEntity.ok(response);
-        }
-
-        @GetMapping("/token-info")
-        public ResponseEntity<Map<String, Object>> getTokenInfo(
-                @RequestHeader("Authorization") String authHeader) {
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("header", authHeader);
-
-            // Extraire le token
-            String token = authHeader.substring(7);
-            response.put("token", token.substring(0, Math.min(20, token.length())) + "...");
-
-            return ResponseEntity.ok(response);
-        }
+    private Resource convertToEntity(ResourceDTO dto) {
+        Resource resource = new Resource();
+        resource.setId(dto.getId());
+        resource.setName(dto.getName());
+        resource.setDescription(dto.getDescription());
+        resource.setType(dto.getType());
+        resource.setTotalQuantity(dto.getTotalQuantity());
+        resource.setReusable(dto.getReusable());
+        resource.setLocation(dto.getLocation());
+        return resource;
     }
 }

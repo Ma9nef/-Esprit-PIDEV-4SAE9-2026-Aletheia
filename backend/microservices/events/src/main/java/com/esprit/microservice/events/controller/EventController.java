@@ -1,5 +1,6 @@
 package com.esprit.microservice.events.controller;
 
+import com.esprit.microservice.events.dto.EventDTO;
 import com.esprit.microservice.events.entity.EventCategory;
 import com.esprit.microservice.events.service.CategoryMappingService;
 import com.esprit.microservice.events.service.RecommendationService;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events")
@@ -28,24 +30,31 @@ public class EventController {
     private final CategoryMappingService categoryMappingService;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event) {
+    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) {
+        Event event = convertToEntity(eventDTO);
         Event createdEvent = eventService.createEvent(event);
-        return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
+        return new ResponseEntity<>(convertToDTO(createdEvent), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<Event>> getAllEvents() {
-        return ResponseEntity.ok(eventService.getAllEvents());
+    public ResponseEntity<List<EventDTO>> getAllEvents() {
+        List<EventDTO> dtos = eventService.getAllEvents().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEventById(@PathVariable Long id) {
-        return ResponseEntity.ok(eventService.getEventById(id));
+    public ResponseEntity<EventDTO> getEventById(@PathVariable Long id) {
+        Event event = eventService.getEventById(id);
+        return ResponseEntity.ok(convertToDTO(event));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        return ResponseEntity.ok(eventService.updateEvent(id, event));
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
+        Event event = convertToEntity(eventDTO);
+        Event updatedEvent = eventService.updateEvent(id, event);
+        return ResponseEntity.ok(convertToDTO(updatedEvent));
     }
 
     @DeleteMapping("/{id}")
@@ -55,32 +64,45 @@ public class EventController {
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<Event>> getEventsByStatus(@PathVariable EventStatus status) {
-        return ResponseEntity.ok(eventService.getEventsByStatus(status));
+    public ResponseEntity<List<EventDTO>> getEventsByStatus(@PathVariable EventStatus status) {
+        List<EventDTO> dtos = eventService.getEventsByStatus(status).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/organizer/{organizer}")
-    public ResponseEntity<List<Event>> getEventsByOrganizer(@PathVariable String organizer) {
-        return ResponseEntity.ok(eventService.getEventsByOrganizer(organizer));
+    public ResponseEntity<List<EventDTO>> getEventsByOrganizer(@PathVariable String organizer) {
+        List<EventDTO> dtos = eventService.getEventsByOrganizer(organizer).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/upcoming")
-    public ResponseEntity<List<Event>> getUpcomingEvents() {
-        return ResponseEntity.ok(eventService.getUpcomingEvents());
+    public ResponseEntity<List<EventDTO>> getUpcomingEvents() {
+        List<EventDTO> dtos = eventService.getUpcomingEvents().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/date-range")
-    public ResponseEntity<List<Event>> getEventsByDateRange(
+    public ResponseEntity<List<EventDTO>> getEventsByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        return ResponseEntity.ok(eventService.getEventsByDateRange(start, end));
+        List<EventDTO> dtos = eventService.getEventsByDateRange(start, end).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Event> updateEventStatus(
+    public ResponseEntity<EventDTO> updateEventStatus(
             @PathVariable Long id,
             @RequestParam EventStatus status) {
-        return ResponseEntity.ok(eventService.updateEventStatus(id, status));
+        Event event = eventService.updateEventStatus(id, status);
+        return ResponseEntity.ok(convertToDTO(event));
     }
 
     @GetMapping("/{id}/canceled")
@@ -91,7 +113,7 @@ public class EventController {
     // ============ RECOMMENDATION ENDPOINTS ============
 
     @GetMapping("/recommendations/user/{userId}")
-    public ResponseEntity<List<Event>> getRecommendationsForUser(
+    public ResponseEntity<List<EventDTO>> getRecommendationsForUser(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "10") Integer limit,
             @RequestParam(defaultValue = "hybrid") String mode) {
@@ -109,7 +131,11 @@ public class EventController {
                 recommendations = recommendationService.getRecommendationsForUser(userId, limit);
         }
 
-        return ResponseEntity.ok(recommendations);
+        List<EventDTO> dtos = recommendations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/recommendations/health")
@@ -132,5 +158,35 @@ public class EventController {
             @RequestParam String category) {
         categoryMappingService.addKeywordMapping(keyword, category);
         return ResponseEntity.ok().build();
+    }
+
+    // ============ METHODES DE CONVERSION ============
+
+    private EventDTO convertToDTO(Event event) {
+        EventDTO dto = new EventDTO();
+        dto.setId(event.getId());
+        dto.setTitle(event.getTitle());
+        dto.setDescription(event.getDescription());
+        dto.setStartDate(event.getStartDate());
+        dto.setEndDate(event.getEndDate());
+        dto.setLocation(event.getLocation());
+        dto.setExpectedAttendees(event.getExpectedAttendees());
+        dto.setOrganizer(event.getOrganizer());
+        dto.setStatus(event.getStatus());
+        return dto;
+    }
+
+    private Event convertToEntity(EventDTO dto) {
+        Event event = new Event();
+        event.setId(dto.getId());
+        event.setTitle(dto.getTitle());
+        event.setDescription(dto.getDescription());
+        event.setStartDate(dto.getStartDate());
+        event.setEndDate(dto.getEndDate());
+        event.setLocation(dto.getLocation());
+        event.setExpectedAttendees(dto.getExpectedAttendees());
+        event.setOrganizer(dto.getOrganizer());
+        event.setStatus(dto.getStatus());
+        return event;
     }
 }

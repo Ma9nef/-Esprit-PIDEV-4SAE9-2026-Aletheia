@@ -11,11 +11,16 @@ import java.util.Map;
 @RequestMapping("/api/test2")
 public class TestTokenController {
 
+    // Constantes ajoutées
+    private static final String KEY_MESSAGE = "message";
+    private static final String KEY_STATUS = "status";
+    private static final String VALUE_OK = "OK";
+
     @GetMapping("/public")
     public ResponseEntity<Map<String, String>> publicEndpoint() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Ceci est un endpoint public");
-        response.put("status", "OK");
+        response.put(KEY_MESSAGE, "Ceci est un endpoint public");
+        response.put(KEY_STATUS, VALUE_OK);
         return ResponseEntity.ok(response);
     }
 
@@ -24,8 +29,8 @@ public class TestTokenController {
             @AuthenticationPrincipal UserDetails userDetails) {
 
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Ceci est un endpoint sécurisé");
-        response.put("status", "OK");
+        response.put(KEY_MESSAGE, "Ceci est un endpoint sécurisé");
+        response.put(KEY_STATUS, VALUE_OK);
 
         if (userDetails != null) {
             response.put("username", userDetails.getUsername());
@@ -42,7 +47,6 @@ public class TestTokenController {
         Map<String, Object> response = new HashMap<>();
         response.put("header", authHeader);
 
-        // Extraire le token
         String token = authHeader.substring(7);
         response.put("token", token.substring(0, Math.min(20, token.length())) + "...");
 
@@ -52,8 +56,8 @@ public class TestTokenController {
     @GetMapping("/hello")
     public ResponseEntity<Map<String, String>> hello() {
         Map<String, String> response = new HashMap<>();
-        response.put("message", "Le service fonctionne!");
-        response.put("status", "OK");
+        response.put(KEY_MESSAGE, "Le service fonctionne!");
+        response.put(KEY_STATUS, VALUE_OK);
         return ResponseEntity.ok(response);
     }
 
@@ -61,7 +65,7 @@ public class TestTokenController {
     public ResponseEntity<Map<String, Object>> mlStatus() {
         Map<String, Object> response = new HashMap<>();
         response.put("ml_service_url", "http://localhost:5000");
-        response.put("status", "configured");
+        response.put(KEY_STATUS, "configured");
         return ResponseEntity.ok(response);
     }
 }

@@ -1,10 +1,10 @@
 package com.esprit.microservice.events.controller;
 
+import com.esprit.microservice.events.dto.EventResourceAllocationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.esprit.microservice.events.dto.EventResourceAllocationDTO;
 import com.esprit.microservice.events.entity.EventResourceAllocation;
 import com.esprit.microservice.events.service.EventResourceAllocationService;
 
@@ -29,22 +29,26 @@ public class EventResourceAllocationController {
     }
 
     @PostMapping
-    public ResponseEntity<EventResourceAllocation> allocateResource(
-            @RequestBody EventResourceAllocation allocation) {
+    public ResponseEntity<EventResourceAllocationDTO> allocateResource(
+            @RequestBody EventResourceAllocationDTO allocationDTO) {
+        EventResourceAllocation allocation = convertToEntity(allocationDTO);
         EventResourceAllocation created = allocationService.allocateResource(allocation);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new ResponseEntity<>(convertToDTO(created), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventResourceAllocation> getAllocationById(@PathVariable Long id) {
-        return ResponseEntity.ok(allocationService.getAllocationById(id));
+    public ResponseEntity<EventResourceAllocationDTO> getAllocationById(@PathVariable Long id) {
+        EventResourceAllocation allocation = allocationService.getAllocationById(id);
+        return ResponseEntity.ok(convertToDTO(allocation));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventResourceAllocation> updateAllocation(
+    public ResponseEntity<EventResourceAllocationDTO> updateAllocation(
             @PathVariable Long id,
-            @RequestBody EventResourceAllocation allocation) {
-        return ResponseEntity.ok(allocationService.updateAllocation(id, allocation));
+            @RequestBody EventResourceAllocationDTO allocationDTO) {
+        EventResourceAllocation allocation = convertToEntity(allocationDTO);
+        EventResourceAllocation updated = allocationService.updateAllocation(id, allocation);
+        return ResponseEntity.ok(convertToDTO(updated));
     }
 
     @DeleteMapping("/{id}")
@@ -54,35 +58,31 @@ public class EventResourceAllocationController {
     }
 
     @GetMapping("/event/{eventId}")
-    public ResponseEntity<List<EventResourceAllocation>> getAllocationsByEvent(
+    public ResponseEntity<List<EventResourceAllocationDTO>> getAllocationsByEvent(
             @PathVariable Long eventId) {
-        return ResponseEntity.ok(allocationService.getAllocationsByEvent(eventId));
+        List<EventResourceAllocation> allocations = allocationService.getAllocationsByEvent(eventId);
+        List<EventResourceAllocationDTO> dtos = allocations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/resource/{resourceId}")
-    public ResponseEntity<List<EventResourceAllocation>> getAllocationsByResource(
+    public ResponseEntity<List<EventResourceAllocationDTO>> getAllocationsByResource(
             @PathVariable Long resourceId) {
-        return ResponseEntity.ok(allocationService.getAllocationsByResource(resourceId));
-    }
-
-    @PostMapping("/check-availability")
-    public ResponseEntity<Boolean> checkAvailability(
-            @RequestBody EventResourceAllocation allocation) {
-        return ResponseEntity.ok(allocationService.checkResourceAvailability(allocation));
-    }
-
-    @GetMapping("/resource/{resourceId}/conflicts")
-    public ResponseEntity<List<EventResourceAllocation>> getConflictingAllocations(
-            @PathVariable Long resourceId,
-            @RequestParam(required = false) Long eventId,
-            @RequestBody EventResourceAllocation allocation) {
-        return ResponseEntity.ok(allocationService.getConflictingAllocations(resourceId, eventId, allocation));
+        List<EventResourceAllocation> allocations = allocationService.getAllocationsByResource(resourceId);
+        List<EventResourceAllocationDTO> dtos = allocations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
     @GetMapping("/resource/{resourceId}/usage")
     public ResponseEntity<Integer> getTotalResourceUsage(@PathVariable Long resourceId) {
         return ResponseEntity.ok(allocationService.getTotalResourceUsage(resourceId));
     }
+
+    // ============ METHODES DE CONVERSION ============
 
     private EventResourceAllocationDTO convertToDTO(EventResourceAllocation entity) {
         EventResourceAllocationDTO dto = new EventResourceAllocationDTO();
@@ -95,21 +95,23 @@ public class EventResourceAllocationController {
         if (entity.getEvent() != null) {
             dto.setEventId(entity.getEvent().getId());
             dto.setEventTitle(entity.getEvent().getTitle());
-            dto.setEventLocation(entity.getEvent().getLocation());
-            dto.setEventStatus(entity.getEvent().getStatus().toString());
-            dto.setEventStartDate(entity.getEvent().getStartDate());
-            dto.setEventEndDate(entity.getEvent().getEndDate());
         }
 
         if (entity.getResource() != null) {
             dto.setResourceId(entity.getResource().getId());
             dto.setResourceName(entity.getResource().getName());
-            dto.setResourceType(entity.getResource().getType().toString());
-            dto.setResourceLocation(entity.getResource().getLocation());
-            dto.setResourceTotalQuantity(entity.getResource().getTotalQuantity());
-            dto.setResourceReusable(entity.getResource().getReusable());
         }
 
         return dto;
+    }
+
+    private EventResourceAllocation convertToEntity(EventResourceAllocationDTO dto) {
+        EventResourceAllocation entity = new EventResourceAllocation();
+        entity.setId(dto.getId());
+        entity.setQuantityUsed(dto.getQuantityUsed());
+        entity.setStartTime(dto.getStartTime());
+        entity.setEndTime(dto.getEndTime());
+        entity.setNotes(dto.getNotes());
+        return entity;
     }
 }

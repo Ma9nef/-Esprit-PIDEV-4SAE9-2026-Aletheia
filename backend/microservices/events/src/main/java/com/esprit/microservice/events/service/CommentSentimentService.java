@@ -7,6 +7,7 @@ import com.esprit.microservice.events.repository.CommentSentimentRepository;
 import com.esprit.microservice.events.repository.EventSentimentStatsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,10 @@ public class CommentSentimentService {
     private final CommentSentimentRepository commentSentimentRepository;
     private final EventSentimentStatsRepository eventSentimentStatsRepository;
     private final SentimentAnalysisService sentimentAnalysisService;
+
+    // Injection de self pour les appels transactionnels
+    @Autowired
+    private CommentSentimentService self;
 
     @Transactional
     public CommentSentiment saveCommentWithSentiment(String comment, Long eventId, Long userId, Long processingTimeMs) {
@@ -61,7 +66,9 @@ public class CommentSentimentService {
                 .build();
 
         CommentSentiment saved = commentSentimentRepository.save(commentSentiment);
-        updateEventSentimentStats(eventId);
+
+        // Utilisation de self au lieu de this pour l'appel transactionnel
+        self.updateEventSentimentStats(eventId);
 
         return saved;
     }

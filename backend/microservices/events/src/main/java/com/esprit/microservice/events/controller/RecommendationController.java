@@ -3,7 +3,6 @@ package com.esprit.microservice.events.controller;
 import com.esprit.microservice.events.dto.MLPredictionResponse;
 import com.esprit.microservice.events.dto.PredictionRequestDTO;
 import com.esprit.microservice.events.dto.RecommendationRequestDTO;
-import com.esprit.microservice.events.dto.RecommendationResponseDTO;
 import com.esprit.microservice.events.entity.Event;
 import com.esprit.microservice.events.repository.EventRepository;
 import com.esprit.microservice.events.service.MLPredictionService;
@@ -25,11 +24,8 @@ public class RecommendationController {
     private final MLPredictionService mlPredictionService;
     private final EventRepository eventRepository;
 
-    /**
-     * POST /api/recommendations/predict
-     * Prédiction pour un utilisateur et un événement
-     */
-    // Dans RecommendationController.java, remplacez predict() par:
+    private static final String DEFAULT_INTERACTION = "CLICK";
+    private static final String DEFAULT_CATEGORY = "Conference";
 
     @PostMapping("/predict")
     public ResponseEntity<MLPredictionResponse> predict(
@@ -37,8 +33,8 @@ public class RecommendationController {
 
         log.info("📊 Prédiction: userId={}, eventId={}", request.getUserId(), request.getEventId());
 
-        String interactionType = request.getInteractionType() != null ? request.getInteractionType() : "CLICK";
-        String category = request.getCategory() != null ? request.getCategory() : "Conference";
+        String interactionType = request.getInteractionType() != null ? request.getInteractionType() : DEFAULT_INTERACTION;
+        String category = request.getCategory() != null ? request.getCategory() : DEFAULT_CATEGORY;
 
         MLPredictionResponse response = mlPredictionService.predict(
                 request.getUserId(),
@@ -49,10 +45,7 @@ public class RecommendationController {
 
         return ResponseEntity.ok(response);
     }
-    /**
-     * POST /api/recommendations/batch
-     * Prédictions batch pour plusieurs événements
-     */
+
     @PostMapping("/batch")
     public ResponseEntity<List<MLPredictionResponse>> predictBatch(
             @RequestBody RecommendationRequestDTO request) {
@@ -60,12 +53,12 @@ public class RecommendationController {
         List<Event> events = eventRepository.findAll();
 
         List<MLPredictionResponse> responses = events.stream()
-                .limit(20) // Limite pour performance
+                .limit(20)
                 .map(event -> mlPredictionService.predict(
                         request.getUserId(),
                         event.getId(),
-                        "CLICK",
-                        "Conference"
+                        DEFAULT_INTERACTION,
+                        DEFAULT_CATEGORY
                 ))
                 .collect(Collectors.toList());
 

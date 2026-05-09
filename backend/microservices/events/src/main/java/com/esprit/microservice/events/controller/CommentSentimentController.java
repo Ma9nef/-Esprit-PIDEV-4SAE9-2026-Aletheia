@@ -28,8 +28,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class CommentSentimentController {
 
+    // Constantes ajoutées pour résoudre les duplications
+    private static final String ERROR_MSG = "error";
+    private static final String NEUTRE_MSG = "Neutre";
+    private static final String STATUS_KEY = "status";
+    private static final String MESSAGE_KEY = "message";
+
     private final CommentSentimentService commentSentimentService;
-    private final CommentSentimentRepository commentSentimentRepository;  // ← AJOUTER CETTE LIGNE
+    private final CommentSentimentRepository commentSentimentRepository;
 
     @PostMapping("/comment")
     public ResponseEntity<CommentWithSentimentResponse> addCommentWithSentiment(
@@ -87,10 +93,8 @@ public class CommentSentimentController {
         return ResponseEntity.ok(response);
     }
 
-    // ==================== NOUVEAUX ENDPOINTS DE PARTAGE ====================
-
     @GetMapping("/event/{eventId}/share")
-    public ResponseEntity<?> getEventSentimentForSharing(
+    public ResponseEntity<Object> getEventSentimentForSharing(
             @PathVariable Long eventId,
             @RequestParam(defaultValue = "true") boolean includeComments) {
 
@@ -121,14 +125,14 @@ public class CommentSentimentController {
         } catch (Exception e) {
             log.error("Erreur lors de la génération du lien de partage: {}", e.getMessage());
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Impossible de générer le lien de partage");
-            error.put("message", e.getMessage());
+            error.put(ERROR_MSG, "Impossible de générer le lien de partage");
+            error.put(MESSAGE_KEY, e.getMessage());
             return ResponseEntity.internalServerError().body(error);
         }
     }
 
     @GetMapping("/share/{token}")
-    public ResponseEntity<?> getSharedEventSentiment(@PathVariable String token) {
+    public ResponseEntity<Object> getSharedEventSentiment(@PathVariable String token) {
 
         try {
             log.info("🔗 Accès au lien de partage avec token: {}", token);
@@ -136,7 +140,7 @@ public class CommentSentimentController {
             Long eventId = validateShareToken(token);
             if (eventId == null) {
                 Map<String, String> error = new HashMap<>();
-                error.put("error", "Token invalide ou expiré");
+                error.put(ERROR_MSG, "Token invalide ou expiré");
                 return ResponseEntity.badRequest().body(error);
             }
 
@@ -160,13 +164,13 @@ public class CommentSentimentController {
         } catch (Exception e) {
             log.error("Erreur lors de l'accès au lien partagé: {}", e.getMessage());
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Impossible d'accéder au contenu partagé");
+            error.put(ERROR_MSG, "Impossible d'accéder au contenu partagé");
             return ResponseEntity.internalServerError().body(error);
         }
     }
 
     @GetMapping("/event/{eventId}/share-stats")
-    public ResponseEntity<?> getSimpleShareStats(@PathVariable Long eventId) {
+    public ResponseEntity<Object> getSimpleShareStats(@PathVariable Long eventId) {
 
         try {
             EventSentimentStats stats = commentSentimentService.getEventStats(eventId);
@@ -192,7 +196,7 @@ public class CommentSentimentController {
         } catch (Exception e) {
             log.error("Erreur: {}", e.getMessage());
             Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
+            error.put(ERROR_MSG, e.getMessage());
             return ResponseEntity.internalServerError().body(error);
         }
     }
@@ -218,10 +222,10 @@ public class CommentSentimentController {
     }
 
     private String getSentimentLabel(Double score) {
-        if (score == null) return "Neutre";
+        if (score == null) return NEUTRE_MSG;
         if (score >= 0.7) return "Très positif";
         if (score >= 0.55) return "Positif";
-        if (score >= 0.45) return "Neutre";
+        if (score >= 0.45) return NEUTRE_MSG;
         if (score >= 0.3) return "Négatif";
         return "Très négatif";
     }
@@ -310,11 +314,11 @@ public class CommentSentimentController {
                     .neutralPercentage(total > 0 ? entity.getNeutralCount() * 100.0 / total : 0)
                     .negativePercentage(total > 0 ? entity.getNegativeCount() * 100.0 / total : 0)
                     .overallSentimentScore(entity.getOverallSentimentScore())
-                    .sentimentLabel(getSentimentLabel(entity.getOverallSentimentScore()))
+                    .sentimentLabel(getSentimentLabelStatic(entity.getOverallSentimentScore()))
                     .build();
         }
 
-        private static String getSentimentLabel(Double score) {
+        private static String getSentimentLabelStatic(Double score) {
             if (score == null) return "Neutre";
             if (score >= 0.7) return "Très positif";
             if (score >= 0.55) return "Positif";

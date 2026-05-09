@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -21,40 +22,34 @@ public class MLTestController {
     private final MLPredictionService mlPredictionService;
     private final RecommendationService recommendationService;
 
-    /**
-     * Tester la prédiction pour un utilisateur et un événement
-     * GET /api/ml-test/predict?userId=42&eventId=10&interaction=CLICK
-     */
+    // Constantes ajoutées
+    private static final String KEY_ML_SERVICE_AVAILABLE = "ml_service_available";
+    private static final String KEY_ML_API_URL = "ml_api_url";
+    private static final String DEFAULT_CATEGORY = "Conference";
+    private static final String DEFAULT_INTERACTION = "CLICK";
+
     @GetMapping("/predict")
     public ResponseEntity<MLPredictionResponse> testPrediction(
             @RequestParam Long userId,
             @RequestParam Long eventId,
-            @RequestParam(defaultValue = "CLICK") String interaction,
-            @RequestParam(defaultValue = "Conference") String category) {
+            @RequestParam(defaultValue = DEFAULT_INTERACTION) String interaction,
+            @RequestParam(defaultValue = DEFAULT_CATEGORY) String category) {
 
         MLPredictionResponse response = mlPredictionService.predict(userId, eventId, interaction, category);
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Vérifier la santé du service ML
-     * GET /api/ml-test/health
-     */
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> checkMLHealth() {
         Map<String, Object> status = new HashMap<>();
-        status.put("ml_service_available", recommendationService.isMLServiceAvailable());
-        status.put("ml_api_url", "${ml.recommendation.api.url}");
+        status.put(KEY_ML_SERVICE_AVAILABLE, recommendationService.isMLServiceAvailable());
+        status.put(KEY_ML_API_URL, "${ml.recommendation.api.url}");
 
         return ResponseEntity.ok(status);
     }
 
-    /**
-     * Tester les recommandations pour un utilisateur
-     * GET /api/ml-test/recommendations/42?limit=5&use_ml_score=true
-     */
     @GetMapping("/recommendations/{userId}")
-    public ResponseEntity<?> testRecommendations(
+    public ResponseEntity<Object> testRecommendations(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "5") Integer limit,
             @RequestParam(defaultValue = "false") Boolean useMlScore) {
