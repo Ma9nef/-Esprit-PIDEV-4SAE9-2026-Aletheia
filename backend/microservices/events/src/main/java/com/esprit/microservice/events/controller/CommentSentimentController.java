@@ -67,7 +67,7 @@ public class CommentSentimentController {
                 .stats(EventStatsResponse.fromEntity(stats))
                 .comments(commentsPage.getContent().stream()
                         .map(CommentResponse::fromEntity)
-                        .collect(Collectors.toList()))
+                        .toList())
                 .currentPage(commentsPage.getNumber())
                 .totalPages(commentsPage.getTotalPages())
                 .totalComments(commentsPage.getTotalElements())
@@ -115,7 +115,7 @@ public class CommentSentimentController {
                     .stats(EventStatsResponse.fromEntity(stats))
                     .comments(comments.stream()
                             .map(CommentShareResponse::fromEntity)
-                            .collect(Collectors.toList()))
+                            .toList())
                     .generatedAt(LocalDateTime.now())
                     .expiresAt(LocalDateTime.now().plusDays(7))
                     .build();
@@ -154,7 +154,7 @@ public class CommentSentimentController {
                     .stats(EventStatsResponse.fromEntity(stats))
                     .comments(comments.stream()
                             .map(CommentShareResponse::fromEntity)
-                            .collect(Collectors.toList()))
+                            .toList())
                     .generatedAt(LocalDateTime.now())
                     .expiresAt(LocalDateTime.now().plusDays(7))
                     .build();

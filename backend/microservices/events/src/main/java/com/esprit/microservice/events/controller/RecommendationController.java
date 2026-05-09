@@ -60,7 +60,7 @@ public class RecommendationController {
                         DEFAULT_INTERACTION,
                         DEFAULT_CATEGORY
                 ))
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(responses);
     }

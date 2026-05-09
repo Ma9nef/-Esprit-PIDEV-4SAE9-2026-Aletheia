@@ -47,7 +47,7 @@ public class RecommendationService {
             if (response != null && response.getRecommendations() != null && !response.getRecommendations().isEmpty()) {
                 List<Long> recommendedIds = response.getRecommendations().stream()
                         .map(RecommendedEventDTO::getEventId)
-                        .collect(Collectors.toList());
+                        .toList();
 
                 List<Event> events = eventRepository.findAllById(recommendedIds);
 
@@ -58,7 +58,7 @@ public class RecommendationService {
                         .map(eventMap::get)
                         .filter(Objects::nonNull)
                         .limit(limit)
-                        .collect(Collectors.toList());
+                        .toList();
             }
 
             return getFallbackRecommendations(limit);
@@ -95,12 +95,12 @@ public class RecommendationService {
                 .filter(pred -> pred.getWill_like() != null && pred.getWill_like())
                 .sorted((a, b) -> Double.compare(b.getScore(), a.getScore()))
                 .limit(limit)
-                .collect(Collectors.toList());
+                .toList();
 
         return predictions.stream()
                 .map(pred -> eventRepository.findById(pred.getEvent_id()).orElse(null))
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<Event> getFallbackRecommendations(Integer limit) {
@@ -108,7 +108,7 @@ public class RecommendationService {
         return eventRepository.findUpcomingEvents(LocalDateTime.now())
                 .stream()
                 .limit(limit != null ? limit : 10)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public boolean isMLServiceAvailable() {
@@ -136,6 +136,6 @@ public class RecommendationService {
             recommendations.addAll(fallback);
         }
 
-        return recommendations.stream().limit(limit).collect(Collectors.toList());
+        return recommendations.stream().limit(limit).toList();
     }
 }

@@ -31,7 +31,7 @@ public class ResourceController {
     public ResponseEntity<List<ResourceDTO>> getAllResources() {
         List<ResourceDTO> dtos = resourceService.getAllResources().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -58,7 +58,7 @@ public class ResourceController {
     public ResponseEntity<List<ResourceDTO>> getResourcesByType(@PathVariable ResourceType type) {
         List<ResourceDTO> dtos = resourceService.getResourcesByType(type).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -66,7 +66,7 @@ public class ResourceController {
     public ResponseEntity<List<ResourceDTO>> getAvailableResources() {
         List<ResourceDTO> dtos = resourceService.getAvailableResources().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -74,7 +74,7 @@ public class ResourceController {
     public ResponseEntity<List<ResourceDTO>> searchResources(@RequestParam String name) {
         List<ResourceDTO> dtos = resourceService.searchResourcesByName(name).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 

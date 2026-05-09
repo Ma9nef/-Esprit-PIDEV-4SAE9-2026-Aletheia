@@ -40,7 +40,7 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> getAllEvents() {
         List<EventDTO> dtos = eventService.getAllEvents().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -67,7 +67,7 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> getEventsByStatus(@PathVariable EventStatus status) {
         List<EventDTO> dtos = eventService.getEventsByStatus(status).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -75,7 +75,7 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> getEventsByOrganizer(@PathVariable String organizer) {
         List<EventDTO> dtos = eventService.getEventsByOrganizer(organizer).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -83,7 +83,7 @@ public class EventController {
     public ResponseEntity<List<EventDTO>> getUpcomingEvents() {
         List<EventDTO> dtos = eventService.getUpcomingEvents().stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -93,7 +93,7 @@ public class EventController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         List<EventDTO> dtos = eventService.getEventsByDateRange(start, end).stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -133,7 +133,7 @@ public class EventController {
 
         List<EventDTO> dtos = recommendations.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(dtos);
     }

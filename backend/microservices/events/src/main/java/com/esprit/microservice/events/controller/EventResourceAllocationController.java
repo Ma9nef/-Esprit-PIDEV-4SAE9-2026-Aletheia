@@ -24,7 +24,7 @@ public class EventResourceAllocationController {
         List<EventResourceAllocation> allocations = allocationService.getAllAllocations();
         List<EventResourceAllocationDTO> dtos = allocations.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -63,7 +63,7 @@ public class EventResourceAllocationController {
         List<EventResourceAllocation> allocations = allocationService.getAllocationsByEvent(eventId);
         List<EventResourceAllocationDTO> dtos = allocations.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
@@ -73,7 +73,7 @@ public class EventResourceAllocationController {
         List<EventResourceAllocation> allocations = allocationService.getAllocationsByResource(resourceId);
         List<EventResourceAllocationDTO> dtos = allocations.stream()
                 .map(this::convertToDTO)
-                .collect(Collectors.toList());
+                .toList();
         return ResponseEntity.ok(dtos);
     }
 
