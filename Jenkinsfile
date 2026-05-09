@@ -9,8 +9,18 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo '?? D?marrage du pipeline Aletheia CI/CD'
+                echo '?? Demarrage du pipeline Aletheia CI/CD'
                 echo "Workspace: ${env.WORKSPACE}"
+            }
+        }
+        
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonarqube-local') {
+                    dir('backend') {
+                        sh 'mvn sonar:sonar -Dsonar.projectKey=Aletheia -Dsonar.host.url=http://sonarqube:9000'
+                    }
+                }
             }
         }
         
@@ -25,7 +35,6 @@ pipeline {
                         }
                     }
                 }
-                
                 stage('Config Server') {
                     steps {
                         dir('backend/config-server') {
@@ -35,7 +44,6 @@ pipeline {
                         }
                     }
                 }
-                
                 stage('ApiGateway') {
                     steps {
                         dir('backend/ApiGateway') {
@@ -45,7 +53,6 @@ pipeline {
                         }
                     }
                 }
-                
                 stage('User Service') {
                     steps {
                         dir('backend/microservices/user-service') {
@@ -55,7 +62,6 @@ pipeline {
                         }
                     }
                 }
-                
                 stage('Events') {
                     steps {
                         dir('backend/microservices/events') {
@@ -71,7 +77,7 @@ pipeline {
     
     post {
         success {
-            echo '?? Pipeline r?ussi ! Tous les microservices ont ?t? mis ? jour sur Docker Hub'
+            echo '?? Pipeline r?ussi ! SonarQube analys? + Images Docker Hub mises ? jour'
         }
         failure {
             echo '? Pipeline ?chou? ! Consultez les logs'
