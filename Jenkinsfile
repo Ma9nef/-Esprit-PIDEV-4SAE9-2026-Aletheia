@@ -32,15 +32,15 @@ pipeline {
                             sh 'mvn clean compile -DskipTests'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=ApiGateway -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
-                        // Analyse User Service (chemin corrig?)
+                        // Analyse User Service
                         dir('backend/microservices/user-service') {
                             sh 'mvn clean compile -DskipTests'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=user-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
-                        // Analyse Events
+                        // Analyse Events (avec tests)
                         dir('backend/microservices/events') {
                             sh 'mvn clean compile -DskipTests'
-                            sh 'mvn test'
+                            sh 'mvn test -Dmaven.test.failure.ignore=false'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=events -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
                     }
