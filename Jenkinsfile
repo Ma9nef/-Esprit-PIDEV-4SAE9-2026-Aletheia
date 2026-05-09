@@ -9,11 +9,11 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                echo '?? Pipeline Aletheia CI/CD'
+                echo '?? Pipeline Aletheia CI/CD avec SonarQube'
             }
         }
         
-        stage('Compile') {
+        stage('Compile & Test') {
             steps {
                 dir('backend') {
                     sh 'mvn clean compile -DskipTests'
@@ -25,13 +25,20 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
                     dir('backend') {
-                        sh 'mvn sonar:sonar -Dsonar.projectKey=Aletheia -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=**/target/classes -Dsonar.exclusions=**/courses/**,**/Library/**,**/offer/**,**/ResourceManagement/**,**/Notification/**,**/ml/**'
+                        sh '''
+                        mvn sonar:sonar \
+                          -Dsonar.projectKey=Aletheia \
+                          -Dsonar.host.url=http://sonarqube:9000 \
+                          -Dsonar.java.binaries=**/target/classes \
+                          -Dsonar.exclusions=**/courses/**,**/Library/**,**/offer/**,**/ResourceManagement/**,**/Notification/**,**/ml/** \
+                          -Dsonar.scm.disabled=true
+                        '''
                     }
                 }
             }
         }
         
-        stage('Build & Push') {
+        stage('Build & Push Docker') {
             parallel {
                 stage('Eureka') { steps { dir('backend/eureka') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-eureka:latest . && docker push ayoubbelgacem/aletheia-eureka:latest' } } }
                 stage('Config Server') { steps { dir('backend/config-server') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-config-server:latest . && docker push ayoubbelgacem/aletheia-config-server:latest' } } }
@@ -43,7 +50,7 @@ pipeline {
     }
     
     post {
-        success { echo '?? Pipeline r?ussi !' }
+        success { echo '?? Pipeline r?ussi ! SonarQube analys?' }
         failure { echo '? Pipeline ?chou? !' }
     }
 }
