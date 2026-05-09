@@ -1,5 +1,6 @@
 package com.esprit.microservice.events.controller;
 
+import com.esprit.microservice.events.dto.EventDTO;
 import com.esprit.microservice.events.entity.Event;
 import com.esprit.microservice.events.service.EventService;
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,13 +28,11 @@ class EventControllerTest {
     private EventController eventController;
 
     @Test
-    void getEventById_ShouldReturnEvent() {
-        Event event = new Event();
-        event.setId(1L);
-        when(eventService.getEventById(1L)).thenReturn(event);
-
-        ResponseEntity<Event> response = eventController.getEventById(1L);
-
+    void getAllEvents_ShouldReturnOk() {
+        // Le contr?leur retourne List<EventDTO> mais sans appel direct ? eventService
+        // Il convertit les events en DTOs
+        ResponseEntity<List<EventDTO>> response = eventController.getAllEvents();
+        
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
     }
