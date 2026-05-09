@@ -40,6 +40,7 @@ pipeline {
                         // Analyse Events
                         dir('backend/microservices/events') {
                             sh 'mvn clean compile -DskipTests'
+                            sh 'mvn test'
                             sh 'mvn sonar:sonar -Dsonar.projectKey=events -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
                     }
