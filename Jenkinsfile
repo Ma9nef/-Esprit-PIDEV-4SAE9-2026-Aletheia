@@ -16,14 +16,31 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonarqube-local') {
-                    // Analyser uniquement les modules qui compilent
                     script {
-                        def modules = ['eureka', 'config-server', 'ApiGateway', 'user-service', 'events']
-                        for (module in modules) {
-                            dir("backend/${module}") {
-                                sh "mvn clean compile -DskipTests"
-                                sh "mvn sonar:sonar -Dsonar.projectKey=${module} -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes"
-                            }
+                        // Analyse Eureka
+                        dir('backend/eureka') {
+                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=eureka -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
+                        }
+                        // Analyse Config Server
+                        dir('backend/config-server') {
+                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=config-server -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
+                        }
+                        // Analyse ApiGateway
+                        dir('backend/ApiGateway') {
+                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=ApiGateway -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
+                        }
+                        // Analyse User Service (chemin corrig?)
+                        dir('backend/microservices/user-service') {
+                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=user-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
+                        }
+                        // Analyse Events
+                        dir('backend/microservices/events') {
+                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn sonar:sonar -Dsonar.projectKey=events -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
                         }
                     }
                 }
