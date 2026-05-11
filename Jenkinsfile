@@ -16,40 +16,40 @@ pipeline {
             }
         }
 
-        stage('Compile & Test') {
+        stage('Compile & Package') {
             parallel {
-                stage('Eureka Compile') {
+                stage('Eureka Package') {
                     steps {
                         dir('backend/eureka') {
-                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
-                stage('Config Server Compile') {
+                stage('Config Server Package') {
                     steps {
                         dir('backend/config-server') {
-                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
-                stage('ApiGateway Compile') {
+                stage('ApiGateway Package') {
                     steps {
                         dir('backend/ApiGateway') {
-                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
-                stage('User Service Compile') {
+                stage('User Service Package') {
                     steps {
                         dir('backend/microservices/user-service') {
-                            sh 'mvn clean compile -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
-                stage('Events Compile & Test') {
+                stage('Events Package & Test') {
                     steps {
                         dir('backend/microservices/events') {
-                            sh 'mvn clean compile'
+                            sh 'mvn clean package -DskipTests'
                             sh 'mvn test'
                         }
                     }
