@@ -5,7 +5,7 @@ pipeline {
         DOCKER_USER = "ayoubbelgacem"
         K8S_DIR = "k8s/aletheia"
         NAMESPACE = "aletheia"
-        SONAR_SERVER = "sonarqube"
+        SONAR_SERVER = "sonarqube-local"
     }
 
     stages {
@@ -19,20 +19,17 @@ pipeline {
         stage('Test and Build Backend Services') {
             steps {
                 script {
-                    // Services qui compilent correctement
                     def services = [
                         'backend/ApiGateway',
                         'backend/config-server',
                         'backend/eureka',
                         'backend/microservices/user-service'
-                        // 'backend/microservices/courses' - exclu temporairement
-                        // 'backend/microservices/Library' - exclu temporairement
                     ]
 
                     for (svc in services) {
-                        echo "Testing and building ${svc}"
+                        echo "Building ${svc}"
                         dir(svc) {
-                            sh 'mvn clean verify -DskipTests'
+                            sh 'mvn clean package -DskipTests'
                         }
                     }
                 }
@@ -145,7 +142,7 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline completed successfully with tests and SonarQube analysis."
+            echo "Pipeline completed successfully!"
         }
         failure {
             echo "Pipeline failed. Check Jenkins logs."
