@@ -192,4 +192,4 @@ pipeline {
             sh "kubectl get pods -n ${NAMESPACE} || true"
         }
     }
-}
+} 
