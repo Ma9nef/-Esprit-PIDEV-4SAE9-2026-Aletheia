@@ -1,101 +1,173 @@
 pipeline {
     agent any
-    
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        DOCKER_USERNAME = 'ayoubbelgacem'
+
+    tools {
+        jdk 'JAVA_HOME'
+        maven 'maven3'
     }
-    
+
+    environment {
+        DOCKER_USER = "ayoubbelgacem"
+        K8S_DIR = "k8s/aletheia"
+        NAMESPACE = "aletheia"
+        SONAR_SERVER = "sonarqube"
+    }
+
     stages {
-        stage('Hello') {
+
+        stage('Checkout Source') {
             steps {
-                echo '?? Pipeline Aletheia CI/CD avec SonarQube'
+                checkout scm
             }
         }
-        
-        stage('Compile & Test') {
-            parallel {
-                stage('Eureka Compile') {
-                    steps {
-                        dir('backend/eureka') {
-                            sh 'mvn clean compile -DskipTests'
-                        }
-                    }
-                }
-                stage('Config Server Compile') {
-                    steps {
-                        dir('backend/config-server') {
-                            sh 'mvn clean compile -DskipTests'
-                        }
-                    }
-                }
-                stage('ApiGateway Compile') {
-                    steps {
-                        dir('backend/ApiGateway') {
-                            sh 'mvn clean compile -DskipTests'
-                        }
-                    }
-                }
-                stage('User Service Compile') {
-                    steps {
-                        dir('backend/microservices/user-service') {
-                            sh 'mvn clean compile -DskipTests'
-                        }
-                    }
-                }
-                stage('Events Compile & Test') {
-                    steps {
-                        dir('backend/microservices/events') {
-                            sh 'mvn clean compile'
-                            sh 'mvn test'
+
+        stage('Test and Build Backend Services') {
+            steps {
+                script {
+                    def services = [
+                        'backend/ApiGateway',
+                        'backend/config-server',
+                        'backend/eureka',
+                        'backend/microservices/courses',
+                        'backend/microservices/user-service',
+                        'backend/microservices/Library'
+                    ]
+
+                    for (svc in services) {
+                        echo "Testing and building ${svc}"
+                        dir(svc) {
+                            sh 'mvn clean verify -DskipTests'
                         }
                     }
                 }
             }
         }
-        
+
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube-local') {
+                withSonarQubeEnv("${SONAR_SERVER}") {
                     script {
-                        // Eureka
-                        dir('backend/eureka') {
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=eureka -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
-                        }
-                        // Config Server
-                        dir('backend/config-server') {
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=config-server -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
-                        }
-                        // ApiGateway
-                        dir('backend/ApiGateway') {
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=ApiGateway -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
-                        }
-                        // User Service
-                        dir('backend/microservices/user-service') {
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=user-service -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes'
-                        }
-                        // Events (avec rapport JaCoCo)
-                        dir('backend/microservices/events') {
-                            sh 'mvn sonar:sonar -Dsonar.projectKey=events -Dsonar.host.url=http://sonarqube:9000 -Dsonar.java.binaries=target/classes -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml'
+                        def services = [
+                            [key: 'api-gateway', path: 'backend/ApiGateway'],
+                            [key: 'config-server', path: 'backend/config-server'],
+                            [key: 'eureka', path: 'backend/eureka'],
+                            [key: 'courses', path: 'backend/microservices/courses'],
+                            [key: 'user-service', path: 'backend/microservices/user-service'],
+                            [key: 'library', path: 'backend/microservices/Library'],
+                            [key: 'events', path: 'backend/microservices/events']
+                        ]
+
+                        for (svc in services) {
+                            echo "Running SonarQube analysis for ${svc.key}"
+                            dir(svc.path) {
+                                sh """
+                                    mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                                    -Dsonar.projectKey=${svc.key} \
+                                    -Dsonar.projectName=${svc.key}
+                                """
+                            }
                         }
                     }
                 }
             }
         }
-        
-        stage('Build & Push Docker') {
-            parallel {
-                stage('Eureka') { steps { dir('backend/eureka') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-eureka:latest . && docker push ayoubbelgacem/aletheia-eureka:latest' } } }
-                stage('Config Server') { steps { dir('backend/config-server') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-config-server:latest . && docker push ayoubbelgacem/aletheia-config-server:latest' } } }
-                stage('ApiGateway') { steps { dir('backend/ApiGateway') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-api-gateway:latest . && docker push ayoubbelgacem/aletheia-api-gateway:latest' } } }
-                stage('User Service') { steps { dir('backend/microservices/user-service') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-user-service:latest . && docker push ayoubbelgacem/aletheia-user-service:latest' } } }
-                stage('Events') { steps { dir('backend/microservices/events') { sh 'mvn clean package -DskipTests && docker build -t ayoubbelgacem/aletheia-events:latest . && docker push ayoubbelgacem/aletheia-events:latest' } } }
+
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    def images = [
+                        [name: 'api-gateway', path: 'backend/ApiGateway'],
+                        [name: 'config-server', path: 'backend/config-server'],
+                        [name: 'eureka', path: 'backend/eureka'],
+                        [name: 'courses', path: 'backend/microservices/courses'],
+                        [name: 'user-service', path: 'backend/microservices/user-service'],
+                        [name: 'library', path: 'backend/microservices/Library'],
+                        [name: 'events', path: 'backend/microservices/events'],
+                        [name: 'frontend', path: 'frontend']
+                    ]
+
+                    for (img in images) {
+                        echo "Building ${DOCKER_USER}/${img.name}:latest"
+                        sh "docker build -t ${DOCKER_USER}/${img.name}:latest ${img.path}"
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Images') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-hub-credentials',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
+                    script {
+                        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+
+                        def imageNames = [
+                            'api-gateway',
+                            'config-server',
+                            'eureka',
+                            'courses',
+                            'user-service',
+                            'library',
+                            'events',
+                            'frontend'
+                        ]
+
+                        for (name in imageNames) {
+                            echo "Pushing ${DOCKER_USER}/${name}:latest"
+                            sh "docker push ${DOCKER_USER}/${name}:latest"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Infrastructure') {
+            steps {
+                sh "kubectl apply -f ${K8S_DIR}/eureka.yaml"
+                sh "kubectl rollout status deployment/eureka -n ${NAMESPACE} --timeout=240s || true"
+
+                sh "kubectl apply -f ${K8S_DIR}/config-server.yaml"
+                sh "kubectl rollout status deployment/config-server -n ${NAMESPACE} --timeout=240s || true"
+
+                sh "kubectl apply -f ${K8S_DIR}/mysql-courses.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/mysql-user.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/mysql-library.yaml || true"
+            }
+        }
+
+        stage('Deploy Backend Services') {
+            steps {
+                sh "kubectl apply -f ${K8S_DIR}/courses.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/user-service.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/library.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/events.yaml || true"
+            }
+        }
+
+        stage('Deploy Gateway and Frontend') {
+            steps {
+                sh "kubectl apply -f ${K8S_DIR}/api-gateway.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/frontend.yaml || true"
+            }
+        }
+
+        stage('Show Kubernetes Status') {
+            steps {
+                sh "kubectl get pods -n ${NAMESPACE} || true"
+                sh "kubectl get svc -n ${NAMESPACE} || true"
             }
         }
     }
-    
+
     post {
-        success { echo '?? Pipeline r?ussi !' }
-        failure { echo '? Pipeline ?chou? !' }
+        success {
+            echo "Pipeline completed successfully with tests and SonarQube analysis."
+        }
+        failure {
+            echo "Pipeline failed. Check Jenkins logs."
+        }
     }
 }
