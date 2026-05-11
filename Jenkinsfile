@@ -16,14 +16,15 @@ pipeline {
             }
         }
 
-        stage('Test and Build Backend Services') {
+        stage('Build Backend Services') {
             steps {
                 script {
                     def services = [
                         'backend/ApiGateway',
                         'backend/config-server',
                         'backend/eureka',
-                        'backend/microservices/user-service'
+                        'backend/microservices/user-service',
+                        'backend/microservices/events'
                     ]
 
                     for (svc in services) {
