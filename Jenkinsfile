@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JAVA_HOME'
-        maven 'maven3'
-    }
-
     environment {
         DOCKER_USER = "ayoubbelgacem"
         K8S_DIR = "k8s/aletheia"
@@ -126,12 +121,8 @@ pipeline {
 
         stage('Deploy Infrastructure') {
             steps {
-                sh "kubectl apply -f ${K8S_DIR}/eureka.yaml"
-                sh "kubectl rollout status deployment/eureka -n ${NAMESPACE} --timeout=240s || true"
-
-                sh "kubectl apply -f ${K8S_DIR}/config-server.yaml"
-                sh "kubectl rollout status deployment/config-server -n ${NAMESPACE} --timeout=240s || true"
-
+                sh "kubectl apply -f ${K8S_DIR}/eureka.yaml || true"
+                sh "kubectl apply -f ${K8S_DIR}/config-server.yaml || true"
                 sh "kubectl apply -f ${K8S_DIR}/mysql-courses.yaml || true"
                 sh "kubectl apply -f ${K8S_DIR}/mysql-user.yaml || true"
                 sh "kubectl apply -f ${K8S_DIR}/mysql-library.yaml || true"
