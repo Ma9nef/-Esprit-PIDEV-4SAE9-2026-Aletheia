@@ -16,21 +16,41 @@ pipeline {
             }
         }
 
-        stage('Build Backend Services') {
-            steps {
-                script {
-                    def services = [
-                        'backend/ApiGateway',
-                        'backend/config-server',
-                        'backend/eureka',
-                        'backend/microservices/user-service',
-                        'backend/microservices/events'
-                    ]
-
-                    for (svc in services) {
-                        echo "Building ${svc}"
-                        dir(svc) {
-                            sh 'mvn clean package -DskipTests'
+        stage('Compile & Test') {
+            parallel {
+                stage('Eureka Compile') {
+                    steps {
+                        dir('backend/eureka') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('Config Server Compile') {
+                    steps {
+                        dir('backend/config-server') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('ApiGateway Compile') {
+                    steps {
+                        dir('backend/ApiGateway') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('User Service Compile') {
+                    steps {
+                        dir('backend/microservices/user-service') {
+                            sh 'mvn clean compile -DskipTests'
+                        }
+                    }
+                }
+                stage('Events Compile & Test') {
+                    steps {
+                        dir('backend/microservices/events') {
+                            sh 'mvn clean compile'
+                            sh 'mvn test'
                         }
                     }
                 }
@@ -42,9 +62,9 @@ pipeline {
                 withSonarQubeEnv("${SONAR_SERVER}") {
                     script {
                         def services = [
-                            [key: 'api-gateway', path: 'backend/ApiGateway'],
-                            [key: 'config-server', path: 'backend/config-server'],
                             [key: 'eureka', path: 'backend/eureka'],
+                            [key: 'config-server', path: 'backend/config-server'],
+                            [key: 'api-gateway', path: 'backend/ApiGateway'],
                             [key: 'user-service', path: 'backend/microservices/user-service'],
                             [key: 'events', path: 'backend/microservices/events']
                         ]
@@ -53,9 +73,10 @@ pipeline {
                             echo "Running SonarQube analysis for ${svc.key}"
                             dir(svc.path) {
                                 sh """
-                                    mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                                    mvn sonar:sonar \
                                     -Dsonar.projectKey=${svc.key} \
-                                    -Dsonar.projectName=${svc.key}
+                                    -Dsonar.host.url=http://sonarqube:9000 \
+                                    -Dsonar.java.binaries=target/classes
                                 """
                             }
                         }
