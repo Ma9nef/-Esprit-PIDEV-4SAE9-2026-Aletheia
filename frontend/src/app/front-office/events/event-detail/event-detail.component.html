@@ -1,0 +1,230 @@
+<!-- src/app/front-office/events/event-detail/event-detail.component.html -->
+
+<div class="event-detail-container" *ngIf="event">
+  <!-- Back Button -->
+  <div class="back-button">
+    <a routerLink="/EventListComponente" class="back-link">
+      ← Back to Events
+    </a>
+  </div>
+
+  <!-- Event Header -->
+  <div class="event-header">
+    <div class="header-content">
+      <h1>{{ event.title }}</h1>
+      <div class="event-status-badge" [class]="event.status.toLowerCase()">
+        {{ getStatusText(event.status) }}
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Prediction Card -->
+  <div class="ai-prediction-card" *ngIf="predictionScore !== null">
+    <div class="prediction-header">
+      <span class="ai-icon">🤖</span>
+      <h3>Personalized Prediction</h3>
+      <span class="ai-badge">AI</span>
+    </div>
+    <div class="prediction-content">
+      <div class="score-container">
+        <div class="score-label">Liking Probability</div>
+        <div class="score-meter">
+          <div class="score-fill" [style.width.%]="predictionScore"></div>
+        </div>
+        <div class="score-value">{{ predictionScore }}%</div>
+      </div>
+      <div class="will-like" *ngIf="willLike">
+        <span class="like-icon">✅</span>
+        Recommended for you by our AI model
+      </div>
+    </div>
+  </div>
+
+  <div class="event-content">
+    <!-- Event Info Section -->
+    <div class="event-info-section">
+      <h2>
+        <span class="section-icon">ℹ️</span>
+        Information
+      </h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">📍</div>
+          <div class="info-content">
+            <strong>Location</strong>
+            <p>{{ event.location }}</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📅</div>
+          <div class="info-content">
+            <strong>Start Date</strong>
+            <p>{{ event.startDate | date:'EEEE d MMMM yyyy HH:mm' }}</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">⏰</div>
+          <div class="info-content">
+            <strong>End Date</strong>
+            <p>{{ event.endDate | date:'EEEE d MMMM yyyy HH:mm' }}</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">👥</div>
+          <div class="info-content">
+            <strong>Expected Attendees</strong>
+            <p>{{ event.expectedAttendees | number }} people</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">👤</div>
+          <div class="info-content">
+            <strong>Organizer</strong>
+            <p>{{ event.organizer }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="description-section">
+        <h3>Description</h3>
+        <p>{{ event.description }}</p>
+      </div>
+    </div>
+
+    <!-- Sentiment Stats Section -->
+    <div class="sentiment-stats-section" *ngIf="stats">
+      <h2>
+        <span class="section-icon">📊</span>
+        Sentiment Analysis
+        <span class="ai-tag">AI Analysis</span>
+      </h2>
+      
+      <div class="stats-container">
+        <div class="stats-cards">
+          <div class="stat-card positive">
+            <div class="stat-icon">😊</div>
+            <div class="stat-value">{{ stats.positiveCount }}</div>
+            <div class="stat-label">Positive</div>
+            <div class="stat-bar">
+              <div class="bar-fill" [style.width.%]="stats.positivePercentage"></div>
+            </div>
+            <div class="stat-percentage">{{ stats.positivePercentage | number:'1.0-0' }}%</div>
+          </div>
+          <div class="stat-card neutral">
+            <div class="stat-icon">😐</div>
+            <div class="stat-value">{{ stats.neutralCount }}</div>
+            <div class="stat-label">Neutral</div>
+            <div class="stat-bar">
+              <div class="bar-fill" [style.width.%]="stats.neutralPercentage"></div>
+            </div>
+            <div class="stat-percentage">{{ stats.neutralPercentage | number:'1.0-0' }}%</div>
+          </div>
+          <div class="stat-card negative">
+            <div class="stat-icon">😞</div>
+            <div class="stat-value">{{ stats.negativeCount }}</div>
+            <div class="stat-label">Negative</div>
+            <div class="stat-bar">
+              <div class="bar-fill" [style.width.%]="stats.negativePercentage"></div>
+            </div>
+            <div class="stat-percentage">{{ stats.negativePercentage | number:'1.0-0' }}%</div>
+          </div>
+        </div>
+
+        <div class="overall-sentiment">
+          <div class="sentiment-header">
+            <strong>Overall Sentiment</strong>
+            <span class="sentiment-label" [class]="stats.sentimentLabel.toLowerCase().replace(' ', '-')">
+              {{ stats.sentimentLabel }}
+            </span>
+          </div>
+          <div class="sentiment-score-container">
+            <div class="score-label">Satisfaction Score</div>
+            <div class="score-bar">
+              <div class="score-fill" [style.width.%]="(stats.overallSentimentScore * 100)"></div>
+            </div>
+            <div class="score-number">{{ (stats.overallSentimentScore * 100) | number:'1.0-0' }}%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="comments-section">
+      <h2>
+        <span class="section-icon">💬</span>
+        Comments
+        <span class="count-badge">{{ totalComments }} reviews</span>
+      </h2>
+      
+      <!-- Add Comment Form -->
+      <div class="add-comment" *ngIf="!hasUserCommented">
+        <div class="comment-form-header">
+          <span class="form-icon">✍️</span>
+          <h3>Share your feedback</h3>
+        </div>
+        <form [formGroup]="commentForm" (ngSubmit)="onSubmitComment()">
+          <textarea 
+            formControlName="comment" 
+            placeholder="What did you think of this event? Your feedback matters to us..."
+            rows="4"
+            [class.error]="commentForm.get('comment')?.invalid && commentForm.get('comment')?.touched"
+          ></textarea>
+          <div class="form-actions">
+            <div class="char-count" *ngIf="commentForm.get('comment')?.value">
+              {{ commentForm.get('comment')?.value.length }}/500
+            </div>
+            <button type="submit" [disabled]="commentForm.invalid || loading" class="submit-btn">
+              <span *ngIf="!loading">📤 Publish my review</span>
+              <span *ngIf="loading">⏳ Analyzing...</span>
+            </button>
+          </div>
+        </form>
+        <div class="form-info">
+          <span>🔍 Our algorithms automatically analyze the sentiment of your comment</span>
+        </div>
+      </div>
+      
+      <div class="already-commented" *ngIf="hasUserCommented">
+        <div class="message-box">
+          <span class="message-icon">✅</span>
+          <p>Thank you for your feedback! Your comment has been analyzed by our AI</p>
+        </div>
+      </div>
+
+      <!-- Comments List -->
+      <div class="comments-list">
+        <div class="comment-card" *ngFor="let comment of comments">
+          <div class="comment-header">
+            <div class="user-info">
+              <div class="user-avatar">
+                <span>👤</span>
+              </div>
+              <div class="user-details">
+                <span class="user-id">User {{ comment.userId }}</span>
+                <span class="comment-date">{{ comment.createdAt | date:'dd MMM yyyy HH:mm' }}</span>
+              </div>
+            </div>
+            <div class="sentiment-badge" [class]="getSentimentClass(comment.sentiment)">
+              {{ getSentimentIcon(comment.sentiment) }} {{ comment.sentiment }}
+              <span class="confidence">({{ comment.confidence | percent:'1.0-0' }})</span>
+            </div>
+          </div>
+          <div class="comment-content">
+            {{ comment.comment }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0" class="page-btn">
+          ← Previous
+        </button>
+        <span class="page-info">Page {{ currentPage + 1 }} / {{ totalPages }}</span>
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages - 1" class="page-btn">
+          Next →
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

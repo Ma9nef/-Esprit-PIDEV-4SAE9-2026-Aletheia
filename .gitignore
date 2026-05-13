@@ -1,0 +1,30 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Java / Maven / Gradle
+**/target/
+**/build/
+*.class
+*.log
+
+# Node / Angular
+**/node_modules/
+**/dist/
+.angular/
+npm-cache/
+
+# Env / secrets
+.env
+.env.local
+**/.env.local
+**/.env.local.*
+*.key
+*.pem
+
+# Angular cache
+frontend/.angular/
+
+# Optional but recommended
+node_modules/
+dist/

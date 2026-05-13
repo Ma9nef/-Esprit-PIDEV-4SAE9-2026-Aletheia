@@ -1,0 +1,294 @@
+<div class="program-space-container">
+  <div *ngIf="loading" class="state-message">
+    Loading training program dashboard...
+  </div>
+
+  <div *ngIf="errorMessage" class="state-message error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="formation as f" class="program-space-page">
+    <div class="program-hero-card">
+      <div class="hero-content">
+        <div class="hero-top">
+          <span class="section-tag">Program Dashboard</span>
+          <span *ngIf="f.level" class="level-badge">{{ f.level }}</span>
+        </div>
+
+        <h1 class="program-title">{{ f.title }}</h1>
+
+        <p class="program-subtitle">
+          This space is your learner portal for the training program. Open the section you need
+          to check sessions, review attendance, or access learning resources.
+        </p>
+
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="meta-label">Duration</span>
+            <span class="meta-value">{{ f.duration }} h</span>
+          </div>
+
+          <div class="hero-meta-item">
+            <span class="meta-label">Capacity</span>
+            <span class="meta-value">{{ f.capacity }}</span>
+          </div>
+
+          <div class="hero-meta-item" *ngIf="f.location">
+            <span class="meta-label">Location</span>
+            <span class="meta-value">{{ f.location }}</span>
+          </div>
+
+          <div class="hero-meta-item" *ngIf="f.startDate">
+            <span class="meta-label">Start Date</span>
+            <span class="meta-value">{{ f.startDate | date:'mediumDate' }}</span>
+          </div>
+
+          <div class="hero-meta-item" *ngIf="f.endDate">
+            <span class="meta-label">End Date</span>
+            <span class="meta-value">{{ f.endDate | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="secondary-btn" type="button" (click)="goBackToMyPrograms()">
+          Back to My Programs
+        </button>
+
+        <button class="primary-btn" type="button" (click)="goToFormationDetails()">
+          View Program Details
+        </button>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="main-sections">
+        <div class="overview-strip">
+          <div class="overview-card">
+            <span class="overview-label">Total Sessions</span>
+            <strong>{{ sessions.length }}</strong>
+          </div>
+
+          <div class="overview-card">
+            <span class="overview-label">Upcoming Sessions</span>
+            <strong>{{ getUpcomingSessionsCount() }}</strong>
+          </div>
+
+          <div class="overview-card">
+            <span class="overview-label">Attendance Rate</span>
+            <strong>
+              {{
+                attendance && !attendanceLoading
+                  ? (attendance.attendanceRate | number:'1.0-0') + '%'
+                  : '--'
+              }}
+            </strong>
+          </div>
+        </div>
+
+        <div class="portal-grid">
+          <div class="portal-card">
+            <div class="portal-card-top">
+              <div class="section-icon">🗓</div>
+              <span class="section-chip">Sessions</span>
+            </div>
+
+            <h3>Schedule / Sessions</h3>
+            <p class="section-description">
+              Open the full schedule page to view all sessions, today’s activity,
+              detailed timing, room information, and topic planning.
+            </p>
+
+            <div *ngIf="sessionsLoading" class="mini-state-message">
+              Loading sessions preview...
+            </div>
+
+            <div *ngIf="sessionsErrorMessage" class="mini-state-message error">
+              {{ sessionsErrorMessage }}
+            </div>
+
+            <div *ngIf="!sessionsLoading && !sessionsErrorMessage" class="portal-preview">
+              <div class="preview-row">
+                <span class="preview-label">Total sessions</span>
+                <span class="preview-value">{{ sessions.length }}</span>
+              </div>
+
+              <div class="preview-row" *ngIf="currentSession">
+                <span class="preview-label">Now</span>
+                <span class="preview-value">{{ currentSession.topic }}</span>
+              </div>
+
+              <div class="preview-row" *ngIf="!currentSession && nextTodaySession">
+                <span class="preview-label">Next today</span>
+                <span class="preview-value">
+                  {{ nextTodaySession.topic }} · {{ nextTodaySession.startTime }}
+                </span>
+              </div>
+
+              <div class="preview-row" *ngIf="!currentSession && !nextTodaySession">
+                <span class="preview-label">Today</span>
+                <span class="preview-value muted">No active session right now</span>
+              </div>
+            </div>
+
+            <button class="portal-open-btn" type="button" (click)="openSessionsPage()">
+              Open Sessions
+            </button>
+          </div>
+
+          <div class="portal-card">
+            <div class="portal-card-top">
+              <div class="section-icon">✅</div>
+              <span class="section-chip subtle">Attendance</span>
+            </div>
+
+            <h3>Attendance</h3>
+            <p class="section-description">
+              Open the attendance page to review your participation record,
+              session-by-session status, and attendance rate.
+            </p>
+
+            <div *ngIf="attendanceLoading" class="mini-state-message">
+              Loading attendance preview...
+            </div>
+
+            <div *ngIf="attendanceErrorMessage" class="mini-state-message error">
+              {{ attendanceErrorMessage }}
+            </div>
+
+            <div *ngIf="!attendanceLoading && !attendanceErrorMessage && attendance" class="portal-preview">
+              <div class="preview-row">
+                <span class="preview-label">Present</span>
+                <span class="preview-value">{{ attendance.presentCount }}</span>
+              </div>
+
+              <div class="preview-row">
+                <span class="preview-label">Absent</span>
+                <span class="preview-value">{{ attendance.absentCount }}</span>
+              </div>
+
+              <div class="preview-row">
+                <span class="preview-label">Late</span>
+                <span class="preview-value">{{ attendance.lateCount }}</span>
+              </div>
+
+              <div class="preview-row">
+                <span class="preview-label">Rate</span>
+                <span class="preview-value">{{ attendance.attendanceRate | number:'1.0-0' }}%</span>
+              </div>
+            </div>
+
+            <button class="portal-open-btn" type="button" (click)="openAttendancePage()">
+              Open Attendance
+            </button>
+          </div>
+
+          <div class="portal-card product-card">
+            <div class="portal-card-top">
+              <div class="section-icon">📚</div>
+              <span class="section-chip subtle">Learning Resource</span>
+            </div>
+
+            <h3>{{ f.productTitle || 'No linked product yet' }}</h3>
+
+            <p class="section-description">
+              {{
+                f.productDescription
+                  ? f.productDescription
+                  : 'This formation can include a linked book, PDF, or digital learning support resource.'
+              }}
+            </p>
+
+            <div class="product-cover" *ngIf="f.productCoverImageUrl">
+              <img
+                [src]="f.productCoverImageUrl"
+                [alt]="f.productTitle || 'Product cover'"
+              />
+            </div>
+
+            <div class="portal-preview" *ngIf="f.productId; else noProductState">
+              <div class="preview-row">
+                <span class="preview-label">Title</span>
+                <span class="preview-value">{{ f.productTitle || '--' }}</span>
+              </div>
+
+              <div class="preview-row" *ngIf="f.productAuthor">
+                <span class="preview-label">Author</span>
+                <span class="preview-value">{{ f.productAuthor }}</span>
+              </div>
+
+              <div class="preview-row" *ngIf="f.productType">
+                <span class="preview-label">Type</span>
+                <span class="preview-value">{{ f.productType }}</span>
+              </div>
+
+              <div class="preview-row" *ngIf="f.productPrice !== undefined && f.productPrice !== null">
+                <span class="preview-label">Price</span>
+                <span class="preview-value">{{ f.productPrice }} DT</span>
+              </div>
+
+              <div class="preview-row">
+                <span class="preview-label">File</span>
+                <span class="preview-value" [class.muted]="!f.productFileUrl">
+                  {{ f.productFileUrl ? 'Available' : 'Not available' }}
+                </span>
+              </div>
+            </div>
+
+            <ng-template #noProductState>
+              <div class="portal-preview">
+                <div class="preview-row">
+                  <span class="preview-label">Resource</span>
+                  <span class="preview-value muted">No product linked</span>
+                </div>
+
+                <div class="preview-row">
+                  <span class="preview-label">Status</span>
+                  <span class="preview-value muted">Waiting for assignment</span>
+                </div>
+              </div>
+            </ng-template>
+
+            <div class="product-actions">
+              <button
+                class="portal-open-btn"
+                type="button"
+                *ngIf="f.productFileUrl"
+                (click)="openProductFile()">
+                Open Resource
+              </button>
+
+              <button
+                class="portal-open-btn secondary-action"
+                type="button"
+                *ngIf="!f.productFileUrl"
+                disabled>
+                No File Available
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="program-sidebar">
+        <div class="sidebar-card" *ngIf="f.objective">
+          <h4>Program Objective</h4>
+          <p>{{ f.objective }}</p>
+        </div>
+
+        <div class="sidebar-card" *ngIf="f.prerequisites">
+          <h4>Prerequisites</h4>
+          <p>{{ f.prerequisites }}</p>
+        </div>
+
+        <div class="sidebar-card info-card">
+          <h4>About this dashboard</h4>
+          <p>
+            This dashboard is the entry point to the training program.
+            Use it to navigate quickly to sessions, attendance, and learning resources.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>

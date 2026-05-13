@@ -1,0 +1,144 @@
+<!-- course-builder.component.html -->
+<div class="cb">
+
+  <!-- Top header -->
+  <header class="cb-header">
+    <div class="cb-title">
+      <h2>Course Builder</h2>
+      <p>Manage course details and build lessons step-by-step.</p>
+    </div>
+
+    <div class="cb-actions">
+      <button class="cb-btn cb-btn--ghost" type="button" (click)="backToCourses()">
+        ← Back to Courses
+      </button>
+      <button class="cb-btn cb-btn--primary" type="button" (click)="goCreateLesson()">
+        + Add Lesson
+      </button>
+    </div>
+  </header>
+
+  <!-- Alerts -->
+  <div class="cb-alert cb-alert--error" *ngIf="error">
+    <span class="cb-alert__icon">!</span>
+    <div class="cb-alert__text">{{ error }}</div>
+  </div>
+
+  <div class="cb-skeleton" *ngIf="loading">
+    <div class="cb-skel cb-skel--title"></div>
+    <div class="cb-skel cb-skel--card"></div>
+    <div class="cb-skel cb-skel--card"></div>
+  </div>
+
+  <!-- Main layout -->
+  <div class="cb-grid" *ngIf="course && !loading">
+
+    <!-- Left: Course card -->
+    <section class="cb-card cb-card--course">
+      <div class="cb-courseCover">
+        <img
+          [src]="course.imageUrl || 'assets/images/course-placeholder.jpg'"
+          alt="Course cover"
+          loading="lazy"
+          (error)="onImageError($event)"
+        />
+        <div class="cb-coverOverlay">
+          <span class="cb-pill" [class.cb-pill--pending]="course.archived" [class.cb-pill--active]="!course.archived">
+            {{ course.archived ? 'Pending validation' : 'Active' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="cb-courseBody">
+        <h3 class="cb-courseTitle">{{ course.title }}</h3>
+        <p class="cb-courseDesc">{{ course.description }}</p>
+
+        <div class="cb-metaGrid">
+          <div class="cb-meta">
+            <div class="cb-metaLabel">Price</div>
+            <div class="cb-metaValue">{{ course.price }} <span class="cb-metaUnit">DT</span></div>
+          </div>
+          <div class="cb-meta">
+            <div class="cb-metaLabel">Duration</div>
+            <div class="cb-metaValue">{{ course.durationHours }} <span class="cb-metaUnit">h</span></div>
+          </div>
+          <div class="cb-meta">
+            <div class="cb-metaLabel">Lessons</div>
+            <div class="cb-metaValue">{{ lessons.length }}</div>
+          </div>
+        </div>
+
+        <div class="cb-courseFooter">
+          <button class="cb-btn cb-btn--primary cb-btn--full" type="button" (click)="goCreateLesson()">
+            + Add a lesson to this course
+          </button>
+          <div class="cb-footNote">
+            Tip: keep lessons short and ordered (1, 2, 3…).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Lessons -->
+    <section class="cb-card cb-card--lessons">
+
+      <div class="cb-cardHead">
+        <div class="cb-cardHeadLeft">
+          <h3>Lessons</h3>
+          <p class="cb-muted">Reorder and manage your content here.</p>
+        </div>
+
+        <div class="cb-cardHeadRight">
+          <span class="cb-count">{{ lessons.length }}</span>
+        </div>
+      </div>
+
+      <!-- Empty -->
+      <div class="cb-empty" *ngIf="lessons.length === 0">
+        <div class="cb-emptyIcon">📚</div>
+        <div class="cb-emptyTitle">No lessons yet</div>
+        <div class="cb-emptyText">Click <b>Add Lesson</b> to create your first lesson.</div>
+        <button class="cb-btn cb-btn--primary" type="button" (click)="goCreateLesson()">
+          + Create first lesson
+        </button>
+      </div>
+
+      <!-- List -->
+      <div class="cb-list" *ngIf="lessons.length > 0">
+
+        <div class="cb-row" *ngFor="let l of lessons; let i = index">
+          <div class="cb-rowLeft">
+            <div class="cb-index">{{ i + 1 }}</div>
+
+            <div class="cb-rowMain">
+              <div class="cb-rowTitle">{{ l.title }}</div>
+
+              <div class="cb-rowBadges">
+                <span class="cb-badge" *ngIf="l.youtubeVideoId">
+                  <span class="cb-dot cb-dot--video"></span> YouTube
+                </span>
+                <span class="cb-badge" *ngIf="l.hasPdf">
+                  <span class="cb-dot cb-dot--pdf"></span> PDF
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="cb-rowRight">
+            <a class="cb-btn cb-btn--ghost cb-btn--sm" [routerLink]="['/back-office/trainer/lessons', l.id]">
+              View
+            </a>
+
+            <!-- later: edit/delete -->
+            <!-- <button class="cb-iconBtn" type="button" (click)="editLesson(l.id)">✎</button>
+            <button class="cb-iconBtn cb-iconBtn--danger" type="button" (click)="deleteLesson(l.id)">🗑</button> -->
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

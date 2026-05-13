@@ -1,0 +1,476 @@
+/* ============================================
+   ALETHEIA - Global Styles & Theme
+   ============================================ */
+
+/* Default (dark) theme uses component styles as-is. */
+
+/* --------------------------------------------
+   Light theme: when body does NOT have .dark-theme
+   -------------------------------------------- */
+   @import "bootstrap/dist/css/bootstrap.min.css";
+body:not(.dark-theme) {
+  background: #f1f5f9;
+}
+
+/* Page wrappers - light background */
+body:not(.dark-theme) .about-page,
+body:not(.dark-theme) .services-page,
+body:not(.dark-theme) .contact-page {
+  background: #f8fafc !important;
+}
+
+body:not(.dark-theme) .about-page::before,
+body:not(.dark-theme) .services-page::before,
+body:not(.dark-theme) .contact-page::before {
+  display: none;
+}
+
+/* Home hero section */
+body:not(.dark-theme) app-home .hero-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%) !important;
+}
+
+body:not(.dark-theme) app-home .hero-section .hero-headline {
+  color: #0f172a;
+}
+
+body:not(.dark-theme) app-home .hero-section .gradient-text {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-theme) app-home .hero-section .hero-subtitle {
+  color: #475569;
+}
+
+/* Home hero – Light mode variables (contrast, buttons, search, badges, illustration) */
+body:not(.dark-theme) app-home .hero-section {
+  --hero-text: #0f172a;
+  --hero-text-muted: #64748b;
+  --hero-subtitle: #475569;
+  --hero-border: rgba(15, 23, 42, 0.12);
+  --hero-input-bg: #ffffff;
+  --hero-input-border: #e2e8f0;
+  --hero-input-text: #0f172a;
+  --hero-input-placeholder: #94a3b8;
+  --hero-btn-primary-bg: linear-gradient(135deg, #6366f1, #8b5cf6);
+  --hero-btn-primary-text: #ffffff;
+  --hero-btn-secondary-bg: #ffffff;
+  --hero-btn-secondary-border: #e2e8f0;
+  --hero-btn-secondary-text: #334155;
+  --hero-badge-bg: rgba(99, 102, 241, 0.1);
+  --hero-badge-border: rgba(99, 102, 241, 0.25);
+  --hero-badge-text: #475569;
+  --hero-search-bg: #ffffff;
+  --hero-search-border: #e2e8f0;
+  --hero-illus-screen: rgba(99, 102, 241, 0.08);
+  --hero-illus-line: #64748b;
+  --hero-illus-accent: #6366f1;
+  --hero-illus-base: rgba(99, 102, 241, 0.06);
+  --hero-illus-border: rgba(99, 102, 241, 0.2);
+}
+
+body:not(.dark-theme) app-home .hero-section .search-form:focus-within {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+body:not(.dark-theme) app-home .hero-section .btn-secondary:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* Shared page hero sections (About, Services, Contact) */
+body:not(.dark-theme) .hero-title {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-theme) .hero-subtitle {
+  color: #475569;
+}
+
+/* Section titles and text */
+body:not(.dark-theme) .section-title {
+  color: #0f172a !important;
+}
+
+body:not(.dark-theme) .section-subtitle {
+  color: #475569 !important;
+}
+
+/* Cards and panels - light mode */
+body:not(.dark-theme) .service-card,
+body:not(.dark-theme) .mv-card,
+body:not(.dark-theme) .different-item,
+body:not(.dark-theme) .serve-card,
+body:not(.dark-theme) .team-card,
+body:not(.dark-theme) .stat-card,
+body:not(.dark-theme) .form-card,
+body:not(.dark-theme) .info-card,
+body:not(.dark-theme) .support-card,
+body:not(.dark-theme) .map-card,
+body:not(.dark-theme) .cta-card,
+body:not(.dark-theme) .visual-card {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08) !important;
+}
+
+body:not(.dark-theme) .service-title,
+body:not(.dark-theme) .mv-title,
+body:not(.dark-theme) .different-title,
+body:not(.dark-theme) .serve-title,
+body:not(.dark-theme) .team-name,
+body:not(.dark-theme) .info-card-title,
+body:not(.dark-theme) .support-card-title,
+body:not(.dark-theme) .support-title,
+body:not(.dark-theme) .map-title,
+body:not(.dark-theme) .form-title {
+  color: #0f172a !important;
+}
+
+body:not(.dark-theme) .service-description,
+body:not(.dark-theme) .mv-description,
+body:not(.dark-theme) .different-text,
+body:not(.dark-theme) .serve-description,
+body:not(.dark-theme) .team-role,
+body:not(.dark-theme) .support-card-text,
+body:not(.dark-theme) .form-description {
+  color: #475569 !important;
+}
+
+body:not(.dark-theme) .contact-value,
+body:not(.dark-theme) .contact-label {
+  color: #334155 !important;
+}
+
+body:not(.dark-theme) .contact-value:hover {
+  color: #6366f1 !important;
+}
+
+/* Stat numbers - keep gradient in light mode */
+body:not(.dark-theme) .stat-number {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-theme) .stat-label {
+  color: #475569 !important;
+}
+
+/* Why choose / feature list */
+body:not(.dark-theme) .why-choose-subtitle,
+body:not(.dark-theme) .feature-item {
+  color: #334155 !important;
+}
+
+/* CTA section */
+body:not(.dark-theme) .cta-title {
+  color: #0f172a !important;
+}
+
+/* Form inputs - light mode */
+body:not(.dark-theme) .form-input,
+body:not(.dark-theme) .form-select,
+body:not(.dark-theme) .form-textarea {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+body:not(.dark-theme) .form-input::placeholder,
+body:not(.dark-theme) .form-textarea::placeholder {
+  color: #94a3b8;
+}
+
+body:not(.dark-theme) .form-label {
+  color: #334155 !important;
+}
+
+/* Map placeholder */
+body:not(.dark-theme) .map-placeholder {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08)) !important;
+  color: #64748b !important;
+}
+
+body:not(.dark-theme) .map-placeholder p {
+  color: #475569 !important;
+}
+
+/* Ensure body has minimal reset for theme transition */
+body {
+  margin: 0;
+  transition: background-color 0.3s ease;
+}
+
+/* Dark theme: body gets class from ThemeService */
+body.dark-theme {
+  background: #0f172a;
+}
+
+/* ============================================
+   Login & Register - Light theme (toggle applies here too)
+   ============================================ */
+body:not(.dark-theme) .login-page,
+body:not(.dark-theme) .register-page {
+  background: #f8fafc !important;
+}
+
+body:not(.dark-theme) .login-page::before,
+body:not(.dark-theme) .register-page::before {
+  opacity: 0.5;
+  background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.06) 0%, transparent 50%);
+}
+
+body:not(.dark-theme) .login-card,
+body:not(.dark-theme) .register-card {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.12) !important;
+}
+
+body:not(.dark-theme) .login-title,
+body:not(.dark-theme) .register-title {
+  color: #0f172a !important;
+}
+
+body:not(.dark-theme) .login-subtitle,
+body:not(.dark-theme) .register-subtitle {
+  color: #475569 !important;
+}
+
+body:not(.dark-theme) .login-page .back-link,
+body:not(.dark-theme) .register-page .back-link {
+  color: #64748b;
+}
+
+body:not(.dark-theme) .login-page .back-link:hover,
+body:not(.dark-theme) .register-page .back-link:hover {
+  color: #6366f1;
+}
+
+body:not(.dark-theme) .login-page .field-label,
+body:not(.dark-theme) .register-page .field-label {
+  color: #334155 !important;
+}
+
+body:not(.dark-theme) .login-page .field-input,
+body:not(.dark-theme) .register-page .field-input {
+  background: #fff !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+body:not(.dark-theme) .login-page .field-input::placeholder,
+body:not(.dark-theme) .register-page .field-input::placeholder {
+  color: #94a3b8;
+}
+
+body:not(.dark-theme) .login-page .input-icon,
+body:not(.dark-theme) .register-page .input-icon {
+  color: #64748b;
+}
+
+body:not(.dark-theme) .login-page .message-error,
+body:not(.dark-theme) .register-page .message-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+body:not(.dark-theme) .login-page .checkbox-wrap,
+body:not(.dark-theme) .register-page .checkbox-wrap {
+  color: #475569;
+}
+
+body:not(.dark-theme) .login-page .inline-link,
+body:not(.dark-theme) .register-page .inline-link {
+  color: #6366f1;
+}
+
+body:not(.dark-theme) .login-page .divider,
+body:not(.dark-theme) .register-page .divider {
+  color: #64748b;
+}
+
+body:not(.dark-theme) .login-page .divider::before,
+body:not(.dark-theme) .login-page .divider::after,
+body:not(.dark-theme) .register-page .divider::before,
+body:not(.dark-theme) .register-page .divider::after {
+  background: #e2e8f0;
+}
+
+body:not(.dark-theme) .login-page .btn-social,
+body:not(.dark-theme) .register-page .btn-social {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+body:not(.dark-theme) .login-page .btn-social:hover,
+body:not(.dark-theme) .register-page .btn-social:hover {
+  background: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+body:not(.dark-theme) .login-page .signin-prompt,
+body:not(.dark-theme) .register-page .signin-prompt {
+  color: #64748b;
+}
+
+body:not(.dark-theme) .login-page .signin-link,
+body:not(.dark-theme) .register-page .signin-link {
+  color: #6366f1;
+}
+
+/* Register / Login - illustration column & benefits (light) */
+body:not(.dark-theme) .login-illustration-col,
+body:not(.dark-theme) .register-illustration-col {
+  background: linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, transparent 60%) !important;
+  border-left-color: rgba(99, 102, 241, 0.15) !important;
+}
+
+body:not(.dark-theme) .why-title,
+body:not(.dark-theme) .benefits-title {
+  color: #0f172a !important;
+}
+
+body:not(.dark-theme) .why-item,
+body:not(.dark-theme) .benefit-item {
+  color: #475569 !important;
+}
+
+body:not(.dark-theme) .why-icon,
+body:not(.dark-theme) .benefit-icon {
+  background: rgba(99, 102, 241, 0.12) !important;
+  color: #6366f1 !important;
+}
+
+body:not(.dark-theme) .login-card-footer .footer-link,
+body:not(.dark-theme) .register-card-footer .footer-link {
+  color: #64748b;
+}
+
+body:not(.dark-theme) .login-card-footer .footer-link:hover,
+body:not(.dark-theme) .register-card-footer .footer-link:hover {
+  color: #6366f1;
+}
+
+body:not(.dark-theme) .login-card-footer .footer-sep,
+body:not(.dark-theme) .register-card-footer .footer-sep {
+  color: #94a3b8;
+}
+/* ============================================
+   Courses Catalog - ALETHEIA styling
+   ============================================ */
+
+   .courses-catalog h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
+  }
+  
+  body:not(.dark-theme) .courses-catalog h2 {
+    color: #0f172a;
+  }
+  
+  body.dark-theme .courses-catalog h2 {
+    color: #e5e7eb;
+  }
+  
+  /* Card look */
+  .courses-catalog .card {
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.06);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  
+  .courses-catalog .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.10);
+  }
+  
+  body:not(.dark-theme) .courses-catalog .card {
+    background: rgba(255, 255, 255, 0.92);
+  }
+  
+  body.dark-theme .courses-catalog .card {
+    background: rgba(15, 23, 42, 0.75);
+  }
+  
+  /* Title + description */
+  .courses-catalog .card-title {
+    font-weight: 800;
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  body:not(.dark-theme) .courses-catalog .card-title { color: #0f172a; }
+  body.dark-theme .courses-catalog .card-title { color: #e5e7eb; }
+  
+  .courses-catalog .card-text {
+    color: #64748b;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 3.9em;
+  }
+  
+  body.dark-theme .courses-catalog .card-text { color: #cbd5e1; }
+  
+  /* Footer + price */
+  .courses-catalog .card-footer {
+    border-top: 1px solid rgba(99, 102, 241, 0.15);
+    background: transparent;
+  }
+  
+  .courses-catalog .card-footer strong {
+    font-size: 16px;
+  }
+  
+  /* Button style (works with or without bootstrap) */
+  .courses-catalog .btn,
+  .courses-catalog .btn-outline-primary {
+    border-radius: 12px;
+    font-weight: 700;
+  }
+  
+  .courses-catalog .btn-outline-primary {
+    border-color: rgba(99, 102, 241, 0.45);
+  }
+  
+  body:not(.dark-theme) .courses-catalog .btn-outline-primary:hover {
+    background: rgba(99, 102, 241, 0.10);
+  }
+  
+  /* States */
+  .courses-catalog .alert {
+    border-radius: 14px;
+    border: 1px solid rgba(99, 102, 241, 0.18);
+  }
+  /* Course image inside cards */
+.courses-catalog .course-card__media{
+  width: 100%;
+  height: 190px;
+  background: #eef2f7;
+  overflow: hidden;
+}
+
+.courses-catalog .course-card__img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

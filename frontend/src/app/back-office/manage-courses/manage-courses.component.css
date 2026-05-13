@@ -1,0 +1,371 @@
+/* ==========================================
+   Manage Courses (mc) - Fresh Clean UI (List)
+   Works with your exact HTML classes
+   ========================================== */
+
+   :host {
+    display: block;
+  }
+
+  /* Page wrapper */
+  .mc {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    width: 100%;
+  }
+
+  /* Header */
+  .mc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .mc-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    line-height: 1.1;
+  }
+
+  .mc-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  /* Alerts */
+  .mc-alert {
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.35;
+    border: 1px solid transparent;
+  }
+
+  .mc-alert--error {
+    background: rgba(255, 70, 70, 0.08);
+    border-color: rgba(255, 70, 70, 0.22);
+    color: inherit;
+  }
+
+  .mc-alert--success {
+    background: rgba(0, 190, 120, 0.10);
+    border-color: rgba(0, 190, 120, 0.24);
+    color: inherit;
+  }
+
+  /* Toolbar */
+  .mc-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .mc-search {
+    flex: 1 1 320px;
+    min-width: 260px;
+    max-width: 520px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(20, 30, 50, 0.12);
+    background: rgba(255, 255, 255, 0.92);
+    outline: none;
+    color: inherit;
+    transition: box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+  }
+
+  .mc-search::placeholder {
+    opacity: 0.6;
+  }
+
+  .mc-search:focus {
+    border-color: rgba(90, 140, 255, 0.55);
+    box-shadow: 0 0 0 4px rgba(90, 140, 255, 0.18);
+    background: rgba(255, 255, 255, 1);
+  }
+
+  .mc-sort {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mc-sort-label {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+
+  /* Chips */
+  .chip {
+    border: 1px solid rgba(20, 30, 50, 0.12);
+    background: rgba(255, 255, 255, 0.78);
+    padding: 8px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    line-height: 1;
+    color: inherit;
+    transition: transform 140ms ease, background 140ms ease, box-shadow 140ms ease;
+  }
+
+  .chip:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(15, 25, 40, 0.06);
+  }
+
+  .chip:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .chip-dir {
+    margin-left: 6px;
+    font-size: 12px;
+    opacity: 0.7;
+  }
+
+  /* Card */
+  .card {
+    border: 1px solid rgba(20, 30, 50, 0.10);
+    background: rgba(255, 255, 255, 0.82);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(15, 25, 40, 0.06);
+    width: 100%;
+  }
+
+  .card-header {
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid rgba(20, 30, 50, 0.08);
+    background: rgba(255, 255, 255, 0.88);
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 750;
+    letter-spacing: -0.1px;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(90, 140, 255, 0.25);
+    background: rgba(90, 140, 255, 0.12);
+  }
+
+  /* Table wrapper */
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Table */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 14px;
+  }
+
+  .table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(20, 30, 50, 0.10);
+    font-weight: 750;
+    font-size: 13px;
+    color: inherit;
+  }
+
+  .table th,
+  .table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(20, 30, 50, 0.06);
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .table tbody tr:hover {
+    background: rgba(90, 140, 255, 0.05);
+  }
+
+  .muted {
+    opacity: 0.7;
+  }
+
+  /* Title cell */
+  .title-cell .title {
+    font-weight: 750;
+    letter-spacing: -0.1px;
+  }
+
+  .title-cell .sub {
+    margin-top: 3px;
+    font-size: 12px;
+    opacity: 0.65;
+  }
+
+  /* Status */
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid rgba(20, 30, 50, 0.10);
+    background: rgba(20, 30, 50, 0.03);
+  }
+
+  .status::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: rgba(0, 170, 120, 0.95); /* Active dot */
+  }
+
+  .status--archived {
+    background: rgba(255, 185, 0, 0.12);
+    border-color: rgba(255, 185, 0, 0.22);
+  }
+
+  .status--archived::before {
+    background: rgba(255, 155, 0, 0.95);
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-start;
+    white-space: nowrap;
+  }
+
+  /* Buttons */
+  .btn {
+    border: 1px solid rgba(20, 30, 50, 0.12);
+    background: rgba(255, 255, 255, 0.86);
+    color: inherit;
+    padding: 10px 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 140ms ease, box-shadow 140ms ease, background 140ms ease;
+  }
+
+  .btn:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 12px 20px rgba(15, 25, 40, 0.07);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .btn-primary {
+    background: rgba(90, 140, 255, 0.18);
+    border-color: rgba(90, 140, 255, 0.30);
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.70);
+  }
+
+  .btn-small {
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+
+  .btn-danger {
+    background: rgba(255, 90, 90, 0.14);
+    border-color: rgba(255, 90, 90, 0.26);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .mc {
+      padding: 16px;
+    }
+
+    .mc-header {
+      align-items: flex-start;
+    }
+
+    .mc-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .mc-search {
+      max-width: none;
+    }
+
+    .actions {
+      flex-wrap: wrap;
+      white-space: normal;
+    }
+
+    .table th,
+    .table td {
+      padding: 12px 12px;
+    }
+  }
+
+  /* Optional: dark-mode compatibility if your app toggles a class */
+  :host-context(.dark-theme) .card,
+  :host-context(.dark-theme) .mc-search,
+  :host-context(.dark-theme) .chip,
+  :host-context(.dark-theme) .btn {
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+
+  :host-context(.dark-theme) .card {
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: none;
+  }
+
+  :host-context(.dark-theme) .mc-search {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  :host-context(.dark-theme) .chip,
+  :host-context(.dark-theme) .btn {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  :host-context(.dark-theme) .table thead th {
+    background: rgba(12, 16, 24, 0.70);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+  }

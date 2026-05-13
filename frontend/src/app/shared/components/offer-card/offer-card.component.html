@@ -1,0 +1,103 @@
+<div class="offer-card" [ngClass]="getStatusClass()">
+  <!-- Header -->
+  <div class="offer-header">
+    <div class="title-section">
+      <h3>{{ offer.name }}</h3>
+      <span class="badge" [ngClass]="offer.type === OfferType.PERCENTAGE ? 'badge-percentage' : 'badge-fixed'">
+        {{ getDiscountLabel() }}
+      </span>
+    </div>
+
+    <div class="status-badge" [ngClass]="getStatusClass()">
+      {{ getStatusLabel() }}
+    </div>
+  </div>
+
+  <!-- Description -->
+  <p class="description">{{ offer.description }}</p>
+
+  <!-- Offer Details -->
+  <div class="offer-details">
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="label">Type</span>
+        <span class="value">{{ getTypeLabel() }}</span>
+      </div>
+
+      <div class="detail-item">
+        <span class="label">Validity</span>
+        <span class="value">
+          from {{ formatDate(offer.startDate) }}<br>
+          to {{ formatDate(offer.endDate) }}
+        </span>
+      </div>
+
+      <div class="detail-item" *ngIf="offer.maxUses">
+        <span class="label">Uses</span>
+        <div class="usage-info">
+          <span class="value">{{ offer.currentUses }} / {{ offer.maxUses }}</span>
+          <div class="progress-bar">
+            <div class="progress" [style.width.%]="getUsagePercentage()"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-item" *ngIf="offer.maxUsesPerUser">
+        <span class="label">Max per user</span>
+        <span class="value">{{ offer.maxUsesPerUser }}</span>
+      </div>
+    </div>
+
+    <!-- Targeting -->
+    <div class="targeting-info" *ngIf="hasTargeting()">
+      <span class="label">🎯 Targeting</span>
+      <span class="value">{{ getTargetingText() }}</span>
+    </div>
+  </div>
+
+  <!-- Price section (if a price is provided) -->
+  <div class="price-section" *ngIf="hasValidPrice()">
+    <div class="price-calculation">
+      <span class="original-price">{{ applyPrice | number:'1.2-2' }} €</span>
+      <span class="arrow">→</span>
+      <span class="final-price">{{ getFinalPrice() | number:'1.2-2' }} €</span>
+      <span class="saved">(save {{ getDiscountAmount() | number:'1.2-2' }} €)</span>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="offer-footer">
+    <div class="usage-info" *ngIf="offer.maxUses">
+      <span class="usage-count">{{ offer.currentUses }} uses</span>
+    </div>
+
+    <div class="actions" *ngIf="showActions">
+      <button (click)="onViewDetails()" class="btn-view" title="View details">
+        Details
+      </button>
+
+      <button
+        *ngIf="showApplyButton"
+        (click)="onApplyOffer()"
+        class="btn-apply"
+        [disabled]="!isApplicable()"
+        title="Apply this offer">
+        Apply
+      </button>
+
+      <button (click)="onEdit()" class="btn-edit" title="Edit">
+        Edit
+      </button>
+
+      <button (click)="onDelete()" class="btn-delete" title="Delete">
+        Delete
+      </button>
+    </div>
+
+    <!-- Message if not applicable -->
+    <div class="not-applicable-message" *ngIf="showApplyButton && !isApplicable()">
+      <span *ngIf="!isActive()">Offer not active</span>
+      <span *ngIf="isFullyUsed()">Offer fully used</span>
+    </div>
+  </div>
+</div>

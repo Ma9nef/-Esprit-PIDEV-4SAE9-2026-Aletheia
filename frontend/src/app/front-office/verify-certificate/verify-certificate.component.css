@@ -1,0 +1,70 @@
+/* Container Background */
+.verify-container {
+    background: radial-gradient(circle at top right, #2c5364, #203a43, #0f2027);
+    background-attachment: fixed;
+}
+
+/* Card Sizing */
+.cert-card {
+    max-width: 850px;
+    width: 95%;
+}
+
+/* Header Gradient */
+.bg-success-gradient {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+/* Text Styling */
+.font-monospace {
+    letter-spacing: 2px;
+    font-family: 'Courier New', Courier, monospace !important;
+}
+
+.letter-spacing-1 {
+    letter-spacing: 1px;
+}
+
+/* Icon Shadows */
+.shadow-icon {
+    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3));
+}
+
+/* Advanced Security Watermark */
+.card-body::before {
+    content: "\F4F0"; /* Character code for bi-patch-check */
+    font-family: "bootstrap-icons";
+    position: absolute;
+    font-size: 18rem;
+    color: rgba(0, 0, 0, 0.03); /* Extremely faint */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    pointer-events: none;
+}
+
+/* Glassmorphism for Error Card */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animations Logic */
+.animate__animated {
+    animation-duration: 0.6s;
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+    .card-body::before {
+        font-size: 10rem;
+    }
+}
+
+/* Print Logic: Only print the card */
+@media print {
+    .verify-container { background: white !important; }
+    .btn, .error-card, .spinner-grow { display: none !important; }
+    .cert-card { box-shadow: none !important; margin: 0; width: 100%; }
+}
